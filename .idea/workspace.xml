@@ -4,78 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8463a58f-158e-43c2-817c-a15d580d5bc0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/VPN_BOT.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/cleanup.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/instructions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/share.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/show_config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/start.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/status.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/support.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/unknown_message.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/unregister.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/keyboards/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/keyboards/commands.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/keyboards/inline.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/keyboards/registration_keyboard.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/keyboards/reply.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/midlewares/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/midlewares/throttling.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/utils/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/utils/config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/utils/db.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/utils/file_manager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/utils/generate_wireguard_configs.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/utils/logger.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/utils/vpn.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/10_free.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/14_free.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/15_free.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/16_free.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/17_free.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/18_free.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/19_free.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/1_free.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/1_free.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/2_free.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/2_free.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/3_free.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/3_free.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/4_free.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/4_free.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/5_free.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/5_free.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/6_free.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/6_free.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/7_free.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/7_free.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/8_free.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/8_free.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/9_free.conf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/configs/base_configs test2/9_free.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/text_messages.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logs/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logs/bot.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_file_manager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_share.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_start.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_status.py" afterDir="false" />
+    <list default="true" id="8463a58f-158e-43c2-817c-a15d580d5bc0" name="Changes" comment="sdelal dohya">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/handlers/1.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/handlers/share.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/share.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/handlers/start.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/start.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/keyboards/commands.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/keyboards/registration_keyboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/keyboards/registration_keyboard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/keyboards/reply.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/keyboards/reply.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/utils/config.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/utils/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/utils/db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/utils/file_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/utils/file_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/utils/vpn.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/text_messages.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/text_messages.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/bot.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/bot.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,20 +53,21 @@
     "Python.1.executor": "Run",
     "Python.file_manager.executor": "Run",
     "Python.main.executor": "Run",
+    "Python.old_bot.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/PycharmProjects/VPN_BOT/configs",
+    "last_opened_file_path": "C:/PycharmProjects/VPN_BOT/bot/utils",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\PycharmProjects\VPN_BOT\bot\utils" />
       <recent name="C:\PycharmProjects\VPN_BOT\configs" />
       <recent name="C:\PycharmProjects\VPN BOT\tests" />
       <recent name="C:\PycharmProjects\VPN BOT\base_configs" />
       <recent name="C:\PycharmProjects\VPN BOT\bot\handlers\base_config" />
-      <recent name="C:\PycharmProjects\VPN BOT\bot\handlers" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\PycharmProjects\VPN BOT\configs" />
@@ -175,8 +120,31 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="old_bot" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="VPN_BOT" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/old_bot.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.old_bot" />
         <item itemvalue="Python.file_manager" />
       </list>
     </recent_temporary>
@@ -197,6 +165,19 @@
       <option name="presentableId" value="Default" />
       <updated>1724876959797</updated>
     </task>
+    <task id="LOCAL-00001" summary="sdelal dohya">
+      <option name="closed" value="true" />
+      <created>1725574673151</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1725574673151</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="sdelal dohya" />
+    <option name="LAST_COMMIT_MESSAGE" value="sdelal dohya" />
   </component>
 </project>

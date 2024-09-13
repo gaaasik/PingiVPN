@@ -1,8 +1,12 @@
 # main.py
 import asyncio
 import logging
+from pathlib import Path
+
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
+from dotenv import load_dotenv
+
 from bot.handlers import start, status, support, admin, share,show_config,instructions,unknown_message
 from bot.utils.logger import setup_logger
 from bot.utils.db import init_db, drop_table
@@ -12,13 +16,26 @@ from bot.midlewares.throttling import ThrottlingMiddleware
 import os
 
 async def main():
-    # Токен бота напрямую в коде
-    BOT_TOKEN = '7036736465:AAEOlcvkYEp3MrEaS1Md0iR8Xilgti6cFuU'  # Замените 'your_bot_token_here' на реальный токен вашего бота
+    # Загружаем переменные окружения из файла .env
+    load_dotenv(dotenv_path=r'C:\PycharmProjects\VPN_BOT\.venv\.env')  # Указываем путь к .env файлу
 
+    # Читаем токен бота из переменной окружения
+    BOT_TOKEN = os.getenv('BOT_TOKEN')
+
+    if BOT_TOKEN:
+        print(f"Токен успешно загружен: {BOT_TOKEN}")
+    else:
+        print("Ошибка: Токен не найден в .env файле!")
     # Настраиваем логирование
     setup_logger("logs/bot.log")
-    db_path = os.path.abspath('vpn_bot.db')
+    # Указываем путь к базе данных
+    db_path = Path(r'C:\PycharmProjects\vpn_bot.db')
 
+    # Проверяем, что файл существует
+    if db_path.exists():
+        print(f"Путь к базе данных: {db_path}")
+    else:
+        print("Файл базы данных не найден!")
 
    # await drop_table('vpn_bot.db', 'users')
 

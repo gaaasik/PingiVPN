@@ -20,8 +20,8 @@ def check_existing_user_files(chat_id):
     user_dir = os.path.join(REGISTERED_USERS_DIR, str(chat_id))
     if os.path.exists(user_dir):
         # Проверяем наличие файлов в этой директории
-        config_file = os.path.join(user_dir, "pingi_vingi.conf")
-        qr_file = os.path.join(user_dir, "pingi_vingi.png")
+        config_file = os.path.join(user_dir, "PingiVPN.conf")
+        qr_file = os.path.join(user_dir, "PingiVPN.png")
         if os.path.exists(config_file) and os.path.exists(qr_file):
             return True
     return False
@@ -33,8 +33,8 @@ async def send_files_to_user(message, chat_id, use_existing=False):
     # Проверяем, существует ли уже папка и файлы пользователя
     if check_existing_user_files(chat_id):
         user_dir = os.path.join(REGISTERED_USERS_DIR, str(chat_id))
-        config_file_path = os.path.join(user_dir, 'pingi_vingi.conf')
-        qr_code_path = os.path.join(user_dir, 'pingi_vingi.png')
+        config_file_path = os.path.join(user_dir, 'PingiVPN.conf')
+        qr_code_path = os.path.join(user_dir, 'PingiVPN.png')
 
         config_file = FSInputFile(config_file_path)
         qr_code_file = FSInputFile(qr_code_path)
@@ -55,8 +55,8 @@ async def send_files_to_user(message, chat_id, use_existing=False):
             user_dir = os.path.join(REGISTERED_USERS_DIR, str(chat_id))
             if not os.path.exists(user_dir):
                 os.makedirs(user_dir)
-            config_file_path = os.path.join(user_dir, 'pingi_vingi.conf')
-            qr_code_path = os.path.join(user_dir, 'pingi_vingi.png')
+            config_file_path = os.path.join(user_dir, 'PingiVPN.conf')
+            qr_code_path = os.path.join(user_dir, 'PingiVPN.png')
 
             shutil.copy(os.path.join(BASE_CONFIGS_DIR, free_files[0]), config_file_path)
             shutil.copy(os.path.join(BASE_CONFIGS_DIR, free_images[0]), qr_code_path)
@@ -98,8 +98,8 @@ async def process_user_files(folder_name):
         os.makedirs(user_dir)
 
     # Проверяем, существует ли уже необходимый файл в папке пользователя
-    config_file_path = os.path.join(user_dir, 'pingi_vingi.conf')
-    qr_file_path = os.path.join(user_dir, 'pingi_vingi.png')
+    config_file_path = os.path.join(user_dir, 'PingiVPN.conf')
+    qr_file_path = os.path.join(user_dir, 'PingiVPN.png')
 
     if os.path.exists(config_file_path) and os.path.exists(qr_file_path):
         # Если файлы уже существуют, просто возвращаем их
@@ -125,11 +125,11 @@ async def process_user_files(folder_name):
 
         if os.path.exists(general_config) and os.path.exists(general_image):
             # Копирование general_adress файлов в директорию пользователя
-            shutil.copy(general_config, os.path.join(user_dir, 'pingi_vingi.conf'))
-            shutil.copy(general_image, os.path.join(user_dir, 'pingi_vingi.png'))
+            shutil.copy(general_config, os.path.join(user_dir, 'PingiVPN.conf'))
+            shutil.copy(general_image, os.path.join(user_dir, 'PingiVPN.png'))
 
-            config_file = FSInputFile(os.path.join(user_dir, 'pingi_vingi.conf'))
-            qr_code_file = FSInputFile(os.path.join(user_dir, 'pingi_vingi.png'))
+            config_file = FSInputFile(os.path.join(user_dir, 'PingiVPN.conf'))
+            qr_code_file = FSInputFile(os.path.join(user_dir, 'PingiVPN.png'))
             return config_file, qr_code_file
         else:
             raise Exception("Нет доступных пар конфигурационных файлов и изображений, и отсутствуют general_adress файлы.")
@@ -141,8 +141,8 @@ async def process_user_files(folder_name):
     prefix_number = free_config_file.split('_')[0]
 
     # Определение путей к новым файлам в директории пользователя
-    new_config_name = "pingi_vingi.conf"
-    new_image_name = "pingi_vingi.png"
+    new_config_name = "PingiVPN.conf"
+    new_image_name = "PingiVPN.png"
     new_config_path = os.path.join(user_dir, new_config_name)
     new_image_path = os.path.join(user_dir, new_image_name)
 

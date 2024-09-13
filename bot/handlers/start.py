@@ -1,4 +1,5 @@
 # bot/handlers/start.py
+import os
 
 from aiogram import Router, types
 from aiogram.filters import Command

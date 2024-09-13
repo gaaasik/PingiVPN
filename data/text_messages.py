@@ -2,12 +2,12 @@ import os
 
 CONFIGS_DIR = r'C:\PycharmProjects\VPN_BOT\configs'
 BASE_CONFIGS_DIR = os.path.join(CONFIGS_DIR, 'base_configs')
-#SERVER_PRIVATE_KEY = 'IG1uYhg18ZNuEedjlYNoMpLhgK6BeQFBnGoPHQZwKHo='  # ////// Укажите здесь ваш приватный ключ сервера
-#SERVER_PUBLIC_KEY = '3VSQ2qeXCG8VxepFz/V10E1N84YA2DFutZPXUQB0NE8='  # Укажите ваш публичный ключ сервера
-#SERVER_IP = '147.45.232.240'  # Укажите IP-адрес вашего сервера
 PATH_TO_IMAGES = r'C:\PycharmProjects\VPN_BOT\data\photo'
 REGISTERED_USERS_DIR = os.path.join(CONFIGS_DIR, 'registered_user')
-name_bot = 'GASIK_VPN_BOT'
+name_bot = 'PingiVPN_bot'
+# Путь к базе данных
+database_path_local = r'C:\PycharmProjects\vpn_bot.db'
+
 # Пример важного сообщения
 welcome_message = (
     "👋 Добро пожаловать на Антарктиду интернета!\n\n"

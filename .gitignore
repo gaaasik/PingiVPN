@@ -1,0 +1,10 @@
+/VPN_BOT.zip
+/vpn_bot.db
+/configs
+/tests
+# Игнорирование виртуальных окружений
+venv/
+.venv/
+
+# Игнорирование файлов окружения
+venv/.env

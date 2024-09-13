@@ -3,10 +3,7 @@ import os
 import datetime
 
 import bot
-
-# Путь к конфигурационным файлам
-CONFIGS_DIR = r'C:\PycharmProjects\VPN BOT\configs'
-BASE_CONFIGS_DIR = os.path.join(CONFIGS_DIR, 'base_configs')
+from data.text_messages import database_path_local
 
 
 # async def delete_user(telegram_id: int):
@@ -58,9 +55,12 @@ async def drop_table(database_path: str, table_name: str):
             print(f"Ошибка при удалении таблицы {table_name}: {e}")
 
 async def init_db(database_path: str):
+    if not os.path.exists(database_path_local):
+        print(f"Файл базы данных не найден по пути: {database_path_local}")
     db_directory = os.path.dirname(database_path)
     if db_directory and not os.path.exists(db_directory):
         os.makedirs(db_directory)
+
 
     conn = await aiosqlite.connect(database_path)
 
@@ -124,7 +124,7 @@ async def init_db(database_path: str):
 
 async def add_user(chat_id: int, user_name: str, referrer_id: int = None):
     registration_date = datetime.datetime.now()  # Сохраняем текущее время
-    async with aiosqlite.connect('vpn_bot.db') as conn:
+    async with aiosqlite.connect(database_path_local) as conn:
         await conn.execute(
             'INSERT INTO users (chat_id, user_name, registration_date, referrer_id) VALUES (?, ?, ?, ?)',
             (chat_id, user_name, registration_date, referrer_id)
@@ -135,21 +135,21 @@ async def add_user(chat_id: int, user_name: str, referrer_id: int = None):
 
 
 async def get_user_by_telegram_id(telegram_id: int):
-    async with aiosqlite.connect('vpn_bot.db') as conn:
+    async with aiosqlite.connect(database_path_local) as conn:
         async with conn.execute('SELECT * FROM users WHERE chat_id = ?', (telegram_id,)) as cursor:
             return await cursor.fetchone()
 
 
 
 async def get_all_users():
-    async with aiosqlite.connect('vpn_bot.db') as conn:
+    async with aiosqlite.connect(database_path_local) as conn:
         async with conn.execute('SELECT * FROM users') as cursor:
             users = await cursor.fetchall()
     return users
 
 
 async def get_user_status(user_id: int):
-    async with aiosqlite.connect('vpn_bot.db') as conn:
+    async with aiosqlite.connect(database_path_local) as conn:
         async with conn.execute('SELECT registration_date, user_name FROM users WHERE chat_id = ?', (user_id,)) as cursor:
             user = await cursor.fetchone()
             if user:
@@ -158,7 +158,7 @@ async def get_user_status(user_id: int):
     return None
 
 async def add_user_question(chat_id: int, user_id: int, question_text: str):
-    async with aiosqlite.connect('vpn_bot.db') as conn:
+    async with aiosqlite.connect(database_path_local) as conn:
         await conn.execute(
             'INSERT INTO user_questions (chat_id, user_id, question_text) VALUES (?, ?, ?)',
             (chat_id, user_id, question_text)
@@ -166,7 +166,7 @@ async def add_user_question(chat_id: int, user_id: int, question_text: str):
         await conn.commit()
 # //////////////////////////////////////////////////////////////////
 async def add_referral(referrer_id: int, referred_id: int):
-    async with aiosqlite.connect('vpn_bot.db') as conn:
+    async with aiosqlite.connect(database_path_local) as conn:
         # Проверяем, есть ли уже столбец referrer_id в таблице
         async with conn.execute("PRAGMA table_info(users)") as cursor:
             columns = await cursor.fetchall()
