@@ -5,8 +5,8 @@ from datetime import datetime
 
 from aiogram import types
 
-from data.text_messages import REGISTERED_USERS_DIR
 
+REGISTERED_USERS_DIR = os.getenv('REGISTERED_USERS_DIR')
 # Хранилище для сообщений и их типов
 user_messages = {}
 important_messages = {}

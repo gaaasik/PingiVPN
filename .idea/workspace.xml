@@ -5,18 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8463a58f-158e-43c2-817c-a15d580d5bc0" name="Changes" comment="sdelal dohya">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/2requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/handlers/1.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/handlers/cleanup.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/cleanup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/handlers/share.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/share.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/handlers/start.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/start.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/keyboards/commands.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/keyboards/registration_keyboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/keyboards/registration_keyboard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/keyboards/reply.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/keyboards/reply.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/utils/config.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/utils/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/utils/db.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/utils/file_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/utils/file_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/utils/vpn.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/data/text_messages.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/text_messages.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/bot.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/bot.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
@@ -35,6 +31,21 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "gaaasik"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/gaaasik/PingiVPN.git",
+    "accountId": "e5396232-b590-4253-8af2-5be56d85fdc6"
+  }
+}]]></component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/.venv/.env" root0="SKIP_INSPECTION" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -55,19 +66,19 @@
     "Python.main.executor": "Run",
     "Python.old_bot.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/PycharmProjects/VPN_BOT/bot/utils",
+    "last_opened_file_path": "C:/PycharmProjects/VPN_BOT",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\PycharmProjects\VPN_BOT" />
       <recent name="C:\PycharmProjects\VPN_BOT\bot\utils" />
       <recent name="C:\PycharmProjects\VPN_BOT\configs" />
       <recent name="C:\PycharmProjects\VPN BOT\tests" />
       <recent name="C:\PycharmProjects\VPN BOT\base_configs" />
-      <recent name="C:\PycharmProjects\VPN BOT\bot\handlers\base_config" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\PycharmProjects\VPN BOT\configs" />
@@ -173,7 +184,23 @@
       <option name="project" value="LOCAL" />
       <updated>1725574673151</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="sdelal dohya">
+      <option name="closed" value="true" />
+      <created>1726259129129</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1726259129129</updated>
+    </task>
+    <task id="LOCAL-00003" summary="sdelal dohya">
+      <option name="closed" value="true" />
+      <created>1726259532362</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1726259532362</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

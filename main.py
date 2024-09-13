@@ -14,10 +14,11 @@ from bot.midlewares.throttling import ThrottlingMiddleware
 
 
 import os
+# Загружаем переменные окружения из файла .env
+
+load_dotenv()  # Указываем путь к .env файлу
 
 async def main():
-    # Загружаем переменные окружения из файла .env
-    load_dotenv(dotenv_path=r'C:\PycharmProjects\VPN_BOT\.venv\.env')  # Указываем путь к .env файлу
 
     # Читаем токен бота из переменной окружения
     BOT_TOKEN = os.getenv('BOT_TOKEN')
@@ -29,7 +30,7 @@ async def main():
     # Настраиваем логирование
     setup_logger("logs/bot.log")
     # Указываем путь к базе данных
-    db_path = Path(r'C:\PycharmProjects\vpn_bot.db')
+    db_path = Path(os.getenv('database_path_local'))
 
     # Проверяем, что файл существует
     if db_path.exists():

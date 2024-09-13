@@ -3,8 +3,8 @@ from aiogram import Router, types
 from aiogram.filters import Command
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from bot.handlers.cleanup import delete_unimportant_messages, store_message, messages_for_db
-from data.text_messages import name_bot
-
+import os
+name_bot = os.getenv('name_bot')
 router = Router()
 
 share_message = (

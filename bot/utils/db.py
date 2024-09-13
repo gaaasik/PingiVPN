@@ -1,10 +1,14 @@
+from pathlib import Path
+
 import aiosqlite
 import os
 import datetime
 
-import bot
-from data.text_messages import database_path_local
+from dotenv import load_dotenv
 
+# Загрузка переменных окружения из файла .env
+load_dotenv()
+database_path_local = Path(os.getenv('database_path_local'))
 
 # async def delete_user(telegram_id: int):
 #     async with aiosqlite.connect('vpn_bot.db') as conn:

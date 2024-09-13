@@ -2,12 +2,24 @@ import asyncio
 import os
 import shutil
 from aiogram.types import FSInputFile
-
+from dotenv import load_dotenv
 from bot.handlers.cleanup import store_important_message
 from bot.keyboards.inline import inline_kb
 from bot.keyboards.reply import reply_keyboard
-from data.text_messages import CONFIGS_DIR, BASE_CONFIGS_DIR, PATH_TO_IMAGES, instructions_message, REGISTERED_USERS_DIR
+from data.text_messages import  instructions_message
+# Загрузка переменных из файла .env
+load_dotenv()
+# Получение переменных окружения
+CONFIGS_DIR = os.getenv('CONFIGS_DIR')
+if CONFIGS_DIR is None:
+    raise ValueError("Переменная окружения CONFIGS_DIR не установлена.")
 
+BASE_CONFIGS_DIR = os.path.join(CONFIGS_DIR, 'base_configs')
+PATH_TO_IMAGES = os.getenv('PATH_TO_IMAGES')
+if PATH_TO_IMAGES is None:
+    raise ValueError("Переменная окружения PATH_TO_IMAGES не установлена.")
+
+REGISTERED_USERS_DIR = os.path.join(CONFIGS_DIR, 'registered_user')
 
 # Новая директория для зарегистрированных пользователей
 

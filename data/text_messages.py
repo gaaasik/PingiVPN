@@ -1,12 +1,6 @@
 import os
 
-CONFIGS_DIR = r'C:\PycharmProjects\VPN_BOT\configs'
-BASE_CONFIGS_DIR = os.path.join(CONFIGS_DIR, 'base_configs')
-PATH_TO_IMAGES = r'C:\PycharmProjects\VPN_BOT\data\photo'
-REGISTERED_USERS_DIR = os.path.join(CONFIGS_DIR, 'registered_user')
-name_bot = 'PingiVPN_bot'
-# Путь к базе данных
-database_path_local = r'C:\PycharmProjects\vpn_bot.db'
+
 
 # Пример важного сообщения
 welcome_message = (

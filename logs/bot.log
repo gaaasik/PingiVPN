@@ -16749,3 +16749,16 @@ sqlite3.OperationalError: unable to open database file
 2024-09-13 14:45:19,711 [INFO] aiogram.event: Update id=228395421 is handled. Duration 328 ms by bot id=7036736465
 2024-09-13 14:45:28,553 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
 2024-09-13 14:45:28,554 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 00:46:38,872 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 00:46:39,103 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 00:47:04,967 [INFO] aiogram.event: Update id=228395422 is handled. Duration 500 ms by bot id=7036736465
+2024-09-14 00:47:06,191 [INFO] aiogram.event: Update id=228395423 is handled. Duration 250 ms by bot id=7036736465
+2024-09-14 00:47:07,142 [INFO] aiogram.event: Update id=228395424 is handled. Duration 171 ms by bot id=7036736465
+2024-09-14 00:47:13,428 [INFO] aiogram.event: Update id=228395425 is handled. Duration 342 ms by bot id=7036736465
+2024-09-14 00:47:18,030 [INFO] aiogram.event: Update id=228395426 is handled. Duration 485 ms by bot id=7036736465
+2024-09-14 00:47:22,216 [INFO] aiogram.event: Update id=228395427 is handled. Duration 375 ms by bot id=7036736465
+2024-09-14 00:47:31,513 [INFO] aiogram.event: Update id=228395428 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 00:47:35,216 [INFO] aiogram.event: Update id=228395429 is handled. Duration 234 ms by bot id=7036736465
+2024-09-14 00:47:37,394 [INFO] aiogram.event: Update id=228395430 is handled. Duration 281 ms by bot id=7036736465
+2024-09-14 00:49:46,653 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 00:49:46,653 [INFO] aiogram.dispatcher: Polling stopped
