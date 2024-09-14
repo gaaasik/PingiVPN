@@ -16762,3 +16762,446 @@ sqlite3.OperationalError: unable to open database file
 2024-09-14 00:47:37,394 [INFO] aiogram.event: Update id=228395430 is handled. Duration 281 ms by bot id=7036736465
 2024-09-14 00:49:46,653 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
 2024-09-14 00:49:46,653 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 13:47:45,424 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 13:47:45,772 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 13:49:57,497 [WARNING] aiogram.dispatcher: Received SIGINT signal
+2024-09-14 13:49:57,498 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 13:49:57,498 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 13:50:35,466 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 13:50:35,685 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 14:11:37,605 [WARNING] aiogram.dispatcher: Received SIGINT signal
+2024-09-14 14:11:37,605 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 14:11:37,605 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 14:36:02,054 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 14:36:02,283 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 14:56:29,369 [INFO] aiogram.event: Update id=228395431 is not handled. Duration 2 ms by bot id=7036736465
+2024-09-14 14:56:29,369 [ERROR] aiogram.event: Cause exception while process update id=228395431 by bot id=7036736465
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\PycharmProjects\\VPN_BOT\\configs/base_configs'
+Traceback (most recent call last):
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/fsm/middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/bot/midlewares/throttling.py", line 35, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/bot/handlers/show_config.py", line 24, in cmd_show_qr_and_file
+    await send_files_to_user(message, folder_name, use_existing=False)
+  File "/home/gasik/PingiVPN/bot/utils/file_manager.py", line 55, in send_files_to_user
+    free_files = sorted([f for f in os.listdir(BASE_CONFIGS_DIR) if f.endswith('_free.conf')])
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\PycharmProjects\\VPN_BOT\\configs/base_configs'
+2024-09-14 14:56:33,707 [INFO] aiogram.event: Update id=228395432 is handled. Duration 271 ms by bot id=7036736465
+2024-09-14 14:56:36,084 [INFO] aiogram.event: Update id=228395433 is not handled. Duration 2 ms by bot id=7036736465
+2024-09-14 14:56:36,084 [ERROR] aiogram.event: Cause exception while process update id=228395433 by bot id=7036736465
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\PycharmProjects\\VPN_BOT\\configs/base_configs'
+Traceback (most recent call last):
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/fsm/middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/bot/midlewares/throttling.py", line 35, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/bot/handlers/show_config.py", line 24, in cmd_show_qr_and_file
+    await send_files_to_user(message, folder_name, use_existing=False)
+  File "/home/gasik/PingiVPN/bot/utils/file_manager.py", line 55, in send_files_to_user
+    free_files = sorted([f for f in os.listdir(BASE_CONFIGS_DIR) if f.endswith('_free.conf')])
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\PycharmProjects\\VPN_BOT\\configs/base_configs'
+2024-09-14 14:56:44,684 [INFO] aiogram.event: Update id=228395434 is handled. Duration 285 ms by bot id=7036736465
+2024-09-14 14:56:49,542 [INFO] aiogram.event: Update id=228395435 is handled. Duration 320 ms by bot id=7036736465
+2024-09-14 14:56:51,322 [INFO] aiogram.event: Update id=228395436 is handled. Duration 284 ms by bot id=7036736465
+2024-09-14 14:56:53,923 [INFO] aiogram.event: Update id=228395437 is handled. Duration 217 ms by bot id=7036736465
+2024-09-14 14:57:05,420 [INFO] aiogram.event: Update id=228395438 is not handled. Duration 1 ms by bot id=7036736465
+2024-09-14 14:57:05,420 [ERROR] aiogram.event: Cause exception while process update id=228395438 by bot id=7036736465
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\PycharmProjects\\VPN_BOT\\configs/base_configs'
+Traceback (most recent call last):
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/fsm/middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/bot/midlewares/throttling.py", line 35, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/bot/handlers/show_config.py", line 24, in cmd_show_qr_and_file
+    await send_files_to_user(message, folder_name, use_existing=False)
+  File "/home/gasik/PingiVPN/bot/utils/file_manager.py", line 55, in send_files_to_user
+    free_files = sorted([f for f in os.listdir(BASE_CONFIGS_DIR) if f.endswith('_free.conf')])
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\PycharmProjects\\VPN_BOT\\configs/base_configs'
+2024-09-14 14:58:56,261 [WARNING] aiogram.dispatcher: Received SIGINT signal
+2024-09-14 14:58:56,261 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 14:58:56,261 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 15:00:42,396 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 15:00:42,772 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 15:00:42,881 [INFO] aiogram.event: Update id=228395439 is not handled. Duration 2 ms by bot id=7036736465
+2024-09-14 15:00:42,882 [ERROR] aiogram.event: Cause exception while process update id=228395439 by bot id=7036736465
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\PycharmProjects\\VPN_BOT\\configs/base_configs'
+Traceback (most recent call last):
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/fsm/middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/bot/midlewares/throttling.py", line 35, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/bot/handlers/show_config.py", line 24, in cmd_show_qr_and_file
+    await send_files_to_user(message, folder_name, use_existing=False)
+  File "/home/gasik/PingiVPN/bot/utils/file_manager.py", line 55, in send_files_to_user
+    free_files = sorted([f for f in os.listdir(BASE_CONFIGS_DIR) if f.endswith('_free.conf')])
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\PycharmProjects\\VPN_BOT\\configs/base_configs'
+2024-09-14 15:00:55,832 [INFO] aiogram.event: Update id=228395440 is not handled. Duration 2 ms by bot id=7036736465
+2024-09-14 15:00:55,832 [ERROR] aiogram.event: Cause exception while process update id=228395440 by bot id=7036736465
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\PycharmProjects\\VPN_BOT\\configs/base_configs'
+Traceback (most recent call last):
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/fsm/middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/bot/midlewares/throttling.py", line 35, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/bot/handlers/show_config.py", line 24, in cmd_show_qr_and_file
+    await send_files_to_user(message, folder_name, use_existing=False)
+  File "/home/gasik/PingiVPN/bot/utils/file_manager.py", line 55, in send_files_to_user
+    free_files = sorted([f for f in os.listdir(BASE_CONFIGS_DIR) if f.endswith('_free.conf')])
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\PycharmProjects\\VPN_BOT\\configs/base_configs'
+2024-09-14 15:02:14,636 [WARNING] aiogram.dispatcher: Received SIGINT signal
+2024-09-14 15:02:14,636 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 15:02:14,636 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 15:19:51,790 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 15:19:52,018 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 15:19:56,155 [INFO] aiogram.event: Update id=228395441 is not handled. Duration 1 ms by bot id=7036736465
+2024-09-14 15:19:56,155 [ERROR] aiogram.event: Cause exception while process update id=228395441 by bot id=7036736465
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\PycharmProjects\\VPN_BOT\\configs/base_configs'
+Traceback (most recent call last):
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/fsm/middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/bot/midlewares/throttling.py", line 35, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/bot/handlers/show_config.py", line 24, in cmd_show_qr_and_file
+    await send_files_to_user(message, folder_name, use_existing=False)
+  File "/home/gasik/PingiVPN/bot/utils/file_manager.py", line 55, in send_files_to_user
+    free_files = sorted([f for f in os.listdir(BASE_CONFIGS_DIR) if f.endswith('_free.conf')])
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\PycharmProjects\\VPN_BOT\\configs/base_configs'
+2024-09-14 15:27:01,122 [WARNING] aiogram.dispatcher: Received SIGINT signal
+2024-09-14 15:27:01,123 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 15:27:01,123 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 15:48:25,630 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 15:48:25,864 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 15:48:39,790 [INFO] aiogram.event: Update id=228395442 is not handled. Duration 2 ms by bot id=7036736465
+2024-09-14 15:48:39,790 [ERROR] aiogram.event: Cause exception while process update id=228395442 by bot id=7036736465
+FileNotFoundError: [Errno 2] No such file or directory: "r'PingiVPN\\configs'/base_configs"
+Traceback (most recent call last):
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/fsm/middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/bot/midlewares/throttling.py", line 35, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/bot/handlers/show_config.py", line 24, in cmd_show_qr_and_file
+    await send_files_to_user(message, folder_name, use_existing=False)
+  File "/home/gasik/PingiVPN/bot/utils/file_manager.py", line 55, in send_files_to_user
+    free_files = sorted([f for f in os.listdir(BASE_CONFIGS_DIR) if f.endswith('_free.conf')])
+FileNotFoundError: [Errno 2] No such file or directory: "r'PingiVPN\\configs'/base_configs"
+2024-09-14 15:50:09,579 [WARNING] aiogram.dispatcher: Received SIGINT signal
+2024-09-14 15:50:09,579 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 15:50:09,580 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 15:50:31,376 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 15:50:31,720 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 15:50:34,381 [INFO] aiogram.event: Update id=228395443 is not handled. Duration 2 ms by bot id=7036736465
+2024-09-14 15:50:34,382 [ERROR] aiogram.event: Cause exception while process update id=228395443 by bot id=7036736465
+FileNotFoundError: [Errno 2] No such file or directory: 'PingiVPN\\configs/base_configs'
+Traceback (most recent call last):
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/fsm/middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/bot/midlewares/throttling.py", line 35, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/bot/handlers/show_config.py", line 24, in cmd_show_qr_and_file
+    await send_files_to_user(message, folder_name, use_existing=False)
+  File "/home/gasik/PingiVPN/bot/utils/file_manager.py", line 55, in send_files_to_user
+    free_files = sorted([f for f in os.listdir(BASE_CONFIGS_DIR) if f.endswith('_free.conf')])
+FileNotFoundError: [Errno 2] No such file or directory: 'PingiVPN\\configs/base_configs'
+2024-09-14 15:50:46,796 [WARNING] aiogram.dispatcher: Received SIGINT signal
+2024-09-14 15:50:46,797 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 15:50:46,797 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 15:55:35,281 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 15:55:35,527 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 15:55:36,844 [INFO] aiogram.event: Update id=228395444 is not handled. Duration 2 ms by bot id=7036736465
+2024-09-14 15:55:36,844 [ERROR] aiogram.event: Cause exception while process update id=228395444 by bot id=7036736465
+FileNotFoundError: [Errno 2] No such file or directory: 'PingiVPN/configs/base_configs'
+Traceback (most recent call last):
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/fsm/middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "/home/gasik/PingiVPN/bot/midlewares/throttling.py", line 35, in __call__
+    return await handler(event, data)
+  File "/home/gasik/PingiVPN/venv/lib/python3.10/site-packages/aiogram/dispatcher/event/handler.py", line 42, in call
+    return await wrapped()
+  File "/home/gasik/PingiVPN/bot/handlers/show_config.py", line 24, in cmd_show_qr_and_file
+    await send_files_to_user(message, folder_name, use_existing=False)
+  File "/home/gasik/PingiVPN/bot/utils/file_manager.py", line 55, in send_files_to_user
+    free_files = sorted([f for f in os.listdir(BASE_CONFIGS_DIR) if f.endswith('_free.conf')])
+FileNotFoundError: [Errno 2] No such file or directory: 'PingiVPN/configs/base_configs'
+2024-09-14 15:56:33,110 [WARNING] aiogram.dispatcher: Received SIGINT signal
+2024-09-14 15:56:33,110 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 15:56:33,111 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 15:58:26,452 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 15:58:26,674 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 15:58:29,441 [INFO] aiogram.event: Update id=228395445 is handled. Duration 675 ms by bot id=7036736465
+2024-09-14 16:02:44,426 [INFO] aiogram.event: Update id=228395446 is handled. Duration 446 ms by bot id=7036736465
+2024-09-14 16:02:46,316 [INFO] aiogram.event: Update id=228395447 is handled. Duration 318 ms by bot id=7036736465
+2024-09-14 16:02:46,995 [INFO] aiogram.event: Update id=228395448 is handled. Duration 124 ms by bot id=7036736465
+2024-09-14 16:02:48,426 [INFO] aiogram.event: Update id=228395449 is handled. Duration 473 ms by bot id=7036736465
+2024-09-14 16:02:49,875 [INFO] aiogram.event: Update id=228395450 is handled. Duration 221 ms by bot id=7036736465
+2024-09-14 16:20:24,889 [WARNING] aiogram.dispatcher: Received SIGINT signal
+2024-09-14 16:20:24,890 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 16:20:24,890 [INFO] aiogram.dispatcher: Polling stopped
