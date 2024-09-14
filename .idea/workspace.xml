@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8463a58f-158e-43c2-817c-a15d580d5bc0" name="Changes" comment="sdelal dohya">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/utils/file_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/utils/file_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/bot.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/bot.log" afterDir="false" />
-    </list>
+    <list default="true" id="8463a58f-158e-43c2-817c-a15d580d5bc0" name="Changes" comment="sdelal dohya" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -193,7 +189,15 @@
       <option name="project" value="LOCAL" />
       <updated>1726259532362</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="sdelal dohya">
+      <option name="closed" value="true" />
+      <created>1726322419255</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1726322419255</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
