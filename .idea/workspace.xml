@@ -5,17 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8463a58f-158e-43c2-817c-a15d580d5bc0" name="Changes" comment="sdelal dohya">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/2requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/handlers/cleanup.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/cleanup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/handlers/share.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/share.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/utils/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/utils/db.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/utils/file_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/utils/file_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/text_messages.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/text_messages.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/bot.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/bot.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,18 +24,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "gaaasik"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;gaaasik&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/gaaasik/PingiVPN.git",
-    "accountId": "e5396232-b590-4253-8af2-5be56d85fdc6"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/gaaasik/PingiVPN.git&quot;,
+    &quot;accountId&quot;: &quot;e5396232-b590-4253-8af2-5be56d85fdc6&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/.venv/.env" root0="SKIP_INSPECTION" />
   </component>
@@ -58,20 +50,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python tests.Python tests for test_start.test_start_command.executor": "Run",
-    "Python.1.executor": "Run",
-    "Python.file_manager.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.old_bot.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/PycharmProjects/VPN_BOT",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python tests.Python tests for test_start.test_start_command.executor&quot;: &quot;Run&quot;,
+    &quot;Python.1.executor&quot;: &quot;Run&quot;,
+    &quot;Python.file_manager.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.old_bot.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/PycharmProjects/VPN_BOT&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\PycharmProjects\VPN_BOT" />
@@ -81,6 +73,7 @@
       <recent name="C:\PycharmProjects\VPN BOT\base_configs" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\PycharmProjects\VPN_BOT\tests" />
       <recent name="C:\PycharmProjects\VPN BOT\configs" />
       <recent name="C:\PycharmProjects\VPN BOT" />
       <recent name="C:\PycharmProjects\VPN BOT\bot" />

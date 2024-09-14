@@ -16762,3 +16762,7 @@ sqlite3.OperationalError: unable to open database file
 2024-09-14 00:47:37,394 [INFO] aiogram.event: Update id=228395430 is handled. Duration 281 ms by bot id=7036736465
 2024-09-14 00:49:46,653 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
 2024-09-14 00:49:46,653 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 13:21:58,620 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 13:21:58,844 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 13:22:02,122 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 13:22:02,122 [INFO] aiogram.dispatcher: Polling stopped
