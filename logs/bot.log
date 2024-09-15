@@ -16766,3 +16766,1587 @@ sqlite3.OperationalError: unable to open database file
 2024-09-14 13:21:58,844 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
 2024-09-14 13:22:02,122 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
 2024-09-14 13:22:02,122 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 20:17:34,408 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 20:17:34,625 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 21:38:53,315 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 21:38:53,326 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 21:39:03,303 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 21:39:03,537 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 21:39:51,781 [INFO] aiogram.event: Update id=228395455 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 21:39:51,781 [ERROR] aiogram.event: Cause exception while process update id=228395455 by bot id=7036736465
+ValidationError: 1 validation error for InlineKeyboardMarkup
+inline_keyboard
+  Field required [type=missing, input_value={'row_width': 2}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.8/v/missing
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\bot\midlewares\throttling.py", line 35, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\start.py", line 29, in cmd_start
+    sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard())
+  File "C:\PycharmProjects\VPN_BOT\bot\keyboards\inline.py", line 11, in device_choice_keyboard
+    keyboard = InlineKeyboardMarkup(row_width=2)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\pydantic\main.py", line 193, in __init__
+    self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 1 validation error for InlineKeyboardMarkup
+inline_keyboard
+  Field required [type=missing, input_value={'row_width': 2}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.8/v/missing
+2024-09-14 21:41:20,055 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'PINGI VINGI'
+2024-09-14 21:41:20,055 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 21:41:24,087 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 21:41:24,248 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 21:41:26,201 [INFO] aiogram.event: Update id=228395456 is handled. Duration 297 ms by bot id=7036736465
+2024-09-14 21:44:45,686 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 21:44:45,686 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 21:44:49,880 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 21:44:50,090 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 21:44:50,678 [INFO] aiogram.event: Update id=228395457 is handled. Duration 187 ms by bot id=7036736465
+2024-09-14 21:46:20,350 [INFO] aiogram.event: Update id=228395458 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 21:46:21,015 [INFO] aiogram.event: Update id=228395459 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 21:46:22,189 [INFO] aiogram.event: Update id=228395460 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 21:46:24,372 [INFO] aiogram.event: Update id=228395461 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 21:46:24,436 [INFO] aiogram.event: Update id=228395462 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 21:46:25,452 [INFO] aiogram.event: Update id=228395463 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 21:46:25,507 [INFO] aiogram.event: Update id=228395464 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 21:46:26,316 [INFO] aiogram.event: Update id=228395465 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 21:46:26,316 [INFO] aiogram.event: Update id=228395466 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 21:46:26,367 [INFO] aiogram.event: Update id=228395467 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 21:46:31,582 [INFO] aiogram.event: Update id=228395468 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 22:12:27,902 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 22:12:27,907 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 22:12:32,604 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 22:12:32,813 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 22:12:37,325 [INFO] aiogram.event: Update id=228395469 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 22:12:37,325 [ERROR] aiogram.event: Cause exception while process update id=228395469 by bot id=7036736465
+TypeError: expected str, bytes or os.PathLike object, not BufferedReader
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\bot\midlewares\throttling.py", line 35, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\start.py", line 42, in cmd_start
+    await message.answer_photo(photo=FSInputFile(photo))
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\types\input_file.py", line 97, in __init__
+    filename = os.path.basename(path)
+  File "C:\Python310\lib\ntpath.py", line 216, in basename
+    return split(p)[1]
+  File "C:\Python310\lib\ntpath.py", line 185, in split
+    p = os.fspath(p)
+TypeError: expected str, bytes or os.PathLike object, not BufferedReader
+2024-09-14 22:13:44,728 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 22:13:44,730 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 22:13:52,020 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 22:13:52,239 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 22:13:55,346 [INFO] aiogram.event: Update id=228395470 is handled. Duration 1297 ms by bot id=7036736465
+2024-09-14 22:14:20,778 [INFO] aiogram.event: Update id=228395471 is handled. Duration 812 ms by bot id=7036736465
+2024-09-14 22:14:31,791 [INFO] aiogram.event: Update id=228395472 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 22:24:25,228 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 22:24:25,238 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 22:24:41,764 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 22:24:41,980 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 22:24:44,526 [INFO] aiogram.event: Update id=228395473 is handled. Duration 656 ms by bot id=7036736465
+2024-09-14 22:24:51,736 [INFO] aiogram.event: Update id=228395474 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 22:24:58,426 [INFO] aiogram.event: Update id=228395475 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 22:26:43,441 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 22:26:43,442 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 22:26:47,091 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 22:26:47,316 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 22:26:51,028 [INFO] aiogram.event: Update id=228395476 is handled. Duration 766 ms by bot id=7036736465
+2024-09-14 22:26:51,819 [INFO] aiogram.event: Update id=228395477 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 22:26:54,171 [INFO] aiogram.event: Update id=228395478 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 22:34:39,343 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 22:34:39,347 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 22:34:43,348 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 22:34:43,548 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 22:34:55,327 [INFO] aiogram.event: Update id=228395479 is handled. Duration 781 ms by bot id=7036736465
+2024-09-14 22:35:00,207 [INFO] aiogram.event: Update id=228395480 is handled. Duration 233 ms by bot id=7036736465
+2024-09-14 22:35:13,458 [INFO] aiogram.event: Update id=228395481 is handled. Duration 264 ms by bot id=7036736465
+2024-09-14 22:51:06,427 [INFO] aiogram.event: Update id=228395482 is handled. Duration 608 ms by bot id=7036736465
+2024-09-14 22:51:07,221 [INFO] aiogram.event: Update id=228395483 is handled. Duration 437 ms by bot id=7036736465
+2024-09-14 22:51:07,941 [INFO] aiogram.event: Update id=228395484 is handled. Duration 250 ms by bot id=7036736465
+2024-09-14 22:51:08,788 [INFO] aiogram.event: Update id=228395485 is handled. Duration 312 ms by bot id=7036736465
+2024-09-14 22:51:09,601 [INFO] aiogram.event: Update id=228395486 is handled. Duration 250 ms by bot id=7036736465
+2024-09-14 23:26:43,344 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 23:26:43,348 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 23:39:45,301 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 23:39:45,523 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 23:40:34,485 [INFO] aiogram.event: Update id=228395487 is handled. Duration 781 ms by bot id=7036736465
+2024-09-14 23:40:35,524 [INFO] aiogram.event: Update id=228395488 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-14 23:40:35,524 [ERROR] aiogram.event: Cause exception while process update id=228395488 by bot id=7036736465
+ValidationError: 1 validation error for InlineKeyboardMarkup
+inline_keyboard
+  Field required [type=missing, input_value={'row_width': 1}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.8/v/missing
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\device_choice.py", line 33, in handle_device_choice
+    reply_markup=download_app_keyboard(download_link)
+  File "C:\PycharmProjects\VPN_BOT\bot\keyboards\inline.py", line 33, in download_app_keyboard
+    keyboard = InlineKeyboardMarkup(row_width=1)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\pydantic\main.py", line 193, in __init__
+    self.__pydantic_validator__.validate_python(data, self_instance=self)
+pydantic_core._pydantic_core.ValidationError: 1 validation error for InlineKeyboardMarkup
+inline_keyboard
+  Field required [type=missing, input_value={'row_width': 1}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.8/v/missing
+2024-09-14 23:41:17,233 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 23:41:17,233 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 23:41:21,081 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 23:41:21,236 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 23:41:24,410 [INFO] aiogram.event: Update id=228395489 is not handled. Duration 282 ms by bot id=7036736465
+2024-09-14 23:41:24,410 [ERROR] aiogram.event: Cause exception while process update id=228395489 by bot id=7036736465
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\device_choice.py", line 37, in handle_device_choice
+    await store_message(callback_query.message.chat.id, message.message_id, message)
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+2024-09-14 23:41:42,128 [INFO] aiogram.event: Update id=228395490 is not handled. Duration 233 ms by bot id=7036736465
+2024-09-14 23:41:42,128 [ERROR] aiogram.event: Cause exception while process update id=228395490 by bot id=7036736465
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\device_choice.py", line 37, in handle_device_choice
+    await store_message(callback_query.message.chat.id, message.message_id, message)
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+2024-09-14 23:41:53,249 [INFO] aiogram.event: Update id=228395491 is not handled. Duration 250 ms by bot id=7036736465
+2024-09-14 23:41:53,249 [ERROR] aiogram.event: Cause exception while process update id=228395491 by bot id=7036736465
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\device_choice.py", line 37, in handle_device_choice
+    await store_message(callback_query.message.chat.id, message.message_id, message)
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+2024-09-14 23:42:08,297 [INFO] aiogram.event: Update id=228395492 is not handled. Duration 77 ms by bot id=7036736465
+2024-09-14 23:42:08,297 [ERROR] aiogram.event: Cause exception while process update id=228395492 by bot id=7036736465
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\device_choice.py", line 37, in handle_device_choice
+    await store_message(callback_query.message.chat.id, message.message_id, message)
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+2024-09-14 23:42:16,410 [INFO] aiogram.event: Update id=228395493 is not handled. Duration 93 ms by bot id=7036736465
+2024-09-14 23:42:16,410 [ERROR] aiogram.event: Cause exception while process update id=228395493 by bot id=7036736465
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\app_downloaded.py", line 20, in handle_app_downloaded
+    await store_message(callback_query.message.chat.id, message.message_id, message)
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+2024-09-14 23:42:56,200 [INFO] aiogram.event: Update id=228395494 is handled. Duration 360 ms by bot id=7036736465
+2024-09-14 23:42:57,648 [INFO] aiogram.event: Update id=228395495 is handled. Duration 141 ms by bot id=7036736465
+2024-09-14 23:43:44,787 [INFO] aiogram.event: Update id=228395496 is handled. Duration 812 ms by bot id=7036736465
+2024-09-14 23:43:45,619 [INFO] aiogram.event: Update id=228395497 is not handled. Duration 77 ms by bot id=7036736465
+2024-09-14 23:43:45,619 [ERROR] aiogram.event: Cause exception while process update id=228395497 by bot id=7036736465
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\device_choice.py", line 37, in handle_device_choice
+    await store_message(callback_query.message.chat.id, message.message_id, message)
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+2024-09-14 23:45:24,948 [INFO] aiogram.event: Update id=228395498 is handled. Duration 1156 ms by bot id=7036736465
+2024-09-14 23:45:37,586 [INFO] aiogram.event: Update id=228395499 is not handled. Duration 93 ms by bot id=7036736465
+2024-09-14 23:45:37,587 [ERROR] aiogram.event: Cause exception while process update id=228395499 by bot id=7036736465
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\device_choice.py", line 37, in handle_device_choice
+    await store_message(callback_query.message.chat.id, message.message_id, message)
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+2024-09-14 23:45:45,999 [INFO] aiogram.event: Update id=228395500 is not handled. Duration 62 ms by bot id=7036736465
+2024-09-14 23:45:46,000 [ERROR] aiogram.event: Cause exception while process update id=228395500 by bot id=7036736465
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\device_choice.py", line 37, in handle_device_choice
+    await store_message(callback_query.message.chat.id, message.message_id, message)
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+2024-09-14 23:46:02,306 [INFO] aiogram.event: Update id=228395501 is not handled. Duration 218 ms by bot id=7036736465
+2024-09-14 23:46:02,306 [ERROR] aiogram.event: Cause exception while process update id=228395501 by bot id=7036736465
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\device_choice.py", line 37, in handle_device_choice
+    await store_message(callback_query.message.chat.id, message.message_id, message)
+TypeError: store_message() missing 1 required positional argument: 'sender_type'
+2024-09-14 23:53:16,145 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 23:53:16,146 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-14 23:53:19,777 [INFO] aiogram.dispatcher: Start polling
+2024-09-14 23:53:19,981 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-14 23:53:22,959 [INFO] aiogram.event: Update id=228395502 is handled. Duration 764 ms by bot id=7036736465
+2024-09-14 23:53:24,586 [INFO] aiogram.event: Update id=228395503 is handled. Duration 233 ms by bot id=7036736465
+2024-09-14 23:53:27,596 [INFO] aiogram.event: Update id=228395504 is handled. Duration 219 ms by bot id=7036736465
+2024-09-14 23:53:48,516 [INFO] aiogram.event: Update id=228395505 is handled. Duration 312 ms by bot id=7036736465
+2024-09-14 23:53:49,430 [INFO] aiogram.event: Update id=228395506 is handled. Duration 125 ms by bot id=7036736465
+2024-09-14 23:53:51,681 [INFO] aiogram.event: Update id=228395507 is handled. Duration 156 ms by bot id=7036736465
+2024-09-14 23:53:54,241 [INFO] aiogram.event: Update id=228395508 is handled. Duration 202 ms by bot id=7036736465
+2024-09-14 23:53:55,332 [INFO] aiogram.event: Update id=228395509 is handled. Duration 343 ms by bot id=7036736465
+2024-09-14 23:53:56,286 [INFO] aiogram.event: Update id=228395510 is handled. Duration 172 ms by bot id=7036736465
+2024-09-14 23:53:57,531 [INFO] aiogram.event: Update id=228395511 is handled. Duration 282 ms by bot id=7036736465
+2024-09-14 23:54:01,758 [INFO] aiogram.event: Update id=228395512 is handled. Duration 233 ms by bot id=7036736465
+2024-09-14 23:54:04,405 [INFO] aiogram.event: Update id=228395513 is handled. Duration 202 ms by bot id=7036736465
+2024-09-14 23:54:07,304 [INFO] aiogram.event: Update id=228395514 is handled. Duration 187 ms by bot id=7036736465
+2024-09-14 23:54:09,257 [INFO] aiogram.event: Update id=228395515 is handled. Duration 155 ms by bot id=7036736465
+2024-09-14 23:54:10,561 [INFO] aiogram.event: Update id=228395516 is handled. Duration 172 ms by bot id=7036736465
+2024-09-14 23:54:12,150 [INFO] aiogram.event: Update id=228395517 is handled. Duration 187 ms by bot id=7036736465
+2024-09-14 23:54:13,321 [INFO] aiogram.event: Update id=228395518 is handled. Duration 468 ms by bot id=7036736465
+2024-09-14 23:54:14,248 [INFO] aiogram.event: Update id=228395519 is handled. Duration 125 ms by bot id=7036736465
+2024-09-14 23:54:15,569 [INFO] aiogram.event: Update id=228395520 is handled. Duration 125 ms by bot id=7036736465
+2024-09-14 23:54:17,433 [INFO] aiogram.event: Update id=228395521 is handled. Duration 139 ms by bot id=7036736465
+2024-09-15 00:05:24,246 [INFO] aiogram.event: Update id=228395522 is handled. Duration 812 ms by bot id=7036736465
+2024-09-15 00:05:27,254 [INFO] aiogram.event: Update id=228395523 is handled. Duration 483 ms by bot id=7036736465
+2024-09-15 00:05:29,730 [INFO] aiogram.event: Update id=228395524 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 00:05:31,621 [INFO] aiogram.event: Update id=228395525 is handled. Duration 531 ms by bot id=7036736465
+2024-09-15 00:06:22,705 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 00:06:22,705 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 00:06:26,648 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 00:06:26,849 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 00:06:31,036 [INFO] aiogram.event: Update id=228395526 is handled. Duration 343 ms by bot id=7036736465
+2024-09-15 00:06:33,661 [INFO] aiogram.event: Update id=228395527 is handled. Duration 203 ms by bot id=7036736465
+2024-09-15 00:06:35,309 [INFO] aiogram.event: Update id=228395528 is handled. Duration 250 ms by bot id=7036736465
+2024-09-15 00:18:42,678 [INFO] aiogram.event: Update id=228395529 is handled. Duration 297 ms by bot id=7036736465
+2024-09-15 00:18:55,760 [INFO] aiogram.event: Update id=228395530 is handled. Duration 139 ms by bot id=7036736465
+2024-09-15 00:19:09,265 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 00:19:09,265 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 00:19:13,459 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 00:19:13,614 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 00:19:14,697 [INFO] aiogram.event: Update id=228395531 is handled. Duration 968 ms by bot id=7036736465
+2024-09-15 00:19:16,298 [INFO] aiogram.event: Update id=228395532 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 00:19:31,333 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 00:19:31,333 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 00:19:35,477 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 00:19:35,635 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 00:19:38,796 [INFO] aiogram.event: Update id=228395533 is handled. Duration 1032 ms by bot id=7036736465
+2024-09-15 00:19:39,949 [INFO] aiogram.event: Update id=228395534 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 00:19:42,083 [INFO] aiogram.event: Update id=228395535 is handled. Duration 139 ms by bot id=7036736465
+2024-09-15 00:19:44,625 [INFO] aiogram.event: Update id=228395536 is handled. Duration 296 ms by bot id=7036736465
+2024-09-15 00:19:45,509 [INFO] aiogram.event: Update id=228395537 is handled. Duration 233 ms by bot id=7036736465
+2024-09-15 00:20:10,451 [INFO] aiogram.event: Update id=228395538 is handled. Duration 235 ms by bot id=7036736465
+2024-09-15 00:21:16,497 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 00:21:16,497 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 00:21:20,605 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 00:21:20,810 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 00:21:23,474 [INFO] aiogram.event: Update id=228395539 is handled. Duration 984 ms by bot id=7036736465
+2024-09-15 00:21:24,477 [INFO] aiogram.event: Update id=228395540 is not handled. Duration 62 ms by bot id=7036736465
+2024-09-15 00:21:24,477 [ERROR] aiogram.event: Cause exception while process update id=228395540 by bot id=7036736465
+TypeError: store_important_message() takes from 2 to 3 positional arguments but 4 were given
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\device_choice.py", line 39, in handle_device_choice
+    await store_important_message(callback_query.message.chat.id, message.message_id, message.text, 'bot')
+TypeError: store_important_message() takes from 2 to 3 positional arguments but 4 were given
+2024-09-15 00:21:25,852 [INFO] aiogram.event: Update id=228395541 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 00:21:27,136 [INFO] aiogram.event: Update id=228395542 is handled. Duration 342 ms by bot id=7036736465
+2024-09-15 00:21:28,186 [INFO] aiogram.event: Update id=228395543 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 00:21:31,284 [INFO] aiogram.event: Update id=228395544 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 00:21:53,869 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 00:21:53,870 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 00:21:57,580 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 00:21:57,744 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 00:22:01,588 [INFO] aiogram.event: Update id=228395545 is handled. Duration 1312 ms by bot id=7036736465
+2024-09-15 00:22:02,700 [INFO] aiogram.event: Update id=228395546 is not handled. Duration 93 ms by bot id=7036736465
+2024-09-15 00:22:02,700 [ERROR] aiogram.event: Cause exception while process update id=228395546 by bot id=7036736465
+TypeError: store_important_message() takes from 2 to 3 positional arguments but 4 were given
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\device_choice.py", line 39, in handle_device_choice
+    await store_important_message(callback_query.message.chat.id, message.message_id, message.text, 'bot')
+TypeError: store_important_message() takes from 2 to 3 positional arguments but 4 were given
+2024-09-15 00:22:04,165 [INFO] aiogram.event: Update id=228395547 is not handled. Duration 125 ms by bot id=7036736465
+2024-09-15 00:22:04,166 [ERROR] aiogram.event: Cause exception while process update id=228395547 by bot id=7036736465
+TypeError: store_important_message() takes from 2 to 3 positional arguments but 4 were given
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\app_downloaded.py", line 24, in handle_app_downloaded
+    await store_important_message(callback_query.message.chat.id, message.message_id, message.text, 'bot')
+TypeError: store_important_message() takes from 2 to 3 positional arguments but 4 were given
+2024-09-15 00:22:05,561 [INFO] aiogram.event: Update id=228395548 is handled. Duration 139 ms by bot id=7036736465
+2024-09-15 00:22:06,937 [INFO] aiogram.event: Update id=228395549 is handled. Duration 202 ms by bot id=7036736465
+2024-09-15 00:22:08,204 [INFO] aiogram.event: Update id=228395550 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 00:22:09,570 [INFO] aiogram.event: Update id=228395551 is handled. Duration 375 ms by bot id=7036736465
+2024-09-15 00:22:10,702 [INFO] aiogram.event: Update id=228395552 is handled. Duration 188 ms by bot id=7036736465
+2024-09-15 00:22:12,049 [INFO] aiogram.event: Update id=228395553 is handled. Duration 202 ms by bot id=7036736465
+2024-09-15 00:22:13,324 [INFO] aiogram.event: Update id=228395554 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 00:22:14,505 [INFO] aiogram.event: Update id=228395555 is handled. Duration 186 ms by bot id=7036736465
+2024-09-15 00:22:15,843 [INFO] aiogram.event: Update id=228395556 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 00:22:16,193 [INFO] aiogram.event: Update id=228395557 is handled. Duration 188 ms by bot id=7036736465
+2024-09-15 00:22:17,272 [INFO] aiogram.event: Update id=228395558 is handled. Duration 516 ms by bot id=7036736465
+2024-09-15 00:22:18,322 [INFO] aiogram.event: Update id=228395559 is handled. Duration 188 ms by bot id=7036736465
+2024-09-15 00:22:18,576 [INFO] aiogram.event: Update id=228395560 is handled. Duration 266 ms by bot id=7036736465
+2024-09-15 00:22:18,703 [INFO] aiogram.event: Update id=228395561 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 00:22:18,885 [INFO] aiogram.event: Update id=228395562 is handled. Duration 264 ms by bot id=7036736465
+2024-09-15 00:22:19,149 [INFO] aiogram.event: Update id=228395563 is handled. Duration 296 ms by bot id=7036736465
+2024-09-15 00:22:24,611 [INFO] aiogram.event: Update id=228395564 is handled. Duration 202 ms by bot id=7036736465
+2024-09-15 00:22:26,496 [INFO] aiogram.event: Update id=228395565 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 00:22:27,954 [INFO] aiogram.event: Update id=228395566 is handled. Duration 203 ms by bot id=7036736465
+2024-09-15 00:22:32,896 [INFO] aiogram.event: Update id=228395567 is handled. Duration 202 ms by bot id=7036736465
+2024-09-15 00:22:35,190 [INFO] aiogram.event: Update id=228395568 is handled. Duration 188 ms by bot id=7036736465
+2024-09-15 00:22:36,293 [INFO] aiogram.event: Update id=228395569 is handled. Duration 391 ms by bot id=7036736465
+2024-09-15 00:22:43,220 [INFO] aiogram.event: Update id=228395570 is not handled. Duration 125 ms by bot id=7036736465
+2024-09-15 00:22:43,220 [ERROR] aiogram.event: Cause exception while process update id=228395570 by bot id=7036736465
+TypeError: store_important_message() takes from 2 to 3 positional arguments but 4 were given
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\device_choice.py", line 39, in handle_device_choice
+    await store_important_message(callback_query.message.chat.id, message.message_id, message.text, 'bot')
+TypeError: store_important_message() takes from 2 to 3 positional arguments but 4 were given
+2024-09-15 00:23:34,724 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 00:23:34,724 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 00:23:38,989 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 00:23:39,197 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 00:23:46,130 [INFO] aiogram.event: Update id=228395571 is handled. Duration 1202 ms by bot id=7036736465
+2024-09-15 00:23:47,293 [INFO] aiogram.event: Update id=228395572 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 00:23:48,657 [INFO] aiogram.event: Update id=228395573 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 00:23:49,952 [INFO] aiogram.event: Update id=228395574 is handled. Duration 110 ms by bot id=7036736465
+2024-09-15 00:23:51,357 [INFO] aiogram.event: Update id=228395575 is handled. Duration 297 ms by bot id=7036736465
+2024-09-15 00:23:52,300 [INFO] aiogram.event: Update id=228395576 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 00:23:53,609 [INFO] aiogram.event: Update id=228395577 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 00:37:12,795 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 00:37:12,796 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 00:37:16,410 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 00:37:16,644 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 00:37:19,650 [INFO] aiogram.event: Update id=228395578 is handled. Duration 891 ms by bot id=7036736465
+2024-09-15 00:37:20,790 [INFO] aiogram.event: Update id=228395579 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 00:37:21,734 [INFO] aiogram.event: Update id=228395580 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 00:37:22,808 [INFO] aiogram.event: Update id=228395581 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 00:37:23,872 [INFO] aiogram.event: Update id=228395582 is handled. Duration 171 ms by bot id=7036736465
+2024-09-15 00:37:24,917 [INFO] aiogram.event: Update id=228395583 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 00:37:25,926 [INFO] aiogram.event: Update id=228395584 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 00:37:31,660 [INFO] aiogram.event: Update id=228395585 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 00:37:32,860 [INFO] aiogram.event: Update id=228395586 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 00:37:33,834 [INFO] aiogram.event: Update id=228395587 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 00:37:35,133 [INFO] aiogram.event: Update id=228395588 is handled. Duration 139 ms by bot id=7036736465
+2024-09-15 00:37:36,214 [INFO] aiogram.event: Update id=228395589 is handled. Duration 264 ms by bot id=7036736465
+2024-09-15 01:10:00,901 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 01:10:00,906 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 01:12:02,944 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 01:12:03,149 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 01:12:11,804 [INFO] aiogram.event: Update id=228395590 is not handled. Duration 1297 ms by bot id=7036736465
+2024-09-15 01:12:11,804 [ERROR] aiogram.event: Cause exception while process update id=228395590 by bot id=7036736465
+AttributeError: 'NoneType' object has no attribute 'text'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\bot\midlewares\throttling.py", line 35, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\start.py", line 48, in cmd_start
+    await store_important_message(message.chat.id, sent_message.message_id, sent_message)
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\cleanup.py", line 48, in store_important_message
+    await log_chat_history(chat_id, message.text, "bot")
+AttributeError: 'NoneType' object has no attribute 'text'
+2024-09-15 01:12:14,898 [INFO] aiogram.event: Update id=228395591 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 01:12:16,699 [INFO] aiogram.event: Update id=228395592 is not handled. Duration 63 ms by bot id=7036736465
+2024-09-15 01:12:16,700 [ERROR] aiogram.event: Cause exception while process update id=228395592 by bot id=7036736465
+AttributeError: 'NoneType' object has no attribute 'text'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\app_downloaded.py", line 24, in handle_app_downloaded
+    await store_important_message(callback_query.message.chat.id, message.message_id, message)
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\cleanup.py", line 48, in store_important_message
+    await log_chat_history(chat_id, message.text, "bot")
+AttributeError: 'NoneType' object has no attribute 'text'
+2024-09-15 01:12:17,873 [INFO] aiogram.event: Update id=228395593 is not handled. Duration 110 ms by bot id=7036736465
+2024-09-15 01:12:17,873 [ERROR] aiogram.event: Cause exception while process update id=228395593 by bot id=7036736465
+AttributeError: 'NoneType' object has no attribute 'text'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\app_downloaded.py", line 24, in handle_app_downloaded
+    await store_important_message(callback_query.message.chat.id, message.message_id, message)
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\cleanup.py", line 48, in store_important_message
+    await log_chat_history(chat_id, message.text, "bot")
+AttributeError: 'NoneType' object has no attribute 'text'
+2024-09-15 01:12:26,343 [INFO] aiogram.event: Update id=228395594 is not handled. Duration 796 ms by bot id=7036736465
+2024-09-15 01:12:26,343 [ERROR] aiogram.event: Cause exception while process update id=228395594 by bot id=7036736465
+AttributeError: 'NoneType' object has no attribute 'text'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\bot\midlewares\throttling.py", line 35, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\start.py", line 48, in cmd_start
+    await store_important_message(message.chat.id, sent_message.message_id, sent_message)
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\cleanup.py", line 48, in store_important_message
+    await log_chat_history(chat_id, message.text, "bot")
+AttributeError: 'NoneType' object has no attribute 'text'
+2024-09-15 01:30:38,135 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 01:30:38,139 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 01:30:41,938 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 01:30:42,142 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 01:33:55,239 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 01:33:55,246 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 01:34:00,445 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 01:34:00,662 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 01:34:49,068 [INFO] aiogram.event: Update id=228395595 is handled. Duration 953 ms by bot id=7036736465
+2024-09-15 01:34:53,676 [INFO] aiogram.event: Update id=228395596 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 01:34:57,406 [INFO] aiogram.event: Update id=228395597 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 01:34:59,928 [INFO] aiogram.event: Update id=228395598 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 01:35:02,112 [INFO] aiogram.event: Update id=228395599 is handled. Duration 140 ms by bot id=7036736465
+2024-09-15 01:35:03,568 [INFO] aiogram.event: Update id=228395600 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 01:35:05,444 [INFO] aiogram.event: Update id=228395601 is handled. Duration 188 ms by bot id=7036736465
+2024-09-15 01:35:07,445 [INFO] aiogram.event: Update id=228395602 is handled. Duration 203 ms by bot id=7036736465
+2024-09-15 01:36:02,280 [INFO] aiogram.event: Update id=228395603 is handled. Duration 500 ms by bot id=7036736465
+2024-09-15 01:36:03,278 [INFO] aiogram.event: Update id=228395604 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 01:36:04,628 [INFO] aiogram.event: Update id=228395605 is handled. Duration 155 ms by bot id=7036736465
+2024-09-15 01:36:05,922 [INFO] aiogram.event: Update id=228395606 is handled. Duration 156 ms by bot id=7036736465
+2024-09-15 01:37:56,176 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 01:37:56,176 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 01:37:59,873 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 01:38:00,077 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 01:38:03,543 [INFO] aiogram.event: Update id=228395607 is handled. Duration 266 ms by bot id=7036736465
+2024-09-15 01:38:06,960 [INFO] aiogram.event: Update id=228395608 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 01:38:07,948 [INFO] aiogram.event: Update id=228395609 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 01:38:08,870 [INFO] aiogram.event: Update id=228395610 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 01:38:09,791 [INFO] aiogram.event: Update id=228395611 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 01:38:59,996 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 01:38:59,996 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 01:39:03,312 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 01:39:03,467 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 01:39:06,573 [INFO] aiogram.event: Update id=228395612 is handled. Duration 1375 ms by bot id=7036736465
+2024-09-15 01:39:11,766 [INFO] aiogram.event: Update id=228395613 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 01:39:13,038 [INFO] aiogram.event: Update id=228395614 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 01:39:16,128 [INFO] aiogram.event: Update id=228395615 is handled. Duration 171 ms by bot id=7036736465
+2024-09-15 01:39:18,711 [INFO] aiogram.event: Update id=228395616 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 01:39:30,341 [INFO] aiogram.event: Update id=228395617 is handled. Duration 156 ms by bot id=7036736465
+2024-09-15 01:39:34,369 [INFO] aiogram.event: Update id=228395618 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 01:44:50,959 [INFO] aiogram.event: Update id=228395619 is handled. Duration 639 ms by bot id=7036736465
+2024-09-15 01:44:53,678 [INFO] aiogram.event: Update id=228395620 is handled. Duration 968 ms by bot id=7036736465
+2024-09-15 01:44:57,094 [INFO] aiogram.event: Update id=228395621 is handled. Duration 250 ms by bot id=7036736465
+2024-09-15 01:44:58,360 [INFO] aiogram.event: Update id=228395622 is handled. Duration 250 ms by bot id=7036736465
+2024-09-15 01:45:00,542 [INFO] aiogram.event: Update id=228395623 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 01:45:02,135 [INFO] aiogram.event: Update id=228395624 is handled. Duration 171 ms by bot id=7036736465
+2024-09-15 01:45:03,492 [INFO] aiogram.event: Update id=228395625 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 01:45:05,124 [INFO] aiogram.event: Update id=228395626 is handled. Duration 360 ms by bot id=7036736465
+2024-09-15 01:45:06,573 [INFO] aiogram.event: Update id=228395627 is handled. Duration 188 ms by bot id=7036736465
+2024-09-15 01:45:08,061 [INFO] aiogram.event: Update id=228395628 is handled. Duration 202 ms by bot id=7036736465
+2024-09-15 01:45:09,796 [INFO] aiogram.event: Update id=228395629 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 01:45:12,346 [INFO] aiogram.event: Update id=228395630 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 01:45:12,584 [INFO] aiogram.event: Update id=228395631 is handled. Duration 281 ms by bot id=7036736465
+2024-09-15 01:45:12,701 [INFO] aiogram.event: Update id=228395632 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 01:45:13,444 [INFO] aiogram.event: Update id=228395633 is handled. Duration 203 ms by bot id=7036736465
+2024-09-15 01:45:15,377 [INFO] aiogram.event: Update id=228395634 is handled. Duration 186 ms by bot id=7036736465
+2024-09-15 01:45:16,845 [INFO] aiogram.event: Update id=228395635 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 01:45:17,537 [INFO] aiogram.event: Update id=228395636 is handled. Duration 235 ms by bot id=7036736465
+2024-09-15 01:45:17,934 [INFO] aiogram.event: Update id=228395637 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 01:45:18,652 [INFO] aiogram.event: Update id=228395638 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 01:45:18,960 [INFO] aiogram.event: Update id=228395639 is handled. Duration 171 ms by bot id=7036736465
+2024-09-15 01:45:19,218 [INFO] aiogram.event: Update id=228395640 is handled. Duration 171 ms by bot id=7036736465
+2024-09-15 01:45:19,362 [INFO] aiogram.event: Update id=228395641 is handled. Duration 202 ms by bot id=7036736465
+2024-09-15 01:45:19,502 [INFO] aiogram.event: Update id=228395642 is handled. Duration 202 ms by bot id=7036736465
+2024-09-15 01:45:24,318 [INFO] aiogram.event: Update id=228395643 is handled. Duration 203 ms by bot id=7036736465
+2024-09-15 01:45:24,485 [INFO] aiogram.event: Update id=228395644 is handled. Duration 327 ms by bot id=7036736465
+2024-09-15 01:45:33,418 [INFO] aiogram.event: Update id=228395645 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 01:45:34,329 [INFO] aiogram.event: Update id=228395646 is handled. Duration 250 ms by bot id=7036736465
+2024-09-15 01:45:37,128 [INFO] aiogram.event: Update id=228395647 is handled. Duration 280 ms by bot id=7036736465
+2024-09-15 01:45:38,169 [INFO] aiogram.event: Update id=228395648 is handled. Duration 157 ms by bot id=7036736465
+2024-09-15 01:45:39,749 [INFO] aiogram.event: Update id=228395649 is handled. Duration 360 ms by bot id=7036736465
+2024-09-15 01:56:26,736 [INFO] aiogram.event: Update id=228395650 is handled. Duration 375 ms by bot id=7036736465
+2024-09-15 01:56:27,522 [INFO] aiogram.event: Update id=228395651 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 01:56:28,278 [INFO] aiogram.event: Update id=228395652 is handled. Duration 171 ms by bot id=7036736465
+2024-09-15 01:56:29,165 [INFO] aiogram.event: Update id=228395653 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 01:56:30,209 [INFO] aiogram.event: Update id=228395654 is handled. Duration 203 ms by bot id=7036736465
+2024-09-15 01:56:32,234 [INFO] aiogram.event: Update id=228395655 is handled. Duration 171 ms by bot id=7036736465
+2024-09-15 01:56:34,053 [INFO] aiogram.event: Update id=228395656 is handled. Duration 139 ms by bot id=7036736465
+2024-09-15 01:56:43,440 [INFO] aiogram.event: Update id=228395657 is handled. Duration 203 ms by bot id=7036736465
+2024-09-15 01:57:23,279 [INFO] aiogram.event: Update id=228395658 is handled. Duration 266 ms by bot id=7036736465
+2024-09-15 01:57:29,737 [INFO] aiogram.event: Update id=228395659 is handled. Duration 140 ms by bot id=7036736465
+2024-09-15 01:59:18,781 [INFO] aiogram.event: Update id=228395660 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 01:59:20,086 [INFO] aiogram.event: Update id=228395661 is handled. Duration 233 ms by bot id=7036736465
+2024-09-15 01:59:54,694 [INFO] aiogram.event: Update id=228395662 is handled. Duration 297 ms by bot id=7036736465
+2024-09-15 02:06:52,009 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 02:06:52,010 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 02:06:55,761 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 02:06:55,928 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 02:06:58,622 [INFO] aiogram.event: Update id=228395663 is handled. Duration 1625 ms by bot id=7036736465
+2024-09-15 02:07:00,214 [INFO] aiogram.event: Update id=228395664 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 02:07:02,792 [INFO] aiogram.event: Update id=228395665 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 02:07:15,612 [INFO] aiogram.event: Update id=228395666 is handled. Duration 171 ms by bot id=7036736465
+2024-09-15 02:07:21,015 [INFO] aiogram.event: Update id=228395667 is handled. Duration 186 ms by bot id=7036736465
+2024-09-15 02:07:27,242 [INFO] aiogram.event: Update id=228395668 is handled. Duration 202 ms by bot id=7036736465
+2024-09-15 02:07:31,556 [INFO] aiogram.event: Update id=228395669 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 02:07:33,417 [INFO] aiogram.event: Update id=228395670 is handled. Duration 282 ms by bot id=7036736465
+2024-09-15 02:08:32,713 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 02:08:32,713 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 02:08:36,193 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 02:08:36,350 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 02:08:39,231 [INFO] aiogram.event: Update id=228395671 is handled. Duration 1391 ms by bot id=7036736465
+2024-09-15 02:08:42,914 [INFO] aiogram.event: Update id=228395672 is handled. Duration 157 ms by bot id=7036736465
+2024-09-15 02:09:03,431 [INFO] aiogram.event: Update id=228395673 is handled. Duration 312 ms by bot id=7036736465
+2024-09-15 02:09:14,251 [INFO] aiogram.event: Update id=228395674 is handled. Duration 139 ms by bot id=7036736465
+2024-09-15 02:09:15,301 [INFO] aiogram.event: Update id=228395675 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 02:09:16,365 [INFO] aiogram.event: Update id=228395676 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 02:09:17,440 [INFO] aiogram.event: Update id=228395677 is handled. Duration 188 ms by bot id=7036736465
+2024-09-15 02:09:18,585 [INFO] aiogram.event: Update id=228395678 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 02:09:19,827 [INFO] aiogram.event: Update id=228395679 is handled. Duration 188 ms by bot id=7036736465
+2024-09-15 02:09:44,598 [INFO] aiogram.event: Update id=228395680 is handled. Duration 328 ms by bot id=7036736465
+2024-09-15 02:09:48,177 [INFO] aiogram.event: Update id=228395681 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 02:09:49,288 [INFO] aiogram.event: Update id=228395682 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 02:09:53,156 [INFO] aiogram.event: Update id=228395683 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 02:10:24,013 [INFO] aiogram.event: Update id=228395684 is handled. Duration 250 ms by bot id=7036736465
+2024-09-15 02:10:29,038 [INFO] aiogram.event: Update id=228395685 is handled. Duration 328 ms by bot id=7036736465
+2024-09-15 02:10:30,723 [INFO] aiogram.event: Update id=228395686 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 02:10:32,809 [INFO] aiogram.event: Update id=228395687 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 02:10:43,238 [INFO] aiogram.event: Update id=228395688 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 02:10:44,252 [INFO] aiogram.event: Update id=228395689 is handled. Duration 233 ms by bot id=7036736465
+2024-09-15 02:10:45,271 [INFO] aiogram.event: Update id=228395690 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 02:11:07,039 [INFO] aiogram.event: Update id=228395691 is handled. Duration 437 ms by bot id=7036736465
+2024-09-15 02:11:10,845 [INFO] aiogram.event: Update id=228395692 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 02:11:12,396 [INFO] aiogram.event: Update id=228395693 is handled. Duration 202 ms by bot id=7036736465
+2024-09-15 02:11:16,938 [INFO] aiogram.event: Update id=228395694 is handled. Duration 281 ms by bot id=7036736465
+2024-09-15 02:11:20,634 [INFO] aiogram.event: Update id=228395695 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 02:11:30,336 [INFO] aiogram.event: Update id=228395696 is handled. Duration 233 ms by bot id=7036736465
+2024-09-15 02:12:13,889 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 02:12:13,890 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 02:12:17,718 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 02:12:17,922 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 02:12:19,664 [INFO] aiogram.event: Update id=228395697 is handled. Duration 266 ms by bot id=7036736465
+2024-09-15 02:12:23,109 [INFO] aiogram.event: Update id=228395698 is handled. Duration 1344 ms by bot id=7036736465
+2024-09-15 02:12:24,316 [INFO] aiogram.event: Update id=228395699 is handled. Duration 188 ms by bot id=7036736465
+2024-09-15 02:12:26,322 [INFO] aiogram.event: Update id=228395700 is handled. Duration 188 ms by bot id=7036736465
+2024-09-15 02:12:28,561 [INFO] aiogram.event: Update id=228395701 is handled. Duration 156 ms by bot id=7036736465
+2024-09-15 02:12:30,323 [INFO] aiogram.event: Update id=228395702 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 02:12:32,107 [INFO] aiogram.event: Update id=228395703 is handled. Duration 141 ms by bot id=7036736465
+2024-09-15 02:12:33,303 [INFO] aiogram.event: Update id=228395704 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 02:12:34,256 [INFO] aiogram.event: Update id=228395705 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 02:12:35,028 [INFO] aiogram.event: Update id=228395706 is handled. Duration 156 ms by bot id=7036736465
+2024-09-15 02:12:35,941 [INFO] aiogram.event: Update id=228395707 is handled. Duration 141 ms by bot id=7036736465
+2024-09-15 02:12:39,690 [INFO] aiogram.event: Update id=228395708 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 02:12:42,261 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 02:12:42,261 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 02:12:45,921 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 02:12:46,095 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 02:12:49,364 [INFO] aiogram.event: Update id=228395709 is handled. Duration 250 ms by bot id=7036736465
+2024-09-15 02:12:51,215 [INFO] aiogram.event: Update id=228395710 is handled. Duration 639 ms by bot id=7036736465
+2024-09-15 02:12:54,456 [INFO] aiogram.event: Update id=228395711 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 02:12:55,430 [INFO] aiogram.event: Update id=228395712 is handled. Duration 202 ms by bot id=7036736465
+2024-09-15 02:12:57,053 [INFO] aiogram.event: Update id=228395713 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 02:12:58,057 [INFO] aiogram.event: Update id=228395714 is handled. Duration 233 ms by bot id=7036736465
+2024-09-15 02:12:59,162 [INFO] aiogram.event: Update id=228395715 is handled. Duration 500 ms by bot id=7036736465
+2024-09-15 02:13:00,167 [INFO] aiogram.event: Update id=228395716 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 02:13:01,604 [INFO] aiogram.event: Update id=228395717 is handled. Duration 203 ms by bot id=7036736465
+2024-09-15 02:13:33,458 [INFO] aiogram.event: Update id=228395718 is handled. Duration 375 ms by bot id=7036736465
+2024-09-15 02:15:22,718 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 02:15:22,718 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 02:15:26,323 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 02:15:26,520 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 02:15:28,984 [INFO] aiogram.event: Update id=228395719 is handled. Duration 219 ms by bot id=7036736465
+2024-09-15 02:15:30,469 [INFO] aiogram.event: Update id=228395720 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 02:15:31,654 [INFO] aiogram.event: Update id=228395721 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 02:15:32,841 [INFO] aiogram.event: Update id=228395722 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 02:15:33,791 [INFO] aiogram.event: Update id=228395723 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 02:15:34,777 [INFO] aiogram.event: Update id=228395724 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 02:15:35,991 [INFO] aiogram.event: Update id=228395725 is handled. Duration 202 ms by bot id=7036736465
+2024-09-15 02:15:37,154 [INFO] aiogram.event: Update id=228395726 is handled. Duration 171 ms by bot id=7036736465
+2024-09-15 02:15:38,312 [INFO] aiogram.event: Update id=228395727 is handled. Duration 202 ms by bot id=7036736465
+2024-09-15 02:15:39,347 [INFO] aiogram.event: Update id=228395728 is handled. Duration 422 ms by bot id=7036736465
+2024-09-15 02:15:40,005 [INFO] aiogram.event: Update id=228395729 is handled. Duration 171 ms by bot id=7036736465
+2024-09-15 02:15:40,319 [INFO] aiogram.event: Update id=228395730 is handled. Duration 188 ms by bot id=7036736465
+2024-09-15 02:15:40,542 [INFO] aiogram.event: Update id=228395732 is handled. Duration 125 ms by bot id=7036736465
+2024-09-15 02:15:40,557 [INFO] aiogram.event: Update id=228395731 is handled. Duration 297 ms by bot id=7036736465
+2024-09-15 02:15:41,405 [INFO] aiogram.event: Update id=228395733 is handled. Duration 250 ms by bot id=7036736465
+2024-09-15 02:15:45,610 [INFO] aiogram.event: Update id=228395734 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 02:15:47,244 [INFO] aiogram.event: Update id=228395735 is handled. Duration 235 ms by bot id=7036736465
+2024-09-15 02:15:50,560 [INFO] aiogram.event: Update id=228395736 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 02:15:55,742 [INFO] aiogram.event: Update id=228395737 is handled. Duration 531 ms by bot id=7036736465
+2024-09-15 02:15:56,920 [INFO] aiogram.event: Update id=228395738 is handled. Duration 297 ms by bot id=7036736465
+2024-09-15 02:15:57,996 [INFO] aiogram.event: Update id=228395739 is handled. Duration 202 ms by bot id=7036736465
+2024-09-15 02:15:59,529 [INFO] aiogram.event: Update id=228395740 is handled. Duration 108 ms by bot id=7036736465
+2024-09-15 02:16:00,856 [INFO] aiogram.event: Update id=228395741 is handled. Duration 172 ms by bot id=7036736465
+2024-09-15 02:16:01,793 [INFO] aiogram.event: Update id=228395742 is handled. Duration 203 ms by bot id=7036736465
+2024-09-15 02:16:02,841 [INFO] aiogram.event: Update id=228395743 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 02:16:03,104 [INFO] aiogram.event: Update id=228395744 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 02:16:03,758 [INFO] aiogram.event: Update id=228395745 is handled. Duration 217 ms by bot id=7036736465
+2024-09-15 02:16:04,147 [INFO] aiogram.event: Update id=228395746 is handled. Duration 202 ms by bot id=7036736465
+2024-09-15 02:16:04,401 [INFO] aiogram.event: Update id=228395747 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 02:16:09,950 [INFO] aiogram.event: Update id=228395748 is handled. Duration 203 ms by bot id=7036736465
+2024-09-15 02:16:14,074 [INFO] aiogram.event: Update id=228395749 is handled. Duration 188 ms by bot id=7036736465
+2024-09-15 02:16:16,931 [INFO] aiogram.event: Update id=228395750 is handled. Duration 233 ms by bot id=7036736465
+2024-09-15 02:16:22,296 [INFO] aiogram.event: Update id=228395751 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 02:19:56,080 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 02:19:56,080 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 12:32:13,880 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 12:32:14,229 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 12:35:07,589 [INFO] aiogram.event: Update id=228395752 is handled. Duration 1000 ms by bot id=7036736465
+2024-09-15 12:35:14,561 [INFO] aiogram.event: Update id=228395753 is handled. Duration 203 ms by bot id=7036736465
+2024-09-15 12:35:17,916 [INFO] aiogram.event: Update id=228395754 is handled. Duration 233 ms by bot id=7036736465
+2024-09-15 12:35:21,108 [INFO] aiogram.event: Update id=228395755 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 12:37:05,849 [ERROR] aiogram.dispatcher: Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientOSError: [WinError 1236] Подключение к сети было разорвано локальной системой
+2024-09-15 12:37:05,850 [WARNING] aiogram.dispatcher: Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7036736465)
+2024-09-15 12:37:17,033 [INFO] aiogram.dispatcher: Connection established (tryings = 1, bot id = 7036736465)
+2024-09-15 12:42:39,490 [ERROR] aiogram.dispatcher: Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientOSError: [WinError 1236] Подключение к сети было разорвано локальной системой
+2024-09-15 12:42:39,491 [WARNING] aiogram.dispatcher: Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7036736465)
+2024-09-15 12:42:50,707 [INFO] aiogram.dispatcher: Connection established (tryings = 1, bot id = 7036736465)
+2024-09-15 12:45:19,101 [INFO] aiogram.event: Update id=228395756 is handled. Duration 358 ms by bot id=7036736465
+2024-09-15 12:46:33,333 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 12:46:33,334 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 13:29:30,395 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 13:29:30,653 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 13:29:38,717 [INFO] aiogram.event: Update id=228395757 is handled. Duration 687 ms by bot id=7036736465
+2024-09-15 13:29:42,854 [INFO] aiogram.event: Update id=228395758 is handled. Duration 344 ms by bot id=7036736465
+2024-09-15 13:30:30,225 [INFO] aiogram.event: Update id=228395759 is handled. Duration 483 ms by bot id=7036736465
+2024-09-15 13:30:31,574 [INFO] aiogram.event: Update id=228395760 is handled. Duration 375 ms by bot id=7036736465
+2024-09-15 13:30:34,878 [INFO] aiogram.event: Update id=228395761 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 13:30:36,438 [INFO] aiogram.event: Update id=228395762 is handled. Duration 156 ms by bot id=7036736465
+2024-09-15 13:30:38,687 [INFO] aiogram.event: Update id=228395763 is handled. Duration 297 ms by bot id=7036736465
+2024-09-15 13:46:48,250 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 13:46:48,250 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 13:57:05,843 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 13:57:06,090 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 13:57:11,767 [INFO] aiogram.event: Update id=228395764 is handled. Duration 1467 ms by bot id=7036736465
+2024-09-15 13:57:13,095 [INFO] aiogram.event: Update id=228395765 is handled. Duration 203 ms by bot id=7036736465
+2024-09-15 13:57:17,967 [INFO] aiogram.event: Update id=228395766 is handled. Duration 358 ms by bot id=7036736465
+2024-09-15 13:57:19,929 [INFO] aiogram.event: Update id=228395767 is handled. Duration 327 ms by bot id=7036736465
+2024-09-15 13:57:25,043 [INFO] aiogram.event: Update id=228395768 is handled. Duration 437 ms by bot id=7036736465
+2024-09-15 13:57:29,943 [INFO] aiogram.event: Update id=228395769 is handled. Duration 313 ms by bot id=7036736465
+2024-09-15 13:57:37,539 [INFO] aiogram.event: Update id=228395770 is handled. Duration 437 ms by bot id=7036736465
+2024-09-15 13:57:46,996 [INFO] aiogram.event: Update id=228395771 is handled. Duration 671 ms by bot id=7036736465
+2024-09-15 13:57:52,382 [INFO] aiogram.event: Update id=228395772 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-15 13:57:56,369 [INFO] aiogram.event: Update id=228395773 is handled. Duration 327 ms by bot id=7036736465
+2024-09-15 13:58:02,369 [INFO] aiogram.event: Update id=228395774 is handled. Duration 202 ms by bot id=7036736465
+2024-09-15 13:58:07,360 [INFO] aiogram.event: Update id=228395775 is handled. Duration 359 ms by bot id=7036736465
+2024-09-15 14:00:14,305 [INFO] aiogram.event: Update id=228395776 is handled. Duration 718 ms by bot id=7036736465
+2024-09-15 14:00:17,934 [INFO] aiogram.event: Update id=228395777 is handled. Duration 514 ms by bot id=7036736465
+2024-09-15 14:00:23,314 [INFO] aiogram.event: Update id=228395778 is handled. Duration 843 ms by bot id=7036736465
+2024-09-15 14:00:28,982 [INFO] aiogram.event: Update id=228395779 is handled. Duration 281 ms by bot id=7036736465
+2024-09-15 14:00:34,480 [INFO] aiogram.event: Update id=228395780 is handled. Duration 250 ms by bot id=7036736465
+2024-09-15 14:00:38,675 [INFO] aiogram.event: Update id=228395781 is handled. Duration 250 ms by bot id=7036736465
+2024-09-15 14:00:51,148 [INFO] aiogram.event: Update id=228395782 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-15 14:00:51,149 [INFO] aiogram.event: Update id=228395783 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-15 14:00:51,149 [INFO] aiogram.event: Update id=228395784 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-15 14:04:23,492 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 14:04:23,496 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 14:04:27,233 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 14:04:27,444 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 14:04:33,601 [INFO] aiogram.event: Update id=228395785 is handled. Duration 1187 ms by bot id=7036736465
+2024-09-15 14:04:34,662 [INFO] aiogram.event: Update id=228395786 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-15 14:04:34,662 [ERROR] aiogram.event: Cause exception while process update id=228395786 by bot id=7036736465
+KeyError: 456717505
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\device_choice.py", line 16, in handle_device_choice
+    await delete_unimportant_messages(callback_query.message.chat.id, callback_query.bot)
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\cleanup.py", line 109, in delete_unimportant_messages
+    messages_to_delete = [
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\cleanup.py", line 111, in <listcomp>
+    if message_id not in important_messages[chat_id] and message_id not in message_types_mapping[chat_id].values()
+KeyError: 456717505
+2024-09-15 14:05:33,405 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 14:05:33,406 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 14:05:37,054 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 14:05:37,213 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 14:05:42,433 [INFO] aiogram.event: Update id=228395787 is handled. Duration 750 ms by bot id=7036736465
+2024-09-15 14:05:44,203 [INFO] aiogram.event: Update id=228395788 is handled. Duration 468 ms by bot id=7036736465
+2024-09-15 14:05:45,917 [INFO] aiogram.event: Update id=228395789 is handled. Duration 141 ms by bot id=7036736465
+2024-09-15 14:05:47,084 [INFO] aiogram.event: Update id=228395790 is not handled. Duration 125 ms by bot id=7036736465
+2024-09-15 14:05:47,084 [ERROR] aiogram.event: Cause exception while process update id=228395790 by bot id=7036736465
+AttributeError: 'NoneType' object has no attribute 'message_id'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\file_or_qr.py", line 31, in handle_get_qr_code
+    await store_important_message(callback_query.bot, callback_query.message.chat.id, message.message_id, message,
+AttributeError: 'NoneType' object has no attribute 'message_id'
+2024-09-15 14:05:48,558 [INFO] aiogram.event: Update id=228395791 is not handled. Duration 202 ms by bot id=7036736465
+2024-09-15 14:05:48,558 [ERROR] aiogram.event: Cause exception while process update id=228395791 by bot id=7036736465
+AttributeError: 'NoneType' object has no attribute 'message_id'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\file_or_qr.py", line 18, in handle_get_config
+    await store_important_message(callback_query.bot, callback_query.message.chat.id, message.message_id, message,
+AttributeError: 'NoneType' object has no attribute 'message_id'
+2024-09-15 14:50:14,607 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 14:50:14,613 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 14:50:18,827 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 14:50:19,032 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 14:50:52,753 [INFO] aiogram.event: Update id=228395792 is handled. Duration 1264 ms by bot id=7036736465
+2024-09-15 14:50:56,125 [INFO] aiogram.event: Update id=228395793 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 14:51:20,463 [INFO] aiogram.event: Update id=228395794 is handled. Duration 375 ms by bot id=7036736465
+2024-09-15 14:51:26,770 [INFO] aiogram.event: Update id=228395795 is handled. Duration 203 ms by bot id=7036736465
+2024-09-15 14:51:31,955 [INFO] aiogram.event: Update id=228395796 is handled. Duration 342 ms by bot id=7036736465
+2024-09-15 14:51:35,157 [INFO] aiogram.event: Update id=228395797 is handled. Duration 375 ms by bot id=7036736465
+2024-09-15 14:51:37,711 [INFO] aiogram.event: Update id=228395798 is handled. Duration 875 ms by bot id=7036736465
+2024-09-15 14:51:40,691 [INFO] aiogram.event: Update id=228395799 is handled. Duration 202 ms by bot id=7036736465
+2024-09-15 14:51:57,138 [INFO] aiogram.event: Update id=228395800 is handled. Duration 703 ms by bot id=7036736465
+2024-09-15 14:52:02,414 [INFO] aiogram.event: Update id=228395801 is handled. Duration 141 ms by bot id=7036736465
+2024-09-15 14:52:08,986 [INFO] aiogram.event: Update id=228395802 is handled. Duration 250 ms by bot id=7036736465
+2024-09-15 14:52:12,418 [INFO] aiogram.event: Update id=228395803 is handled. Duration 562 ms by bot id=7036736465
+2024-09-15 14:52:16,132 [INFO] aiogram.event: Update id=228395804 is handled. Duration 562 ms by bot id=7036736465
+2024-09-15 14:57:03,271 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 14:57:03,272 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 14:57:11,523 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 14:57:11,728 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 14:59:18,515 [INFO] aiogram.event: Update id=228395805 is handled. Duration 766 ms by bot id=7036736465
+2024-09-15 14:59:21,770 [INFO] aiogram.event: Update id=228395806 is handled. Duration 233 ms by bot id=7036736465
+2024-09-15 14:59:29,171 [INFO] aiogram.event: Update id=228395807 is handled. Duration 156 ms by bot id=7036736465
+2024-09-15 14:59:32,424 [INFO] aiogram.event: Update id=228395808 is handled. Duration 328 ms by bot id=7036736465
+2024-09-15 14:59:33,828 [INFO] aiogram.event: Update id=228395809 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 14:59:40,240 [INFO] aiogram.event: Update id=228395810 is handled. Duration 266 ms by bot id=7036736465
+2024-09-15 14:59:42,154 [INFO] aiogram.event: Update id=228395811 is handled. Duration 203 ms by bot id=7036736465
+2024-09-15 14:59:44,382 [INFO] aiogram.event: Update id=228395812 is not handled. Duration 16 ms by bot id=7036736465
+2024-09-15 14:59:44,382 [ERROR] aiogram.event: Cause exception while process update id=228395812 by bot id=7036736465
+AttributeError: 'NoneType' object has no attribute 'message_id'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\file_or_qr.py", line 31, in handle_get_qr_code
+    await store_important_message(callback_query.bot, callback_query.message.chat.id, message.message_id, message,
+AttributeError: 'NoneType' object has no attribute 'message_id'
+2024-09-15 15:03:46,206 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 15:03:46,206 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 15:03:58,388 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 15:03:58,603 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 15:04:05,028 [INFO] aiogram.event: Update id=228395813 is handled. Duration 266 ms by bot id=7036736465
+2024-09-15 15:04:06,998 [INFO] aiogram.event: Update id=228395814 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-15 15:04:06,998 [ERROR] aiogram.event: Cause exception while process update id=228395814 by bot id=7036736465
+AttributeError: 'NoneType' object has no attribute 'message_id'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\file_or_qr.py", line 20, in handle_get_config
+    await store_important_message(callback_query.bot, callback_query.message.chat.id, message.message_id, message,
+AttributeError: 'NoneType' object has no attribute 'message_id'
+2024-09-15 15:07:10,780 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 15:07:10,782 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 15:07:14,511 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 15:07:14,716 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 15:07:18,145 [INFO] aiogram.event: Update id=228395815 is handled. Duration 250 ms by bot id=7036736465
+2024-09-15 15:07:19,597 [INFO] aiogram.event: Update id=228395816 is handled. Duration 344 ms by bot id=7036736465
+2024-09-15 15:13:26,117 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 15:13:26,119 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 15:13:34,335 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 15:13:34,579 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 15:13:36,515 [INFO] aiogram.event: Update id=228395817 is handled. Duration 703 ms by bot id=7036736465
+2024-09-15 15:13:37,993 [INFO] aiogram.event: Update id=228395818 is handled. Duration 217 ms by bot id=7036736465
+2024-09-15 15:13:41,233 [INFO] aiogram.event: Update id=228395819 is handled. Duration 266 ms by bot id=7036736465
+2024-09-15 15:13:42,770 [INFO] aiogram.event: Update id=228395820 is handled. Duration 407 ms by bot id=7036736465
+2024-09-15 15:13:44,896 [INFO] aiogram.event: Update id=228395821 is handled. Duration 157 ms by bot id=7036736465
+2024-09-15 15:14:27,867 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 15:14:27,868 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 15:14:42,688 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 15:14:42,846 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 15:14:46,428 [INFO] aiogram.event: Update id=228395822 is handled. Duration 859 ms by bot id=7036736465
+2024-09-15 15:14:50,820 [INFO] aiogram.event: Update id=228395823 is handled. Duration 421 ms by bot id=7036736465
+2024-09-15 15:14:52,613 [INFO] aiogram.event: Update id=228395824 is handled. Duration 421 ms by bot id=7036736465
+2024-09-15 15:14:53,864 [INFO] aiogram.event: Update id=228395825 is handled. Duration 421 ms by bot id=7036736465
+2024-09-15 15:14:55,083 [INFO] aiogram.event: Update id=228395826 is handled. Duration 233 ms by bot id=7036736465
+2024-09-15 15:14:57,524 [INFO] aiogram.event: Update id=228395827 is handled. Duration 375 ms by bot id=7036736465
+2024-09-15 15:14:58,754 [INFO] aiogram.event: Update id=228395828 is handled. Duration 405 ms by bot id=7036736465
+2024-09-15 15:15:00,534 [INFO] aiogram.event: Update id=228395829 is handled. Duration 453 ms by bot id=7036736465
+2024-09-15 15:15:11,532 [INFO] aiogram.event: Update id=228395830 is handled. Duration 344 ms by bot id=7036736465
+2024-09-15 15:15:40,431 [INFO] aiogram.event: Update id=228395831 is handled. Duration 1171 ms by bot id=7036736465
+2024-09-15 15:16:28,904 [INFO] aiogram.event: Update id=228395832 is handled. Duration 328 ms by bot id=7036736465
+2024-09-15 15:16:32,161 [INFO] aiogram.event: Update id=228395833 is handled. Duration 140 ms by bot id=7036736465
+2024-09-15 15:16:33,038 [INFO] aiogram.event: Update id=228395834 is handled. Duration 140 ms by bot id=7036736465
+2024-09-15 15:21:58,329 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 15:21:58,329 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 15:22:04,498 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 15:22:04,700 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 15:23:26,375 [INFO] aiogram.event: Update id=228395835 is handled. Duration 1625 ms by bot id=7036736465
+2024-09-15 15:23:27,874 [INFO] aiogram.event: Update id=228395836 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 15:23:28,823 [INFO] aiogram.event: Update id=228395837 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 15:23:30,140 [INFO] aiogram.event: Update id=228395838 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 15:23:31,300 [INFO] aiogram.event: Update id=228395839 is handled. Duration 218 ms by bot id=7036736465
+2024-09-15 15:23:37,171 [INFO] aiogram.event: Update id=228395840 is handled. Duration 140 ms by bot id=7036736465
+2024-09-15 15:23:39,980 [INFO] aiogram.event: Update id=228395841 is handled. Duration 1203 ms by bot id=7036736465
+2024-09-15 15:23:40,997 [INFO] aiogram.event: Update id=228395842 is handled. Duration 155 ms by bot id=7036736465
+2024-09-15 15:23:42,503 [INFO] aiogram.event: Update id=228395843 is handled. Duration 233 ms by bot id=7036736465
+2024-09-15 15:24:06,314 [INFO] aiogram.event: Update id=228395844 is handled. Duration 390 ms by bot id=7036736465
+2024-09-15 15:24:07,386 [INFO] aiogram.event: Update id=228395845 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 15:24:07,982 [INFO] aiogram.event: Update id=228395846 is handled. Duration 203 ms by bot id=7036736465
+2024-09-15 15:24:09,244 [INFO] aiogram.event: Update id=228395847 is handled. Duration 233 ms by bot id=7036736465
+2024-09-15 15:25:49,442 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 15:25:49,442 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-15 15:25:53,041 [INFO] aiogram.dispatcher: Start polling
+2024-09-15 15:25:53,290 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 15:26:01,033 [INFO] aiogram.event: Update id=228395848 is handled. Duration 719 ms by bot id=7036736465
+2024-09-15 15:26:02,462 [INFO] aiogram.event: Update id=228395849 is handled. Duration 453 ms by bot id=7036736465
+2024-09-15 15:26:03,515 [INFO] aiogram.event: Update id=228395850 is handled. Duration 421 ms by bot id=7036736465
+2024-09-15 15:26:04,638 [INFO] aiogram.event: Update id=228395851 is handled. Duration 280 ms by bot id=7036736465
+2024-09-15 15:26:11,122 [INFO] aiogram.event: Update id=228395852 is handled. Duration 139 ms by bot id=7036736465
+2024-09-15 15:26:13,325 [INFO] aiogram.event: Update id=228395853 is handled. Duration 217 ms by bot id=7036736465
+2024-09-15 15:26:14,384 [INFO] aiogram.event: Update id=228395854 is handled. Duration 187 ms by bot id=7036736465
+2024-09-15 15:26:15,602 [INFO] aiogram.event: Update id=228395855 is handled. Duration 203 ms by bot id=7036736465
+2024-09-15 15:26:17,208 [INFO] aiogram.event: Update id=228395856 is handled. Duration 266 ms by bot id=7036736465
+2024-09-15 15:26:18,690 [INFO] aiogram.event: Update id=228395857 is handled. Duration 171 ms by bot id=7036736465
+2024-09-15 15:26:20,152 [INFO] aiogram.event: Update id=228395858 is handled. Duration 312 ms by bot id=7036736465
+2024-09-15 15:26:21,442 [INFO] aiogram.event: Update id=228395859 is handled. Duration 280 ms by bot id=7036736465
+2024-09-15 15:26:23,032 [INFO] aiogram.event: Update id=228395860 is handled. Duration 344 ms by bot id=7036736465
+2024-09-15 15:26:34,408 [INFO] aiogram.event: Update id=228395861 is handled. Duration 719 ms by bot id=7036736465
+2024-09-15 15:26:43,826 [INFO] aiogram.event: Update id=228395862 is handled. Duration 250 ms by bot id=7036736465
+2024-09-15 15:26:53,009 [INFO] aiogram.event: Update id=228395863 is handled. Duration 296 ms by bot id=7036736465
+2024-09-15 15:27:07,275 [INFO] aiogram.event: Update id=228395864 is handled. Duration 609 ms by bot id=7036736465
+2024-09-15 15:27:08,333 [INFO] aiogram.event: Update id=228395865 is handled. Duration 266 ms by bot id=7036736465
+2024-09-15 16:02:57,088 [INFO] aiogram.event: Update id=228395866 is handled. Duration 703 ms by bot id=7036736465
+2024-09-15 16:03:42,377 [INFO] aiogram.event: Update id=228395867 is handled. Duration 625 ms by bot id=7036736465
+2024-09-15 16:03:56,360 [INFO] aiogram.event: Update id=228395868 is handled. Duration 233 ms by bot id=7036736465
+2024-09-15 16:04:09,682 [INFO] aiogram.event: Update id=228395869 is handled. Duration 983 ms by bot id=7036736465
+2024-09-15 16:04:41,227 [INFO] aiogram.event: Update id=228395870 is handled. Duration 485 ms by bot id=7036736465

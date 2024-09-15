@@ -4,7 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8463a58f-158e-43c2-817c-a15d580d5bc0" name="Changes" comment="sdelal dohya" />
+    <list default="true" id="8463a58f-158e-43c2-817c-a15d580d5bc0" name="Changes" comment="sdelal dohya">
+      <change afterPath="$PROJECT_DIR$/bot/handlers/app_downloaded.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/handlers/device_choice.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/handlers/file_or_qr.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/utils/file_sender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/handlers/cleanup.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/cleanup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/handlers/start.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/start.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/keyboards/inline.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/keyboards/inline.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/utils/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/utils/db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/utils/logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/utils/logger.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/photo/Hello.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/photo/Hello.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/text_messages.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/text_messages.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/bot.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/bot.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -197,7 +213,15 @@
       <option name="project" value="LOCAL" />
       <updated>1726322419255</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="sdelal dohya">
+      <option name="closed" value="true" />
+      <created>1726322542980</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1726322542980</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

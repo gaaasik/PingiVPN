@@ -5,11 +5,14 @@ from datetime import datetime
 
 from aiogram import types
 
+from bot.utils.logger import get_message_type_log, log_chat_history
 
 REGISTERED_USERS_DIR = os.getenv('REGISTERED_USERS_DIR')
 # Хранилище для сообщений и их типов
 user_messages = {}
 important_messages = {}
+message_types_mapping = {}  # Добавляем новый словарь для маппинга типов сообщений
+
 # Дополнительное хранилище для сообщений для базы данных
 messages_for_db = []  # Список или используйте другую структуру данных по мере необходимости
 
@@ -41,37 +44,56 @@ async def store_message(chat_id: int, message_id: int, message_text: str, sender
     # Выводим сообщение в консоль (или другой логгер), чтобы увидеть, что было сохранено
     print(f"Stored message: {message_text} (ID: {message_id}, Sender: {sender_type})")
 
-async def store_important_message(chat_id: int, message_id: int, message: types.Message = None,):
+
+# === Новая логика для маппинга типов сообщений ===
+def register_message_type(chat_id: int, message_id: int, message_type: str):
     """
-    Сохраняет ID важного сообщения для конкретного чата на основе определенных критериев.
+    Регистрируем новый тип сообщения для конкретного чата и сохраняем его.
     """
-    await log_chat_history(chat_id, message.text, "bot")
+    if chat_id not in message_types_mapping:
+        message_types_mapping[chat_id] = {}
+
+    # Если для данного типа уже есть сообщение, удаляем его
+    if message_type in message_types_mapping[chat_id]:
+        old_message_id = message_types_mapping[chat_id][message_type]
+        try:
+            important_messages[chat_id].remove(old_message_id)
+        except KeyError:
+            pass  # Если сообщение уже удалено, игнорируем
+    # Сохраняем новое сообщение по типу
+    message_types_mapping[chat_id][message_type] = message_id
+
+
+# Изменение логики удаления и хранения сообщений по типу
+async def store_important_message(bot, chat_id: int, message_id: int, message: types.Message = None,
+                                  message_type: str = None):
+    """
+    Сохраняет ID важного сообщения для конкретного чата.
+    Если новое важное сообщение добавляется, старое удаляется.
+    """
+    if message:
+        log_text = get_message_type_log(message)
+        await log_chat_history(chat_id, log_text, "bot")
+
     if chat_id not in important_messages:
-        important_messages[chat_id] = set()  # используем множество для предотвращения дубликатов
+        important_messages[chat_id] = set()
 
-    # Критерии для определения важности сообщения
-    if message and message.message_id not in important_messages[chat_id]:
+    # Если это сообщение с файлом, удалим старые сообщения с тем же типом
+    if message_type in message_types_mapping.get(chat_id, {}):
+        old_message_id = message_types_mapping[chat_id][message_type]
+        try:
+            await bot.delete_message(chat_id, old_message_id)
+        except Exception as e:
+            print(f"Не удалось удалить старое важное сообщение {old_message_id}: {e}")
 
-        # Сообщения, содержащие файлы конфигурации или изображения
-        if message.document or message.photo:
+    important_messages[chat_id].add(message_id)
 
-            important_messages[chat_id].add(message_id)
-        # Сообщение приветствия (проверяем часть строки)
-        elif "👋 Всем привет!" in message.text:
+    # Регистрируем тип сообщения (например, файл или QR-код)
+    if message_type:
+        register_message_type(chat_id, message_id, message_type)
 
-            important_messages[chat_id].add(message_id)
-        # Сообщение с инструкцией (проверяем часть строки в нижнем регистре)
-        elif "добро пожаловать!" in message.text.lower() or "ого, вы уже в игре!" in message.text.lower():
-            important_messages[chat_id].add(message_id)
 
-        elif "/start" in message.text in message.text.lower():
-            important_messages[chat_id].add(message_id)
-
-    # Если сообщение не передано, не добавляем его как важное по умолчанию
-    # important_messages[chat_id].add(message_id)
-
-# bot/handlers/cleanup.py
-
+# Функция удаления неважных сообщений. Не трогаем сообщения с кнопками.
 async def delete_unimportant_messages(chat_id: int, bot):
     """
     Удаляет все сообщения в чате, кроме важных.
@@ -83,10 +105,10 @@ async def delete_unimportant_messages(chat_id: int, bot):
         # Если нет сообщений в данном чате, просто выходим
         return
 
-    # Получаем список сообщений для удаления
+    # Получаем список сообщений для удаления, кроме сообщений с текстом и кнопками
     messages_to_delete = [
-        message_id for message_id, _, _ in user_messages[chat_id][:-2]
-        if message_id not in important_messages[chat_id]
+        message_id for message_id, _, _ in user_messages[chat_id]
+        if message_id not in important_messages[chat_id] and message_id not in message_types_mapping.get(chat_id, {}).values()
     ]
 
     # Удаляем сообщения
@@ -96,34 +118,37 @@ async def delete_unimportant_messages(chat_id: int, bot):
         except Exception as e:
             print(f"Не удалось удалить сообщение {message_id}: {e}")
 
-    # Оставляем только последние два сообщения в user_messages
-    user_messages[chat_id] = user_messages[chat_id][-2:]
+    # Очищаем user_messages, так как все неважные сообщения удалены
+    user_messages[chat_id] = [
+        (message_id, message_text, sender_type)
+        for message_id, message_text, sender_type in user_messages[chat_id]
+        if message_id in important_messages[chat_id]
+    ]
 
-
-async def log_chat_history(chat_id: int, message_text:str,sender_type:str):
-    # Проверяем, существует ли директория с именем, начинающимся с chat_id
-    user_dirs = [d for d in os.listdir(REGISTERED_USERS_DIR) if d.startswith(str(chat_id))]
-
-    if not user_dirs:
-        print(f"Директория для chat_id {chat_id} не найдена. Сообщение // {message_text} // не будет сохранено.")
-        return  # Если директория не найдена, ничего не делаем
-
-    # Используем первую найденную директорию, соответствующую chat_id
-    user_dir = os.path.join(REGISTERED_USERS_DIR, user_dirs[0])
-
-    # Путь к файлу лога сообщений
-    log_file_path = os.path.join(user_dir, "chat_log.txt")
-
-    # Формирование строки для записи
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    if sender_type == 'user':
-        log_entry = f"{timestamp} User: {message_text}\n"
-    else:
-        log_entry = f"{timestamp} Bot: {message_text}\n"
-
-    # Запись сообщения в текстовый файл
-    with open(log_file_path, 'a', encoding='utf-8') as log_file:
-        log_file.write(log_entry)
+# async def log_chat_history(chat_id: int, message_text:str,sender_type:str):
+#     # Проверяем, существует ли директория с именем, начинающимся с chat_id
+#     user_dirs = [d for d in os.listdir(REGISTERED_USERS_DIR) if d.startswith(str(chat_id))]
+#
+#     if not user_dirs:
+#         print(f"Директория для chat_id {chat_id} не найдена. Сообщение // {message_text} // не будет сохранено.")
+#         return  # Если директория не найдена, ничего не делаем
+#
+#     # Используем первую найденную директорию, соответствующую chat_id
+#     user_dir = os.path.join(REGISTERED_USERS_DIR, user_dirs[0])
+#
+#     # Путь к файлу лога сообщений
+#     log_file_path = os.path.join(user_dir, "chat_log.txt")
+#
+#     # Формирование строки для записи
+#     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+#     if sender_type == 'user':
+#         log_entry = f"{timestamp} User: {message_text}\n"
+#     else:
+#         log_entry = f"{timestamp} Bot: {message_text}\n"
+#
+#     # Запись сообщения в текстовый файл
+#     with open(log_file_path, 'a', encoding='utf-8') as log_file:
+#         log_file.write(log_entry)
 
 
 async def clear_chat_history(chat_id: int, bot):
@@ -150,3 +175,65 @@ async def clear_chat_history(chat_id: int, bot):
     user_messages[chat_id].clear()
     important_messages[chat_id].clear()  # Также очищаем важные сообщения
     messages_for_db.clear()  # Очищаем сообщения для базы данных
+
+    # старая логика
+    # async def store_important_message(chat_id: int, message_id: int, message: types.Message = None,):
+    #     """
+    #     Сохраняет ID важного сообщения для конкретного чата на основе определенных критериев.
+    #     """
+    #     await log_chat_history(chat_id, message.text, "bot")
+    #     if chat_id not in important_messages:
+    #         important_messages[chat_id] = set()  # используем множество для предотвращения дубликатов
+    #
+    #     # Критерии для определения важности сообщения
+    #     if message and message.message_id not in important_messages[chat_id]:
+    #
+    #         # Сообщения, содержащие файлы конфигурации или изображения
+    #         if message.document or message.photo:
+    #
+    #             important_messages[chat_id].add(message_id)
+    #         # Сообщение приветствия (проверяем часть строки)
+    #         elif "👋 Всем привет!" in message.text:
+    #
+    #             important_messages[chat_id].add(message_id)
+    #         # Сообщение с инструкцией (проверяем часть строки в нижнем регистре)
+    #         elif "добро пожаловать!" in message.text.lower() or "ого, вы уже в игре!" in message.text.lower():
+    #             important_messages[chat_id].add(message_id)
+    #
+    #         elif "/start" in message.text in message.text.lower():
+    #             important_messages[chat_id].add(message_id)
+    #
+    #     # Если сообщение не передано, не добавляем его как важное по умолчанию
+    #     # important_messages[chat_id].add(message_id)
+    #
+
+    # старая логика
+    # async def store_important_message(chat_id: int, message_id: int, message: types.Message = None,):
+    #     """
+    #     Сохраняет ID важного сообщения для конкретного чата на основе определенных критериев.
+    #     """
+    #     await log_chat_history(chat_id, message.text, "bot")
+    #     if chat_id not in important_messages:
+    #         important_messages[chat_id] = set()  # используем множество для предотвращения дубликатов
+    #
+    #     # Критерии для определения важности сообщения
+    #     if message and message.message_id not in important_messages[chat_id]:
+    #
+    #         # Сообщения, содержащие файлы конфигурации или изображения
+    #         if message.document or message.photo:
+    #
+    #             important_messages[chat_id].add(message_id)
+    #         # Сообщение приветствия (проверяем часть строки)
+    #         elif "👋 Всем привет!" in message.text:
+    #
+    #             important_messages[chat_id].add(message_id)
+    #         # Сообщение с инструкцией (проверяем часть строки в нижнем регистре)
+    #         elif "добро пожаловать!" in message.text.lower() or "ого, вы уже в игре!" in message.text.lower():
+    #             important_messages[chat_id].add(message_id)
+    #
+    #         elif "/start" in message.text in message.text.lower():
+    #             important_messages[chat_id].add(message_id)
+    #
+    #     # Если сообщение не передано, не добавляем его как важное по умолчанию
+    #     # important_messages[chat_id].add(message_id)
+    #

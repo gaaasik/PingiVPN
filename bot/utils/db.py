@@ -187,3 +187,10 @@ async def add_referral(referrer_id: int, referred_id: int):
 
         await conn.commit()
 
+
+async def get_user_count():
+    """Подсчет количества зарегистрированных пользователей"""
+    async with aiosqlite.connect(database_path_local) as conn:
+        async with conn.execute('SELECT COUNT(*) FROM users') as cursor:
+            user_count = await cursor.fetchone()
+            return user_count[0]

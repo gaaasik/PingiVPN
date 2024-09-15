@@ -7,7 +7,8 @@ from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from dotenv import load_dotenv
 
-from bot.handlers import start, status, support, admin, share,show_config,instructions,unknown_message
+from bot.handlers import start, status, support, admin, share, show_config, instructions, unknown_message, \
+    device_choice, app_downloaded, file_or_qr
 from bot.utils.logger import setup_logger
 from bot.utils.db import init_db, drop_table
 from bot.midlewares.throttling import ThrottlingMiddleware
@@ -54,12 +55,14 @@ async def main():
     dp.include_router(start.router)
     #dp.include_router(registration.router)
     dp.include_router(status.router)
-    #dp.include_router(unknown_message.router)
     dp.include_router(support.router)
     dp.include_router(admin.router)
     dp.include_router(share.router)
     dp.include_router(show_config.router)
     dp.include_router(instructions.router)
+    dp.include_router(device_choice.router)
+    dp.include_router(app_downloaded.router)
+    dp.include_router(file_or_qr.router)
 #    dp.include_router(clear.router)
     # Запуск бота
     try:
