@@ -18350,3 +18350,5 @@ AttributeError: 'NoneType' object has no attribute 'message_id'
 2024-09-15 16:03:56,360 [INFO] aiogram.event: Update id=228395868 is handled. Duration 233 ms by bot id=7036736465
 2024-09-15 16:04:09,682 [INFO] aiogram.event: Update id=228395869 is handled. Duration 983 ms by bot id=7036736465
 2024-09-15 16:04:41,227 [INFO] aiogram.event: Update id=228395870 is handled. Duration 485 ms by bot id=7036736465
+2024-09-15 16:22:16,102 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-15 16:22:16,107 [INFO] aiogram.dispatcher: Polling stopped
