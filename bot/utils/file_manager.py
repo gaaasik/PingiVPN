@@ -4,7 +4,7 @@ import shutil
 from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 from bot.handlers.cleanup import store_important_message
-from bot.keyboards.inline import inline_kb
+
 from bot.keyboards.reply import reply_keyboard
 from data.text_messages import  instructions_message
 # Загрузка переменных из файла .env

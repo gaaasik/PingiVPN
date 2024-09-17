@@ -12,6 +12,8 @@ REGISTERED_USERS_DIR = os.getenv('REGISTERED_USERS_DIR')
 user_messages = {}
 important_messages = {}
 message_types_mapping = {}  # Добавляем новый словарь для маппинга типов сообщений
+share_message_types_mapping = {}      # Логика для маппинга типов сообщений для функции "Поделиться с другом"
+
 
 # Дополнительное хранилище для сообщений для базы данных
 messages_for_db = []  # Список или используйте другую структуру данных по мере необходимости
@@ -42,11 +44,11 @@ async def store_message(chat_id: int, message_id: int, message_text: str, sender
     })
 
     # Выводим сообщение в консоль (или другой логгер), чтобы увидеть, что было сохранено
-    print(f"Stored message: {message_text} (ID: {message_id}, Sender: {sender_type})")
+    print(f"Stored message: {message_text} (ID: {chat_id}, Sender: {sender_type})")
 
 
 # === Новая логика для маппинга типов сообщений ===
-def register_message_type(chat_id: int, message_id: int, message_type: str):
+async def register_message_type(chat_id: int, message_id: int, message_type: str, bot):
     """
     Регистрируем новый тип сообщения для конкретного чата и сохраняем его.
     """
@@ -56,13 +58,47 @@ def register_message_type(chat_id: int, message_id: int, message_type: str):
     # Если для данного типа уже есть сообщение, удаляем его
     if message_type in message_types_mapping[chat_id]:
         old_message_id = message_types_mapping[chat_id][message_type]
+
+        try:
+            # Фактическое удаление старого сообщения через Telegram API
+            await bot.delete_message(chat_id, old_message_id)
+        except Exception as e:
+            print(f"Ошибка при удалении старого сообщения {old_message_id}: {e}")
+
+        # Убираем сообщение из списка важных
         try:
             important_messages[chat_id].remove(old_message_id)
         except KeyError:
             pass  # Если сообщение уже удалено, игнорируем
+
     # Сохраняем новое сообщение по типу
     message_types_mapping[chat_id][message_type] = message_id
 
+    # Добавляем новое сообщение в список важных сообщений
+    if chat_id not in important_messages:
+        important_messages[chat_id] = set()
+
+    important_messages[chat_id].add(message_id)
+
+# === Новая логика для маппинга типов сообщений ===
+
+# async def register_share_message_type(chat_id: int, message_id: int, bot):
+#     """
+#     Асинхронная регистрация сообщения с типом 'share_message' для конкретного чата.
+#     """
+#     if chat_id not in share_message_types_mapping:
+#         share_message_types_mapping[chat_id] = {}
+#
+#     # Если уже есть сообщение типа 'share_message', удаляем его
+#     if 'share_message' in share_message_types_mapping[chat_id]:
+#         old_message_id = share_message_types_mapping[chat_id]['share_message']
+#         try:
+#             await bot.delete_message(chat_id, old_message_id)  # Удаление старого сообщения
+#         except Exception as e:
+#             print(f"Не удалось удалить старое сообщение с ID {old_message_id}: {e}")
+#
+#     # Сохраняем новое сообщение по типу
+#     share_message_types_mapping[chat_id]['share_message'] = message_id
 
 # Изменение логики удаления и хранения сообщений по типу
 async def store_important_message(bot, chat_id: int, message_id: int, message: types.Message = None,
@@ -90,7 +126,7 @@ async def store_important_message(bot, chat_id: int, message_id: int, message: t
 
     # Регистрируем тип сообщения (например, файл или QR-код)
     if message_type:
-        register_message_type(chat_id, message_id, message_type)
+        await register_message_type(chat_id, message_id, message_type, 'bot')
 
 
 # Функция удаления неважных сообщений. Не трогаем сообщения с кнопками.
@@ -237,3 +273,23 @@ async def clear_chat_history(chat_id: int, bot):
     #     # Если сообщение не передано, не добавляем его как важное по умолчанию
     #     # important_messages[chat_id].add(message_id)
     #
+
+
+async def delete_important_message(chat_id, message_type, bot):
+    """
+    Удаляет важное сообщение по типу.
+    :param chat_id: ID чата пользователя
+    :param message_type: Тип сообщения (например, 'subscription_check' или 'file_choice')
+    :param bot: объект бота
+    """
+    if chat_id in message_types_mapping and message_type in message_types_mapping[chat_id]:
+        message_id = message_types_mapping[chat_id][message_type]
+
+        try:
+            # Удаляем сообщение из чата
+            await bot.delete_message(chat_id, message_id)
+            # Удаляем сообщение из маппинга важных сообщений
+            important_messages[chat_id].remove(message_id)
+            del message_types_mapping[chat_id][message_type]
+        except Exception as e:
+            print(f"Не удалось удалить сообщение {message_id}: {e}")

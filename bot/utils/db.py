@@ -10,34 +10,8 @@ from dotenv import load_dotenv
 load_dotenv()
 database_path_local = Path(os.getenv('database_path_local'))
 
-# async def delete_user(telegram_id: int):
-#     async with aiosqlite.connect('vpn_bot.db') as conn:
-#         # Получаем информацию о пользователе
-#         user = await get_user_by_telegram_id(telegram_id)
-#         if user:
-#             phone_number = user[2]  # предполагаем, что номер телефона находится в третьем столбце
-#
-#             # Путь к папке пользователя
-#             user_dir = os.path.join(CONFIGS_DIR, phone_number)
-#             user_config_file = os.path.join(user_dir, f"{phone_number}.conf")
-#
-#             # Проверяем, существует ли файл
-#             if os.path.exists(user_config_file):
-#                 # Переименовываем файл обратно в 'free_config'
-#                 base_free_config_name = os.path.basename(user_config_file).replace(phone_number, 'free_config')
-#                 new_free_config_path = os.path.join(BASE_CONFIGS_DIR, base_free_config_name)
-#                 os.rename(user_config_file, new_free_config_path)
-#
-#                 # Переименовываем QR-код обратно в 'free_config'
-#                 user_qr_file = os.path.splitext(user_config_file)[0] + '.png'
-#                 base_free_qr_name = os.path.basename(user_qr_file).replace(phone_number, 'free_config')
-#                 new_free_qr_path = os.path.join(BASE_CONFIGS_DIR, base_free_qr_name)
-#                 os.rename(user_qr_file, new_free_qr_path)
-#
-#         # Удаление пользователя из базы данных
-#         await conn.execute('DELETE FROM users WHERE telegram_id = ?', (telegram_id,))
-#         await conn.execute('DELETE FROM connections WHERE user_id = (SELECT id FROM users WHERE telegram_id = ?)', (telegram_id,))
-#         await conn.commit()
+
+
 async def drop_table(database_path: str, table_name: str):
     """
     Удаляет таблицу из базы данных.
@@ -194,3 +168,51 @@ async def get_user_count():
         async with conn.execute('SELECT COUNT(*) FROM users') as cursor:
             user_count = await cursor.fetchone()
             return user_count[0]
+
+
+# Получаем время последней проверки подписки
+async def get_last_subscription_check(chat_id):
+    conn = await aiosqlite.connect(database_path_local)
+    cursor = await conn.execute("SELECT last_subscription_check FROM users WHERE chat_id = ?", (chat_id,))
+    result = await cursor.fetchone()
+    await conn.close()
+    return result[0] if result else None
+
+# Обновляем время последней проверки подписки
+async def update_last_subscription_check(chat_id):
+    conn = await aiosqlite.connect(database_path_local)
+    await conn.execute("UPDATE users SET last_subscription_check = ? WHERE chat_id = ?", (datetime.datetime.now(), chat_id))
+    await conn.commit()
+    await conn.close()
+
+# Получаем статус подписки пользователя
+async def get_user_subscription_status(chat_id):
+    conn = await aiosqlite.connect(database_path_local)
+    cursor = await conn.execute("SELECT is_subscribed FROM users WHERE chat_id = ?", (chat_id,))
+    result = await cursor.fetchone()
+    await conn.close()
+    return result[0] if result else False
+
+# Обновляем статус подписки
+async def update_user_subscription_status(chat_id, is_subscribed):
+    conn = await aiosqlite.connect(database_path_local)
+    await conn.execute("UPDATE users SET is_subscribed = ? WHERE chat_id = ?", (is_subscribed, chat_id))
+    await conn.commit()
+    await conn.close()
+
+
+
+# Вызов функции для добавления столбца `device`
+#    await add_device_column(conn)
+#async def add_device_column(conn):
+#     # Проверяем наличие столбца `device` в таблице
+#     cursor = await conn.execute("PRAGMA table_info(users)")
+#     columns = await cursor.fetchall()
+#
+#     # Если столбца `device` нет, то добавляем его
+#     if not any(column[1] == "device" for column in columns):
+#         await conn.execute('''ALTER TABLE users ADD COLUMN device TEXT''')
+#         await conn.commit()
+#         print("Колонка 'device' добавлена в таблицу users.")
+#     else:
+#         print("Колонка 'device' уже существует.")

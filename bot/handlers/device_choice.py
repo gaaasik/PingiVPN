@@ -5,6 +5,7 @@ from aiogram.types import CallbackQuery
 
 from bot.handlers.cleanup import store_message, delete_unimportant_messages, store_important_message
 from bot.keyboards.inline import download_app_keyboard
+from models.user import User
 
 router = Router()
 
@@ -30,9 +31,14 @@ async def handle_device_choice(callback_query: CallbackQuery):
 
     # Отправляем сообщение с кнопками для скачивания приложения
     message = await callback_query.message.answer(
-        "Скачайте официальное приложение WireGuard на ваше устройство.",
-        reply_markup=download_app_keyboard(download_link)
+        "Скачайте *официальное* приложение *WireGuard* на ваше устройство.",
+        reply_markup=download_app_keyboard(download_link),
+        parse_mode="Markdown"
     )
+
+    # Обновляем устройство пользователя в базе данных
+    User.update_device(callback_query.from_user.id, device)
+    print(f"Пользователь {callback_query.from_user.id} - @{callback_query.from_user.username} выбрал устройство: {device}")
 
     # Сохраняем сообщение как важное с типом 'device_choice'
     await store_important_message(callback_query.bot, callback_query.message.chat.id, message.message_id, message,

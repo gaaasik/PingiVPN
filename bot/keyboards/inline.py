@@ -1,10 +1,5 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-inline_kb = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [InlineKeyboardButton(text="📜 Подробная инструкция", callback_data="detailed_instruction")]
-    ]
-)
 
 # Создаем инлайн-кнопки для выбора устройства
 def device_choice_keyboard():
@@ -31,17 +26,38 @@ def device_choice_keyboard():
 # Клавиатура для скачивания приложения и подтверждения скачивания
 def download_app_keyboard(download_link):
     buttons = [
-        [InlineKeyboardButton(text="Скачать", url=download_link)],  # Ведет на ссылку для скачивания
+        [InlineKeyboardButton(text="Открыть магазин приложений", url=download_link)],  # Ведет на ссылку для скачивания
         [InlineKeyboardButton(text="Я скачал ✅", callback_data="app_downloaded")]
     ]
     keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)  # Передаем список кнопок в конструктор
     return keyboard
 
-# Клавиатура для получения конфигурационного файла или QR-кода
+# Кнопка для перехода на канал и кнопка для проверки подписки
+def subscribe_keyboard():
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Перейти на канал", url="https://t.me/pingi_hub")],
+        [InlineKeyboardButton(text="Я подписался", callback_data="check_subscription")]
+    ])
+    return keyboard
+
+# Функция для кнопки "Получить файл"
+def get_file_button():
+    return InlineKeyboardButton(text="Получить файл", callback_data="get_config")
+
+# Функция для кнопки "Показать QR-код"
+def get_qr_code_button():
+    return InlineKeyboardButton(text="Показать QR-код", callback_data="get_qr_code")
+
+# Функция для кнопки "Подробная инструкция"
+def get_detailed_instruction_button():
+    return InlineKeyboardButton(
+        text="📜 Подробная инструкция",
+        url="https://telegra.ph/Podrobnaya-instrukciya-po-podklyucheniyu-k-Pingi-VPN-09-17"
+    )
+# Основная функция для формирования клавиатуры
 def config_or_qr_keyboard():
     buttons = [
-        [InlineKeyboardButton(text="Получить файл", callback_data="get_config"),
-         InlineKeyboardButton(text="Показать QR-код", callback_data="get_qr_code")]
+        [get_file_button(), get_qr_code_button()],
+        [get_detailed_instruction_button()]
     ]
-    keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)  # Передаем список кнопок в конструктор
-    return keyboard
+    return InlineKeyboardMarkup(inline_keyboard=buttons)

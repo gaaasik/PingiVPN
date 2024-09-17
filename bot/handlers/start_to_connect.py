@@ -3,25 +3,43 @@ from aiogram import Router, types
 from aiogram.filters import Command
 
 from bot.handlers.cleanup import store_message, delete_unimportant_messages, store_important_message
+from bot.keyboards.inline import device_choice_keyboard
 from bot.utils.file_manager import process_user_files, check_existing_user_files, send_files_to_user
 import os
 
 router = Router()
-@router.message(Command("show"))
-@router.message(lambda message: message.text == "Показать QR и файл")
-async def cmd_show_qr_and_file(message: types.Message):
-    # Сохраняем сообщение в базе данных
-    await store_message(message.chat.id, message.message_id, message.text, 'user')
 
-    # Получаем ID чата и никнейм пользователя
-    chat_id = message.chat.id
-    username = message.from_user.username or "unknown"
 
-    # Формируем название папки как "id чата_никнейм пользователя"
-    folder_name = f"{chat_id}_{username}"
+# Обработчик для кнопки "Подключиться 🚀"
+@router.message(lambda message: message.text == "Подключиться 🚀")
+async def handle_connect(message: types.Message):
+    # Текст приветственного сообщения
+    welcome_text = "Выберите устройство для настройки VPN."
 
-    # Отправка файлов пользователю
-    await send_files_to_user(message, folder_name, use_existing=False)
+    # Отправляем сообщение с клавиатурой выбора устройства
+    sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard())
+
+    # Сохраняем сообщение как важное
+    await store_important_message(message.bot, message.chat.id, sent_message.message_id, sent_message)
+
+
+
+
+# @router.message(Command("show"))
+# @router.message(lambda message: message.text == "Показать QR и файл")
+# async def cmd_show_qr_and_file(message: types.Message):
+#     # Сохраняем сообщение в базе данных
+#     await store_message(message.chat.id, message.message_id, message.text, 'user')
+#
+#     # Получаем ID чата и никнейм пользователя
+#     chat_id = message.chat.id
+#     username = message.from_user.username or "unknown"
+#
+#     # Формируем название папки как "id чата_никнейм пользователя"
+#     folder_name = f"{chat_id}_{username}"
+#
+#     # Отправка файлов пользователю
+#     await send_files_to_user(message, folder_name, use_existing=False)
 
 
 
