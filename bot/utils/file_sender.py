@@ -6,6 +6,7 @@ from aiogram.types import FSInputFile
 import logging
 
 from bot.handlers.cleanup import store_important_message
+from bot.utils.file_manager import find_user_directory
 from data.text_messages import android_instructions, iphone_instructions, mac_instructions, linux_instructions, windows_instructions
 from dotenv import load_dotenv
 from bot.utils.cache import cached_video  # Предполагаем, что видео кешируется аналогично фото
@@ -50,19 +51,23 @@ async def send_config_file(callback_query):
 
     print(f"Отправка конфигурационного файла для пользователя с chat_id: {chat_id}, username: {username or 'unknown'}")
 
-    # Формируем название папки корректно
-    folder_name = f"{chat_id}" if not username or username == 'unknown' else f"{chat_id}_{username}"
-    user_dir = os.path.join(REGISTERED_USERS_DIR, folder_name)
-    print(f"Директория пользователя: {user_dir}")
+    # Ищем папку пользователя, которая содержит chat_id в своем имени
+    user_dir = find_user_directory(chat_id)  #=============#
+
+    if not user_dir:  #=============#
+        # Если папка не найдена, создаем новую
+        folder_name = f"{chat_id}_{username}" if username else f"{chat_id}"
+        user_dir = os.path.join(REGISTERED_USERS_DIR, folder_name)
+        os.makedirs(user_dir)
+        print(f"Создана новая папка: {user_dir}")
 
     # Пути к файлам
     config_file_path = os.path.join(user_dir, "PingiVPN.conf")
     qr_code_path = os.path.join(user_dir, "PingiVPN.png")
 
-    # Проверяем, существуют ли оба файла в директории
+    # Проверяем, существуют ли оба файла в директории, если нет, вызываем create_user_files
     if not (os.path.exists(config_file_path) and os.path.exists(qr_code_path)):
         print(f"Не все файлы существуют. Вызываем create_user_files.")
-        # Вызов функции создания файлов перед отправкой, если файлы не существуют
         await create_user_files(chat_id, username, callback_query.bot)
 
     # Проверяем наличие конфигурационного файла после создания и отправляем его, если он существует
@@ -70,9 +75,8 @@ async def send_config_file(callback_query):
         print(f"Файл {config_file_path} найден. Отправляем файл пользователю.")
         await callback_query.message.answer_document(FSInputFile(config_file_path))
     else:
-        print(f"Файл {config_file_path} не найден.")
+        print(f"Файл {config_file_path} не найден даже после создания.")
         await callback_query.message.answer("Конфигурационный файл не найден.")
-
 
 # Отправка видео пользователю
 async def send_instruction_video(callback_query):
@@ -104,19 +108,23 @@ async def send_qr_code(callback_query):
 
     print(f"Отправка QR-кода для пользователя с chat_id: {chat_id}, username: {username or 'unknown'}")
 
-    # Формируем название папки корректно
-    folder_name = f"{chat_id}" if not username or username == 'unknown' else f"{chat_id}_{username}"
-    user_dir = os.path.join(REGISTERED_USERS_DIR, folder_name)
-    print(f"Директория пользователя: {user_dir}")
+    # Ищем папку пользователя, которая содержит chat_id в своем имени
+    user_dir = find_user_directory(chat_id)  #=============#
+
+    if not user_dir:  #=============#
+        # Если папка не найдена, создаем новую
+        folder_name = f"{chat_id}_{username}" if username else f"{chat_id}"
+        user_dir = os.path.join(REGISTERED_USERS_DIR, folder_name)
+        os.makedirs(user_dir)
+        print(f"Создана новая папка: {user_dir}")
 
     # Пути к файлам
     config_file_path = os.path.join(user_dir, "PingiVPN.conf")
     qr_code_path = os.path.join(user_dir, "PingiVPN.png")
 
-    # Проверяем, существуют ли оба файла в директории
+    # Проверяем, существуют ли оба файла в директории, если нет, вызываем create_user_files
     if not (os.path.exists(config_file_path) and os.path.exists(qr_code_path)):
         print(f"Не все файлы существуют. Вызываем create_user_files.")
-        # Вызов функции создания файлов перед отправкой, если файлы не существуют
         await create_user_files(chat_id, username, callback_query.bot)
 
     # Проверяем наличие QR-кода после создания и отправляем его, если он существует
@@ -124,32 +132,23 @@ async def send_qr_code(callback_query):
         print(f"Файл {qr_code_path} найден. Отправляем QR-код пользователю.")
         await callback_query.message.answer_photo(FSInputFile(qr_code_path))
     else:
-        print(f"Файл {qr_code_path} не найден.")
+        print(f"Файл {qr_code_path} не найден даже после создания.")
         await callback_query.message.answer("QR-код не найден.")
-
 async def create_user_files(chat_id, username, bot):
     try:
-        # Если username пустой или None, используем только chat_id
-        if not username or username == "unknown":
-            folder_name = f"{chat_id}"
-        else:
-            folder_name = f"{chat_id}_{username}"
+        # Ищем папку пользователя, которая содержит chat_id в своем имени
+        user_dir = find_user_directory(chat_id)  #=============#
 
-        user_dir = os.path.join(REGISTERED_USERS_DIR, folder_name)
-
-
-        # Проверка на существование директории
-        if not os.path.exists(user_dir):
+        if not user_dir:  #=============#
+            # Если папка не найдена, создаем новую
+            folder_name = f"{chat_id}_{username}" if username else f"{chat_id}"
+            user_dir = os.path.join(REGISTERED_USERS_DIR, folder_name)
             os.makedirs(user_dir)
-            print(f"Создана директория для пользователя: {user_dir}")
-        else:
-            print(f"Директория уже существует: {user_dir}")
+            print(f"Создана новая папка: {user_dir}")
 
         # Проверяем, существуют ли уже необходимые файлы
         config_file_path = os.path.join(user_dir, 'PingiVPN.conf')
         qr_code_path = os.path.join(user_dir, 'PingiVPN.png')
-        print(f"Путь к конфигурационному файлу: {config_file_path}")
-        print(f"Путь к QR-коду: {qr_code_path}")
 
         # Если файлы уже существуют, не создаем новые
         if os.path.exists(config_file_path) and os.path.exists(qr_code_path):
@@ -159,23 +158,19 @@ async def create_user_files(chat_id, username, bot):
         # Копируем файлы из base_configs в папку пользователя
         free_files = sorted([f for f in os.listdir(BASE_CONFIGS_DIR) if f.endswith('_free.conf')])
         free_images = sorted([f for f in os.listdir(BASE_CONFIGS_DIR) if f.endswith('_free.png')])
-        print(f"Найдено {len(free_files)} свободных конфигурационных файлов и {len(free_images)} изображений")
 
         if free_files and free_images:
             # Копирование и переименование файлов для пользователя
             shutil.copy(os.path.join(BASE_CONFIGS_DIR, free_files[0]), config_file_path)
             shutil.copy(os.path.join(BASE_CONFIGS_DIR, free_images[0]), qr_code_path)
-            print(f"Файлы скопированы для пользователя {chat_id} из base_configs.")
 
             # Переименование и перемещение использованных файлов в архив
             archive_used_files(chat_id, username, free_files[0], free_images[0])
 
         else:
             # Если нет доступных файлов, используем резервные файлы
-            print(f"Нет доступных файлов в base_configs, проверяем резервные файлы...")
             if os.path.exists(GENERAL_CONFIG_FILE) and os.path.exists(GENERAL_IMAGE_FILE):
                 # Копируем резервные файлы в папку пользователя
-                print(f"Резервные файлы найдены. Копируем файлы...")
                 shutil.copy(GENERAL_CONFIG_FILE, config_file_path)
                 shutil.copy(GENERAL_IMAGE_FILE, qr_code_path)
 
@@ -189,14 +184,11 @@ async def create_user_files(chat_id, username, bot):
                 )
                 await bot.send_message(admin_chat_id, warning_message)
             else:
-                print(f"Резервные конфигурационные файлы не найдены!")
                 raise Exception("Резервные конфигурационные файлы также не найдены!")
 
     except Exception as e:
         error_message = f"Ошибка при создании файлов для пользователя {chat_id}: {e}"
         logging.error(error_message)
-        print(error_message)
-
 def remove_old_files(user_dir):
     """Удаляет старые конфигурационные файлы пользователя"""
     try:

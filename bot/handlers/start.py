@@ -11,7 +11,6 @@ from bot.keyboards.inline import device_choice_keyboard
 from bot.keyboards.reply import reply_keyboard
 from bot.utils.cache import cached_photo, send_cached_photo
 from bot.utils.db import add_user, drop_table, get_user_by_telegram_id, add_referral, get_user_count
-from bot.utils.file_manager import send_files_to_user
 from models.user import User
 
 router = Router()
