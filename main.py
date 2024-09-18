@@ -17,10 +17,10 @@ import os
 
 load_dotenv()  # Указываем путь к .env файлу
 PATH_TO_IMAGES = os.getenv('PATH_TO_IMAGES')
+video_path = os.getenv("video_path")
 async def on_startup():
     # Кэшируем изображение при старте
     image_path = os.path.join(PATH_TO_IMAGES, "Hello.png")
-    video_path = os.path.join(PATH_TO_IMAGES, "instructions_iPhone.mp4")
     print('закешировали')
     # Кэшируем фото и видео
     await cache_media(image_path, video_path)

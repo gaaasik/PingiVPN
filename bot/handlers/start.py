@@ -62,7 +62,12 @@ async def cmd_start(message: types.Message):
 
     # Получаем данные пользователя из базы данных (включая устройство)
     user = await get_user_by_telegram_id(message.from_user.id)
-
+    # Уведомляем администратора о новом пользователе
+    count_users = await get_user_count()
+    await message.bot.send_message(
+        chat_id=456717505,  # ID админа для уведомления
+        text=f"Пользователь нажал start : @{username} (ID чата: {chat_id}) \n Количество пользователей: {count_users}"
+    )
     if not user:
         # Регистрируем нового пользователя
         await add_user(
