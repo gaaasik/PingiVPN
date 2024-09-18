@@ -3,16 +3,26 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 # Кнопки для основного меню после регистрации
 
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+
 reply_keyboard = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="Показать QR и файл"),
-         KeyboardButton(text="Информация об аккаунте ℹ️")],
-        [#KeyboardButton(text="Удалить конфигурацию ❌"),
-         #KeyboardButton(text="Удалить регистрацию")
-        KeyboardButton(text="Поделиться с другом!")
+        [
+            KeyboardButton(text="Подключиться 🚀"),
+            KeyboardButton(text="Информация об аккаунте ℹ️")
         ],
-
-        [KeyboardButton(text="Задать вопрос 🙋‍♂️")]
+        [
+            KeyboardButton(text="Поделиться с другом!")
+        ],
+        [(
+            KeyboardButton(text="Тарифы \n(в разработке)")
+        ),
+            (
+            KeyboardButton(text="Проверить скорость")
+        )],
+        [
+            KeyboardButton(text="Задать вопрос 🙋‍♂️")
+        ]
     ],
     resize_keyboard=True
 )

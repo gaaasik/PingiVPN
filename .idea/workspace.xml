@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8463a58f-158e-43c2-817c-a15d580d5bc0" name="Changes" comment="sdelal dohya" />
+    <list default="true" id="8463a58f-158e-43c2-817c-a15d580d5bc0" name="Changes" comment="sdelal dohya &#10;edit all">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/utils/file_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/utils/file_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/bot.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/bot.log" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -197,11 +201,45 @@
       <option name="project" value="LOCAL" />
       <updated>1726322419255</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="sdelal dohya">
+      <option name="closed" value="true" />
+      <created>1726322542980</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1726322542980</updated>
+    </task>
+    <task id="LOCAL-00006" summary="sdelal dohya eshe raz">
+      <option name="closed" value="true" />
+      <created>1726406436790</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1726406436790</updated>
+    </task>
+    <task id="LOCAL-00007" summary="sdelal dohya eshe raz">
+      <option name="closed" value="true" />
+      <created>1726406631735</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1726406631735</updated>
+    </task>
+    <task id="LOCAL-00008" summary="sdelal dohya &#10;edit all">
+      <option name="closed" value="true" />
+      <created>1726616974611</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1726616974611</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="sdelal dohya" />
-    <option name="LAST_COMMIT_MESSAGE" value="sdelal dohya" />
+    <MESSAGE value="sdelal dohya eshe raz" />
+    <MESSAGE value="sdelal dohya &#10;edit all" />
+    <option name="LAST_COMMIT_MESSAGE" value="sdelal dohya &#10;edit all" />
   </component>
 </project>
