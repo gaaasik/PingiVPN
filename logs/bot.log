@@ -24078,3 +24078,85 @@ TypeError: create_user_files() missing 1 required positional argument: 'bot'
 2024-09-18 02:48:27,124 [INFO] aiogram.event: Update id=228396603 is handled. Duration 217 ms by bot id=7036736465
 2024-09-18 02:48:28,041 [INFO] root: Файлы 16_free.conf и 4_free.png успешно перемещены и переименованы для пользователя 456717505
 2024-09-18 02:48:28,284 [INFO] aiogram.event: Update id=228396604 is handled. Duration 359 ms by bot id=7036736465
+2024-09-18 02:49:59,335 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-18 02:49:59,336 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-18 02:53:41,808 [INFO] aiogram.dispatcher: Start polling
+2024-09-18 02:53:42,095 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-18 02:53:42,353 [INFO] aiogram.event: Update id=228396606 is handled. Duration 188 ms by bot id=7036736465
+2024-09-18 02:53:42,649 [INFO] aiogram.event: Update id=228396605 is handled. Duration 484 ms by bot id=7036736465
+2024-09-18 02:53:46,410 [INFO] aiogram.event: Update id=228396607 is handled. Duration 266 ms by bot id=7036736465
+2024-09-18 02:53:52,317 [INFO] aiogram.event: Update id=228396608 is handled. Duration 329 ms by bot id=7036736465
+2024-09-18 02:53:55,855 [INFO] aiogram.event: Update id=228396609 is handled. Duration 203 ms by bot id=7036736465
+2024-09-18 02:54:00,680 [INFO] aiogram.event: Update id=228396610 is handled. Duration 233 ms by bot id=7036736465
+2024-09-18 02:54:05,582 [INFO] aiogram.event: Update id=228396611 is handled. Duration 204 ms by bot id=7036736465
+2024-09-18 02:54:10,878 [INFO] aiogram.event: Update id=228396612 is handled. Duration 217 ms by bot id=7036736465
+2024-09-18 02:55:06,708 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-18 02:55:06,708 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-18 03:00:35,231 [INFO] aiogram.dispatcher: Start polling
+2024-09-18 03:00:35,572 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-18 03:00:41,921 [INFO] aiogram.event: Update id=228396613 is not handled. Duration 0 ms by bot id=7036736465
+2024-09-18 03:00:41,921 [ERROR] aiogram.event: Cause exception while process update id=228396613 by bot id=7036736465
+FileNotFoundError: [WinError 3] Системе не удается найти указанный путь: 'C:\\PycharmProjects\\VPN_BOT\\configs\\registered_user'
+Traceback (most recent call last):
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "C:\PycharmProjects\VPN_BOT\bot\midlewares\throttling.py", line 35, in __call__
+    return await handler(event, data)
+  File "C:\PycharmProjects\VPN_BOT\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "C:\PycharmProjects\VPN_BOT\bot\handlers\start.py", line 32, in cmd_start
+    matching_dirs = [d for d in os.listdir(REGISTERED_USERS_DIR) if str(chat_id) in d]
+FileNotFoundError: [WinError 3] Системе не удается найти указанный путь: 'C:\\PycharmProjects\\VPN_BOT\\configs\\registered_user'
+2024-09-18 03:01:09,261 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-18 03:01:09,262 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-18 03:01:13,393 [INFO] aiogram.dispatcher: Start polling
+2024-09-18 03:01:13,612 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-18 03:01:20,141 [INFO] aiogram.event: Update id=228396614 is handled. Duration 483 ms by bot id=7036736465
+2024-09-18 03:01:26,180 [INFO] aiogram.event: Update id=228396615 is handled. Duration 202 ms by bot id=7036736465
+2024-09-18 03:01:27,064 [INFO] aiogram.event: Update id=228396616 is handled. Duration 141 ms by bot id=7036736465
+2024-09-18 03:01:28,490 [ERROR] root: Ошибка при архивировании файлов для пользователя 456717505: [Errno 2] No such file or directory: 'C:\\PycharmProjects\\VPN_BOT\\configs\\used_config\\72_456717505_None_Used.conf'
+2024-09-18 03:01:28,730 [INFO] aiogram.event: Update id=228396617 is handled. Duration 797 ms by bot id=7036736465
+2024-09-18 03:01:46,742 [INFO] aiogram.event: Update id=228396618 is handled. Duration 389 ms by bot id=7036736465
+2024-09-18 03:27:38,543 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-18 03:27:38,549 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-18 03:28:15,610 [INFO] aiogram.dispatcher: Start polling
+2024-09-18 03:28:15,883 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-18 03:28:25,133 [INFO] aiogram.event: Update id=228396619 is handled. Duration 671 ms by bot id=7036736465
+2024-09-18 03:28:38,348 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-18 03:28:38,348 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-18 03:28:42,913 [INFO] aiogram.dispatcher: Start polling
+2024-09-18 03:28:43,132 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-18 03:28:49,784 [INFO] aiogram.event: Update id=228396620 is handled. Duration 500 ms by bot id=7036736465
+2024-09-18 03:28:53,179 [INFO] aiogram.event: Update id=228396621 is handled. Duration 202 ms by bot id=7036736465
+2024-09-18 03:28:54,434 [INFO] aiogram.event: Update id=228396622 is handled. Duration 141 ms by bot id=7036736465
+2024-09-18 03:28:55,917 [INFO] aiogram.event: Update id=228396623 is handled. Duration 327 ms by bot id=7036736465
+2024-09-18 03:29:14,837 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-18 03:29:14,837 [INFO] aiogram.dispatcher: Polling stopped
