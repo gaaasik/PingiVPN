@@ -9,7 +9,7 @@ from bot.handlers import start, status, support, admin, share, start_to_connect,
     device_choice, app_downloaded, file_or_qr, subscription, speedtest
 from bot.utils.cache import cache_media
 from bot.utils.logger import setup_logger
-from bot.utils.db import init_db, drop_table
+from bot.utils.db import init_db, drop_table, add_device_column
 
 from bot.midlewares.throttling import ThrottlingMiddleware
 import os
@@ -44,7 +44,7 @@ async def main():
     else:
         print("Файл базы данных не найден!")
 
-   # await drop_table('vpn_bot.db', 'users')
+   ### await drop_table('vpn_bot.db', 'users')
 
 
     # Инициализация бота и диспетчера

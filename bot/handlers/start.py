@@ -17,6 +17,7 @@ router = Router()
 # Загрузка переменных из файла .env
 load_dotenv()
 PATH_TO_IMAGES = os.getenv('PATH_TO_IMAGES')  # Получаем путь к папке с изображениями
+
 # Получение пути к папке с зарегистрированными пользователями
 REGISTERED_USERS_DIR = os.getenv('REGISTERED_USERS_DIR')
 
@@ -26,7 +27,7 @@ async def cmd_start(message: types.Message):
     # Получаем ID чата и никнейм пользователя
     chat_id = message.chat.id
     username = message.from_user.username or None  # Используем None, если username отсутствует
-
+    print(REGISTERED_USERS_DIR)
     # Ищем директорию, которая содержит chat_id в названии
     matching_dirs = [d for d in os.listdir(REGISTERED_USERS_DIR) if str(chat_id) in d]
 

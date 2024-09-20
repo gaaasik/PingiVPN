@@ -39,10 +39,15 @@ async def init_db(database_path: str):
     if db_directory and not os.path.exists(db_directory):
         os.makedirs(db_directory)
 
-
     conn = await aiosqlite.connect(database_path)
 
-    # Создание таблицы users
+    # Добавляем новые столбцы, если они не существуют
+    await add_device_column(conn)
+    await add_is_subscribed_column(conn)
+    await add_vpn_usage_start_date_column(conn)
+    await add_traffic_used_column(conn)
+
+    # Создание таблицы users с новыми полями
     await conn.execute('''
          CREATE TABLE IF NOT EXISTS users (
              id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,11 +55,15 @@ async def init_db(database_path: str):
              user_name TEXT,
              registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
              referrer_id INTEGER,  -- Новое поле для хранения ID пригласившего пользователя
+             device TEXT,  -- Новое поле для устройства
+             is_subscribed BOOLEAN DEFAULT 0,  -- Поле для отслеживания подписки
+             vpn_usage_start_date TIMESTAMP,  -- Дата начала использования VPN
+             traffic_used INTEGER DEFAULT 0,  -- Потраченный трафик (в мегабайтах)
              FOREIGN KEY(referrer_id) REFERENCES users(id)
          )
      ''')
 
-    # Создание таблицы connections
+    # Создание остальных таблиц
     await conn.execute('''
         CREATE TABLE IF NOT EXISTS connections (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -64,7 +73,6 @@ async def init_db(database_path: str):
         )
     ''')
 
-    # Создание таблицы configurations для отслеживания конфигурационных файлов
     await conn.execute('''
         CREATE TABLE IF NOT EXISTS configurations (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -73,7 +81,6 @@ async def init_db(database_path: str):
         )
     ''')
 
-    # ////////// Добавление создания таблицы user_questions //////////
     await conn.execute('''
         CREATE TABLE IF NOT EXISTS user_questions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -83,22 +90,21 @@ async def init_db(database_path: str):
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     ''')
-    # //////////////////////////////////////////////////////////////////
 
-    # Создание таблицы referrals
     await conn.execute('''
-            CREATE TABLE IF NOT EXISTS referrals (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                referrer_id INTEGER NOT NULL,
-                referred_id INTEGER NOT NULL,
-                timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY(referrer_id) REFERENCES users(id),
-                FOREIGN KEY(referred_id) REFERENCES users(id)
-            )
-        ''')
+        CREATE TABLE IF NOT EXISTS referrals (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            referrer_id INTEGER NOT NULL,
+            referred_id INTEGER NOT NULL,
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(referrer_id) REFERENCES users(id),
+            FOREIGN KEY(referred_id) REFERENCES users(id)
+        )
+    ''')
 
     await conn.commit()
     return conn
+
 
 async def add_user(chat_id: int, user_name: str, referrer_id: int = None):
     registration_date = datetime.datetime.now()  # Сохраняем текущее время
@@ -202,17 +208,50 @@ async def update_user_subscription_status(chat_id, is_subscribed):
 
 
 
-# Вызов функции для добавления столбца `device`
-#    await add_device_column(conn)
-#async def add_device_column(conn):
-#     # Проверяем наличие столбца `device` в таблице
-#     cursor = await conn.execute("PRAGMA table_info(users)")
-#     columns = await cursor.fetchall()
-#
-#     # Если столбца `device` нет, то добавляем его
-#     if not any(column[1] == "device" for column in columns):
-#         await conn.execute('''ALTER TABLE users ADD COLUMN device TEXT''')
-#         await conn.commit()
-#         print("Колонка 'device' добавлена в таблицу users.")
-#     else:
-#         print("Колонка 'device' уже существует.")
+
+async def add_device_column(conn):
+    cursor = await conn.execute("PRAGMA table_info(users)")
+    columns = await cursor.fetchall()
+
+    # Если столбца `device` нет, то добавляем его
+    if not any(column[1] == "device" for column in columns):
+        await conn.execute('''ALTER TABLE users ADD COLUMN device TEXT''')
+        await conn.commit()
+        print("Колонка 'device' добавлена в таблицу users.")
+    else:
+        print("Колонка 'device' уже существует.")
+
+async def add_is_subscribed_column(conn):
+    cursor = await conn.execute("PRAGMA table_info(users)")
+    columns = await cursor.fetchall()
+
+    # Если столбца `is_subscribed` нет, то добавляем его
+    if not any(column[1] == "is_subscribed" for column in columns):
+        await conn.execute('''ALTER TABLE users ADD COLUMN is_subscribed BOOLEAN DEFAULT 0''')
+        await conn.commit()
+        print("Колонка 'is_subscribed' добавлена в таблицу users.")
+    else:
+        print("Колонка 'is_subscribed' уже существует.")
+
+async def add_vpn_usage_start_date_column(conn):
+    cursor = await conn.execute("PRAGMA table_info(users)")
+    columns = await cursor.fetchall()
+
+    # Если столбца `vpn_usage_start_date` нет, то добавляем его
+    if not any(column[1] == "vpn_usage_start_date" for column in columns):
+        await conn.execute('''ALTER TABLE users ADD COLUMN vpn_usage_start_date TIMESTAMP''')
+        await conn.commit()
+        print("Колонка 'vpn_usage_start_date' добавлена в таблицу users.")
+    else:
+        print("Колонка 'vpn_usage_start_date' уже существует.")
+async def add_traffic_used_column(conn):
+    cursor = await conn.execute("PRAGMA table_info(users)")
+    columns = await cursor.fetchall()
+
+    # Если столбца `traffic_used` нет, то добавляем его
+    if not any(column[1] == "traffic_used" for column in columns):
+        await conn.execute('''ALTER TABLE users ADD COLUMN traffic_used INTEGER DEFAULT 0''')
+        await conn.commit()
+        print("Колонка 'traffic_used' добавлена в таблицу users.")
+    else:
+        print("Колонка 'traffic_used' уже существует.")
