@@ -15,7 +15,7 @@ reply_keyboard = ReplyKeyboardMarkup(
             KeyboardButton(text="Поделиться с другом!")
         ],
         [(
-            KeyboardButton(text="Тарифы \n(в разработке)")
+            KeyboardButton(text="У меня не получается")
         ),
             (
             KeyboardButton(text="Проверить скорость")

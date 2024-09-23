@@ -24176,3 +24176,96 @@ FileNotFoundError: [WinError 3] Системе не удается найти указанный путь: 'C:\\Py
 2024-09-18 04:01:50,610 [INFO] aiogram.event: Update id=228396627 is handled. Duration 203 ms by bot id=7036736465
 2024-09-18 04:01:51,880 [INFO] aiogram.event: Update id=228396628 is handled. Duration 141 ms by bot id=7036736465
 2024-09-18 04:01:54,848 [INFO] aiogram.event: Update id=228396629 is handled. Duration 969 ms by bot id=7036736465
+2024-09-23 12:51:37,220 [INFO] aiogram.dispatcher: Start polling
+2024-09-23 12:51:37,511 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-23 12:56:59,072 [INFO] aiogram.event: Update id=228396761 is handled. Duration 2063 ms by bot id=7036736465
+2024-09-23 13:00:22,641 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-23 13:00:22,641 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-23 13:00:37,615 [INFO] aiogram.dispatcher: Start polling
+2024-09-23 13:00:37,883 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-23 13:00:50,051 [INFO] aiogram.event: Update id=228396762 is handled. Duration 1844 ms by bot id=7036736465
+2024-09-23 13:02:00,762 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-23 13:02:00,762 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-23 13:06:08,969 [INFO] aiogram.dispatcher: Start polling
+2024-09-23 13:06:09,256 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-23 13:06:15,403 [INFO] aiogram.event: Update id=228396764 is handled. Duration 2702 ms by bot id=7036736465
+2024-09-23 13:07:19,563 [INFO] aiogram.event: Update id=228396765 is handled. Duration 2688 ms by bot id=7036736465
+2024-09-23 13:07:50,282 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-23 13:07:50,283 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-23 13:08:33,752 [INFO] aiogram.dispatcher: Start polling
+2024-09-23 13:08:34,075 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-23 13:08:39,704 [INFO] aiogram.event: Update id=228396766 is handled. Duration 1875 ms by bot id=7036736465
+2024-09-23 13:08:43,101 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-23 13:08:43,102 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-23 13:24:24,409 [INFO] aiogram.dispatcher: Start polling
+2024-09-23 13:24:24,686 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-23 13:24:28,069 [INFO] aiogram.event: Update id=228396797 is handled. Duration 344 ms by bot id=7036736465
+2024-09-23 13:24:29,329 [INFO] aiogram.event: Update id=228396798 is handled. Duration 327 ms by bot id=7036736465
+2024-09-23 13:24:31,830 [INFO] aiogram.event: Update id=228396799 is handled. Duration 389 ms by bot id=7036736465
+2024-09-23 13:24:36,050 [INFO] aiogram.event: Update id=228396800 is handled. Duration 828 ms by bot id=7036736465
+2024-09-23 13:24:36,102 [INFO] aiogram.event: Update id=228396801 is handled. Duration 343 ms by bot id=7036736465
+2024-09-23 13:24:39,092 [INFO] aiogram.event: Update id=228396802 is handled. Duration 577 ms by bot id=7036736465
+2024-09-23 13:24:41,991 [INFO] aiogram.event: Update id=228396803 is handled. Duration 562 ms by bot id=7036736465
+2024-09-23 13:24:46,262 [INFO] aiogram.event: Update id=228396804 is handled. Duration 702 ms by bot id=7036736465
+2024-09-23 13:24:48,469 [INFO] aiogram.event: Update id=228396805 is handled. Duration 625 ms by bot id=7036736465
+2024-09-23 13:24:51,042 [INFO] aiogram.event: Update id=228396806 is handled. Duration 657 ms by bot id=7036736465
+2024-09-23 13:24:54,052 [INFO] aiogram.event: Update id=228396807 is handled. Duration 781 ms by bot id=7036736465
+2024-09-23 13:24:56,591 [INFO] aiogram.event: Update id=228396808 is handled. Duration 905 ms by bot id=7036736465
+2024-09-23 13:25:11,296 [INFO] aiogram.event: Update id=228396809 is handled. Duration 125 ms by bot id=7036736465
+2024-09-23 13:25:12,184 [INFO] aiogram.event: Update id=228396810 is handled. Duration 140 ms by bot id=7036736465
+2024-09-23 13:25:19,050 [INFO] aiogram.event: Update id=228396811 is handled. Duration 250 ms by bot id=7036736465
+2024-09-23 13:25:24,671 [INFO] aiogram.event: Update id=228396812 is handled. Duration 234 ms by bot id=7036736465
+2024-09-23 13:25:32,443 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-23 13:25:32,443 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-23 13:37:25,028 [INFO] aiogram.dispatcher: Start polling
+2024-09-23 13:37:25,306 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-23 13:37:44,793 [INFO] aiogram.event: Update id=228396813 is handled. Duration 218 ms by bot id=7036736465
+2024-09-23 13:37:48,483 [INFO] aiogram.event: Update id=228396814 is handled. Duration 202 ms by bot id=7036736465
+2024-09-23 13:37:49,795 [INFO] aiogram.event: Update id=228396815 is handled. Duration 313 ms by bot id=7036736465
+2024-09-23 13:38:11,044 [INFO] root: Файлы 73_free.conf и 73_free.png успешно перемещены и переименованы для пользователя 456717505
+2024-09-23 13:38:11,446 [INFO] aiogram.event: Update id=228396816 is handled. Duration 4172 ms by bot id=7036736465
+2024-09-23 13:44:22,356 [ERROR] aiogram.dispatcher: Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientOSError: [WinError 1236] Подключение к сети было разорвано локальной системой
+2024-09-23 13:44:22,356 [WARNING] aiogram.dispatcher: Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7036736465)
+2024-09-23 13:44:33,579 [INFO] aiogram.dispatcher: Connection established (tryings = 1, bot id = 7036736465)
+2024-09-23 14:07:06,639 [INFO] aiogram.event: Update id=228396817 is handled. Duration 3000 ms by bot id=7036736465
+2024-09-23 14:07:10,294 [INFO] aiogram.event: Update id=228396818 is handled. Duration 250 ms by bot id=7036736465
+2024-09-23 14:07:11,561 [INFO] aiogram.event: Update id=228396819 is handled. Duration 202 ms by bot id=7036736465
+2024-09-23 14:07:12,506 [INFO] root: Файлы 74_free.conf и 74_free.png успешно перемещены и переименованы для пользователя 7032840268
+2024-09-23 14:07:13,036 [INFO] aiogram.event: Update id=228396820 is handled. Duration 670 ms by bot id=7036736465
+2024-09-23 14:39:32,743 [ERROR] aiogram.dispatcher: Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientOSError: [WinError 1236] Подключение к сети было разорвано локальной системой
+2024-09-23 14:39:32,748 [WARNING] aiogram.dispatcher: Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7036736465)
+2024-09-23 14:39:43,962 [INFO] aiogram.dispatcher: Connection established (tryings = 1, bot id = 7036736465)
+2024-09-23 15:19:05,296 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-23 15:19:05,300 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-23 15:19:13,841 [INFO] aiogram.dispatcher: Start polling
+2024-09-23 15:19:14,116 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-23 15:19:22,129 [INFO] aiogram.event: Update id=228396821 is handled. Duration 375 ms by bot id=7036736465
+2024-09-23 15:25:43,527 [ERROR] aiogram.dispatcher: Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientOSError: [WinError 1236] Подключение к сети было разорвано локальной системой
+2024-09-23 15:25:43,528 [WARNING] aiogram.dispatcher: Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7036736465)
+2024-09-23 15:25:54,698 [INFO] aiogram.dispatcher: Connection established (tryings = 1, bot id = 7036736465)
+2024-09-23 15:35:13,366 [ERROR] aiogram.dispatcher: Failed to fetch updates - TelegramNetworkError: HTTP Client says - ClientOSError: [WinError 1236] Подключение к сети было разорвано локальной системой
+2024-09-23 15:35:13,370 [WARNING] aiogram.dispatcher: Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7036736465)
+2024-09-23 15:35:24,609 [INFO] aiogram.dispatcher: Connection established (tryings = 1, bot id = 7036736465)
+2024-09-23 15:36:15,394 [ERROR] aiogram.dispatcher: Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2024-09-23 15:36:15,395 [WARNING] aiogram.dispatcher: Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7036736465)
+2024-09-23 15:36:20,506 [ERROR] aiogram.dispatcher: Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2024-09-23 15:36:20,506 [WARNING] aiogram.dispatcher: Sleep for 1.420250 seconds and try again... (tryings = 1, bot id = 7036736465)
+2024-09-23 15:36:22,495 [INFO] aiogram.dispatcher: Connection established (tryings = 2, bot id = 7036736465)
+2024-09-23 15:36:24,312 [INFO] aiogram.event: Update id=228396823 is handled. Duration 1813 ms by bot id=7036736465
+2024-09-23 15:36:26,086 [ERROR] aiogram.dispatcher: Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2024-09-23 15:36:26,086 [WARNING] aiogram.dispatcher: Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7036736465)
+2024-09-23 15:36:31,389 [ERROR] aiogram.dispatcher: Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2024-09-23 15:36:31,390 [WARNING] aiogram.dispatcher: Sleep for 1.401547 seconds and try again... (tryings = 1, bot id = 7036736465)
+2024-09-23 15:36:37,566 [ERROR] aiogram.dispatcher: Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2024-09-23 15:36:37,567 [WARNING] aiogram.dispatcher: Sleep for 1.858683 seconds and try again... (tryings = 2, bot id = 7036736465)
+2024-09-23 15:36:44,703 [ERROR] aiogram.dispatcher: Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2024-09-23 15:36:44,703 [WARNING] aiogram.dispatcher: Sleep for 2.213066 seconds and try again... (tryings = 3, bot id = 7036736465)
+2024-09-23 15:36:45,803 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-23 15:36:45,804 [INFO] aiogram.dispatcher: Polling stopped
+2024-09-23 15:59:31,197 [INFO] aiogram.dispatcher: Start polling
+2024-09-23 15:59:31,477 [INFO] aiogram.dispatcher: Run polling for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-23 15:59:51,703 [INFO] aiogram.event: Update id=228396828 is handled. Duration 1766 ms by bot id=7036736465
+2024-09-23 16:00:02,155 [INFO] aiogram.event: Update id=228396829 is handled. Duration 438 ms by bot id=7036736465
+2024-09-23 16:00:04,707 [INFO] aiogram.event: Update id=228396830 is handled. Duration 358 ms by bot id=7036736465
+2024-09-23 16:01:47,291 [INFO] aiogram.dispatcher: Polling stopped for bot @GASIK_VPN_BOT id=7036736465 - 'Test pingi bot'
+2024-09-23 16:01:47,291 [INFO] aiogram.dispatcher: Polling stopped
