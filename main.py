@@ -6,7 +6,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from dotenv import load_dotenv
 from bot.handlers import start, status, support, admin, share, start_to_connect, instructions, \
-    device_choice, app_downloaded, file_or_qr, subscription, speedtest
+    device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request
 from bot.utils.cache import cache_media
 from bot.utils.logger import setup_logger
 from bot.utils.db import init_db, drop_table, add_device_column
@@ -21,7 +21,8 @@ video_path = os.getenv("video_path")
 async def on_startup():
     # Кэшируем изображение при старте
     image_path = os.path.join(PATH_TO_IMAGES, "Hello.png")
-    print('закешировали')
+    print('закешировали приветственное фото'
+          '')
     # Кэшируем фото и видео
     await cache_media(image_path, video_path)
 async def main():
@@ -68,7 +69,7 @@ async def main():
     dp.include_router(app_downloaded.router)
     dp.include_router(file_or_qr.router)
     dp.include_router(subscription.router)
-#    dp.include_router(clear.router)
+    dp.include_router(user_help_request.router)
     # Запуск бота
     try:
         await dp.start_polling(bot)
