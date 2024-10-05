@@ -64,8 +64,10 @@ async def init_db(database_path: str):
     await add_traffic_used_column(conn)
     await add_columns_to_users_sub(conn)
     #await calculate_days_and_update_status(conn)
+    await add_is_notification_column(conn)
     await get_users_with_days_since_registration()
     await add_feedback_status_column(conn)
+    await add_ip_columns(conn)
     # Создание таблицы users с новыми полями
     await conn.execute('''
                CREATE TABLE IF NOT EXISTS users (
@@ -138,40 +140,7 @@ async def add_user(chat_id: int, user_name: str, referrer_id: int = None):
         await conn.commit()
 
 
-async def calculate_days_and_update_status(conn):
-    """Подсчитывает количество дней с момента регистрации и обновляет статусы подписки."""
 
-    today = datetime.today().date()  # Текущая дата
-
-    # Получаем всех пользователей и их данные
-    async with conn.execute("SELECT id, registration_date, has_paid_subscription FROM users") as cursor:
-        users = await cursor.fetchall()
-
-        for user in users:
-            user_id = user[0]
-
-            # Если строка даты содержит время, используйте соответствующий формат
-            registration_date = datetime.strptime(user[1], '%Y-%m-%d %H:%M:%S.%f').date()
-            has_paid_subscription = user[2]
-
-            # Вычисляем количество дней с момента регистрации
-            days_since_registration = (today - registration_date).days
-
-            # Определяем статус подписки
-            if days_since_registration <= 14:
-                subscription_status = 'new_user'
-            elif has_paid_subscription == 1:
-                subscription_status = 'premium'
-            else:
-                subscription_status = 'free'
-
-            # Обновляем количество дней с момента регистрации и статус подписки в базе данных
-            await conn.execute(
-                '''UPDATE users 
-                   SET days_since_registration = ?, subscription_status = ?
-                   WHERE id = ?''',
-                (days_since_registration, subscription_status, user_id)
-            )
 
     # Сохраняем изменения
     await conn.commit()
@@ -371,7 +340,7 @@ async def get_user_status(chat_id):
 
         # Выполняем запрос к базе данных
         cursor = await db.execute(
-            "SELECT registration_date, user_name, subscription_status FROM users WHERE chat_id = ?", (chat_id,))
+            "SELECT registration_date, days_since_registration, user_name, subscription_status FROM users WHERE chat_id = ?", (chat_id,))
         result = await cursor.fetchone()
 
         # Проверяем, найден ли пользователь
@@ -458,3 +427,33 @@ async def get_feedback_status(chat_id: int) -> str:
     except Exception as e:
         print(f"Ошибка при получении статуса для пользователя с chat_id {chat_id}: {e}")
         return None
+
+
+async def add_is_notification_column(conn):
+    cursor = await conn.execute("PRAGMA table_info(users)")
+    columns = await cursor.fetchall()
+
+    # Если столбца `is_notification` нет, то добавляем его
+    if not any(column[1] == "is_notification" for column in columns):
+        await conn.execute('''ALTER TABLE users ADD COLUMN is_notification BOOLEAN DEFAULT 0''')
+        await conn.commit()
+        print("Колонка 'is_notification' добавлена в таблицу users.")
+    else:
+        print("Колонка 'is_notification' уже существует.")
+
+
+async def add_ip_columns(conn):
+    cursor = await conn.execute("PRAGMA table_info(users)")
+    columns = await cursor.fetchall()
+
+    # Добавляем колонку для хранения частного IP-адреса пользователя
+    if not any(column[1] == "private_ip" for column in columns):
+        await conn.execute('''ALTER TABLE users ADD COLUMN private_ip TEXT''')
+        print("Колонка 'private_ip' добавлена в таблицу users.")
+
+    # Добавляем колонку для хранения IP-адреса сервера
+    if not any(column[1] == "server_ip" for column in columns):
+        await conn.execute('''ALTER TABLE users ADD COLUMN server_ip TEXT''')
+        print("Колонка 'server_ip' добавлена в таблицу users.")
+
+    await conn.commit()

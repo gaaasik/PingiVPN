@@ -25,19 +25,17 @@ async def cmd_status(message: types.Message):
 
     # Получаем данные пользователя из базы данных
     user_data = await get_user_status(user_id)  # Получаем статус и дату регистрации
-    if user_data and len(user_data) == 3:  # Проверяем, что возвращено три элемента
-        registration_date, user_name, subscription_status = user_data
+    if user_data and len(user_data) == 4:  # Проверяем, что возвращено три элемента
+        registration_date, days_since_registration, user_name, subscription_status = user_data
 
-        # Преобразуем строку в datetime, если это необходимо
-        if isinstance(registration_date, str):
-            registration_date = datetime.strptime(registration_date, "%Y-%m-%d %H:%M:%S.%f")
+
 
         # Вычисляем количество дней с момента регистрации
         now = datetime.now()
-        days_since_registration = (now - registration_date).days
+
         # Код для отправки сообщения с кнопкой оплаты
         if subscription_status == "waiting_pending":
-            status_sub_txt = "Ожидание оплаты подписки"
+            status_sub_txt = f"Бесплатные 14 дней закончились \nОжидание оплаты подписки"
             # Создаем клавиатуру с кнопкой оплаты
             reply_markup = create_payment_button()
         else:
@@ -46,10 +44,10 @@ async def cmd_status(message: types.Message):
 
         # Пример экранирования текста
         status_message = (
-            f"🕒 Вы с нами уже {escape_markdown(str(days_since_registration))} дней! 🚀 Какой прогресс! 😎\n"
-            f"Дата регистрации: {escape_markdown(registration_date.strftime('%d-%m-%Y'))}\n"
-            f"Имя пользователя: {escape_markdown(user_name)}\n"
-            f"Статус подписки: *{escape_markdown(status_sub_txt)}*"
+            f"🕒 Вы с нами уже {(str(days_since_registration))} дней! 🚀 Какой прогресс! 😎\n"
+            f"Действие тарифа: {(days_since_registration)} дней \n"
+            f"Имя пользователя: {(user_name)}\n"
+            f"Статус подписки: *{(status_sub_txt)}*"
         )
 
         # Удаление старых сообщений с той же информацией

@@ -6,6 +6,7 @@ from pathlib import Path
 
 from aiogram import Bot
 import aiosqlite
+from aiogram.exceptions import TelegramForbiddenError
 from pytz import timezone
 
 from bot.keyboards.inline import create_feedback_keyboard
@@ -51,24 +52,52 @@ async def check_db(bot: Bot):
 
                 # Проверяем и обновляем статус подписки
                 if days_since_registration > 14:
-                    # Получаем текущий статус
-                    cursor = await db.execute("SELECT subscription_status FROM users WHERE chat_id = ?", (chat_id,))
-                    current_status = await cursor.fetchone()
+                    # Получаем текущий статус и значение is_notification
+                    cursor = await db.execute('''
+                        SELECT subscription_status, is_notification
+                        FROM users
+                        WHERE chat_id = ?
+                    ''', (chat_id,))
+                    result = await cursor.fetchone()
 
-                    # Если статус ещё не "waiting_pending", обновляем и отправляем уведомление
-                    if current_status and current_status[0] != 'waiting_pending':
-                        await db.execute("UPDATE users SET subscription_status = 'waiting_pending' WHERE chat_id = ?",
-                                         (chat_id,))
-                        await db.commit()
+                    if result:
+                        current_status, is_notification = result
 
-                        # Отправляем сообщение пользователю
-                        warning_message = (
-                            f"Ваш пробный период истек. Пожалуйста, оплатите подписку, чтобы продолжить пользоваться VPN."
-                        )
-                        await bot.send_message(chat_id, warning_message)
-                        print(
-                            f"Статус пользователя с chat_id {chat_id} обновлен на 'waiting_pending'. Сообщение отправлено.")
+                        # Если статус ещё не "waiting_pending", обновляем и отправляем уведомление
+                        if current_status != 'waiting_pending':
+                            await db.execute('''
+                                UPDATE users
+                                SET subscription_status = 'waiting_pending'
+                                WHERE chat_id = ?
+                            ''', (chat_id,))
+                            await db.commit()
 
+                        # Проверяем is_notification, чтобы отправить уведомление только один раз
+                        if is_notification == 0:  # Если сообщение еще не отправлялось
+                            try:
+                                # Отправляем сообщение пользователю
+                                warning_message = (
+                                    f"Ваш пробный период истек. \nСкоро потребуется оплата, чтобы продолжить пользоваться VPN."
+                                )
+                                await bot.send_message(chat_id, warning_message)
+                                print(f"Статус пользователя с chat_id {chat_id} обновлен на 'waiting_pending'. Сообщение отправлено.")
+
+                                # Обновляем поле is_notification на True (1)
+                                await db.execute('''
+                                    UPDATE users
+                                    SET is_notification = 1
+                                    WHERE chat_id = ?
+                                ''', (chat_id,))
+                                await db.commit()
+                                print(f"Поле is_notification для chat_id {chat_id} обновлено на True.")
+                            except TelegramForbiddenError:
+                                # Обрабатываем случай, если бот был заблокирован пользователем
+                                print(f"Bot was blocked by user {chat_id}, skipping.")
+                            except Exception as e:
+                                # Логируем другие возможные ошибки
+                                print(f"Ошибка при отправке сообщения пользователю {chat_id}: {e}")
+                        else:
+                            print(f"Сообщение уже было отправлено пользователю с chat_id {chat_id}. Пропускаем отправку.")
     except Exception as e:
         logging.error(f"Ошибка при выполнении проверки бесплатных аккаунтов: {e}")
 

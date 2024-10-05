@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 
 from bot.keyboards.inline import create_feedback_keyboard
 from bot.utils import payment
+from bot.utils.add_ip_adress import update_user_ip_info
 from bot.utils.db import who_have_expired_trial
 import bot
 from bot.handlers import start, status, support, admin, share, start_to_connect, instructions, \
@@ -30,8 +31,8 @@ load_dotenv()
 bot = None
 PATH_TO_IMAGES = os.getenv('PATH_TO_IMAGES')
 video_path = os.getenv("video_path")
-
-
+REGISTERED_USERS_DIR = os.getenv('REGISTERED_USERS_DIR')
+database_path_local = os.getenv('database_path_local')
 
 
 async def on_startup():
@@ -52,12 +53,12 @@ async def send_admin_log(bot: Bot, message: str):
 # Функция, которая выполняется каждые 10 секунд
 async def periodic_task(bot: Bot):
     # Ждем 10 секунд после старта бота
-    await asyncio.sleep(5)
+    await asyncio.sleep(43200)
     while True:
         await send_admin_log(bot, "Прошло 43200 секунд с запуска бота.")
-        # await check_db(bot)
-        # # Пример асинхронного вызова
-        # await notify_users_with_free_status(bot)
+        await check_db(bot)
+        # Пример асинхронного вызова
+       # await notify_users_with_free_status(bot)
         await asyncio.sleep(43200)
 async def main():
     global bot
@@ -88,7 +89,7 @@ async def main():
     # Запускаем асинхронную задачу для периодической отправки сообщений админу
     asyncio.create_task(periodic_task(bot))
 
-
+    await update_user_ip_info(bot, database_path_local, REGISTERED_USERS_DIR)
 
 
     # Промежуточное ПО для предотвращения спама
