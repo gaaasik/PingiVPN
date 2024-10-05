@@ -9,7 +9,7 @@ import aiosqlite
 from aiogram.exceptions import TelegramForbiddenError
 from pytz import timezone
 
-from bot.keyboards.inline import create_feedback_keyboard
+from bot.keyboards.inline import create_feedback_keyboard, account_info_keyboard
 from data.text_messages import attention_message
 
 # Настройки
@@ -77,9 +77,9 @@ async def check_db(bot: Bot):
                             try:
                                 # Отправляем сообщение пользователю
                                 warning_message = (
-                                    f"Ваш пробный период истек. \nСкоро потребуется оплата, чтобы продолжить пользоваться VPN."
+                                    f"Ваш пробный период истек. \nСкоро потребуется оплата, чтобы продолжить пользоваться VPN.\n\n "
                                 )
-                                await bot.send_message(chat_id, warning_message)
+                                await bot.send_message(chat_id, warning_message,reply_markup=account_info_keyboard())
                                 print(f"Статус пользователя с chat_id {chat_id} обновлен на 'waiting_pending'. Сообщение отправлено.")
 
                                 # Обновляем поле is_notification на True (1)
