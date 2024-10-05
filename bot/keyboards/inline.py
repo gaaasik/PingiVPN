@@ -72,3 +72,34 @@ def config_or_qr_keyboard():
         [get_detailed_instruction_button()]
     ]
     return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def create_payment_button():
+    """Создает клавиатуру с кнопкой оплаты"""
+    payment_url = "https://example.com/payment"  # Замените ссылку на вашу страницу оплаты
+
+    # Создаем инлайн-кнопку с текстом "Оплатить 199 рублей" и ссылкой на оплату
+    payment_button = InlineKeyboardButton(text="Оплатить 199 рублей", url=payment_url)
+
+    # Создаем клавиатуру и добавляем кнопку
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[[payment_button]])
+
+    return keyboard
+def create_feedback_keyboard():
+        buttons = [
+            # Первый ряд кнопок: Плохо и Отлично
+            [
+                InlineKeyboardButton(text="Плохо", callback_data="feedback_bad"),
+                InlineKeyboardButton(text="Отлично", callback_data="feedback_excellent")
+            ],
+            # Второй ряд кнопок: Поделиться с другом и Оплатить 199 рублей
+            [
+                InlineKeyboardButton(text="Поделиться с другом", callback_data="share_friend"),
+
+            ],
+            [InlineKeyboardButton(text="Оплатить 199 рублей", callback_data="pay_199")]
+        ]
+
+        # Создаем клавиатуру с кнопками
+        keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
+        return keyboard

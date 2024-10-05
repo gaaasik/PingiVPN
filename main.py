@@ -1,62 +1,103 @@
-# main.py
 import asyncio
 import logging
+import os
 from pathlib import Path
+
+import aiocron
+import aiosqlite
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from dotenv import load_dotenv
+
+from bot.keyboards.inline import create_feedback_keyboard
+from bot.utils import payment
+from bot.utils.db import who_have_expired_trial
+import bot
 from bot.handlers import start, status, support, admin, share, start_to_connect, instructions, \
-    device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request
+    device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request, feedback
+
 
 from bot.payments import pay_199
 
 
+
 from bot.utils.cache import cache_media
+from bot.utils.check_status import check_db, ADMIN_CHAT_ID, notify_users_with_free_status
 from bot.utils.logger import setup_logger
-from bot.utils.db import init_db, drop_table, add_device_column
-
+from bot.utils.db import init_db,database_path_local
 from bot.midlewares.throttling import ThrottlingMiddleware
-import os
-# Загружаем переменные окружения из файла .env
+from bot.utils.send_message_first import send_messages_to_chats
+from data.text_messages import attention_message
 
-load_dotenv()  # Указываем путь к .env файлу
+# Загружаем переменные окружения из файла .env
+load_dotenv()
+
+# Глобальная переменная для хранения экземпляра бота
+bot = None
 PATH_TO_IMAGES = os.getenv('PATH_TO_IMAGES')
 video_path = os.getenv("video_path")
+
+
+
+
 async def on_startup():
-    # Кэшируем изображение при старте
+    """Кэширование изображений при старте"""
     image_path = os.path.join(PATH_TO_IMAGES, "Hello.png")
-    print('закешировали приветственное фото'
-          '')
-    # Кэшируем фото и видео
+    print('закешировали приветственное фото')
     await cache_media(image_path, video_path)
+
+
+async def send_admin_log(bot: Bot, message: str):
+    """Отправка сообщения админу и запись в лог"""
+    try:
+        await bot.send_message(chat_id=ADMIN_CHAT_ID, text=message)
+    except Exception as e:
+        logging.error(f"Ошибка при отправке сообщения админу: {e}")
+
+
+# Функция, которая выполняется каждые 10 секунд
+async def periodic_task(bot: Bot):
+    # Ждем 10 секунд после старта бота
+    await asyncio.sleep(5)
+    while True:
+        await send_admin_log(bot, "Прошло 43200 секунд с запуска бота.")
+        # await check_db(bot)
+        # # Пример асинхронного вызова
+        # await notify_users_with_free_status(bot)
+        await asyncio.sleep(43200)
 async def main():
+    global bot
     await on_startup()
+
     # Читаем токен бота из переменной окружения
     BOT_TOKEN = os.getenv('BOT_TOKEN')
-
-    if BOT_TOKEN:
-        print(f"Токен успешно загружен: {BOT_TOKEN}")
-    else:
+    if not BOT_TOKEN:
         print("Ошибка: Токен не найден в .env файле!")
+        return
+    print(f"Токен успешно загружен: {BOT_TOKEN}")
+
     # Настраиваем логирование
     setup_logger("logs/bot.log")
+
     # Указываем путь к базе данных
     db_path = Path(os.getenv('database_path_local'))
-
-    # Проверяем, что файл существует
-    if db_path.exists():
-        print(f"Путь к базе данных: {db_path}")
-    else:
+    if not db_path.exists():
         print("Файл базы данных не найден!")
-
-   ### await drop_table('vpn_bot.db', 'users')
-
+        return
+    print(f"Путь к базе данных: {db_path}")
     # Инициализация бота и диспетчера
     bot = Bot(token=BOT_TOKEN, parse_mode="HTML")
     dp = Dispatcher(storage=MemoryStorage())
 
     # Инициализация базы данных SQLite
-    database = await init_db(db_path)
+    await init_db(db_path)
+
+    # Запускаем асинхронную задачу для периодической отправки сообщений админу
+    asyncio.create_task(periodic_task(bot))
+
+
+
+
     # Промежуточное ПО для предотвращения спама
     dp.message.middleware(ThrottlingMiddleware(rate_limit=1))
 
@@ -75,6 +116,8 @@ async def main():
     dp.include_router(subscription.router)
     dp.include_router(user_help_request.router)
     dp.include_router(pay_199.router)
+    dp.include_router(feedback.router)
+    dp.include_router(payment.router)
     # Запуск бота
     try:
         await dp.start_polling(bot)
@@ -82,6 +125,7 @@ async def main():
         logging.exception(e)
     finally:
         await bot.session.close()
+
 
 if __name__ == "__main__":
     asyncio.run(main())
