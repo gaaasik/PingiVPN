@@ -58,17 +58,17 @@ async def cmd_start(message: types.Message):
     # Отправка закешированного фото
     await send_cached_photo(message)
 
-    sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard())
+    sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard(message))
     await store_important_message(message.chat.id, sent_message.message_id, sent_message)
 
     # Получаем данные пользователя из базы данных (включая устройство)
     user = await get_user_by_telegram_id(message.from_user.id)
     # Уведомляем администратора о новом пользователе
     count_users = await get_user_count()
-    await message.bot.send_message(
-        chat_id=456717505,  # ID админа для уведомления
-        text=f"Пользователь нажал start : @{username} (ID чата: {chat_id}) \n Количество пользователей: {count_users}"
-    )
+    # await message.bot.send_message(
+    #     chat_id=456717505,  # ID админа для уведомления
+    #     text=f"Пользователь нажал start : @{username} (ID чата: {chat_id}) \n Количество пользователей: {count_users}"
+    # )
     if not user:
         # Регистрируем нового пользователя
         await add_user(

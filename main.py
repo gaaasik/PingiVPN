@@ -7,6 +7,10 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from dotenv import load_dotenv
 from bot.handlers import start, status, support, admin, share, start_to_connect, instructions, \
     device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request
+
+from bot.payments import pay_199
+
+
 from bot.utils.cache import cache_media
 from bot.utils.logger import setup_logger
 from bot.utils.db import init_db, drop_table, add_device_column
@@ -47,10 +51,10 @@ async def main():
 
    ### await drop_table('vpn_bot.db', 'users')
 
-
     # Инициализация бота и диспетчера
     bot = Bot(token=BOT_TOKEN, parse_mode="HTML")
     dp = Dispatcher(storage=MemoryStorage())
+
     # Инициализация базы данных SQLite
     database = await init_db(db_path)
     # Промежуточное ПО для предотвращения спама
@@ -70,6 +74,7 @@ async def main():
     dp.include_router(file_or_qr.router)
     dp.include_router(subscription.router)
     dp.include_router(user_help_request.router)
+    dp.include_router(pay_199.router)
     # Запуск бота
     try:
         await dp.start_polling(bot)
