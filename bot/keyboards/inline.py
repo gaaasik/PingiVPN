@@ -1,11 +1,8 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-############################################################Анатолий#######################################
-
-############################################################Анатолий#######################################
 
 # Создаем инлайн-кнопки для выбора устройства
-def device_choice_keyboard(message):
-    user_id = message.from_user.id
+# Создаем инлайн-кнопки для выбора устройства
+def device_choice_keyboard():
     """Клавиатура для выбора устройства"""
 
     # Создаем кнопки
@@ -26,6 +23,7 @@ def device_choice_keyboard(message):
     # Передаем список кнопок в InlineKeyboardMarkup
     keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
     return keyboard
+
 
 # Клавиатура для скачивания приложения и подтверждения скачивания
 def download_app_keyboard(download_link):
