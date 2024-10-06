@@ -1,5 +1,7 @@
 from aiogram import Router, types
 from aiogram.filters import Command
+from aiogram.types import InlineKeyboardMarkup
+
 from bot.handlers.cleanup import delete_unimportant_messages, store_message, messages_for_db, register_message_type
 from bot.keyboards.inline import create_payment_button
 from bot.utils.db import get_user_status
@@ -39,10 +41,11 @@ async def cmd_status(message: types.Message):
         if subscription_status == "waiting_pending":
             status_sub_txt = "Ожидание оплаты подписки"
             # Создаем клавиатуру с кнопкой оплаты
-            reply_markup = create_payment_button()
+            keyboard = create_payment_button()
+
         else:
             status_sub_txt = subscription_status
-            reply_markup = None  # Без кнопок, если статус другой
+            keyboard = create_payment_button()  # Без кнопок, если статус другой
 
         # Пример экранирования текста
         status_message = (
@@ -61,7 +64,7 @@ async def cmd_status(message: types.Message):
                     print(f"Не удалось удалить сообщение {msg['message_id']}: {e}")
 
         # Отправка нового сообщения с информацией об аккаунте и кнопкой оплаты, если нужно
-        sent_message = await message.answer(status_message, parse_mode="Markdown", reply_markup=reply_markup)
+        sent_message = await message.answer(status_message, parse_mode="Markdown", reply_markup=keyboard)
 
         if sent_message and sent_message.message_id:
             # Сохраняем и регистрируем сообщение только в случае успешной отправки

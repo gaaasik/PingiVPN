@@ -3,7 +3,6 @@ import logging
 import os
 from pathlib import Path
 
-import aiocron
 import aiosqlite
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
@@ -34,11 +33,15 @@ load_dotenv()
 
 # Глобальная переменная для хранения экземпляра бота
 bot = None
+
 PATH_TO_IMAGES = os.getenv('PATH_TO_IMAGES')
 video_path = os.getenv("video_path")
 
-
-
+#############################################################################
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+bot = Bot(token=BOT_TOKEN, parse_mode="HTML")
+dp = Dispatcher(storage=MemoryStorage())
+#############################################################################
 
 async def on_startup():
     """Кэширование изображений при старте"""
@@ -70,7 +73,7 @@ async def main():
     await on_startup()
 
     # Читаем токен бота из переменной окружения
-    BOT_TOKEN = os.getenv('BOT_TOKEN')
+
     if not BOT_TOKEN:
         print("Ошибка: Токен не найден в .env файле!")
         return
@@ -86,8 +89,7 @@ async def main():
         return
     print(f"Путь к базе данных: {db_path}")
     # Инициализация бота и диспетчера
-    bot = Bot(token=BOT_TOKEN, parse_mode="HTML")
-    dp = Dispatcher(storage=MemoryStorage())
+
 
     # Инициализация базы данных SQLite
     await init_db(db_path)

@@ -2,120 +2,93 @@ from yookassa import Payment, Configuration
 from aiogram import Router, types
 from aiogram import Router, types
 
-from aiogram.types import CallbackQuery
-from bot.handlers.cleanup import store_message, delete_unimportant_messages, store_important_message
-import json
-import asyncio
+from aiogram.types import CallbackQuery, LabeledPrice, PreCheckoutQuery
 import os
-import time
+
+from bot.handlers.cleanup import store_message, register_message_type, delete_unimportant_messages
+from bot.payments.add_payment_db import update_has_paid_subscription_db, check_has_paid_subscription_db, \
+    test_update_tolsemenovv_has_paid_subscription_db
+
 router = Router()
 
 
 
-# # Настройка конфигурации YooKassa
-Configuration.account_id = os.getenv('SHOPID')
-Configuration.secret_key = os.getenv('API_KEY')
+# Вставьте ваши данные для YooKassa и Telegram
+SHOP_ID = os.getenv('SHOPID')
+SECRET_KEY = os.getenv('API')
+BOT_PAYMENT_TOKEN = os.getenv('PROVIDER_TOKEN_TEST')  # Тестовый токен провайдера
+
+# Настройка конфигурации YooKassa
+Configuration.account_id = SHOP_ID
+Configuration.secret_key = SECRET_KEY
+
+
+router = Router()
 
 
 
-
-# ################################################
-user_payments = {}
-###################################
-
-
-
-#Создание url для перехода по ссылки
-def create_payment199(message):
-    user_id = message.from_user.id
-
-    payment = Payment.create({
-        "amount": {
-            "value": "199.00",  # Сумма оплаты
-            "currency": "RUB"
-        },
-        "confirmation": {
-            "type": "redirect",
-            "return_url": os.getenv('URL')  # URL для возврата после оплаты
-        },
-        "capture": True,
-        "description": "Оплата за одписку на месяц 199р"
-    })
-
-# ####################################################################### Сохраняем платеж для пользователя
-    user_payments[user_id] = payment.id
-    check_payment(user_id, payment.id)
-
-    return payment.confirmation.confirmation_url
+@router.callback_query(lambda c: c.data == 'payment_199')
+async def process_callback_query(callback_query: types.CallbackQuery):
+    chat_id = callback_query.message.chat.id
+    user_id = callback_query.message.from_user.id
+    bot = callback_query.message.bot
 
 
+    await test_update_tolsemenovv_has_paid_subscription_db(0)
 
-# def check_payment_status(user_id):
-#     if user_id in user_payments:
-#         payment_id = user_payments[user_id]
-#         payment = Payment.find_one(payment_id)
-#         return payment.status
-#     return None
+    newcheck = await check_has_paid_subscription_db(chat_id)
 
+    print("newcheck = ", newcheck)
+    check = await check_has_paid_subscription_db(chat_id)
+    if check:
+        share_message = ("У вас тариф уже оплачен! Повторная оплата будет 12.12.24")
+        sent_message = await callback_query.message.answer(share_message, parse_mode="Markdown")
 
-def check_payment(user_id, payment_id):
-    if user_id in user_payments:
-        print("СТАРТ ОБРАБОТЧИКА//////////////////////////////////////////////////////////////////////////")
-        payment = Payment.find_one(payment_id)
-        start_time = time.time()  # Засекаем время начала
-        timeout = 10  # 5 минут в секундах
-        while payment['status'] == 'pending':
-            print("Платеж в состоянии ожидания//////////////////////////////////////////////////////////////////////////")
-
-            payment = Payment.find_one(payment_id)
-            asyncio.sleep(3)
-            elapsed_time = time.time() - start_time
-            if elapsed_time > timeout:
-                print("Время ожидания истекло, прекращаем проверку//////////////////////////////////////////////////////////////////////////")
-                # Отправляем сообщение пользователю о таймауте
-                # await bot.send_message(user_id, "Время ожидания оплаты истекло. Попробуйте снова.")
-                return False
-
-
-        print("Обработчик закончился//////////////////////////////////////////////////////////////////////////")
-        if payment['status'] == 'succeeded':
-            print("SUCCSESS RETURN")
-            #await message.answer("оплата прошла")
-            #await bot.send_message(chat_id, "Добро пожаловать!")
-            print(payment)
-            return True
+        # Регистрируем тип сообщения для маппинга, чтобы можно было его удалять
+        if sent_message:
+            await store_message(chat_id, sent_message.message_id, share_message, 'bot')
+            await register_message_type(chat_id, sent_message.message_id, 'confirm_payment','bot')  # Оставляем await, т.к. функция асинхронная
         else:
-            print("BAD RETURN")
-            #await message.answer("оплата НЕ прошла")
-            print(payment)
-            return False
+            print("Ошибка отправки сообщения: message.answer вернул None")
+        await callback_query.answer()
+        return
 
-	# payment = json.loads((Payment.find_one(payment_id)).json())
-	# while payment['status'] == 'pending':
-	# 	payment = json.loads((Payment.find_one(payment_id)).json())
-	# 	await asyncio.sleep(3)
-    #
-	# if payment['status']=='succeeded':
-	# 	print("SUCCSESS RETURN")
-	# 	print(payment)
-	# 	return True
-	# else:
-	# 	print("BAD RETURN")
-	# 	print(payment)
-	# 	return False
+    prices = [LabeledPrice(label="Оплата подписки", amount=199 * 100)]  # 199 руб.
+    invoice_message = await callback_query.bot.send_invoice(
+        chat_id=callback_query.from_user.id,
+        title="Оплата подписки",
+        description="Оплата за доступ на месяц",
+        payload="subscription-199",  # Уникальный идентификатор платежа
+        provider_token=BOT_PAYMENT_TOKEN,  # Тестовый токен для Telegram Payments
+        currency="RUB",
+        prices=prices,
+        need_email=True,
+        start_parameter="subscription-payment"
+    )
 
-
-@router.callback_query(lambda c: c.data.startswith("payment"))
-async def handle_device_choice(callback_query: CallbackQuery):
-    await delete_unimportant_messages(callback_query.message.chat.id, callback_query.bot)
-
-    message = await callback_query.message.answer("Начали оплату.")
-
-    await store_important_message(callback_query.bot, callback_query.message.chat.id, message.message_id, message,
-                                  message_type="device_choice")
-
+    # Сохраняем сообщение с платёжной формой
+    await store_message(callback_query.from_user.id, invoice_message.message_id, "Инвойс на оплату", 'bot')
     await callback_query.answer()
 
 
+@router.pre_checkout_query()
+async def process_pre_checkout_query(pre_checkout_query: PreCheckoutQuery):
+    await pre_checkout_query.bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True)
 
+
+@router.message()
+async def process_successful_payment(message: types.Message):
+
+
+
+    if message.successful_payment:
+        await update_has_paid_subscription_db(1, message.chat.id)
+        # Логируем информацию о платеже
+        successful_payment_info = message.successful_payment
+        print(f"Платеж успешно завершен! Invoice payload: {successful_payment_info.invoice_payload}")
+        print(f"Telegram Payment Charge ID: {successful_payment_info.telegram_payment_charge_id}")
+        print(f"Provider Payment Charge ID: {successful_payment_info.provider_payment_charge_id}")
+
+        # Отправляем пользователю сообщение об успешной оплате
+        await message.answer("Оплата успешно выполнена! Спасибо за покупку.")
 
