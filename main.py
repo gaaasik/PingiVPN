@@ -9,10 +9,11 @@ from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from dotenv import load_dotenv
 
+from bot.handlers.admin import send_admin_log
 from bot.keyboards.inline import create_feedback_keyboard
 from bot.utils import payment
 from bot.utils.add_ip_adress import update_user_ip_info
-from bot.utils.db import who_have_expired_trial
+from bot.utils.db import who_have_expired_trial, add_user
 import bot
 from bot.handlers import start, status, support, admin, share, start_to_connect, instructions, \
     device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request, feedback
@@ -42,13 +43,6 @@ async def on_startup():
     await cache_media(image_path, video_path)
 
 
-async def send_admin_log(bot: Bot, message: str):
-    """Отправка сообщения админу и запись в лог"""
-    try:
-        await bot.send_message(chat_id=ADMIN_CHAT_ID, text=message)
-    except Exception as e:
-        logging.error(f"Ошибка при отправке сообщения админу: {e}")
-
 
 # Функция, которая выполняется каждые 10 секунд
 async def periodic_task(bot: Bot):
@@ -61,6 +55,7 @@ async def periodic_task(bot: Bot):
        # await notify_users_with_free_status(bot)
         await asyncio.sleep(43200)
 async def main():
+
     global bot
     await on_startup()
 
@@ -85,11 +80,12 @@ async def main():
     dp = Dispatcher(storage=MemoryStorage())
     # Инициализация базы данных SQLite
     await init_db(db_path)
-
+    result = await add_user(111224422, "test_user")
+    print(result)
     # Запускаем асинхронную задачу для периодической отправки сообщений админу
     asyncio.create_task(periodic_task(bot))
 
-    await update_user_ip_info(bot, database_path_local, REGISTERED_USERS_DIR)
+    #await update_user_ip_info(bot, database_path_local, REGISTERED_USERS_DIR)
 
 
     # Промежуточное ПО для предотвращения спама
@@ -100,7 +96,7 @@ async def main():
     dp.include_router(speedtest.router)
     dp.include_router(status.router)
     dp.include_router(support.router)
-    dp.include_router(admin.router)
+    #dp.include_router(admin.router)
     dp.include_router(share.router)
     dp.include_router(start_to_connect.router)
     dp.include_router(instructions.router)
