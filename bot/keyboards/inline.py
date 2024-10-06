@@ -1,9 +1,13 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+############################################################Анатолий#######################################
 
+############################################################Анатолий#######################################
 
 # Создаем инлайн-кнопки для выбора устройства
-def device_choice_keyboard():
+def device_choice_keyboard(message):
+    user_id = message.from_user.id
     """Клавиатура для выбора устройства"""
+
     # Создаем кнопки
     buttons = [
         [
@@ -16,7 +20,7 @@ def device_choice_keyboard():
         ],
         [
             InlineKeyboardButton(text="Windows", callback_data="device_windows")
-        ]
+        ],
     ]
 
     # Передаем список кнопок в InlineKeyboardMarkup
@@ -64,16 +68,22 @@ def config_or_qr_keyboard():
 
 
 def create_payment_button():
-    """Создает клавиатуру с кнопкой оплаты"""
-    payment_url = "https://example.com/payment"  # Замените ссылку на вашу страницу оплаты
+
+
+
 
     # Создаем инлайн-кнопку с текстом "Оплатить 199 рублей" и ссылкой на оплату
-    payment_button = InlineKeyboardButton(text="Оплатить 199 рублей", url=payment_url)
+    payment_button = InlineKeyboardButton(text="Оплатить 199р", callback_data="payment_199")
 
     # Создаем клавиатуру и добавляем кнопку
     keyboard = InlineKeyboardMarkup(inline_keyboard=[[payment_button]])
 
     return keyboard
+
+
+
+
+
 def create_feedback_keyboard():
         buttons = [
             # Первый ряд кнопок: Плохо и Отлично
