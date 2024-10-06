@@ -3,7 +3,10 @@ import logging
 import os
 from pathlib import Path
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> f956458aa59e818f9e5a1981be9ddec931c3991e
 import aiosqlite
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
@@ -17,6 +20,12 @@ from bot.utils.db import who_have_expired_trial, add_user
 import bot
 from bot.handlers import start, status, support, admin, share, start_to_connect, instructions, \
     device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request, feedback
+
+
+from bot.payments import pay_199
+
+
+
 from bot.utils.cache import cache_media
 from bot.utils.check_status import check_db, ADMIN_CHAT_ID, notify_users_with_free_status
 from bot.utils.logger import setup_logger
@@ -55,7 +64,6 @@ async def periodic_task(bot: Bot):
        # await notify_users_with_free_status(bot)
         await asyncio.sleep(43200)
 async def main():
-
     global bot
     await on_startup()
 
@@ -105,6 +113,7 @@ async def main():
     dp.include_router(file_or_qr.router)
     dp.include_router(subscription.router)
     dp.include_router(user_help_request.router)
+    dp.include_router(pay_199.router)
     dp.include_router(feedback.router)
     dp.include_router(payment.router)
     # Запуск бота
