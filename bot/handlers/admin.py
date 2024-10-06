@@ -1,23 +1,15 @@
-# bot/handlers/admin.py
-from aiogram import Router, types
-router = Router()
+import logging
 
-#
-# @router.message(lambda message: message.text == "Список пользователей")
-# async def cmd_list_users(message: types.Message):
-#     users = await get_all_users()
-#
-#     if users:
-#         user_list = "\n".join([f"ID: {user[0]}, Телеграм ID: {user[1]}, Номер телефона: {user[2]}" for user in users])
-#         await message.answer(f"Список пользователей:\n{user_list}")
-#     else:
-#         await message.answer("Нет зарегистрированных пользователей.")
-#
-#
-#
-# @router.message(lambda message: message.text and message.text.startswith("Заблокировать"))
-# async def block_user_handler(message: types.Message):
-#     # Ваш код для блокировки пользователя
-#     user_to_block = message.text.split()[1]  # Пример получения идентификатора пользователя
-#     # Логика блокировки пользователя
-#     await message.answer(f"Пользователь {user_to_block} был заблокирован.")
+from aiogram import Bot
+
+from bot.handlers.user_help_request import ADMIN_CHAT_ID
+
+# ID администратора
+ADMIN_CHAT_ID = 456717505
+
+async def send_admin_log(bot: Bot, message: str):
+    """Отправка сообщения админу и запись в лог"""
+    try:
+        await bot.send_message(chat_id=ADMIN_CHAT_ID, text=message)
+    except Exception as e:
+        logging.error(f"Ошибка при отправке сообщения админу: {e}")

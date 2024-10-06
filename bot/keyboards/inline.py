@@ -102,3 +102,13 @@ def create_feedback_keyboard():
         # Создаем клавиатуру с кнопками
         keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
         return keyboard
+
+
+def account_info_keyboard():
+    # Создаем инлайн-кнопку
+    buttons = [
+        [
+            InlineKeyboardButton(text="Информация об аккаунте ℹ️", callback_data="account_info")
+        ]
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=buttons)

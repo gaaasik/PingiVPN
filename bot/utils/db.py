@@ -64,8 +64,10 @@ async def init_db(database_path: str):
     await add_traffic_used_column(conn)
     await add_columns_to_users_sub(conn)
     #await calculate_days_and_update_status(conn)
+    await add_is_notification_column(conn)
     await get_users_with_days_since_registration()
     await add_feedback_status_column(conn)
+    await add_ip_columns(conn)
     # Создание таблицы users с новыми полями
     await conn.execute('''
                CREATE TABLE IF NOT EXISTS users (
@@ -129,57 +131,53 @@ async def init_db(database_path: str):
 
 
 async def add_user(chat_id: int, user_name: str, referrer_id: int = None):
-    registration_date = datetime.datetime.now()  # Сохраняем текущее время
+    registration_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Сохраняем текущее время в формате строки
+
     async with aiosqlite.connect(database_path_local) as conn:
-        await conn.execute(
-            'INSERT INTO users (chat_id, user_name, registration_date, referrer_id) VALUES (?, ?, ?, ?)',
-            (chat_id, user_name, registration_date, referrer_id)
-        )
-        await conn.commit()
+        try:
+            # Сначала проверяем, существует ли пользователь с таким chat_id
+            cursor = await conn.execute("SELECT chat_id FROM users WHERE chat_id = ?", (chat_id,))
+            existing_user = await cursor.fetchone()
 
+            if existing_user:
+                print(f"Пользователь с chat_id {chat_id} уже существует.")
+                return
 
-async def calculate_days_and_update_status(conn):
-    """Подсчитывает количество дней с момента регистрации и обновляет статусы подписки."""
-
-    today = datetime.today().date()  # Текущая дата
-
-    # Получаем всех пользователей и их данные
-    async with conn.execute("SELECT id, registration_date, has_paid_subscription FROM users") as cursor:
-        users = await cursor.fetchall()
-
-        for user in users:
-            user_id = user[0]
-
-            # Если строка даты содержит время, используйте соответствующий формат
-            registration_date = datetime.strptime(user[1], '%Y-%m-%d %H:%M:%S.%f').date()
-            has_paid_subscription = user[2]
-
-            # Вычисляем количество дней с момента регистрации
-            days_since_registration = (today - registration_date).days
-
-            # Определяем статус подписки
-            if days_since_registration <= 14:
-                subscription_status = 'new_user'
-            elif has_paid_subscription == 1:
-                subscription_status = 'premium'
+            # Если пользователя нет, добавляем его
+            if referrer_id:
+                await conn.execute(
+                    '''
+                    INSERT INTO users (chat_id, user_name, registration_date, referrer_id)
+                    VALUES (?, ?, ?, ?)
+                    ''',
+                    (chat_id, user_name, registration_date, referrer_id)
+                )
             else:
-                subscription_status = 'free'
+                await conn.execute(
+                    '''
+                    INSERT INTO users (chat_id, user_name, registration_date)
+                    VALUES (?, ?, ?)
+                    ''',
+                    (chat_id, user_name, registration_date)
+                )
 
-            # Обновляем количество дней с момента регистрации и статус подписки в базе данных
-            await conn.execute(
-                '''UPDATE users 
-                   SET days_since_registration = ?, subscription_status = ?
-                   WHERE id = ?''',
-                (days_since_registration, subscription_status, user_id)
-            )
+            # Коммит транзакции
+            await conn.commit()
+            print(f"Пользователь с chat_id {chat_id} успешно добавлен.")
 
-    # Сохраняем изменения
-    await conn.commit()
+        except Exception as e:
+            print(f"Ошибка при добавлении пользователя с chat_id {chat_id}: {e}")
 
-async def get_user_by_telegram_id(telegram_id: int):
+        finally:
+            await conn.close()  # Закрываем соединение после завершения работы с БД
+
+
+async def get_user_by_telegram_id(chat_id: int):
     async with aiosqlite.connect(database_path_local) as conn:
-        async with conn.execute('SELECT * FROM users WHERE chat_id = ?', (telegram_id,)) as cursor:
-            return await cursor.fetchone()
+        cursor = await conn.execute('SELECT * FROM users WHERE chat_id = ?', (chat_id,))
+        user = await cursor.fetchone()  # Получаем одну строку (пользователя) из результата запроса
+        return user  # Возвращаем информацию о пользователе или None, если не найден
+
 
 
 
@@ -371,7 +369,7 @@ async def get_user_status(chat_id):
 
         # Выполняем запрос к базе данных
         cursor = await db.execute(
-            "SELECT registration_date, user_name, subscription_status FROM users WHERE chat_id = ?", (chat_id,))
+            "SELECT registration_date, days_since_registration, user_name, subscription_status FROM users WHERE chat_id = ?", (chat_id,))
         result = await cursor.fetchone()
 
         # Проверяем, найден ли пользователь
@@ -458,3 +456,33 @@ async def get_feedback_status(chat_id: int) -> str:
     except Exception as e:
         print(f"Ошибка при получении статуса для пользователя с chat_id {chat_id}: {e}")
         return None
+
+
+async def add_is_notification_column(conn):
+    cursor = await conn.execute("PRAGMA table_info(users)")
+    columns = await cursor.fetchall()
+
+    # Если столбца `is_notification` нет, то добавляем его
+    if not any(column[1] == "is_notification" for column in columns):
+        await conn.execute('''ALTER TABLE users ADD COLUMN is_notification BOOLEAN DEFAULT 0''')
+        await conn.commit()
+        print("Колонка 'is_notification' добавлена в таблицу users.")
+    else:
+        print("Колонка 'is_notification' уже существует.")
+
+
+async def add_ip_columns(conn):
+    cursor = await conn.execute("PRAGMA table_info(users)")
+    columns = await cursor.fetchall()
+
+    # Добавляем колонку для хранения частного IP-адреса пользователя
+    if not any(column[1] == "private_ip" for column in columns):
+        await conn.execute('''ALTER TABLE users ADD COLUMN private_ip TEXT''')
+        print("Колонка 'private_ip' добавлена в таблицу users.")
+
+    # Добавляем колонку для хранения IP-адреса сервера
+    if not any(column[1] == "server_ip" for column in columns):
+        await conn.execute('''ALTER TABLE users ADD COLUMN server_ip TEXT''')
+        print("Колонка 'server_ip' добавлена в таблицу users.")
+
+    await conn.commit()
