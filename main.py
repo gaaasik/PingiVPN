@@ -3,7 +3,7 @@ import logging
 import os
 from pathlib import Path
 
-import aiocron
+
 import aiosqlite
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
@@ -53,7 +53,7 @@ async def send_admin_log(bot: Bot, message: str):
 # Функция, которая выполняется каждые 10 секунд
 async def periodic_task(bot: Bot):
     # Ждем 10 секунд после старта бота
-    await asyncio.sleep(43200)
+    await asyncio.sleep(10)
     while True:
         await send_admin_log(bot, "Прошло 43200 секунд с запуска бота.")
         await check_db(bot)
