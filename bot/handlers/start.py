@@ -6,6 +6,7 @@ from aiogram.filters import Command
 from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 
+from bot.handlers.admin import send_admin_log
 from bot.handlers.cleanup import store_message, store_important_message
 from bot.keyboards.inline import device_choice_keyboard
 from bot.keyboards.reply import reply_keyboard
@@ -61,25 +62,32 @@ async def cmd_start(message: types.Message):
     sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard())
     await store_important_message(message.chat.id, sent_message.message_id, sent_message)
 
-    # Получаем данные пользователя из базы данных (включая устройство)
-    user = await get_user_by_telegram_id(message.from_user.id)
+
+
     # Уведомляем администратора о новом пользователе
     count_users = await get_user_count()
-    await message.bot.send_message(
-        chat_id=456717505,  # ID админа для уведомления
-        text=f"Пользователь нажал start : @{username} (ID чата: {chat_id}) \n Количество пользователей: {count_users}"
-    )
-    if not user:
-        # Регистрируем нового пользователя
-        await add_user(
-            chat_id=chat_id,
-            user_name=username,
+    # Получаем данные пользователя из базы данных
+    user = await get_user_by_telegram_id(chat_id)
+    print(user)
+    test = 111122222
+
+    if user:
+        # Если пользователь уже существует, уведомляем администратора
+        await send_admin_log(
+            bot=message.bot,
+            message=f"Пользователь уже существует: @{username} (ID чата: {chat_id})"
         )
-        # Уведомляем администратора о новом пользователе
+    else:
+        # Если пользователя нет, добавляем его в базу данных
+        await add_user(chat_id=chat_id, user_name=username)
+
+        # Получаем количество пользователей для уведомления администратора
         count_users = await get_user_count()
-        await message.bot.send_message(
-            chat_id=456717505,  # ID админа для уведомления
-            text=f"Добавлен новый пользователь: @{username} (ID чата: {chat_id}) \n Количество пользователей: {count_users}"
+
+        # Уведомляем администратора о новом пользователе
+        await send_admin_log(
+            bot=message.bot,
+            message=f"Добавлен новый пользователь: @{username} (ID чата: {chat_id}) \nКоличество пользователей: {count_users}"
         )
 
     # Сохраняем в базе данных реферальную информацию (если есть)

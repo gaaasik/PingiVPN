@@ -131,24 +131,53 @@ async def init_db(database_path: str):
 
 
 async def add_user(chat_id: int, user_name: str, referrer_id: int = None):
-    registration_date = datetime.datetime.now()  # Сохраняем текущее время
+    registration_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Сохраняем текущее время в формате строки
+
     async with aiosqlite.connect(database_path_local) as conn:
-        await conn.execute(
-            'INSERT INTO users (chat_id, user_name, registration_date, referrer_id) VALUES (?, ?, ?, ?)',
-            (chat_id, user_name, registration_date, referrer_id)
-        )
-        await conn.commit()
+        try:
+            # Сначала проверяем, существует ли пользователь с таким chat_id
+            cursor = await conn.execute("SELECT chat_id FROM users WHERE chat_id = ?", (chat_id,))
+            existing_user = await cursor.fetchone()
+
+            if existing_user:
+                print(f"Пользователь с chat_id {chat_id} уже существует.")
+                return
+
+            # Если пользователя нет, добавляем его
+            if referrer_id:
+                await conn.execute(
+                    '''
+                    INSERT INTO users (chat_id, user_name, registration_date, referrer_id)
+                    VALUES (?, ?, ?, ?)
+                    ''',
+                    (chat_id, user_name, registration_date, referrer_id)
+                )
+            else:
+                await conn.execute(
+                    '''
+                    INSERT INTO users (chat_id, user_name, registration_date)
+                    VALUES (?, ?, ?)
+                    ''',
+                    (chat_id, user_name, registration_date)
+                )
+
+            # Коммит транзакции
+            await conn.commit()
+            print(f"Пользователь с chat_id {chat_id} успешно добавлен.")
+
+        except Exception as e:
+            print(f"Ошибка при добавлении пользователя с chat_id {chat_id}: {e}")
+
+        finally:
+            await conn.close()  # Закрываем соединение после завершения работы с БД
 
 
-
-
-    # Сохраняем изменения
-    await conn.commit()
-
-async def get_user_by_telegram_id(telegram_id: int):
+async def get_user_by_telegram_id(chat_id: int):
     async with aiosqlite.connect(database_path_local) as conn:
-        async with conn.execute('SELECT * FROM users WHERE chat_id = ?', (telegram_id,)) as cursor:
-            return await cursor.fetchone()
+        cursor = await conn.execute('SELECT * FROM users WHERE chat_id = ?', (chat_id,))
+        user = await cursor.fetchone()  # Получаем одну строку (пользователя) из результата запроса
+        return user  # Возвращаем информацию о пользователе или None, если не найден
+
 
 
 
