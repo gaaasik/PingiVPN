@@ -10,15 +10,15 @@ from dotenv import load_dotenv
 
 from bot.handlers.admin import send_admin_log
 from bot.keyboards.inline import create_feedback_keyboard
+from bot.payments.api_payments_db import init_payment_db
 from bot.utils import payment
 from bot.utils.add_ip_adress import update_user_ip_info
 from bot.utils.db import who_have_expired_trial, add_user
-import bot
 from bot.handlers import start, status, support, admin, share, start_to_connect, instructions, \
     device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request, feedback
 
 
-from bot.payments import pay_199
+from bot.payments import payments_handler
 
 
 
@@ -27,18 +27,32 @@ from bot.utils.check_status import check_db, ADMIN_CHAT_ID, notify_users_with_fr
 from bot.utils.logger import setup_logger
 from bot.utils.db import init_db,database_path_local
 from bot.midlewares.throttling import ThrottlingMiddleware
-from bot.utils.send_message_first import send_messages_to_chats
-from data.text_messages import attention_message
+from bot_instance import BOT_TOKEN, dp, bot
+
+#from bot_instance import bot, dp, BOT_TOKEN
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
 
+
 # Глобальная переменная для хранения экземпляра бота
-bot = None
+
+#bot = None
+
+
+
 PATH_TO_IMAGES = os.getenv('PATH_TO_IMAGES')
 video_path = os.getenv("video_path")
 REGISTERED_USERS_DIR = os.getenv('REGISTERED_USERS_DIR')
 database_path_local = os.getenv('database_path_local')
+
+############################################################################################################
+
+# BOT_TOKEN = os.getenv('BOT_TOKEN')
+# bot = Bot(token=BOT_TOKEN, parse_mode="HTML")
+# dp = Dispatcher(storage=MemoryStorage())
+
+############################################################################################
 
 
 async def on_startup():
@@ -46,6 +60,8 @@ async def on_startup():
     image_path = os.path.join(PATH_TO_IMAGES, "Hello.png")
     print('закешировали приветственное фото')
     await cache_media(image_path, video_path)
+
+
 
 
 
@@ -60,11 +76,11 @@ async def periodic_task(bot: Bot):
        # await notify_users_with_free_status(bot)
         await asyncio.sleep(43200)
 async def main():
-    global bot
+    #global bot
     await on_startup()
 
     # Читаем токен бота из переменной окружения
-    BOT_TOKEN = os.getenv('BOT_TOKEN')
+
     if not BOT_TOKEN:
         print("Ошибка: Токен не найден в .env файле!")
         return
@@ -80,10 +96,12 @@ async def main():
         return
     print(f"Путь к базе данных: {db_path}")
     # Инициализация бота и диспетчера
-    bot = Bot(token=BOT_TOKEN, parse_mode="HTML")
-    dp = Dispatcher(storage=MemoryStorage())
+
     # Инициализация базы данных SQLite
     await init_db(db_path)
+    ###############################################################################
+    await init_payment_db()
+    ###############################################################################
     result = await add_user(111224422, "test_user")
     print(result)
     # Запускаем асинхронную задачу для периодической отправки сообщений админу
@@ -109,9 +127,9 @@ async def main():
     dp.include_router(file_or_qr.router)
     dp.include_router(subscription.router)
     dp.include_router(user_help_request.router)
-    dp.include_router(pay_199.router)
+    dp.include_router(payments_handler.router)
     dp.include_router(feedback.router)
-    dp.include_router(payment.router)
+    #dp.include_router(payment.router)
     # Запуск бота
     try:
         await dp.start_polling(bot)
