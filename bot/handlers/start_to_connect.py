@@ -4,7 +4,6 @@ from aiogram.filters import Command
 
 from bot.handlers.cleanup import store_message, delete_unimportant_messages, store_important_message
 from bot.keyboards.inline import device_choice_keyboard
-
 import os
 
 router = Router()
