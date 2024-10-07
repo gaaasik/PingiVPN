@@ -39,13 +39,7 @@ def send_message(chat_id, text, requests=None):
 def webhook():
 
     data = request.json
-    user_id = data['object'].get('metadata', {}).get('user_id', None)
-    print("userid = ",user_id)
-    print("Получен вебхук: ", data['object']['id'])
-    try:
-        send_message(user_id, "Ваш платёж был успешно завершён. Спасибо за покупку!")
-    except Exception as e:
-        logging.exception(e)
+
     if data and 'event' in data:
         payment_info = data['object']
         payment_id = payment_info['id']
@@ -58,13 +52,12 @@ def webhook():
 
         # Обновление информации о платеже в базе данных
         update_payment_status(payment_id, user_id, amount, currency, status, payment_method_id)
-        print("///////////////payment.succeeded")
+
         if status == 'payment.succeeded' and user_id:
-            print("payment.succeeded///////////////////")
-            try:
-                send_message(user_id, "Ваш платёж был успешно завершён. Спасибо за покупку!")
-            except Exception as e:
-                logging.exception(e)
+            send_message(user_id, "Ваш платёж был успешно завершён. Спасибо за покупку!")
+
+
+
 
     return jsonify({"status": "ok"}), 200
 
