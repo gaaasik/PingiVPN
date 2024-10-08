@@ -9,15 +9,15 @@ from dotenv import load_dotenv
 
 from bot.handlers.admin import send_admin_log
 from bot.keyboards.inline import create_feedback_keyboard
-from bot.payments2.payments_db import init_payment_db
-from bot.utils import payment
+#from bot.payments2.payments_db import init_payment_db
+
 from bot.utils.add_ip_adress import update_user_ip_info
 from bot.utils.db import who_have_expired_trial, add_user
 from bot.handlers import start, status, support, admin, share, start_to_connect, instructions, \
     device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request, feedback
 
 
-from bot.payments import payments_handler
+from bot.payments2 import payments_handler
 
 
 
@@ -96,7 +96,7 @@ async def main():
     # Инициализация базы данных SQLite
     await init_db(db_path)
     ###############################################################################
-    await init_payment_db()
+    #await init_payment_db()
     ###############################################################################
     result = await add_user(111224422, "test_user")
     print(result)
@@ -123,7 +123,7 @@ async def main():
     dp.include_router(file_or_qr.router)
     dp.include_router(subscription.router)
     dp.include_router(user_help_request.router)
-#    dp.include_router(payments_handler.router)
+    dp.include_router(payments_handler.router)
     dp.include_router(feedback.router)
     #dp.include_router(payment.router)
     # Запуск бота
