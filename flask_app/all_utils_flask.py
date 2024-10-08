@@ -51,7 +51,8 @@ async def update_payment_status(payment_id, user_id, amount, currency, status, p
                     "status": status
 
                 }
-            send_to_redis(REDIS_QUEUE, message)
+            print("пытаемся отправить в редис")
+            await send_to_redis(REDIS_QUEUE, message)
     except Exception as e:
         logging.error(f"Ошибка обновления информации о платеже в базе данных: {e}")
 async def initialize_db():
