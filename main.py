@@ -74,6 +74,12 @@ async def periodic_task(bot: Bot):
         await asyncio.sleep(43200)
 async def main():
     #global bot
+    try:
+        await send_admin_log(bot, "Бот запустился")
+        await asyncio.create_task(listen_to_redis_queue(bot))
+    except Exception as e:
+        print(f"Ошибка при запуске прослушивания очереди Redis: {e}")
+
     await on_startup()
     await initialize_db()
 
@@ -137,6 +143,7 @@ async def main():
     except Exception as e:
         logging.exception(e)
     finally:
+        await send_admin_log(bot, "Бот завершил работу и пошел отдыхать")
         await bot.session.close()
 
 

@@ -1,11 +1,13 @@
 import asyncio
+import json
 
+import redis
 from flask import Flask, jsonify, request
 
-from flask_app.all_utils_flask import initialize_db, logger, update_payment_status
+from flask_app.all_utils_flask import initialize_db, logger#, update_payment_status
 
 app = Flask(__name__)
-
+redis_client = redis.Redis(host='localhost', port=6379)
 @app.route('/webhook', methods=['POST'])
 def webhook():
     logger.info("webhook получен - начинаем обработку:")
@@ -24,39 +26,62 @@ def webhook():
         user_id = payment_info.get('metadata', {}).get('user_id', None)
         payment_method_id = payment_info.get('payment_method', {}).get('id', '0')
 
-        # Обработка событий
-        if event_type == 'payment.succeeded':
-            logger.info(
-                f"Оплата успешна! ID платежа: {payment_id}, Сумма: {amount} {currency}, Пользователь: {user_id}")
-            asyncio.run(
-                update_payment_status(payment_id, user_id, amount, currency, 'payment.succeeded', payment_method_id))
-            # Отправка уведомления через Redis или другой метод
-            return jsonify({"status": "ok"}), 200
+        if not user_id:
+            logger.error("Отсутствует user_id в метаданных платежа")
+            return jsonify({"status": "error", "message": "Missing user_id"}), 400
 
-        elif event_type == 'payment.waiting_for_capture':
-            logger.info(
-                f"Платеж ожидает подтверждения. ID платежа: {payment_id}, Сумма: {amount} {currency}, Пользователь: {user_id}")
-            asyncio.run(update_payment_status(payment_id, user_id, amount, currency, 'payment.waiting_for_capture',
-                                              payment_method_id))
-            return jsonify({"status": "ok"}), 200
+            # Логирование информации о платеже
+        logger.info(
+            f"Получено событие: {event_type}, ID платежа: {payment_id}, сумма: {amount} {currency}, пользователь: {user_id}")
 
-        elif event_type == 'payment.canceled':
-            logger.info(
-                f"Платеж отменен. ID платежа: {payment_id}, Сумма: {amount} {currency}, Пользователь: {user_id}")
-            asyncio.run(
-                update_payment_status(payment_id, user_id, amount, currency, 'payment.canceled', payment_method_id))
-            return jsonify({"status": "ok"}), 200
+        # Формирование сообщения для отправки в Redis
+        message = {
+            "user_id": user_id,
+            "payment_id": payment_id,
+            "amount": amount,
+            "currency": currency,
+            "status": event_type,
+            "payment_method_id": payment_method_id
+        }
 
-        elif event_type == 'refund.succeeded':
-            logger.info(
-                f"Возврат выполнен успешно. ID возврата: {payment_id}, Сумма: {amount} {currency}, Пользователь: {user_id}")
-            asyncio.run(
-                update_payment_status(payment_id, user_id, amount, currency, 'refund.succeeded', payment_method_id))
-            return jsonify({"status": "ok"}), 200
+        # Отправляем информацию о платеже в Redis-очередь
+        redis_client.lpush('payment_notifications', json.dumps(message))
+        logger.info(f"Информация о платеже {payment_id} добавлена в очередь Redis")
+        return jsonify({"status": "ok"}), 200
 
-        else:
-            logger.warning(f"Неизвестное событие: {event_type}")
-            return jsonify({"status": "error", "message": "Unknown event"}), 400
+        # # Обработка событий
+        # if event_type == 'payment.succeeded':
+        #     logger.info(
+        #         f"Оплата успешна! ID платежа: {payment_id}, Сумма: {amount} {currency}, Пользователь: {user_id}")
+        #     asyncio.run(
+        #         update_payment_status(payment_id, user_id, amount, currency, 'payment.succeeded', payment_method_id))
+        #     # Отправка уведомления через Redis или другой метод
+        #     return jsonify({"status": "ok"}), 200
+        #
+        # elif event_type == 'payment.waiting_for_capture':
+        #     logger.info(
+        #         f"Платеж ожидает подтверждения. ID платежа: {payment_id}, Сумма: {amount} {currency}, Пользователь: {user_id}")
+        #     asyncio.run(update_payment_status(payment_id, user_id, amount, currency, 'payment.waiting_for_capture',
+        #                                       payment_method_id))
+        #     return jsonify({"status": "ok"}), 200
+        #
+        # elif event_type == 'payment.canceled':
+        #     logger.info(
+        #         f"Платеж отменен. ID платежа: {payment_id}, Сумма: {amount} {currency}, Пользователь: {user_id}")
+        #     asyncio.run(
+        #         update_payment_status(payment_id, user_id, amount, currency, 'payment.canceled', payment_method_id))
+        #     return jsonify({"status": "ok"}), 200
+        #
+        # elif event_type == 'refund.succeeded':
+        #     logger.info(
+        #         f"Возврат выполнен успешно. ID возврата: {payment_id}, Сумма: {amount} {currency}, Пользователь: {user_id}")
+        #     asyncio.run(
+        #         update_payment_status(payment_id, user_id, amount, currency, 'refund.succeeded', payment_method_id))
+        #     return jsonify({"status": "ok"}), 200
+        #
+        # else:
+        #     logger.warning(f"Неизвестное событие: {event_type}")
+        #     return jsonify({"status": "error", "message": "Unknown event"}), 400
 
     except Exception as e:
         logger.error(f"Ошибка обработки вебхука: {e}")
