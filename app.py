@@ -28,8 +28,10 @@ db_path = Path(os.getenv('database_path_local'))
 # Настройка API Юкассы
 shop_account_id = os.getenv('SHOPID')  # Ваш shopId
 SECRET_KEY = os.getenv('API_KEY')  # Ваш секретный ключ API
+
 if not SECRET_KEY:
-    logger.error("SECRET_KEY не загружен. Проверьте переменные окружения и наличие API_KEY в .env файле.")
+    logger.error("SECRET_KEY не загружен. Проверьте переменные окружения и наличие API_KEY в .env файле.")=======
+
 # # Настройка Redis
 # redis_host = os.getenv('REDIS_HOST', 'localhost')
 # redis_port = os.getenv('REDIS_PORT', 6379)
@@ -72,6 +74,7 @@ async def verify_signature(data, signature):
         logger.error(f"Ошибка при проверке подписи: {e}")
         return False
 
+
 async def update_payment_status(payment_id, user_id, amount, currency, status, payment_method_id):
     """Асинхронное обновление статуса платежа в базе данных."""
     try:
@@ -103,24 +106,41 @@ async def update_payment_status(payment_id, user_id, amount, currency, status, p
         connection.close()
 
 
-def send_to_redis(queue, message):
-    """Добавление сообщения в очередь Redis."""
+def verify_signature(data, signature):
+    """Проверка подписи HMAC для безопасности вебхуков."""
     try:
-        redis_client.lpush(queue, message)
-        logger.info(f"Сообщение добавлено в очередь {queue}: {message}")
+        hash_digest = hmac.new(SECRET_KEY.encode('utf-8'), data.encode('utf-8'), hashlib.sha256).hexdigest()
+        is_valid = hmac.compare_digest(hash_digest, signature)
+        if not is_valid:
+            logger.warning("Получена недействительная подпись вебхука.")
+        return is_valid
     except Exception as e:
-        logger.error(f"Ошибка отправки сообщения в Redis: {e}")
+        logger.error(f"Ошибка при проверке подписи: {e}")
+        return False
+
+# def send_to_redis(queue, message):
+#     """Добавление сообщения в очередь Redis."""
+#     try:
+#         redis_client.lpush(queue, message)
+#         logger.info(f"Сообщение добавлено в очередь {queue}: {message}")
+#     except Exception as e:
+#         logger.error(f"Ошибка отправки сообщения в Redis: {e}")
+
 
 # Маршрут для вебхука от Юкассы
 @app.route('/webhook', methods=['POST'])
 def webhook():
+    logger.info(f"webhook получен - начинаем обработку:")
+
     try:
         # Получаем данные из запроса
         data = request.get_data(as_text=True)
         signature = request.headers.get('HTTP_YANDEX_SIGNATURE')
+
 	if not signature:
 	    logger.error("Подпись отсутствует в заголовках запроса.")
 	    return jsonify({"status": "error", "message": "Missing signature"}), 400
+
 
         # Проверка подписи
         if not verify_signature(data, signature):
@@ -164,10 +184,10 @@ def webhook():
         logger.error(f"Ошибка обработки вебхука: {e}")
         return jsonify({"status": "error", "message": "Internal server error"}), 500
 
+
 @app.route('/', methods=['GET'])
 def home():
     return "Hello, this is Flask application!", 200
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
-

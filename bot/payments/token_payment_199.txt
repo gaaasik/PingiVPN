@@ -9,8 +9,6 @@ from bot.handlers.cleanup import store_message, register_message_type, delete_un
 from bot.payments.add_payment_db import update_has_paid_subscription_db, check_has_paid_subscription_db, \
     test_update_tolsemenovv_has_paid_subscription_db
 
-router = Router()
-
 
 
 # Вставьте ваши данные для YooKassa и Telegram

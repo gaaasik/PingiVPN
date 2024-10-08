@@ -59,7 +59,7 @@ async def cmd_start(message: types.Message):
     # Отправка закешированного фото
     await send_cached_photo(message)
 
-    sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard(message))
+    sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard())
     await store_important_message(message.chat.id, sent_message.message_id, sent_message)
 
     # Получаем данные пользователя из базы данных (включая устройство)

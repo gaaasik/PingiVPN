@@ -1,7 +1,6 @@
 /VPN_BOT.zip
-
 /tests
-
+/configs
 # Игнорирование виртуальных окружений
 venv/
 .venv/
