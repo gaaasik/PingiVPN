@@ -136,10 +136,9 @@ def webhook():
         # Получаем данные из запроса
         data = request.get_data(as_text=True)
         signature = request.headers.get('HTTP_YANDEX_SIGNATURE')
-
-	if not signature:
-	    logger.error("Подпись отсутствует в заголовках запроса.")
-	    return jsonify({"status": "error", "message": "Missing signature"}), 400
+        if not signature:
+            logger.error("Подпись отсутствует в заголовках запроса.")
+            return jsonify({"status": "error", "message": "Missing signature"}), 400
 
 
         # Проверка подписи
