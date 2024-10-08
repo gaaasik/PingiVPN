@@ -49,7 +49,23 @@ def webhook():
         logger.info(f"Информация о платеже {payment_id} добавлена в очередь Redis")
         return jsonify({"status": "ok"}), 200
 
-        # # Обработка событий
+
+
+    except Exception as e:
+        logger.error(f"Ошибка обработки вебхука: {e}")
+        return jsonify({"status": "error", "message": "Internal server error"}), 500
+
+@app.route('/', methods=['GET'])
+def home():
+    return "Hello, this is Flask application!", 200
+
+if __name__ == "__main__":
+
+    app.run(host='0.0.0.0', port=5000)
+
+
+
+ # # Обработка событий
         # if event_type == 'payment.succeeded':
         #     logger.info(
         #         f"Оплата успешна! ID платежа: {payment_id}, Сумма: {amount} {currency}, Пользователь: {user_id}")
@@ -82,22 +98,6 @@ def webhook():
         # else:
         #     logger.warning(f"Неизвестное событие: {event_type}")
         #     return jsonify({"status": "error", "message": "Unknown event"}), 400
-
-    except Exception as e:
-        logger.error(f"Ошибка обработки вебхука: {e}")
-        return jsonify({"status": "error", "message": "Internal server error"}), 500
-
-@app.route('/', methods=['GET'])
-def home():
-    return "Hello, this is Flask application!", 200
-
-if __name__ == "__main__":
-
-    app.run(host='0.0.0.0', port=5000)
-
-
-
-
 # import asyncio
 
 
