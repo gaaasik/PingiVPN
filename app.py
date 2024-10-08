@@ -30,7 +30,7 @@ shop_account_id = os.getenv('SHOPID')  # Ваш shopId
 SECRET_KEY = os.getenv('API_KEY')  # Ваш секретный ключ API
 
 if not SECRET_KEY:
-    logger.error("SECRET_KEY не загружен. Проверьте переменные окружения и наличие API_KEY в .env файле.")=======
+    logger.error("SECRET_KEY не загружен. Проверьте переменные окружения и наличие API_KEY в .env файле.")
 
 # # Настройка Redis
 # redis_host = os.getenv('REDIS_HOST', 'localhost')
