@@ -23,7 +23,7 @@ async def process_callback_query(callback_query: types.CallbackQuery):
     bot = callback_query.message.bot
 
     # Создаем платёж и получаем ссылку
-    one_time_id, one_time_link, one_time_payment_method_id = create_one_time_payment(user_id)
+    one_time_id, one_time_link, one_time_payment_method_id = create_one_time_payment(chat_id)
 
     # Текст сообщения
     text_payment = (

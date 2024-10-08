@@ -81,6 +81,67 @@ async def update_has_paid_subscription_db(status, chat_id):
     finally:
         await conn.close()
 
+def ensure_payments_table_exists():
+    """
+    Функция для проверки существования таблицы payments и ее создания при необходимости.
+    """
+    try:
+        connection = sqlite3.connect(db_path)
+        cursor = connection.cursor()
+
+        # Проверка наличия таблицы payments
+        cursor.execute("""
+            SELECT name FROM sqlite_master WHERE type='table' AND name='payments';
+        """)
+        table_exists = cursor.fetchone()
+
+        # Если таблицы нет, создаем ее
+        if not table_exists:
+            cursor.execute('''
+                CREATE TABLE payments (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id TEXT,
+                    payment_id TEXT UNIQUE,
+                    amount REAL,
+                    currency TEXT,
+                    status TEXT,
+                    payment_method_id TEXT,
+                    created_at TEXT,
+                    updated_at TEXT
+                )
+            ''')
+            connection.commit()
+            logger.info("Таблица payments создана.")
+        else:
+            logger.info("Таблица payments уже существует.")
+
+    except Exception as e:
+        logger.error(f"Ошибка при проверке или создании таблицы payments: {e}")
+    finally:
+        connection.close()
+
+
+def add_column_to_payments(column_name, column_type="TEXT"):
+    """
+    Функция для добавления нового столбца в таблицу payments.
+    :param column_name: Имя нового столбца.
+    :param column_type: Тип данных столбца (по умолчанию TEXT).
+    """
+    try:
+        connection = sqlite3.connect(db_path)
+        cursor = connection.cursor()
+        # Создаем запрос для добавления столбца
+        query = f"ALTER TABLE payments ADD COLUMN {column_name} {column_type}"
+        cursor.execute(query)
+        connection.commit()
+        logger.info(f"Столбец {column_name} типа {column_type} успешно добавлен в таблицу payments.")
+    except sqlite3.OperationalError as e:
+        logger.error(f"Ошибка при добавлении столбца {column_name}: {e}")
+    finally:
+        connection.close()
+
+
+
 async def verify_signature(data, signature):
     if not SECRET_KEY or not signature:
         logger.error("Секретный ключ или подпись не могут быть пустыми.")
@@ -215,4 +276,8 @@ def home():
 
 if __name__ == "__main__":
     initialize_db()
+    # Пример использования:
+    add_column_to_payments("new_column_name")
+    # Вызов функции для проверки и создания таблицы при запуске приложения
+    ensure_payments_table_exists()
     app.run(host='0.0.0.0', port=5000)
