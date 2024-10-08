@@ -76,7 +76,6 @@ async def main():
     #global bot
     try:
         await send_admin_log(bot, "Бот запустился")
-        await asyncio.create_task(listen_to_redis_queue(bot))
     except Exception as e:
         print(f"Ошибка при запуске прослушивания очереди Redis: {e}")
 
@@ -113,7 +112,7 @@ async def main():
     print(result)
     # Запускаем асинхронную задачу для периодической отправки сообщений админу
     asyncio.create_task(periodic_task(bot))
-
+    await asyncio.create_task(listen_to_redis_queue(bot))
     #await update_user_ip_info(bot, database_path_local, REGISTERED_USERS_DIR)
 
     #listen_to_redis_queue(bot)

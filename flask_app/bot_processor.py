@@ -1,19 +1,12 @@
 import asyncio
 import json
 import logging
-import redis
 from aiogram import Bot
+import redis
 
-# Настройка подключения к Redis
-REDIS_HOST = 'localhost'
-REDIS_PORT = 6379
+# Настройки Redis
+redis_client = redis.Redis(host='localhost', port=6379)
 REDIS_QUEUE = 'payment_notifications'
-
-# Инициализация клиента Redis
-redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT)
-
-# Инициализация логирования
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 async def listen_to_redis_queue(bot: Bot):
@@ -22,21 +15,25 @@ async def listen_to_redis_queue(bot: Bot):
 
     while True:
         try:
-            # Используем asyncio.to_thread для выполнения блокирующего вызова в отдельном потоке
+            # Попытка извлечь сообщение из очереди Redis
             _, message = await asyncio.to_thread(redis_client.blpop, REDIS_QUEUE)
             logger.info(f"Сообщение пришло в очередь Redis: {message}")
             await process_payment_message(message, bot)
-        except Exception as e:
-            logger.error(f"Ошибка при обработке сообщения из Redis: {e}")
 
+        except redis.exceptions.ConnectionError as e:
+            # Логирование ошибки подключения к Redis
+            logger.error(f"Ошибка подключения к Redis: {e}")
+            # Ожидание перед повторной попыткой подключения
+            await asyncio.sleep(5)
+
+        except Exception as e:
+            # Логирование любых других ошибок
+            logger.error(f"Ошибка при обработке сообщения из Redis: {e}")
+            # Ожидание перед повторной попыткой
+            await asyncio.sleep(5)
 
 async def process_payment_message(message: str, bot: Bot):
-    """
-    Обработка сообщения из Redis с информацией о платеже.
-
-    :param message: JSON-строка с информацией о платеже, полученная из Redis.
-    :param bot: Экземпляр Telegram-бота для отправки сообщений пользователям.
-    """
+    """Обработка сообщения из Redis с информацией о платеже."""
     try:
         # Декодируем JSON-строку в Python-словарь
         data = json.loads(message)
