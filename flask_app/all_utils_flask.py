@@ -14,7 +14,6 @@ def get_moscow_time():
     moscow_tz = pytz.timezone('Europe/Moscow')
     return datetime.now(moscow_tz)
 
-
 async def update_payment_status(payment_id, user_id, amount, currency, status, payment_method_id):
     """Асинхронное обновление или добавление записи о платеже в таблицу payments."""
     try:

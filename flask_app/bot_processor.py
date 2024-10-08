@@ -4,8 +4,7 @@ from  flask_app.config_flask_redis import REDIS_HOST, REDIS_PORT, REDIS_PASSWORD
 from  flask_app.all_utils_flask import logger
 redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
 import json
-import asyncio
-
+from redis import asyncio as aioredis
 
 async def process_payment_message(message, bot):
     """Обработка сообщения из Redis с информацией о платеже."""
@@ -53,13 +52,15 @@ async def process_payment_message(message, bot):
     except Exception as e:
         logger.error(f"Ошибка обработки сообщения о платеже: {e}")
 
-def listen_to_redis_queue(bot):
+async def listen_to_redis_queue(bot):
     """Прослушивание очереди Redis для обработки сообщений."""
     logger.info(f"Начало прослушивания очереди {REDIS_QUEUE}")
+    redis_client = aioredis.from_url("redis://localhost:6379")
     while True:
-        print("сообщение пришло в очередь redis ")
-        _, message = redis_client.blpop(REDIS_QUEUE)
-        process_payment_message(message,bot)
+        print("Ожидаем сообщения из Redis...")
+        _, message = await redis_client.blpop("payment_notifications")
+        print(f"Получено сообщение: {message}")
+        await process_payment_message(message,bot)
 
 
 
