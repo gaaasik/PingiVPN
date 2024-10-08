@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 from bot.handlers.admin import send_admin_log
 from bot.keyboards.inline import create_feedback_keyboard
-from bot.payments.api_payments_db import init_payment_db
+from bot.payments2.payments_db import init_payment_db
 from bot.utils import payment
 from bot.utils.add_ip_adress import update_user_ip_info
 from bot.utils.db import who_have_expired_trial, add_user
@@ -59,9 +59,6 @@ async def on_startup():
     image_path = os.path.join(PATH_TO_IMAGES, "Hello.png")
     print('закешировали приветственное фото')
     await cache_media(image_path, video_path)
-
-
-
 
 
 # Функция, которая выполняется каждые 10 секунд
@@ -126,7 +123,7 @@ async def main():
     dp.include_router(file_or_qr.router)
     dp.include_router(subscription.router)
     dp.include_router(user_help_request.router)
-    dp.include_router(payments_handler.router)
+#    dp.include_router(payments_handler.router)
     dp.include_router(feedback.router)
     #dp.include_router(payment.router)
     # Запуск бота

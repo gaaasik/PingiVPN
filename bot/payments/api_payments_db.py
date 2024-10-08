@@ -21,35 +21,6 @@ def get_moscow_time():
     return datetime.now(moscow_tz)
 
 # Функция для инициализации базы данных
-async def init_payment_db():
-    connection = sqlite3.connect(db_path)
-    cursor = connection.cursor()
-
-    # Проверка существования таблицы
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='payments'")
-    table_exists = cursor.fetchone()
-
-    # Создание таблицы payments, если она не существует
-    if not table_exists:
-        cursor.execute("""
-            CREATE TABLE payments (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER,
-                payment_id VARCHAR(255) UNIQUE,
-                payment_method_id VARCHAR(255) DEFAULT '0',
-                amount DECIMAL(10, 2),
-                currency VARCHAR(10),
-                status VARCHAR(50),
-                created_at TIMESTAMP,
-                updated_at TIMESTAMP
-            )
-            """)
-        print("Таблица 'payments' была успешно создана.")
-    else:
-        print("Таблица 'payments' уже существует. Пропускаем создание.")
-
-    connection.commit()
-    connection.close()
 
 
 # Функция для обновления информации о платеже в базе данных с московским временем
@@ -101,6 +72,7 @@ def delete_payments_by_user(user_id):
     connection.commit()
     connection.close()
     print(f"Все записи с user_id = {user_id} удалены.")
+
 
 
 
