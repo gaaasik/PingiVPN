@@ -1,7 +1,7 @@
 import redis
 import json
 from flask_app.config_flask_redis import REDIS_HOST, REDIS_PORT, REDIS_PASSWORD, REDIS_QUEUE
-from bot.utils import logger
+from flask_app.all_utils_flask import logger
 
 # Подключение к Redis
 redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
