@@ -7,6 +7,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from dotenv import load_dotenv
 
+from app import initialize_db, add_column_to_payments, ensure_payments_table_exists
 from bot.handlers.admin import send_admin_log
 from bot.keyboards.inline import create_feedback_keyboard
 #from bot.payments2.payments_db import init_payment_db
@@ -74,7 +75,11 @@ async def periodic_task(bot: Bot):
 async def main():
     #global bot
     await on_startup()
-
+    initialize_db()
+    # Пример использования:
+    #add_column_to_payments("new_column_name")
+    # Вызов функции для проверки и создания таблицы при запуске приложения
+    ensure_payments_table_exists()
     # Читаем токен бота из переменной окружения
 
     if not BOT_TOKEN:
