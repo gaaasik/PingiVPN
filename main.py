@@ -11,7 +11,6 @@ from app import initialize_db, add_column_to_payments, ensure_payments_table_exi
 from bot.handlers.admin import send_admin_log
 from bot.keyboards.inline import create_feedback_keyboard
 #from bot.payments2.payments_db import init_payment_db
-
 from bot.utils.add_ip_adress import update_user_ip_info
 from bot.utils.db import who_have_expired_trial, add_user
 from bot.handlers import start, status, support, admin, share, start_to_connect, instructions, \

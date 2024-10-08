@@ -76,6 +76,7 @@ async def update_has_paid_subscription_db(status, chat_id):
         await conn.execute("UPDATE users SET has_paid_subscription = ? WHERE chat_id = ?", (status, chat_id))
         await conn.commit()
         logger.info(f"Статус подписки пользователя {chat_id} обновлен на {status}.")
+        logger.info(f"Статус подписки пользователя {chat_id} обновлен на {status}.")
     except Exception as e:
         logger.error(f"Ошибка обновления статуса подписки в базе данных: {e}")
     finally:
@@ -250,7 +251,7 @@ def webhook():
 
                 # Обновление информации о платеже в базе данных
                 asyncio.run(update_payment_status(payment_id, user_id, amount, currency, event_type, payment_method_id))
-                asyncio.run(update_has_paid_subscription_db(user_id, True))
+                asyncio.run(update_has_paid_subscription_db(True, user_id))
 
                 # Отправка информации о платеже в Redis для дальнейшей обработки
                 message = {
