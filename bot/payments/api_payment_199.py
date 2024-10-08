@@ -97,13 +97,13 @@ def verify_signature(data, signature):
         logger.error(f"Ошибка при проверке подписи: {e}")
         return False
 
-def send_to_redis(queue, message):
-    """Добавление сообщения в очередь Redis."""
-    try:
-        redis_client.lpush(queue, message)
-        logger.info(f"Сообщение добавлено в очередь {queue}: {message}")
-    except Exception as e:
-        logger.error(f"Ошибка отправки сообщения в Redis: {e}")
+# def send_to_redis(queue, message):
+#     """Добавление сообщения в очередь Redis."""
+#     try:
+#         redis_client.lpush(queue, message)
+#         logger.info(f"Сообщение добавлено в очередь {queue}: {message}")
+#     except Exception as e:
+#         logger.error(f"Ошибка отправки сообщения в Redis: {e}")
 
 # Маршрут для вебхука от Юкассы
 @app.route('/webhook', methods=['POST'])
