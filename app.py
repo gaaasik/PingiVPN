@@ -4,6 +4,8 @@ import hashlib
 import logging
 import os
 import sqlite3
+
+import aiosqlite
 import redis
 from datetime import datetime
 from pathlib import Path
@@ -40,14 +42,35 @@ if not SECRET_KEY:
 #
 # # Подключение к Redis
 # redis_client = redis.Redis(host=redis_host, port=redis_port, password=redis_password)
+def initialize_db():
+    connection = sqlite3.connect(db_path)
+    cursor = connection.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS payments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id TEXT,
+            payment_id TEXT,
+            amount REAL,
+            currency TEXT,
+            status TEXT,
+            payment_method_id TEXT,
+            created_at TEXT,
+            updated_at TEXT
+        )
+    ''')
+    connection.commit()
+    connection.close()
+
+
 
 def get_moscow_time():
     """Получение текущего времени в часовом поясе Москвы."""
     moscow_tz = pytz.timezone('Europe/Moscow')
     return datetime.now(moscow_tz)
 
-async def update_has_paid_subscription_db(status, chat_id, aiosqlite=None):
+async def update_has_paid_subscription_db(status, chat_id):
     """Асинхронное обновление статуса подписки пользователя в базе данных."""
+    conn = None
     try:
         conn = await aiosqlite.connect(db_path)
         await conn.execute("UPDATE users SET has_paid_subscription = ? WHERE chat_id = ?", (status, chat_id))
@@ -191,4 +214,5 @@ def home():
     return "Hello, this is Flask application!", 200
 
 if __name__ == "__main__":
+    initialize_db()
     app.run(host='0.0.0.0', port=5000)
