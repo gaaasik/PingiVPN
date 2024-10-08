@@ -7,7 +7,6 @@ from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from dotenv import load_dotenv
 
-from app import initialize_db, add_column_to_payments, ensure_payments_table_exists
 from bot.handlers.admin import send_admin_log
 from bot.keyboards.inline import create_feedback_keyboard
 #from bot.payments2.payments_db import init_payment_db
@@ -27,6 +26,8 @@ from bot.utils.logger import setup_logger
 from bot.utils.db import init_db,database_path_local
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
+from flask_app.all_utils_flask import initialize_db
+from flask_app.bot_processor import listen_to_redis_queue
 
 #from bot_instance import bot, dp, BOT_TOKEN
 
@@ -74,11 +75,11 @@ async def periodic_task(bot: Bot):
 async def main():
     #global bot
     await on_startup()
-    initialize_db()
+    await initialize_db()
+
     # Пример использования:
     #add_column_to_payments("new_column_name")
-    # Вызов функции для проверки и создания таблицы при запуске приложения
-    ensure_payments_table_exists()
+
     # Читаем токен бота из переменной окружения
 
     if not BOT_TOKEN:
@@ -109,7 +110,7 @@ async def main():
 
     #await update_user_ip_info(bot, database_path_local, REGISTERED_USERS_DIR)
 
-
+    #listen_to_redis_queue(bot)
     # Промежуточное ПО для предотвращения спама
     dp.message.middleware(ThrottlingMiddleware(rate_limit=1))
 
