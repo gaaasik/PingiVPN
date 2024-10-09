@@ -19,7 +19,7 @@ async def update_user_subscription_db(user_id: int):
                 UPDATE users
                 SET subscription_status = 'active',
                     has_paid_subscription = 1,
-                    date_pay_subsr = ?
+                    vpn_usage_start_date = ?
                 WHERE chat_id = ?
             """, (datetime.now(), user_id))
             # Сохраняем изменения
