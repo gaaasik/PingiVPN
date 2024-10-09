@@ -97,7 +97,7 @@ async def listen_to_redis_queue(bot: Bot):
             logging.info("Попытка извлечь задачу из очереди Redis")
 
             # Выполняем синхронный запрос к Redis в отдельном потоке
-            task_data = await asyncio.to_thread(redis_client.lpop, 'tasks')
+            task_data = await asyncio.to_thread(redis_client.lpop, 'payment_notifications')
 
             if task_data:
                 logging.info(f"Извлечена задача из Redis: {task_data}")
