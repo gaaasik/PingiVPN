@@ -97,7 +97,7 @@ async def listen_to_redis_queue(bot: Bot):
             logging.info("Попытка извлечь задачу из очереди Redis")
 
             # Выполняем синхронный запрос к Redis в отдельном потоке
-            task_data = await asyncio.to_thread(redis_client.lpop, 'payment_notifications')
+            task_data = await asyncio.to_thread(redis_client.lpop, 'tasks')
 
             if task_data:
                 logging.info(f"Извлечена задача из Redis: {task_data}")
@@ -111,12 +111,14 @@ async def listen_to_redis_queue(bot: Bot):
                     continue
 
                 user_id = task.get('user_id')
-                message = task.get('message', 'Сообщение по умолчанию')
+                amount = task.get('amount')
+                currency = task.get('currency')
+                status = task.get('status')
 
-                logging.info(f"Обработка сообщения для пользователя {user_id} с текстом: {message}")
+                logging.info(f"Обработка сообщения для пользователя {user_id}")
 
-                # Обрабатываем задачу с помощью функции process_payment_message
-                await process_payment_message(message, bot)
+                # Передаем всю задачу в функцию process_payment_message, включая все данные
+                await process_payment_message(json.dumps(task), bot)
             else:
                 logging.info("Очередь Redis пуста, ждем следующую задачу")
 
@@ -170,3 +172,4 @@ async def process_payment_message(message: str, bot: Bot):
         logger.error(f"Ошибка декодирования JSON: {e}, данные: {message}")
     except Exception as e:
         logger.error(f"Ошибка при обработке сообщения о платеже: {e}")
+
