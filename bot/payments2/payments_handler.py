@@ -26,7 +26,54 @@ REDIS_QUEUE = 'payment_notifications'
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 router = Router()
 
+@router.callback_query(lambda c: c.data == 'payment_199')
+async def process_callback_query(callback_query: types.CallbackQuery):
+    chat_id = callback_query.message.chat.id
+    user_id = callback_query.message.from_user.id
+    bot = callback_query.message.bot
+    global listen_task
+    if listen_task is None or listen_task.done():
+        listen_task = asyncio.create_task(run_listening_for_duration(bot, 20 * 60))  # 20 минут = 20 * 60 секунд
 
+    if chat_id == 456717505:
+
+        # Создаем платёж и получаем ссылку
+        one_time_id, one_time_link, one_time_payment_method_id = create_one_time_payment(chat_id)
+
+        # Текст сообщения
+        text_payment = (
+            "Вы подключаете подписку на наш сервис с помощью\n"
+            "платёжной системы Юkassa\n\n"
+            "Стоимость подписки на 1 месяц: 199р 👇👇👇\n"
+        )
+
+        # Создаем клавиатуру с кнопкой
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text="Оплатить 199р", url=one_time_link)]
+            ]
+        )
+        # Отправляем сообщение с текстом и клавиатурой
+        await bot.send_message(
+            chat_id=chat_id,
+            text=  text_payment,
+            reply_markup=keyboard
+        )
+    else:
+
+
+        # Отправляем сообщение с текстом и клавиатурой
+        await bot.send_message(
+            chat_id=chat_id,
+            text="Оплата скоро будет доступна"#,
+            #reply_markup=keyboard
+        )
+
+        username = callback_query.message.from_user.username
+        await send_admin_log(bot,
+            message=f"@{username} - нажал кнопку оплатить, но у него ничего не вышло )) ID чата: {chat_id})")
+    # Подтверждаем callback_query, чтобы избежать зависания
+    await callback_query.answer()
 async def run_listening_for_duration(bot: Bot, duration: int):
     """Запускает прослушивание Redis на определенный промежуток времени."""
     global listen_task
