@@ -24,12 +24,28 @@ REDIS_QUEUE = 'payment_notifications'
 # Инициализация Redis клиента
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 router = Router()
-
+async def run_listening_for_duration(bot: Bot, duration: int):
+    """Запускает прослушивание Redis на определенный промежуток времени."""
+    global listen_task
+    try:
+        # Запускаем задачу прослушивания
+        listen_task = asyncio.create_task(listen_to_redis_queue(bot))
+        await asyncio.sleep(duration)  # Ждем указанное время
+        listen_task.cancel()  # Завершаем прослушивание после истечения времени
+        logging.info("Задача была завершена после 20 минут")
+    except asyncio.CancelledError:
+        logging.info("Задача была отменена до завершения времени")
+    except Exception as e:
+        logging.error(f"Ошибка при запуске прослушивания: {e}")
 @router.callback_query(lambda c: c.data == 'payment_199')
 async def process_callback_query(callback_query: types.CallbackQuery):
     chat_id = callback_query.message.chat.id
     user_id = callback_query.message.from_user.id
     bot = callback_query.message.bot
+    global listen_task
+    if listen_task is None or listen_task.done():
+        listen_task = asyncio.create_task(run_listening_for_duration(bot, 20 * 60))  # 20 минут = 20 * 60 секунд
+
     if chat_id == 456717505:
 
         # Создаем платёж и получаем ссылку
@@ -55,6 +71,8 @@ async def process_callback_query(callback_query: types.CallbackQuery):
             reply_markup=keyboard
         )
     else:
+
+
         # Отправляем сообщение с текстом и клавиатурой
         await bot.send_message(
             chat_id=chat_id,
@@ -167,6 +185,10 @@ async def process_payment_message(message: str, bot: Bot):
         # Отправляем сообщение пользователю
         await bot.send_message(chat_id=user_id, text=text)
         logger.info(f"Сообщение отправлено пользователю {user_id}: {text}")
+        global listen_task, is_listening
+        if listen_task and not listen_task.done():
+            listen_task.cancel()  # Останавливаем задачу
+            is_listening = False
 
     except json.JSONDecodeError as e:
         logger.error(f"Ошибка декодирования JSON: {e}, данные: {message}")

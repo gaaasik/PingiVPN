@@ -38,10 +38,6 @@ load_dotenv()
 
 # Глобальная переменная для хранения экземпляра бота
 
-#bot = None
-
-
-
 PATH_TO_IMAGES = os.getenv('PATH_TO_IMAGES')
 video_path = os.getenv("video_path")
 REGISTERED_USERS_DIR = os.getenv('REGISTERED_USERS_DIR')

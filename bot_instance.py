@@ -13,3 +13,5 @@ load_dotenv()
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 bot = Bot(token=BOT_TOKEN, parse_mode="HTML")
 dp = Dispatcher(storage=MemoryStorage())
+# Переменная для хранения задачи прослушивания
+listen_task = None
