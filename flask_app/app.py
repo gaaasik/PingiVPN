@@ -50,7 +50,6 @@ def webhook():
         return jsonify({"status": "ok"}), 200
 
 
-
     except Exception as e:
         logger.error(f"Ошибка обработки вебхука: {e}")
         return jsonify({"status": "error", "message": "Internal server error"}), 500

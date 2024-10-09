@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 
 from bot.handlers.admin import send_admin_log
 from bot.keyboards.inline import create_feedback_keyboard
+from bot.payments2.payments_handler import listen_to_redis_queue
 #from bot.payments2.payments_db import init_payment_db
 from bot.utils.add_ip_adress import update_user_ip_info
 from bot.utils.db import who_have_expired_trial, add_user
@@ -27,7 +28,7 @@ from bot.utils.db import init_db,database_path_local
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from flask_app.all_utils_flask import initialize_db
-from flask_app.bot_processor import listen_to_redis_queue
+#from flask_app.bot_processor import listen_to_redis_queue # старый код не буду использовать
 
 #from bot_instance import bot, dp, BOT_TOKEN
 
@@ -141,6 +142,9 @@ async def main():
     #dp.include_router(payment.router)
     # Запуск бота
     try:
+        loop = asyncio.get_event_loop()
+        # Запускаем обработчик задач
+        loop.create_task(listen_to_redis_queue(bot))
         await dp.start_polling(bot)
     except Exception as e:
         logging.exception(e)
