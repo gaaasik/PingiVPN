@@ -43,7 +43,7 @@ async def cmd_status(message: types.Message):
 
         else:
             status_sub_txt = subscription_status
-            keyboard = create_payment_button()  # Без кнопок, если статус другой
+            keyboard = None  # Без кнопок, если статус другой
 
         # Пример экранирования текста
         status_message = (
@@ -63,6 +63,7 @@ async def cmd_status(message: types.Message):
 
         # Отправка нового сообщения с информацией об аккаунте и кнопкой оплаты, если нужно
         sent_message = await message.answer(status_message, parse_mode="Markdown", reply_markup=keyboard)
+
 
         if sent_message and sent_message.message_id:
             # Сохраняем и регистрируем сообщение только в случае успешной отправки
