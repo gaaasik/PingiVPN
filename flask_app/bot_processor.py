@@ -5,32 +5,32 @@ from aiogram import Bot
 import redis
 
 # Настройки Redis
-redis_client = redis.Redis(host='localhost', port=6379)
+#redis_client = redis.Redis(host='localhost', port=6379)
 REDIS_QUEUE = 'payment_notifications'
-logger = logging.getLogger(__name__)
+#logger = logging.getLogger(__name__)
 
-async def listen_to_redis_queue(bot: Bot):
-    """Прослушивание очереди Redis для обработки сообщений о платежах."""
-    logger.info(f"Начало прослушивания очереди {REDIS_QUEUE}")
-
-    while True:
-        try:
-            # Попытка извлечь сообщение из очереди Redis
-            _, message = await asyncio.to_thread(redis_client.blpop, REDIS_QUEUE)
-            logger.info(f"Сообщение пришло в очередь Redis: {message}")
-            await process_payment_message(message, bot)
-
-        except redis.exceptions.ConnectionError as e:
-            # Логирование ошибки подключения к Redis
-            logger.error(f"Ошибка подключения к Redis: {e}")
-            # Ожидание перед повторной попыткой подключения
-            await asyncio.sleep(5)
-
-        except Exception as e:
-            # Логирование любых других ошибок
-            logger.error(f"Ошибка при обработке сообщения из Redis: {e}")
-            # Ожидание перед повторной попыткой
-            await asyncio.sleep(5)
+# async def listen_to_redis_queue(bot: Bot):
+#     """Прослушивание очереди Redis для обработки сообщений о платежах."""
+#     logger.info(f"Начало прослушивания очереди {REDIS_QUEUE}")
+#
+#     while True:
+#         try:
+#             # Попытка извлечь сообщение из очереди Redis
+#             _, message = await asyncio.to_thread(redis_client.blpop, REDIS_QUEUE)
+#             logger.info(f"Сообщение пришло в очередь Redis: {message}")
+#             await process_payment_message(message, bot)
+#
+#         except redis.exceptions.ConnectionError as e:
+#             # Логирование ошибки подключения к Redis
+#             logger.error(f"Ошибка подключения к Redis: {e}")
+#             # Ожидание перед повторной попыткой подключения
+#             await asyncio.sleep(5)
+#
+#         except Exception as e:
+#             # Логирование любых других ошибок
+#             logger.error(f"Ошибка при обработке сообщения из Redis: {e}")
+#             # Ожидание перед повторной попыткой
+#             await asyncio.sleep(5)
 
 async def process_payment_message(message: str, bot: Bot):
     """Обработка сообщения из Redis с информацией о платеже."""

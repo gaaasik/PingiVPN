@@ -1,10 +1,15 @@
+import asyncio
+import json
 import os
 
+import redis
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from dotenv import load_dotenv
 from yookassa import Configuration, Payment
-from aiogram import Router, types
+from aiogram import Router, types, Bot
 
+from flask_app.all_utils_flask import logger
+from flask_app.bot_processor import REDIS_QUEUE
 from bot.handlers.admin import send_admin_log
 
 load_dotenv()
@@ -15,7 +20,8 @@ Configuration.account_id = os.getenv('SHOPID')# Ваш shopId
 Configuration.secret_key = os.getenv('API_KEY')  # Ваш секретный ключ API
 
 
-
+# Инициализация Redis клиента
+redis_client = redis.Redis(host='localhost', port=6379, db=0)
 router = Router()
 
 @router.callback_query(lambda c: c.data == 'payment_199')
@@ -82,3 +88,56 @@ def create_one_time_payment(user_id):
     return payment.id, payment.confirmation.confirmation_url, '0'
 
 
+async def listen_to_redis_queue(bot:Bot):
+    """Прослушивание очереди Redis для обработки сообщений о платежах."""
+    logger.info(f"Начало прослушивания очереди {REDIS_QUEUE}")
+    while True:
+        # Получаем задачу из очереди Redis
+        task_data = redis_client.lpop('tasks')
+        if task_data:
+            task = json.loads(task_data)
+            user_id = task.get('user_id')
+            message = task.get('message', 'Сообщение по умолчанию')
+            await process_payment_message(message,bot)
+            # Ожидаем перед следующей проверкой, чтобы не перегружать сервер
+            await asyncio.sleep(5)
+
+
+
+
+
+async def process_payment_message(message: str, bot: Bot):
+    """Обработка сообщения из Redis с информацией о платеже."""
+    try:
+        # Декодируем JSON-строку в Python-словарь
+        data = json.loads(message)
+        user_id = data.get('user_id')
+        amount = data.get('amount')
+        currency = data.get('currency')
+        status = data.get('status')
+
+        # Проверка, что все нужные данные присутствуют
+        if not all([user_id, amount, currency, status]):
+            logger.error(f"Некорректное сообщение о платеже: {data}")
+            return
+
+        # Формируем текст сообщения в зависимости от статуса платежа
+        if status == 'payment.succeeded':
+            text = f"Ваш платеж на сумму {amount} {currency} успешно завершен!"
+        elif status == 'payment.waiting_for_capture':
+            text = f"Ваш платеж на сумму {amount} {currency} ожидает подтверждения."
+        elif status == 'payment.canceled':
+            text = f"Ваш платеж на сумму {amount} {currency} был отменен."
+        elif status == 'refund.succeeded':
+            text = f"Ваш возврат на сумму {amount} {currency} был успешно обработан."
+        else:
+            text = f"Обновление платежа: {status}. Сумма: {amount} {currency}."
+
+        # Отправляем сообщение пользователю
+        await bot.send_message(chat_id=user_id, text=text)
+        logger.info(f"Сообщение отправлено пользователю {user_id}: {text}")
+
+    except json.JSONDecodeError as e:
+        logger.error(f"Ошибка декодирования JSON: {e}")
+    except Exception as e:
+        logger.error(f"Ошибка при обработке сообщения о платеже: {e}")

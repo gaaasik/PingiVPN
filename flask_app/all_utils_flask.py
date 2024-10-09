@@ -2,8 +2,8 @@ import logging
 import aiosqlite
 from datetime import datetime
 import pytz
-from flask_app.config_flask_redis import DATABASE_PATH, REDIS_QUEUE
-from flask_app.redis_utils import send_to_redis
+from flask_app.config_flask_redis import DATABASE_PATH
+#from flask_app.redis_utils import send_to_redis
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

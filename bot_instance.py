@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from aiogram.fsm.storage.memory import MemoryStorage
 from redis import asyncio as aioredis
 
-from flask_app.bot_processor import listen_to_redis_queue
+#from flask_app.bot_processor import listen_to_redis_queue
 
 load_dotenv()
 
