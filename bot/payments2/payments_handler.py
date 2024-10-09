@@ -94,6 +94,8 @@ async def listen_to_redis_queue(bot: Bot):
     logging.info("Начало прослушивания очереди tasks")
     while True:
         try:
+            logging.info("Попытка извлечь задачу из очереди Redis")
+
             # Выполняем синхронный запрос к Redis в отдельном потоке
             task_data = await asyncio.to_thread(redis_client.lpop, 'tasks')
             if task_data:
