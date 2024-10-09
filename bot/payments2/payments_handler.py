@@ -15,7 +15,8 @@ from bot.handlers.admin import send_admin_log
 
 load_dotenv()
 WEBHOOK_URL = os.getenv('WEBHOOK_URL')
-
+# Переменная для хранения задачи прослушивания
+listen_task = None
 # Настройка API Юкассы
 Configuration.account_id = os.getenv('SHOPID')# Ваш shopId
 Configuration.secret_key = os.getenv('API_KEY')  # Ваш секретный ключ API

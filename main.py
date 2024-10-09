@@ -72,6 +72,7 @@ async def periodic_task(bot: Bot):
        # await notify_users_with_free_status(bot)
         await asyncio.sleep(43200)
 async def main():
+
     #global bot
     try:
         await send_admin_log(bot, "Бот запустился")
