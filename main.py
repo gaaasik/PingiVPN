@@ -58,7 +58,7 @@ async def on_startup():
     print('закешировали приветственное фото')
     await cache_media(image_path, video_path)
     # Запускаем фоновую задачу для прослушивания очереди
-    asyncio.create_task(listen_to_redis_queue(bot))
+    #asyncio.create_task(listen_to_redis_queue(bot))
 
 
 # Функция, которая выполняется каждые 10 секунд
