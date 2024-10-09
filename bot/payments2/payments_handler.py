@@ -98,14 +98,31 @@ async def listen_to_redis_queue(bot: Bot):
 
             # Выполняем синхронный запрос к Redis в отдельном потоке
             task_data = await asyncio.to_thread(redis_client.lpop, 'tasks')
+
             if task_data:
-                task = json.loads(task_data)
+                logging.info(f"Извлечена задача из Redis: {task_data}")
+
+                try:
+                    task = json.loads(task_data)
+                    logging.info(f"Задача после парсинга JSON: {task}")
+                except json.JSONDecodeError as e:
+                    logging.error(f"Ошибка декодирования JSON: {e}, данные: {task_data}")
+                    # Если данные не являются корректным JSON, переходим к следующей итерации
+                    continue
+
                 user_id = task.get('user_id')
                 message = task.get('message', 'Сообщение по умолчанию')
 
-                await process_payment_message(message,bot)
+                logging.info(f"Обработка сообщения для пользователя {user_id} с текстом: {message}")
+
+                # Обрабатываем задачу с помощью функции process_payment_message
+                await process_payment_message(message, bot)
+            else:
+                logging.info("Очередь Redis пуста, ждем следующую задачу")
+
             # Ждем перед следующим запросом к Redis
             await asyncio.sleep(1)
+
         except redis.exceptions.ConnectionError as e:
             logging.error(f"Ошибка подключения к Redis: {e}")
             # Ждем перед повторной попыткой подключения
@@ -116,11 +133,11 @@ async def listen_to_redis_queue(bot: Bot):
             await asyncio.sleep(5)
 
 
-
-
 async def process_payment_message(message: str, bot: Bot):
     """Обработка сообщения из Redis с информацией о платеже."""
     try:
+        logging.info(f"Начинаем обработку сообщения: {message}")
+
         # Декодируем JSON-строку в Python-словарь
         data = json.loads(message)
         user_id = data.get('user_id')
@@ -150,6 +167,6 @@ async def process_payment_message(message: str, bot: Bot):
         logger.info(f"Сообщение отправлено пользователю {user_id}: {text}")
 
     except json.JSONDecodeError as e:
-        logger.error(f"Ошибка декодирования JSON: {e}")
+        logger.error(f"Ошибка декодирования JSON: {e}, данные: {message}")
     except Exception as e:
         logger.error(f"Ошибка при обработке сообщения о платеже: {e}")
