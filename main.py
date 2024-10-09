@@ -61,6 +61,8 @@ async def on_startup():
     image_path = os.path.join(PATH_TO_IMAGES, "Hello.png")
     print('закешировали приветственное фото')
     await cache_media(image_path, video_path)
+    # Запускаем фоновую задачу для прослушивания очереди
+    asyncio.create_task(listen_to_redis_queue(bot))
 
 
 # Функция, которая выполняется каждые 10 секунд
@@ -142,12 +144,11 @@ async def main():
     #dp.include_router(payment.router)
     # Запуск бота
     try:
-        loop = asyncio.get_event_loop()
-        # Запускаем обработчик задач
-        #loop.create_task(listen_to_redis_queue(bot))
+
+
         await dp.start_polling(bot)
     except Exception as e:
-        logging.exception(e)
+        logging.exception(f"Произошла ошибка: {e}")
     finally:
         await send_admin_log(bot, "Бот завершил работу и пошел отдыхать")
         await bot.session.close()

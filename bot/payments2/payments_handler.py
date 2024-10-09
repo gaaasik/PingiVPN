@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 import os
 
 import redis
@@ -9,7 +10,7 @@ from yookassa import Configuration, Payment
 from aiogram import Router, types, Bot
 
 from flask_app.all_utils_flask import logger
-from flask_app.bot_processor import REDIS_QUEUE
+
 from bot.handlers.admin import send_admin_log
 
 load_dotenv()
@@ -18,7 +19,7 @@ WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 # Настройка API Юкассы
 Configuration.account_id = os.getenv('SHOPID')# Ваш shopId
 Configuration.secret_key = os.getenv('API_KEY')  # Ваш секретный ключ API
-
+REDIS_QUEUE = 'payment_notifications'
 
 # Инициализация Redis клиента
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
@@ -88,20 +89,29 @@ def create_one_time_payment(user_id):
     return payment.id, payment.confirmation.confirmation_url, '0'
 
 
-async def listen_to_redis_queue(bot:Bot):
+async def listen_to_redis_queue(bot: Bot):
     """Прослушивание очереди Redis для обработки сообщений о платежах."""
-    logger.info(f"Начало прослушивания очереди {REDIS_QUEUE}")
+    logging.info("Начало прослушивания очереди tasks")
     while True:
-        # Получаем задачу из очереди Redis
-        task_data = redis_client.lpop('tasks')
-        if task_data:
-            task = json.loads(task_data)
-            user_id = task.get('user_id')
-            message = task.get('message', 'Сообщение по умолчанию')
-            await process_payment_message(message,bot)
-            # Ожидаем перед следующей проверкой, чтобы не перегружать сервер
-            await asyncio.sleep(5)
+        try:
+            # Выполняем синхронный запрос к Redis в отдельном потоке
+            task_data = await asyncio.to_thread(redis_client.lpop, 'tasks')
+            if task_data:
+                task = json.loads(task_data)
+                user_id = task.get('user_id')
+                message = task.get('message', 'Сообщение по умолчанию')
 
+                await process_payment_message(message,bot)
+            # Ждем перед следующим запросом к Redis
+            await asyncio.sleep(1)
+        except redis.exceptions.ConnectionError as e:
+            logging.error(f"Ошибка подключения к Redis: {e}")
+            # Ждем перед повторной попыткой подключения
+            await asyncio.sleep(5)
+        except Exception as e:
+            logging.error(f"Ошибка при обработке сообщения из Redis: {e}")
+            # Ждем перед повторной попыткой в случае любой другой ошибки
+            await asyncio.sleep(5)
 
 
 
