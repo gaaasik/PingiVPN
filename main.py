@@ -22,7 +22,7 @@ from bot.payments2 import payments_handler
 
 
 from bot.utils.cache import cache_media
-from bot.utils.check_status import check_db, ADMIN_CHAT_ID, notify_users_with_free_status
+from bot.utils.check_status import check_db, notify_users_with_free_status
 from bot.utils.logger import setup_logger
 from bot.utils.db import init_db,database_path_local
 from bot.midlewares.throttling import ThrottlingMiddleware

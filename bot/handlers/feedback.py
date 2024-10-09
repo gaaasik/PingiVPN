@@ -4,7 +4,7 @@ from aiogram import Router, types, Bot
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from bot.utils.check_status import ADMIN_CHAT_ID
+from bot.handlers.admin import ADMIN_CHAT_IDS
 from bot.utils.db import set_feedback_status  # Ваша функция для обновления статуса
 #from main import send_admin_log  # Ваша функция для отправки сообщения админу
 
@@ -12,7 +12,7 @@ router = Router()
 async def send_admin_log(bot: Bot, message: str):
     """Отправка сообщения админу и запись в лог"""
     try:
-        await bot.send_message(chat_id=ADMIN_CHAT_ID, text=message)
+        await bot.send_message(chat_id=ADMIN_CHAT_IDS, text=message)
     except Exception as e:
         logging.error(f"Ошибка при отправке сообщения админу: {e}")
 

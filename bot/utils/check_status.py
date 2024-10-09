@@ -13,7 +13,7 @@ from bot.keyboards.inline import create_feedback_keyboard, account_info_keyboard
 from data.text_messages import attention_message
 
 # Настройки
-ADMIN_CHAT_ID = 456717505  # ID админа
+
 TRIAL_PERIOD_DAYS = 15  # Продолжительность пробного периода
 DB_PATH = Path(os.getenv('database_path_local'))  # Путь к базе данных
 
