@@ -144,7 +144,7 @@ async def main():
     try:
         loop = asyncio.get_event_loop()
         # Запускаем обработчик задач
-        loop.create_task(listen_to_redis_queue(bot))
+        #loop.create_task(listen_to_redis_queue(bot))
         await dp.start_polling(bot)
     except Exception as e:
         logging.exception(e)
