@@ -35,7 +35,7 @@ async def process_callback_query(callback_query: types.CallbackQuery):
     if listen_task is None or listen_task.done():
         listen_task = asyncio.create_task(run_listening_for_duration(bot, 20 * 60))  # 20 минут = 20 * 60 секунд
 
-    if chat_id == 456717505:
+    if chat_id in ADMIN_CHAT_IDS:
 
         # Создаем платёж и получаем ссылку
         one_time_id, one_time_link, one_time_payment_method_id = create_one_time_payment(chat_id)
