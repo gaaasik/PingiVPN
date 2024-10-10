@@ -7,7 +7,7 @@ venv/
 ./configs/registered_user
 # Игнорирование файлов окружения
 *.env
-
+vpn_bot.db
 logs/bot.log
 
 # Игнорируем файлы настроек IDE

@@ -10,6 +10,7 @@ from yookassa import Configuration, Payment
 from aiogram import Router, types, Bot
 
 from bot.payments2.if_user_sucsess_pay import update_user_subscription_db, handle_post_payment_actions
+from bot.payments2.payments_db import reset_user_data_db
 from flask_app.all_utils_flask import logger
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 
@@ -51,6 +52,7 @@ async def process_callback_query(callback_query: types.CallbackQuery):
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 [InlineKeyboardButton(text="Оплатить 199р", url=one_time_link)]
+
             ]
         )
         # Отправляем сообщение с текстом и клавиатурой
@@ -74,7 +76,26 @@ async def process_callback_query(callback_query: types.CallbackQuery):
             message=f"@{username} - нажал кнопку оплатить, но у него ничего не вышло )) ID чата: {chat_id})")
     # Подтверждаем callback_query, чтобы избежать зависания
     await callback_query.answer()
+
+@router.callback_query(lambda c: c.data == 'delete_user')
+async def delete_user_callback(callback_query: types.CallbackQuery):
+    chat_id = callback_query.message.chat.id  # Используем chat_id вместо user_id
+    user_id = callback_query.message.from_user.id
+    bot = callback_query.message.bot
+
+    # Вызываем функцию сброса данных пользователя
+    await reset_user_data_db(chat_id)
+
+    # Отправляем сообщение пользователю
+    await bot.send_message(
+        chat_id=chat_id,
+        text="Вы удалены из базы данных."
+    )
+
+    # Подтверждаем callback_query, чтобы избежать зависания
+    await callback_query.answer()
 async def run_listening_for_duration(bot: Bot, duration: int):
+
     """Запускает прослушивание Redis на определенный промежуток времени."""
     global listen_task
     try:
@@ -93,7 +114,7 @@ async def process_callback_query(callback_query: types.CallbackQuery):
     bot = callback_query.message.bot
     global listen_task
     if listen_task is None or listen_task.done():
-        listen_task = asyncio.create_task(run_listening_for_duration(bot, 60 * 60))
+        listen_task = asyncio.create_task(run_listening_for_duration(bot, 3600))
 
     if chat_id == 456717505:
         one_time_id, one_time_link, _ = create_one_time_payment(chat_id)
@@ -198,3 +219,4 @@ async def process_payment_message(message: str, bot: Bot):
         logger.error(f"Ошибка декодирования JSON: {e}, данные: {message}")
     except Exception as e:
         logger.error(f"Ошибка при обработке сообщения о платеже: {e}")
+

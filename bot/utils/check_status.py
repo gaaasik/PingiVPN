@@ -3,7 +3,7 @@ import logging
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
-
+from bot.handlers.admin import send_admin_log
 from aiogram import Bot
 import aiosqlite
 from aiogram.exceptions import TelegramForbiddenError
@@ -25,11 +25,13 @@ async def get_users_from_db():
         users = await cursor.fetchall()
         return users
 
+
 def calculate_days_since_registration(registration_date):
     """Вычисление количества дней с даты регистрации"""
     reg_date = datetime.strptime(registration_date, "%Y-%m-%d %H:%M:%S.%f")
     current_date = datetime.now()
     return (current_date - reg_date).days
+
 
 async def update_user_days_in_db(chat_id, days, db):
     """Обновление количества дней с момента регистрации"""
@@ -40,13 +42,13 @@ async def update_user_days_in_db(chat_id, days, db):
 async def check_db(bot: Bot):
     """Проверка базы данных, обновление дней и уведомление пользователей об окончании пробного периода"""
     print("check_db run ")
+    notificated_user = 0
     try:
         users = await get_users_from_db()  # Получаем всех пользователей
         async with aiosqlite.connect(DB_PATH) as db:
             for user in users:
                 chat_id, username, registration_date = user
                 days_since_registration = calculate_days_since_registration(registration_date)
-
                 # Обновляем количество дней с момента регистрации
                 await update_user_days_in_db(chat_id, days_since_registration, db)
 
@@ -75,15 +77,18 @@ async def check_db(bot: Bot):
                         # Проверяем is_notification, чтобы отправить уведомление только один раз
                         if is_notification == 0:  # Если сообщение еще не отправлялось
                             try:
+
                                 # Отправляем сообщение пользователю
                                 warning_message = (
                                     f"Ваш пробный период истек. \nСкоро потребуется оплата, чтобы продолжить пользоваться VPN.\n\n "
                                 )
-                                await bot.send_message(chat_id, warning_message,reply_markup=account_info_keyboard())
-                                print(f"Статус пользователя с chat_id {chat_id} обновлен на 'waiting_pending'. Сообщение отправлено.")
+                                await bot.send_message(chat_id, warning_message, reply_markup=account_info_keyboard())
+                                notificated_user += 1
+                                logging.info(
+                                    f"Статус пользователя с chat_id {chat_id} обновлен на 'waiting_pending'. Сообщение отправлено.")
 
                                 # Обновляем поле is_notification на True (1)
-                                await db.execute('''
+                                await db.execute('''                              
                                     UPDATE users
                                     SET is_notification = 1
                                     WHERE chat_id = ?
@@ -92,14 +97,20 @@ async def check_db(bot: Bot):
                                 print(f"Поле is_notification для chat_id {chat_id} обновлено на True.")
                             except TelegramForbiddenError:
                                 # Обрабатываем случай, если бот был заблокирован пользователем
-                                print(f"Bot was blocked by user {chat_id}, skipping.")
+                                logging.error("Bot was blocked by user {chat_id}, skipping.")
                             except Exception as e:
                                 # Логируем другие возможные ошибки
-                                print(f"Ошибка при отправке сообщения пользователю {chat_id}: {e}")
+                                logging.error(f"Ошибка при отправке сообщения пользователю {chat_id}: {e}")
                         else:
-                            print(f"Сообщение уже было отправлено пользователю с chat_id {chat_id}. Пропускаем отправку.")
+                            print(
+                                f"Сообщение уже было отправлено пользователю с chat_id {chat_id}. Пропускаем отправку.")
+        print(f"Статус {notificated_user} пользователей - обновлен на 'waiting_pending'. Сообщениz отправлено.")
+
+        await send_admin_log(bot, f"Статус {notificated_user} пользователей - обновлен на 'waiting_pending'. Сообщение отправлено.")
+
     except Exception as e:
         logging.error(f"Ошибка при выполнении проверки бесплатных аккаунтов: {e}")
+
 
 # Функция для проверки статуса пользователя и отправки сообщения, если статус "free"
 async def check_and_notify_free_user(conn, bot: Bot, chat_id: int, message: str):
@@ -182,9 +193,6 @@ async def process_free_users(bot: Bot, message: str):
         await conn.close()
 
 
-
-
 # Пример использования
 async def notify_users_with_free_status(bot: Bot):
-
     await process_free_users(bot, attention_message)
