@@ -34,7 +34,7 @@ async def process_callback_query(callback_query: types.CallbackQuery):
     bot = callback_query.message.bot
     global listen_task
     if listen_task is None or listen_task.done():
-        listen_task = asyncio.create_task(run_listening_for_duration(bot, 20 * 60))  # 20 минут = 20 * 60 секунд
+        listen_task = asyncio.create_task(run_listening_for_duration(bot, 3600))  # 20 минут = 20 * 60 секунд
 
     if chat_id in ADMIN_CHAT_IDS:
 
