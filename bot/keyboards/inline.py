@@ -75,7 +75,8 @@ def create_payment_button():
 
 
     # Создаем клавиатуру и добавляем кнопку
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[[payment_button]])
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[[payment_button],
+                                                     [InlineKeyboardButton(text="Удалить себя из базы данных - опасная кнопка!", callback_data='delete_user')]])
 
     return keyboard
 

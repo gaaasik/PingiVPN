@@ -6,21 +6,14 @@ import aiosqlite
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from dotenv import load_dotenv
-
 from bot.handlers.admin import send_admin_log
 from bot.keyboards.inline import create_feedback_keyboard
 from bot.payments2.payments_handler import listen_to_redis_queue
-#from bot.payments2.payments_db import init_payment_db
 from bot.utils.add_ip_adress import update_user_ip_info
 from bot.utils.db import who_have_expired_trial, add_user
 from bot.handlers import start, status, support, admin, share, start_to_connect, instructions, \
     device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request, feedback
-
-
 from bot.payments2 import payments_handler
-
-
-
 from bot.utils.cache import cache_media
 from bot.utils.check_status import check_db, notify_users_with_free_status
 from bot.utils.logger import setup_logger
@@ -28,13 +21,9 @@ from bot.utils.db import init_db,database_path_local
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from flask_app.all_utils_flask import initialize_db
-#from flask_app.bot_processor import listen_to_redis_queue # старый код не буду использовать
-
-#from bot_instance import bot, dp, BOT_TOKEN
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
-
 
 # Глобальная переменная для хранения экземпляра бота
 
@@ -43,41 +32,30 @@ video_path = os.getenv("video_path")
 REGISTERED_USERS_DIR = os.getenv('REGISTERED_USERS_DIR')
 database_path_local = os.getenv('database_path_local')
 
-############################################################################################################
-
-# BOT_TOKEN = os.getenv('BOT_TOKEN')
-# bot = Bot(token=BOT_TOKEN, parse_mode="HTML")
-# dp = Dispatcher(storage=MemoryStorage())
-
-############################################################################################
-
-
 async def on_startup():
     """Кэширование изображений при старте"""
     image_path = os.path.join(PATH_TO_IMAGES, "Hello.png")
     print('закешировали приветственное фото')
     await cache_media(image_path, video_path)
-    # Запускаем фоновую задачу для прослушивания очереди
-    #asyncio.create_task(listen_to_redis_queue(bot))
 
 
 # Функция, которая выполняется каждые 10 секунд
 async def periodic_task(bot: Bot):
     # Ждем 10 секунд после старта бота
-    await asyncio.sleep(43200)
+    await asyncio.sleep(3600)
     while True:
-        await send_admin_log(bot, "Прошло 43200 секунд с запуска бота.")
-        await check_db(bot)
+        await send_admin_log(bot, "Пинг бота - прошел 1 час работы бота.")
+        #await check_db(bot)
+        
         # Пример асинхронного вызова
-       # await notify_users_with_free_status(bot)
-        await asyncio.sleep(43200)
+        # await notify_users_with_free_status(bot)
+        await asyncio.sleep(3600)
 async def main():
 
-    #global bot
     try:
         await send_admin_log(bot, "Бот запустился")
     except Exception as e:
-        print(f"Ошибка при запуске прослушивания очереди Redis: {e}")
+        logging.exception(f"Ошибка при отправке запуске очереди Redis: {e}")
 
     await on_startup()
     await initialize_db()
@@ -86,7 +64,6 @@ async def main():
     #add_column_to_payments("new_column_name")
 
     # Читаем токен бота из переменной окружения
-
     if not BOT_TOKEN:
         print("Ошибка: Токен не найден в .env файле!")
         return
@@ -105,21 +82,11 @@ async def main():
 
     # Инициализация базы данных SQLite
     await init_db(db_path)
-    ###############################################################################
-    #await init_payment_db()
-    ###############################################################################
     result = await add_user(111224422, "test_user")
-    print(result)
     # Запускаем асинхронную задачу для периодической отправки сообщений админу
     asyncio.create_task(periodic_task(bot))
 
-    #await listen_to_redis_queue(bot)
-
-
-    #await update_user_ip_info(bot, database_path_local, REGISTERED_USERS_DIR)
-
-    #listen_to_redis_queue(bot)
-    # Промежуточное ПО для предотвращения спама
+     # Промежуточное ПО для предотвращения спама
     dp.message.middleware(ThrottlingMiddleware(rate_limit=1))
 
     # Регистрация хэндлеров
@@ -139,10 +106,11 @@ async def main():
     dp.include_router(payments_handler.router)
     dp.include_router(feedback.router)
     #dp.include_router(payment.router)
+
+
+
     # Запуск бота
     try:
-
-
         await dp.start_polling(bot)
     except Exception as e:
         logging.exception(f"Произошла ошибка: {e}")

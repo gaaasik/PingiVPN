@@ -6,7 +6,7 @@ from bot.handlers.cleanup import delete_unimportant_messages, store_message, mes
 from bot.keyboards.inline import create_payment_button
 from bot.utils.db import get_user_status
 from datetime import datetime
-
+from bot.handlers.admin import  ADMIN_CHAT_IDS
 router = Router()
 
 def escape_markdown(text: str) -> str:
@@ -18,78 +18,85 @@ def escape_markdown(text: str) -> str:
 @router.message(Command("status"))
 @router.message(lambda message: message.text == "Информация об аккаунте ℹ️")
 async def cmd_status(message: types.Message):
-    chat_id = message.chat.id
     user_id = message.from_user.id
     bot = message.bot
-
-    # Сохраняем сообщение пользователя для удаления после отправки информации
-    await store_message(chat_id, message.message_id, message.text, 'user')
-
-    # Получаем данные пользователя из базы данных
-    user_data = await get_user_status(user_id)  # Получаем статус и дату регистрации
-    if user_data and len(user_data) == 4:  # Проверяем, что возвращено три элемента
-        registration_date, days_since_registration, user_name, subscription_status = user_data
+    chat_id = message.chat.id
+    if chat_id in ADMIN_CHAT_IDS:
 
 
 
-        # Вычисляем количество дней с момента регистрации
-        now = datetime.now()
+        # Сохраняем сообщение пользователя для удаления после отправки информации
+        await store_message(chat_id, message.message_id, message.text, 'user')
 
-        # Код для отправки сообщения с кнопкой оплаты
-        if subscription_status == "waiting_pending":
-            status_sub_txt = f"Бесплатные 14 дней закончились \nОжидание оплаты подписки"
-            # Создаем клавиатуру с кнопкой оплаты
-            keyboard = create_payment_button()
+        # Получаем данные пользователя из базы данных
+        user_data = await get_user_status(user_id)  # Получаем статус и дату регистрации
+        if user_data and len(user_data) == 4:  # Проверяем, что возвращено 4 элемента
+            registration_date, days_since_registration, user_name, subscription_status = user_data
+
+            # Код для отправки сообщения с кнопкой оплаты
+            if subscription_status == "waiting_pending":
+                status_sub_txt = f"Ожидание оплаты подписки"
+                # Создаем клавиатуру с кнопкой оплаты
+                keyboard = create_payment_button()
+
+            elif subscription_status == 'new_user' :
+                status_sub_txt = f"Пробный период"
+                keyboard = create_payment_button()
+
+
+            elif subscription_status == 'active' :
+                status_sub_txt = f'Подписка активна'
+                keyboard = None
+            else:
+                status_sub_txt = subscription_status
+                keyboard = create_payment_button()
+
+                # Пример экранирования текста
+            status_message = (
+                f"🕒 Вы с нами уже {(str(days_since_registration))} дней! 🚀 Какой прогресс! 😎\n"
+                f"Действие тарифа: {(days_since_registration)} дней \n"
+                f"Имя пользователя: {(user_name)}\n"
+                f"Статус подписки: *{(status_sub_txt)}*"
+            )
+
+            # Удаление старых сообщений с той же информацией
+            for msg in messages_for_db:
+                if msg['chat_id'] == chat_id and msg['message_text'] == status_message:
+                    try:
+                        await bot.delete_message(chat_id, msg['message_id'])
+                    except Exception as e:
+                        print(f"Не удалось удалить сообщение {msg['message_id']}: {e}")
+
+            # Отправка нового сообщения с информацией об аккаунте и кнопкой оплаты, если нужно
+            sent_message = await message.answer(status_message, parse_mode="Markdown", reply_markup=keyboard)
+
+
+            if sent_message and sent_message.message_id:
+                # Сохраняем и регистрируем сообщение только в случае успешной отправки
+                await store_message(chat_id, sent_message.message_id, status_message, 'bot')
+                await register_message_type(chat_id, sent_message.message_id, 'account_status', 'bot')
+            else:
+                print("Ошибка: сообщение не отправлено или нет message_id")
 
         else:
-            status_sub_txt = subscription_status
-            keyboard = None  # Без кнопок, если статус другой
+            # Отправка сообщения, если данные не найдены
+            error_message = "Ваши данные не найдены в системе."
+            sent_message = await message.answer(error_message)
 
-        # Пример экранирования текста
-        status_message = (
-            f"🕒 Вы с нами уже {(str(days_since_registration))} дней! 🚀 Какой прогресс! 😎\n"
-            f"Действие тарифа: {(days_since_registration)} дней \n"
-            f"Имя пользователя: {(user_name)}\n"
-            f"Статус подписки: *{(status_sub_txt)}*"
-        )
+            if sent_message and sent_message.message_id:
+                await store_message(chat_id, sent_message.message_id, error_message, 'bot')
+            else:
+                print("Ошибка: сообщение не отправлено или нет message_id")
 
-        # Удаление старых сообщений с той же информацией
-        for msg in messages_for_db:
-            if msg['chat_id'] == chat_id and msg['message_text'] == status_message:
-                try:
-                    await bot.delete_message(chat_id, msg['message_id'])
-                except Exception as e:
-                    print(f"Не удалось удалить сообщение {msg['message_id']}: {e}")
+        # Удаление сообщения пользователя после обработки
+        try:
+            await bot.delete_message(chat_id, message.message_id)
+        except Exception as e:
+            print(f"Не удалось удалить сообщение пользователя {message.message_id}: {e}")
 
-        # Отправка нового сообщения с информацией об аккаунте и кнопкой оплаты, если нужно
-        sent_message = await message.answer(status_message, parse_mode="Markdown", reply_markup=keyboard)
-
-
-        if sent_message and sent_message.message_id:
-            # Сохраняем и регистрируем сообщение только в случае успешной отправки
-            await store_message(chat_id, sent_message.message_id, status_message, 'bot')
-            await register_message_type(chat_id, sent_message.message_id, 'account_status', 'bot')
-        else:
-            print("Ошибка: сообщение не отправлено или нет message_id")
-
-    else:
-        # Отправка сообщения, если данные не найдены
-        error_message = "Ваши данные не найдены в системе."
-        sent_message = await message.answer(error_message)
-
-        if sent_message and sent_message.message_id:
-            await store_message(chat_id, sent_message.message_id, error_message, 'bot')
-        else:
-            print("Ошибка: сообщение не отправлено или нет message_id")
-
-    # Удаление сообщения пользователя после обработки
-    try:
-        await bot.delete_message(chat_id, message.message_id)
-    except Exception as e:
-        print(f"Не удалось удалить сообщение пользователя {message.message_id}: {e}")
-
-    # Удаляем неважные сообщения
-    await delete_unimportant_messages(chat_id, bot)
+        # Удаляем неважные сообщения
+        await delete_unimportant_messages(chat_id, bot)
+    else: await message.answer("Ведутся технические работы", parse_mode="Markdown")
 # Обработчик для инлайн-кнопки
 @router.callback_query(lambda call: call.data == "account_info")
 async def send_account_info(callback_query: types.CallbackQuery):
