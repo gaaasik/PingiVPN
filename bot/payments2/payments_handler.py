@@ -114,7 +114,7 @@ async def process_callback_query(callback_query: types.CallbackQuery):
     bot = callback_query.message.bot
     global listen_task
     if listen_task is None or listen_task.done():
-        listen_task = asyncio.create_task(run_listening_for_duration(bot, 60 * 60))
+        listen_task = asyncio.create_task(run_listening_for_duration(bot, 3600))
 
     if chat_id == 456717505:
         one_time_id, one_time_link, _ = create_one_time_payment(chat_id)
