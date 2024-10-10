@@ -46,7 +46,7 @@ async def cmd_status(message: types.Message):
 
             elif subscription_status == 'active' :
                 status_sub_txt = f'Подписка активна'
-                keyboard = None
+                keyboard = create_payment_button()
             else:
                 status_sub_txt = subscription_status
                 keyboard = create_payment_button()
