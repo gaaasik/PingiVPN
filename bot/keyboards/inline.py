@@ -71,12 +71,14 @@ def create_payment_button():
 
 
     # Создаем инлайн-кнопку с текстом "Оплатить 199 рублей" и ссылкой на оплату
-    payment_button = InlineKeyboardButton(text="Подключить подписку", callback_data="payment_199")
+    payment_button = InlineKeyboardButton(text="Подключить подписку - 199р", callback_data="payment_199")
 
 
     # Создаем клавиатуру и добавляем кнопку
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[[payment_button],
-                                                     [InlineKeyboardButton(text="Удалить себя из базы данных - опасная кнопка!", callback_data='delete_user')]])
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[[payment_button]
+        #,[InlineKeyboardButton(text="Удалить себя из базы данных - опасная кнопка!", callback_data='delete_user')]
+
+                                                     ])
 
     return keyboard
 
