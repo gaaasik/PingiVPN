@@ -36,19 +36,19 @@ async def cmd_status(message: types.Message):
         if subscription_status == "waiting_pending":
             status_sub_txt = f"Ожидание оплаты подписки"
             # Создаем клавиатуру с кнопкой оплаты
-            keyboard = create_payment_button()
+            keyboard = create_payment_button(chat_id)
 
         elif subscription_status == 'new_user' :
             status_sub_txt = f"Пробный период"
-            keyboard = create_payment_button()
+            keyboard = create_payment_button(chat_id)
 
 
         elif subscription_status == 'active' :
             status_sub_txt = f'Подписка активна'
-            keyboard = create_payment_button()
+            keyboard = create_payment_button(chat_id)
         else:
             status_sub_txt = subscription_status
-            keyboard = create_payment_button()
+            keyboard = create_payment_button(chat_id)
 
             # Пример экранирования текста
         status_message = (
@@ -79,7 +79,7 @@ async def cmd_status(message: types.Message):
 
     else:
         # Отправка сообщения, если данные не найдены
-        error_message = "Ваши данные не найдены в системе."
+        error_message = "Ваши данные не найдены в системе. Обратитесь в поддержку, мы на связи."
         sent_message = await message.answer(error_message)
 
         if sent_message and sent_message.message_id:
@@ -113,7 +113,7 @@ async def send_account_info(callback_query: types.CallbackQuery):
         if subscription_status == "waiting_pending":
             status_sub_txt = f"Бесплатные 14 дней закончились \nОжидание оплаты подписки"
             # Создаем клавиатуру с кнопкой оплаты
-            reply_markup = create_payment_button()
+            reply_markup = create_payment_button(chat_id)
         else:
             status_sub_txt = subscription_status
             reply_markup = None  # Без кнопок, если статус другой
