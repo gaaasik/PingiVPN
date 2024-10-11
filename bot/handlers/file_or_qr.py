@@ -11,7 +11,7 @@ from bot.keyboards.inline import subscribe_keyboard, get_detailed_instruction_bu
     get_qr_code_button
 from bot.utils.db import update_user_subscription_status
 from bot.utils.file_sender import send_config_file, send_qr_code, send_instruction_video
-from bot.utils.subscription_check import should_check_subscription, update_subscription_status, check_subscription
+from bot.utils.subscription_check import should_check_subscription, update_subscription_status, check_subscription_channel
 from data.text_messages import detailed_instructions_message
 
 router = Router()
@@ -26,7 +26,7 @@ async def handle_get_file(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
 
     # Проверяем подписку пользователя
-    if not await check_subscription(chat_id, callback_query.bot):
+    if not await check_subscription_channel(chat_id, callback_query.bot):
         # Отправляем сообщение с кнопками "Перейти на канал" и "Я подписался"
         message = await callback_query.message.answer(
             "VPN работает без рекламы. Чтобы начать пользоваться — подпишитесь на канал PingiVPN.",
@@ -61,7 +61,7 @@ async def handle_get_qr_code(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
 
     # Проверяем подписку пользователя
-    if not await check_subscription(chat_id, callback_query.bot):
+    if not await check_subscription_channel(chat_id, callback_query.bot):
         # Отправляем сообщение с кнопками "Перейти на канал" и "Я подписался"
         message = await callback_query.message.answer(
             "VPN работает без рекламы. Чтобы начать пользоваться — подпишитесь на канал PingiVPN.",
@@ -89,7 +89,7 @@ async def handle_get_file(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
 
     # Проверяем подписку пользователя
-    if not await check_subscription(chat_id, callback_query.bot):
+    if not await check_subscription_channel(chat_id, callback_query.bot):
         # Отправляем сообщение с кнопками "Перейти на канал" и "Я подписался"
         message = await callback_query.message.answer(
             "VPN работает без рекламы. Чтобы начать пользоваться — подпишитесь на канал PingiVPN.",

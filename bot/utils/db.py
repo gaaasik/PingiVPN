@@ -188,7 +188,7 @@ async def get_all_users():
     return users
 
 
-async def get_user_status(user_id: int):
+async def get_user_registration_date_and_username(user_id: int):
     async with aiosqlite.connect(database_path_local) as conn:
         async with conn.execute('SELECT registration_date, user_name FROM users WHERE chat_id = ?', (user_id,)) as cursor:
             user = await cursor.fetchone()
@@ -248,13 +248,13 @@ async def update_last_subscription_check(chat_id):
     await conn.close()
 
 # Получаем статус подписки пользователя
+
 async def get_user_subscription_status(chat_id):
     conn = await aiosqlite.connect(database_path_local)
-    cursor = await conn.execute("SELECT is_subscribed FROM users WHERE chat_id = ?", (chat_id,))
+    cursor = await conn.execute("SELECT subscription_status FROM users WHERE chat_id = ?", (chat_id,))
     result = await cursor.fetchone()
     await conn.close()
     return result[0] if result else False
-
 # Обновляем статус подписки
 async def update_user_subscription_status(chat_id, is_subscribed):
     conn = await aiosqlite.connect(database_path_local)
@@ -359,7 +359,7 @@ async def who_have_expired_trial(conn):
 
     return users_with_expired_trial
 # Функция для получения статуса пользователя
-async def get_user_status(chat_id):
+async def get_user_registration_date_and_username(chat_id):
     async with aiosqlite.connect(database_path_local) as db:
         # Проверяем тип данных chat_id и конвертируем его при необходимости
         if isinstance(chat_id, str) and chat_id.isdigit():

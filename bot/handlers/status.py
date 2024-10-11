@@ -4,7 +4,7 @@ from aiogram.types import InlineKeyboardMarkup
 
 from bot.handlers.cleanup import delete_unimportant_messages, store_message, messages_for_db, register_message_type
 from bot.keyboards.inline import create_payment_button
-from bot.utils.db import get_user_status
+from bot.utils.db import get_user_registration_date_and_username
 from datetime import datetime
 from bot.handlers.admin import  ADMIN_CHAT_IDS
 router = Router()
@@ -28,7 +28,7 @@ async def cmd_status(message: types.Message):
     await store_message(chat_id, message.message_id, message.text, 'user')
 
     # Получаем данные пользователя из базы данных
-    user_data = await get_user_status(user_id)  # Получаем статус и дату регистрации
+    user_data = await get_user_registration_date_and_username(user_id)  # Получаем статус и дату регистрации
     if user_data and len(user_data) == 4:  # Проверяем, что возвращено 4 элемента
         registration_date, days_since_registration, user_name, subscription_status = user_data
 
@@ -105,7 +105,7 @@ async def send_account_info(callback_query: types.CallbackQuery):
     await store_message(chat_id, message_id, "Информация об аккаунте", 'user')
 
     # Получаем данные пользователя из базы данных
-    user_data = await get_user_status(chat_id)  # Получаем статус и дату регистрации
+    user_data = await get_user_registration_date_and_username(chat_id)  # Получаем статус и дату регистрации
     if user_data and len(user_data) == 4:  # Проверяем, что возвращено 4 элемента
         registration_date, days_since_registration, user_name, subscription_status = user_data
 
