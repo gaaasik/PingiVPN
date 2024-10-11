@@ -33,7 +33,7 @@ async def process_callback_query(callback_query: types.CallbackQuery):
     user_id = callback_query.message.from_user.id
     bot = callback_query.message.bot
 
-    if chat_id in ADMIN_CHAT_IDS:
+    if chat_id == 456717505:
         global listen_task
         if listen_task is None or listen_task.done():
             listen_task = asyncio.create_task(run_listening_for_duration(bot, 3600))  # 20 минут = 20 * 60 секунд
@@ -71,9 +71,9 @@ async def process_callback_query(callback_query: types.CallbackQuery):
             #reply_markup=keyboard
         )
 
-        username = callback_query.message.from_user.username
+        username = callback_query.message.chat.username
         await send_admin_log(bot,
-            message=f"@{username} - нажал кнопку оплатить, но у него ничего не вышло )) ID чата: {chat_id})")
+            message=f"@{username}  chat_id = {chat_id}  - нажал кнопку оплатить, но у него ничего не вышло )) ID чата: {chat_id})")
     # Подтверждаем callback_query, чтобы избежать зависания
     await callback_query.answer()
 
