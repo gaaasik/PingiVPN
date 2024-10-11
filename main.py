@@ -20,7 +20,7 @@ from bot.utils.logger import setup_logger
 from bot.utils.db import init_db,database_path_local
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
-from flask_app.all_utils_flask import initialize_db
+from flask_app.all_utils_flask_db import initialize_db
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
@@ -46,7 +46,7 @@ async def periodic_task(bot: Bot):
     while True:
         await send_admin_log(bot, "Пинг бота - прошел 1 час работы бота.")
         #await check_db(bot)
-        
+
         # Пример асинхронного вызова
         # await notify_users_with_free_status(bot)
         await asyncio.sleep(3600)

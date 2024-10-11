@@ -1,13 +1,13 @@
 from datetime import datetime, timedelta
-from bot.utils.db import get_user_subscription_status, update_user_subscription_status, get_last_subscription_check, update_last_subscription_check
+from bot.utils.db import update_user_subscription_status, get_last_subscription_check, update_last_subscription_check
 
 # Проверка подписки через Telegram API getChatMember
-async def check_subscription(chat_id, bot):
+async def check_subscription_channel(chat_id, bot):
     status = await bot.get_chat_member("@pingi_hub", chat_id)
     if status.status in ["member", "administrator", "creator"]:
         return True
     return False
-async def delete_subscription_message(callback_query):
+async def delete_subscription_channel_message(callback_query):
     """
     Удаляет сообщение с просьбой подписаться, если оно существует.
     """
@@ -27,7 +27,7 @@ async def should_check_subscription(chat_id):
 
 # Обновление статуса подписки и времени последней проверки
 async def update_subscription_status(chat_id, bot):
-    if await check_subscription(chat_id, bot):
+    if await check_subscription_channel(chat_id, bot):
         await update_user_subscription_status(chat_id, True)
         await update_last_subscription_check(chat_id)
         return True

@@ -9,11 +9,12 @@ from dotenv import load_dotenv
 from yookassa import Configuration, Payment
 from aiogram import Router, types, Bot
 
+from bot.handlers.cleanup import register_message_type, delete_important_message
 from bot.payments2.if_user_sucsess_pay import update_user_subscription_db, handle_post_payment_actions
 from bot.payments2.payments_db import reset_user_data_db
-from flask_app.all_utils_flask import logger
+from flask_app.all_utils_flask_db import logger
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
-
+from bot.utils.db import get_user_subscription_status
 load_dotenv()
 WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 listen_task = None  # Переменная для хранения задачи прослушивания
@@ -26,7 +27,7 @@ REDIS_QUEUE = 'payment_notifications'
 # Инициализация Redis клиента
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 router = Router()
-
+#нажатие на кнопку оплатить 199 рублей - отправялет сообщение с ссылкой на оплату
 @router.callback_query(lambda c: c.data == 'payment_199')
 async def process_callback_query(callback_query: types.CallbackQuery):
     chat_id = callback_query.message.chat.id
@@ -34,33 +35,42 @@ async def process_callback_query(callback_query: types.CallbackQuery):
     bot = callback_query.message.bot
 
     if chat_id == 456717505:
-        global listen_task
-        if listen_task is None or listen_task.done():
-            listen_task = asyncio.create_task(run_listening_for_duration(bot, 3600))  # 20 минут = 20 * 60 секунд
+        if get_user_subscription_status(chat_id) == "waiting_pending" or "new_user":
+            global listen_task
+            if listen_task is None or listen_task.done():
+                listen_task = asyncio.create_task(run_listening_for_duration(bot, 3600))  # 1 час
 
-        # Создаем платёж и получаем ссылку
-        one_time_id, one_time_link, one_time_payment_method_id = create_one_time_payment(chat_id)
+            # Создаем платёж и получаем ссылку
+            one_time_id, one_time_link, one_time_payment_method_id = create_one_time_payment(chat_id)
 
-        # Текст сообщения
-        text_payment = (
-            "Вы подключаете подписку на наш сервис с помощью\n"
-            "платёжной системы Юkassa\n\n"
-            "Стоимость подписки на 1 месяц: 199р 👇👇👇\n"
-        )
+            # Текст сообщения
+            text_payment = (
+                "Вы подключаете подписку на наш сервис с помощью\n"
+                "платёжной системы Юkassa\n\n"
+                "Стоимость подписки на 1 месяц: 199р 👇👇👇\n"
+            )
 
-        # Создаем клавиатуру с кнопкой
-        keyboard = InlineKeyboardMarkup(
-            inline_keyboard=[
-                [InlineKeyboardButton(text="Оплатить 199р", url=one_time_link)]
+            # Создаем клавиатуру с кнопкой
+            keyboard = InlineKeyboardMarkup(
+                inline_keyboard=[
+                    [InlineKeyboardButton(text="Оплатить 199р", url=one_time_link)]
 
-            ]
-        )
-        # Отправляем сообщение с текстом и клавиатурой
-        await bot.send_message(
-            chat_id=chat_id,
-            text=  text_payment,
-            reply_markup=keyboard
-        )
+                ]
+            )
+            # Отправляем сообщение с текстом и клавиатурой
+            sent_message = await bot.send_message(
+                chat_id=chat_id,
+                text=  text_payment,
+                reply_markup=keyboard
+            )
+            await register_message_type(chat_id,sent_message,"msg_with_pay_url")
+        elif get_user_subscription_status == "active":
+            # Отправляем сообщение с текстом и клавиатурой
+            await bot.send_message(
+                chat_id=chat_id,
+                text="Ваша подписка активна",
+            )
+
     else:
 
 
@@ -197,12 +207,15 @@ async def process_payment_message(message: str, bot: Bot):
             await update_user_subscription_db(user_id)
             await handle_post_payment_actions(bot, user_id)
             text = f"Ваш платеж на сумму {amount} {currency} успешно завершен!"
+            await delete_important_message(user_id,"msg_with_pay_url",bot)
         elif status == 'payment.waiting_for_capture':
             text = f"Ваш платеж на сумму {amount} {currency} ожидает подтверждения."
+            await delete_important_message(user_id, "msg_with_pay_url", bot)
         elif status == 'payment.canceled':
             text = f"Ваш платеж на сумму {amount} {currency} был отменен."
+            await delete_important_message(user_id, "msg_with_pay_url", bot)
         elif status == 'refund.succeeded':
-            text = f"Ваш возврат на сумму {amount} {currency} был успешно обработан."
+            text = f"Ваш возврат на сумму {amount} {currency} был не обработан."
         else:
             text = f"Обновление платежа: {status}. Сумма: {amount} {currency}."
 

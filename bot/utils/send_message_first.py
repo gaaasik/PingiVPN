@@ -1,6 +1,6 @@
 from aiogram import Bot
 from aiogram.exceptions import TelegramForbiddenError
-from bot.utils.db import get_user_status
+from bot.utils.db import get_user_registration_date_and_username
 
 
 async def send_messages_to_chats(bot: Bot, chat_ids, message_text, reply_markup):
@@ -8,7 +8,7 @@ async def send_messages_to_chats(bot: Bot, chat_ids, message_text, reply_markup)
 
     for chat_data in chat_ids:
         chat_id = chat_data[0]  # Извлекаем только chat_id из кортежа
-        user_status = await get_user_status(chat_id)
+        user_status = await get_user_registration_date_and_username(chat_id)
 
         if user_status == "waiting_pending":
             print(f"Пользователь с chat_id {chat_id} уже получил сообщение, но сейчас сообщение  будет отправлено.")

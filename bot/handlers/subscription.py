@@ -1,6 +1,6 @@
 from aiogram import Router, types
 from aiogram.types import CallbackQuery
-from bot.utils.subscription_check import check_subscription
+from bot.utils.subscription_check import check_subscription_channel
 from bot.handlers.cleanup import store_important_message, delete_important_message
 from bot.keyboards.inline import config_or_qr_keyboard, subscribe_keyboard
 
@@ -14,7 +14,7 @@ async def handle_check_subscription(callback_query: CallbackQuery):
     bot = callback_query.bot
 
     # Проверяем подписку через Telegram API
-    if await check_subscription(chat_id, bot):
+    if await check_subscription_channel(chat_id, bot):
         # Удаляем старое сообщение с кнопками
         await delete_important_message(chat_id, "subscription_check", bot)
     else:

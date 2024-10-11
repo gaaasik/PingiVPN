@@ -9,11 +9,6 @@ from flask_app.config_flask_redis import DATABASE_PATH
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-def get_moscow_time():
-    """Получение текущего времени в часовом поясе Москвы."""
-    moscow_tz = pytz.timezone('Europe/Moscow')
-    return datetime.now(moscow_tz)
-
 async def initialize_db():
     """Асинхронная инициализация базы данных с использованием aiosqlite."""
     async with aiosqlite.connect(DATABASE_PATH) as connection:
