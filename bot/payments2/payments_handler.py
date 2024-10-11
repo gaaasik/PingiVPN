@@ -222,7 +222,7 @@ async def process_payment_message(message: str, bot: Bot):
         # Отправляем сообщение пользователю
         await bot.send_message(chat_id=user_id, text=text)
         logger.info(f"Сообщение отправлено пользователю {user_id}: {text}")
-
+        await delete_important_message(user_id, "msg_with_pay_url", bot)
         # Останавливаем задачу прослушивания, если необходимо
         global listen_task
         if listen_task and not listen_task.done():
