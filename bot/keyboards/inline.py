@@ -65,20 +65,24 @@ def config_or_qr_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
-def create_payment_button():
+def create_payment_button(chat_id):
 
 
 
 
     # Создаем инлайн-кнопку с текстом "Оплатить 199 рублей" и ссылкой на оплату
     payment_button = InlineKeyboardButton(text="Подключить подписку - 199р", callback_data="payment_199")
+    if chat_id == 456717505:
+        # Создаем клавиатуру и добавляем кнопку
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[[payment_button]
+            , [InlineKeyboardButton(text="Удалить себя из базы данных - опасная кнопка!",
+                                    callback_data='delete_user')]])
+    else:
+        # Создаем клавиатуру и добавляем кнопку
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[[payment_button]])
 
 
-    # Создаем клавиатуру и добавляем кнопку
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[[payment_button]
-        #,[InlineKeyboardButton(text="Удалить себя из базы данных - опасная кнопка!", callback_data='delete_user')]
 
-                                                     ])
 
     return keyboard
 
