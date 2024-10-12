@@ -106,7 +106,7 @@ async def send_instruction_video(callback_query):
             return
 
 
-async def send_qr_code(callback_query, bot):
+async def send_qr_code(callback_query):
     """
     Отправка QR-кода пользователю через Telegram.
     """
