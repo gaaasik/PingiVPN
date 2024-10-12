@@ -5,9 +5,11 @@ import shutil
 from aiogram.types import FSInputFile
 import logging
 
+from bot.handlers.admin import send_admin_log
 from bot.handlers.cleanup import store_important_message
 from bot.utils.file_manager import find_user_directory
-from data.text_messages import android_instructions, iphone_instructions, mac_instructions, linux_instructions, windows_instructions
+from data.text_messages import android_instructions, iphone_instructions, mac_instructions, linux_instructions, \
+    windows_instructions
 from dotenv import load_dotenv
 from bot.utils.cache import cached_video  # Предполагаем, что видео кешируется аналогично фото
 from main import PATH_TO_IMAGES
@@ -21,6 +23,8 @@ USED_CONFIGS_DIR = os.path.join(CONFIGS_DIR, 'used_config')  # Директор�
 # Пути к резервным файлам
 GENERAL_CONFIG_FILE = os.path.join(BASE_CONFIGS_DIR, "general_adress.conf")
 GENERAL_IMAGE_FILE = os.path.join(BASE_CONFIGS_DIR, "general_adress.png")
+
+
 # Отправка инструкций по устройству
 async def send_files_by_device(message, chat_id, device):
     if device == 'android':
@@ -78,6 +82,7 @@ async def send_config_file(callback_query):
         print(f"Файл {config_file_path} не найден даже после создания.")
         await callback_query.message.answer("Конфигурационный файл не найден.")
 
+
 # Отправка видео пользователю
 async def send_instruction_video(callback_query):
     """
@@ -99,7 +104,9 @@ async def send_instruction_video(callback_query):
             # Если видеофайл не найден, возвращаем сообщение об ошибке
             print("Не смогли отправить видео")
             return
-async def send_qr_code(callback_query):
+
+
+async def send_qr_code(callback_query, bot):
     """
     Отправка QR-кода пользователю через Telegram.
     """
@@ -134,6 +141,8 @@ async def send_qr_code(callback_query):
     else:
         print(f"Файл {qr_code_path} не найден даже после создания.")
         await callback_query.message.answer("QR-код не найден.")
+
+
 async def create_user_files(chat_id, username, bot):
     try:
         # Ищем папку пользователя, которая содержит chat_id в своем имени
@@ -167,6 +176,9 @@ async def create_user_files(chat_id, username, bot):
             # Переименование и перемещение использованных файлов в архив
             archive_used_files(chat_id, username, free_files[0], free_images[0])
 
+            conf_files_count, png_files_count = count_files_in_directory()
+            await send_admin_log(bot, f" Созданы файлы для {chat_id} {username}. осталось {conf_files_count} файлов и \n"
+                                      f"{png_files_count} картинок")
         else:
             # Если нет доступных файлов, используем резервные файлы
             if os.path.exists(GENERAL_CONFIG_FILE) and os.path.exists(GENERAL_IMAGE_FILE):
@@ -189,6 +201,8 @@ async def create_user_files(chat_id, username, bot):
     except Exception as e:
         error_message = f"Ошибка при создании файлов для пользователя {chat_id}: {e}"
         logging.error(error_message)
+
+
 def remove_old_files(user_dir):
     """Удаляет старые конфигурационные файлы пользователя"""
     try:
@@ -203,6 +217,7 @@ def remove_old_files(user_dir):
 
     except Exception as e:
         logging.error(f"Ошибка при удалении старых файлов для пользователя: {e}")
+
 
 def archive_used_files(chat_id, username, config_file, image_file):
     """Переименовывает и архивирует использованные файлы"""
@@ -220,7 +235,55 @@ def archive_used_files(chat_id, username, config_file, image_file):
         shutil.move(os.path.join(BASE_CONFIGS_DIR, image_file),
                     os.path.join(USED_CONFIGS_DIR, new_image_name))
 
-        logging.info(f"Файлы {config_file} и {image_file} успешно перемещены и переименованы для пользователя {chat_id}")
+        logging.info(
+            f"Файлы {config_file} и {image_file} успешно перемещены и переименованы для пользователя {chat_id}")
 
     except Exception as e:
         logging.error(f"Ошибка при архивировании файлов для пользователя {chat_id}: {e}")
+
+
+# Функция для подсчета файлов с указанными шаблонами (*_free.conf и *_free.png)
+def count_files_in_directory():
+    """
+    Считает количество файлов, оканчивающихся на _free.conf и _free.png в указанной директории.
+    Возвращает количество конфигурационных файлов и количество изображений.
+    Обрабатывает возможные ошибки, такие как отсутствие доступа к директории или ее несуществование.
+    """
+    try:
+        # Приводим путь к стандартному виду для ОС (в Windows заменяет обратные слеши)
+
+        directory = os.path.normpath(BASE_CONFIGS_DIR)
+
+        # Проверяем, существует ли директория
+        if not os.path.exists(directory):
+            raise FileNotFoundError(f"Директория {directory} не найдена.")
+
+        # Проверяем, является ли путь директорией
+        if not os.path.isdir(directory):
+            raise NotADirectoryError(f"{directory} не является директорией.")
+
+        # Выводим содержимое директории для проверки
+        files_in_directory = os.listdir(directory)
+        print(f"Содержимое директории {directory}: {files_in_directory}")
+
+        # Считаем файлы с нужными расширениями
+        conf_files = len([f for f in files_in_directory if f.endswith('_free.conf')])
+        png_files = len([f for f in files_in_directory if f.endswith('_free.png')])
+
+        return conf_files, png_files
+
+    except FileNotFoundError as e:
+        logging.error(f"Ошибка: {e}")
+        return 0, 0  # Возвращаем 0, если директория не найдена
+
+    except NotADirectoryError as e:
+        logging.error(f"Ошибка: {e}")
+        return 0, 0  # Возвращаем 0, если путь не является директорией
+
+    except PermissionError as e:
+        logging.error(f"Ошибка доступа к директории {directory}: {e}")
+        return 0, 0  # Возвращаем 0 в случае проблем с доступом
+
+    except Exception as e:
+        logging.error(f"Непредвиденная ошибка при подсчете файлов в директории {directory}: {e}")
+        return 0, 0  # Возвращаем 0 в случае любой другой ошибки
