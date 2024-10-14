@@ -1,5 +1,8 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
+from bot.handlers.admin import ADMIN_CHAT_IDS
+
+
 # Создаем инлайн-кнопки для выбора устройства
 # Создаем инлайн-кнопки для выбора устройства
 def device_choice_keyboard():
@@ -72,7 +75,7 @@ def create_payment_button(chat_id):
 
     # Создаем инлайн-кнопку с текстом "Оплатить 199 рублей" и ссылкой на оплату
     payment_button = InlineKeyboardButton(text="Подключить подписку - 199р", callback_data="payment_199")
-    if chat_id == 456717505:
+    if chat_id in ADMIN_CHAT_IDS:
         # Создаем клавиатуру и добавляем кнопку
         keyboard = InlineKeyboardMarkup(inline_keyboard=[[payment_button]
             , [InlineKeyboardButton(text="Удалить себя из базы данных - опасная кнопка!",

@@ -9,12 +9,14 @@ from dotenv import load_dotenv
 from yookassa import Configuration, Payment
 from aiogram import Router, types, Bot
 
-from bot.handlers.cleanup import register_message_type, delete_important_message
-from bot.payments2.if_user_sucsess_pay import update_user_subscription_db, handle_post_payment_actions
+from bot.handlers.cleanup import register_message_type, delete_important_message, store_message, \
+    delete_unimportant_messages
+from bot.payments2.if_user_sucsess_pay import handle_post_payment_actions
 from bot.payments2.payments_db import reset_user_data_db
 from flask_app.all_utils_flask_db import logger
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
-from bot.utils.db import get_user_subscription_status
+from bot.utils.db import get_user_subscription_status, update_payment_status, update_user_subscription_db
+
 load_dotenv()
 WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 listen_task = None  # Переменная для хранения задачи прослушивания
@@ -25,20 +27,22 @@ Configuration.secret_key = os.getenv('API_KEY')
 REDIS_QUEUE = 'payment_notifications'
 
 # Инициализация Redis клиента
-redis_client = redis.Redis(host='localhost', port=6379, db=0)
+redis_client = redis.Redis(host='217.25.91.109', port=6379, db=0)
 router = Router()
+
+
 #нажатие на кнопку оплатить 199 рублей - отправялет сообщение с ссылкой на оплату
 @router.callback_query(lambda c: c.data == 'payment_199')
 async def process_callback_query(callback_query: types.CallbackQuery):
     chat_id = callback_query.message.chat.id
     user_id = callback_query.message.from_user.id
     bot = callback_query.message.bot
+    await delete_unimportant_messages(chat_id,bot)
+    subscription_status = await get_user_subscription_status(chat_id)
+    print(subscription_status)
+    if chat_id in ADMIN_CHAT_IDS or chat_id==1388513042:
+        if subscription_status == "waiting_pending" or subscription_status == "new_user":
 
-    if chat_id == 456717505:
-        if get_user_subscription_status(chat_id) == "waiting_pending" or "new_user":
-            global listen_task
-            if listen_task is None or listen_task.done():
-                listen_task = asyncio.create_task(run_listening_for_duration(bot, 3600))  # 1 час
 
             # Создаем платёж и получаем ссылку
             one_time_id, one_time_link, one_time_payment_method_id = create_one_time_payment(chat_id)
@@ -60,32 +64,35 @@ async def process_callback_query(callback_query: types.CallbackQuery):
             # Отправляем сообщение с текстом и клавиатурой
             sent_message = await bot.send_message(
                 chat_id=chat_id,
-                text=  text_payment,
+                text=text_payment,
                 reply_markup=keyboard
             )
-            await register_message_type(chat_id,sent_message,"msg_with_pay_url")
-        elif get_user_subscription_status == "active":
+            await register_message_type(chat_id, sent_message.message_id, "msg_with_pay_url", bot)
+            print("text = ", sent_message.text)
+        elif subscription_status == "active":
             # Отправляем сообщение с текстом и клавиатурой
-            await bot.send_message(
+            text_msg="Ваша подписка активна на месяц"
+            sent_message = await bot.send_message(
                 chat_id=chat_id,
-                text="Ваша подписка активна",
+                text=text_msg,
             )
+            await store_message(chat_id, sent_message.message_id, text_msg , 'bot')
+
 
     else:
-
-
         # Отправляем сообщение с текстом и клавиатурой
         await bot.send_message(
             chat_id=chat_id,
-            text="Оплата скоро будет доступна"#,
+            text="Оплата скоро будет доступна"  #,
             #reply_markup=keyboard
         )
 
         username = callback_query.message.chat.username
         await send_admin_log(bot,
-            message=f"@{username}  chat_id = {chat_id}  - нажал кнопку оплатить, но у него ничего не вышло )) ID чата: {chat_id})")
+                             message=f"@{username}  chat_id = {chat_id}  - нажал кнопку оплатить, но у него ничего не вышло )) ID чата: {chat_id})")
     # Подтверждаем callback_query, чтобы избежать зависания
     await callback_query.answer()
+
 
 @router.callback_query(lambda c: c.data == 'delete_user')
 async def delete_user_callback(callback_query: types.CallbackQuery):
@@ -104,43 +111,23 @@ async def delete_user_callback(callback_query: types.CallbackQuery):
 
     # Подтверждаем callback_query, чтобы избежать зависания
     await callback_query.answer()
-async def run_listening_for_duration(bot: Bot, duration: int):
 
+
+async def run_listening_redis_for_duration(bot: Bot):
     """Запускает прослушивание Redis на определенный промежуток времени."""
     global listen_task
     try:
         # Запускаем задачу прослушивания
         listen_task = asyncio.create_task(listen_to_redis_queue(bot))
-        await asyncio.sleep(duration)  # Ждем указанное время
-        listen_task.cancel()  # Завершаем прослушивание после истечения времени
-        logging.info("Задача прослушивания была завершена после указанного времени.")
+
     except asyncio.CancelledError:
         logging.info("Задача прослушивания была отменена.")
+        await send_admin_log(bot,"Warning - очредь редис заверешиоа работу" )
     except Exception as e:
-        logging.error(f"Ошибка при запуске прослушивания: {e}")@router.callback_query(lambda c: c.data == 'payment_199')
-async def process_callback_query(callback_query: types.CallbackQuery):
-    chat_id = callback_query.message.chat.id
-    user_id = callback_query.message.from_user.id
-    bot = callback_query.message.bot
-    global listen_task
-    if listen_task is None or listen_task.done():
-        listen_task = asyncio.create_task(run_listening_for_duration(bot, 3600))
+        logging.error(f"Ошибка при запуске прослушивания: {e}") @ router.callback_query(
+            lambda c: c.data == 'payment_199')
+        await send_admin_log(bot, "Warning - очредь редис заверешиоа работу")
 
-    if chat_id == 456717505:
-        one_time_id, one_time_link, _ = create_one_time_payment(chat_id)
-        text_payment = (
-            "Вы подключаете подписку на наш сервис с помощью платёжной системы Юkassa\n\n"
-            "Стоимость подписки на 1 месяц: 199р 👇👇👇\n"
-        )
-        keyboard = InlineKeyboardMarkup(
-            inline_keyboard=[[InlineKeyboardButton(text="Оплатить 199р", url=one_time_link)]]
-        )
-        await bot.send_message(chat_id=chat_id, text=text_payment, reply_markup=keyboard)
-    else:
-        await bot.send_message(chat_id=chat_id, text="Оплата скоро будет доступна")
-        username = callback_query.message.from_user.username
-        await send_admin_log(bot, message=f"@{username} - нажал кнопку оплатить, но у него ничего не вышло )) ID чата: {chat_id})")
-    await callback_query.answer()
 
 
 # Функция для создания разового платежа
@@ -154,12 +141,13 @@ def create_one_time_payment(user_id):
     })
     return payment.id, payment.confirmation.confirmation_url, '0'
 
+
 async def listen_to_redis_queue(bot: Bot):
     """Прослушивание очереди Redis для обработки сообщений о платежах."""
     logging.info("Начало прослушивания очереди tasks")
     while True:
         try:
-            logging.info("Попытка извлечь задачу из очереди Redis")
+            #logging.info("Попытка извлечь задачу из очереди Redis")
             task_data = await asyncio.to_thread(redis_client.lpop, 'payment_notifications')
 
             if task_data:
@@ -175,9 +163,10 @@ async def listen_to_redis_queue(bot: Bot):
                 # Передаем всю задачу в функцию process_payment_message, включая все данные
                 await process_payment_message(json.dumps(task), bot)
             else:
-                logging.info("Очередь Redis пуста, ждем следующую задачу")
+                a=1
+                #logging.info("Очередь Redis пуста, ждем следующую задачу")
 
-            await asyncio.sleep(1)
+            await asyncio.sleep(3)
 
         except redis.exceptions.ConnectionError as e:
             logging.error(f"Ошибка подключения к Redis: {e}")
@@ -196,40 +185,51 @@ async def process_payment_message(message: str, bot: Bot):
         amount = data.get('amount')
         currency = data.get('currency')
         status = data.get('status')
+        payment_id = data.get('payment_id')
+
+        # print(data)
+        #добавить дату платежа
 
         # Проверка наличия всех необходимых данных
-        if not all([user_id, amount, currency, status]):
+        if not all([user_id, amount, currency, status, payment_id]):
             logger.error(f"Некорректное сообщение о платеже: {data}")
             return
+        # обноление таблицы payment
+        await update_payment_status(payment_id, user_id, amount, currency, status)
+        #await delete_important_message(user_id, "msg_with_pay_url", bot)
 
+
+
+        ###############################################
         # Формирование сообщения в зависимости от статуса платежа
         if status == 'payment.succeeded':
+
             await update_user_subscription_db(user_id)
             await handle_post_payment_actions(bot, user_id)
-            text = f"Ваш платеж на сумму {amount} {currency} успешно завершен!"
-            await delete_important_message(user_id,"msg_with_pay_url",bot)
-        elif status == 'payment.waiting_for_capture':
-            text = f"Ваш платеж на сумму {amount} {currency} ожидает подтверждения."
-            await delete_important_message(user_id, "msg_with_pay_url", bot)
-        elif status == 'payment.canceled':
-            text = f"Ваш платеж на сумму {amount} {currency} был отменен."
-            await delete_important_message(user_id, "msg_with_pay_url", bot)
-        elif status == 'refund.succeeded':
-            text = f"Ваш возврат на сумму {amount} {currency} был не обработан."
-        else:
-            text = f"Обновление платежа: {status}. Сумма: {amount} {currency}."
+        #дрписать canceled уведомления
 
-        # Отправляем сообщение пользователю
-        await bot.send_message(chat_id=user_id, text=text)
-        logger.info(f"Сообщение отправлено пользователю {user_id}: {text}")
+
+        # elif status == 'payment.waiting_for_capture':
+        #     text = f"Ваш платеж на сумму {amount} {currency} ожидает подтверждения."
+        #
+        # elif status == 'payment.canceled':
+        #     text = f"Ваш платеж на сумму {amount} {currency} был отменен."
+        #
+        # elif status == 'refund.succeeded':
+        #     text = f"Ваш возврат на сумму {amount} {currency} был не обработан."
+        # else:
+        #     text = f"Обновление платежа: {status}. Сумма: {amount} {currency}."
+
+        #logger.info(f"Сообщение отправлено пользователю {user_id}: {text}")
+
+
         await delete_important_message(user_id, "msg_with_pay_url", bot)
         # Останавливаем задачу прослушивания, если необходимо
-        global listen_task
-        if listen_task and not listen_task.done():
-            listen_task.cancel()
+        # global listen_task
+        # if listen_task and not listen_task.done():
+        #     listen_task.cancel()
 
     except json.JSONDecodeError as e:
         logger.error(f"Ошибка декодирования JSON: {e}, данные: {message}")
     except Exception as e:
         logger.error(f"Ошибка при обработке сообщения о платеже: {e}")
-

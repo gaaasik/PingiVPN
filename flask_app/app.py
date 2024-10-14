@@ -25,7 +25,7 @@ def webhook():
         currency = payment_info.get('amount', {}).get('currency', 'Нет валюты')
         user_id = payment_info.get('metadata', {}).get('user_id', None)
         payment_method_id = payment_info.get('payment_method', {}).get('id', '0')
-
+        print(payload)
         if not user_id:
             logger.error("Отсутствует user_id в метаданных платежа")
             return jsonify({"status": "error", "message": "Missing user_id"}), 400
