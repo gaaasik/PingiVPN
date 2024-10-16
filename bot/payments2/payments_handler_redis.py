@@ -37,59 +37,57 @@ async def process_callback_query(callback_query: types.CallbackQuery):
     chat_id = callback_query.message.chat.id
     user_id = callback_query.message.from_user.id
     bot = callback_query.message.bot
-    await delete_unimportant_messages(chat_id,bot)
+    await delete_unimportant_messages(chat_id, bot)
     subscription_status = await get_user_subscription_status(chat_id)
     print(subscription_status)
-    if chat_id in ADMIN_CHAT_IDS or chat_id==1388513042:
-        if subscription_status == "waiting_pending" or subscription_status == "new_user":
+    # if chat_id in ADMIN_CHAT_IDS or chat_id==1388513042:
+    if subscription_status == "waiting_pending" or subscription_status == "new_user":
 
+        # Создаем платёж и получаем ссылку
+        one_time_id, one_time_link, one_time_payment_method_id = create_one_time_payment(chat_id)
 
-            # Создаем платёж и получаем ссылку
-            one_time_id, one_time_link, one_time_payment_method_id = create_one_time_payment(chat_id)
-
-            # Текст сообщения
-            text_payment = (
-                "Вы подключаете подписку на наш сервис с помощью\n"
-                "платёжной системы Юkassa\n\n"
-                "Стоимость подписки на 1 месяц: 199р 👇👇👇\n"
-            )
-
-            # Создаем клавиатуру с кнопкой
-            keyboard = InlineKeyboardMarkup(
-                inline_keyboard=[
-                    [InlineKeyboardButton(text="Оплатить 199р", url=one_time_link)]
-
-                ]
-            )
-            # Отправляем сообщение с текстом и клавиатурой
-            sent_message = await bot.send_message(
-                chat_id=chat_id,
-                text=text_payment,
-                reply_markup=keyboard
-            )
-            await register_message_type(chat_id, sent_message.message_id, "msg_with_pay_url", bot)
-            print("text = ", sent_message.text)
-        elif subscription_status == "active":
-            # Отправляем сообщение с текстом и клавиатурой
-            text_msg="Ваша подписка активна на месяц"
-            sent_message = await bot.send_message(
-                chat_id=chat_id,
-                text=text_msg,
-            )
-            await store_message(chat_id, sent_message.message_id, text_msg , 'bot')
-
-
-    else:
-        # Отправляем сообщение с текстом и клавиатурой
-        await bot.send_message(
-            chat_id=chat_id,
-            text="Оплата скоро будет доступна"  #,
-            #reply_markup=keyboard
+        # Текст сообщения
+        text_payment = (
+            "Вы подключаете подписку на наш сервис с помощью\n"
+            "платёжной системы Юkassa\n\n"
+            "Стоимость подписки на 1 месяц: 199р 👇👇👇\n"
         )
 
-        username = callback_query.message.chat.username
-        await send_admin_log(bot,
-                             message=f"@{username}  chat_id = {chat_id}  - нажал кнопку оплатить, но у него ничего не вышло )) ID чата: {chat_id})")
+        # Создаем клавиатуру с кнопкой
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text="Оплатить 199р", url=one_time_link)]
+
+            ]
+        )
+        # Отправляем сообщение с текстом и клавиатурой
+        sent_message = await bot.send_message(
+            chat_id=chat_id,
+            text=text_payment,
+            reply_markup=keyboard
+        )
+        await register_message_type(chat_id, sent_message.message_id, "msg_with_pay_url", bot)
+        print("text = ", sent_message.text)
+    elif subscription_status == "active":
+        # Отправляем сообщение с текстом и клавиатурой
+        text_msg = "Ваша подписка активна на месяц"
+        sent_message = await bot.send_message(
+            chat_id=chat_id,
+            text=text_msg,
+        )
+        await store_message(chat_id, sent_message.message_id, text_msg, 'bot')
+
+    # else:
+    #     # Отправляем сообщение с текстом и клавиатурой
+    #     await bot.send_message(
+    #         chat_id=chat_id,
+    #         text="Оплата скоро будет доступна"  #,
+    #         #reply_markup=keyboard
+    #     )
+
+    username = callback_query.message.chat.username
+    await send_admin_log(bot,
+                         message=f"@{username}  chat_id = {chat_id}  - нажал кнопку оплатить ID чата: {chat_id})")
     # Подтверждаем callback_query, чтобы избежать зависания
     await callback_query.answer()
 
@@ -122,12 +120,11 @@ async def run_listening_redis_for_duration(bot: Bot):
 
     except asyncio.CancelledError:
         logging.info("Задача прослушивания была отменена.")
-        await send_admin_log(bot,"Warning - очредь редис заверешиоа работу" )
+        await send_admin_log(bot, "Warning - очредь редис заверешиоа работу")
     except Exception as e:
         logging.error(f"Ошибка при запуске прослушивания: {e}") @ router.callback_query(
             lambda c: c.data == 'payment_199')
         await send_admin_log(bot, "Warning - очредь редис заверешиоа работу")
-
 
 
 # Функция для создания разового платежа
@@ -163,7 +160,7 @@ async def listen_to_redis_queue(bot: Bot):
                 # Передаем всю задачу в функцию process_payment_message, включая все данные
                 await process_payment_message(json.dumps(task), bot)
             else:
-                a=1
+                a = 1
                 #logging.info("Очередь Redis пуста, ждем следующую задачу")
 
             await asyncio.sleep(3)
@@ -196,18 +193,15 @@ async def process_payment_message(message: str, bot: Bot):
             return
         # обноление таблицы payment
         await update_payment_status(payment_id, user_id, amount, currency, status)
+        await send_admin_log(bot, f"Пойман платеж от {user_id}, c статусом {status}")
         #await delete_important_message(user_id, "msg_with_pay_url", bot)
-
-
 
         ###############################################
         # Формирование сообщения в зависимости от статуса платежа
         if status == 'payment.succeeded':
-
             await update_user_subscription_db(user_id)
             await handle_post_payment_actions(bot, user_id)
         #дрписать canceled уведомления
-
 
         # elif status == 'payment.waiting_for_capture':
         #     text = f"Ваш платеж на сумму {amount} {currency} ожидает подтверждения."
@@ -221,7 +215,6 @@ async def process_payment_message(message: str, bot: Bot):
         #     text = f"Обновление платежа: {status}. Сумма: {amount} {currency}."
 
         #logger.info(f"Сообщение отправлено пользователю {user_id}: {text}")
-
 
         await delete_important_message(user_id, "msg_with_pay_url", bot)
         # Останавливаем задачу прослушивания, если необходимо

@@ -85,21 +85,21 @@ async def handle_get_qr_code(callback_query: CallbackQuery):
     await callback_query.answer()
 
 
-async def handle_get_file(callback_query: CallbackQuery):
-    chat_id = callback_query.message.chat.id
-
-    # Проверяем подписку пользователя
-    if not await check_subscription_channel(chat_id, callback_query.bot):
-        # Отправляем сообщение с кнопками "Перейти на канал" и "Я подписался"
-        message = await callback_query.message.answer(
-            "VPN работает без рекламы. Чтобы начать пользоваться — подпишитесь на канал PingiVPN.",
-            reply_markup=subscribe_keyboard()
-        )
-        # Сохраняем это сообщение как важное
-        await store_important_message(callback_query.bot, chat_id, message.message_id, message, "subscription_check")
-        return
-
-    # Если подписка подтверждена, отправляем файл
-    await send_config_file(callback_query)
-
-    await callback_query.answer()
+# async def handle_get_file(callback_query: CallbackQuery):
+#     chat_id = callback_query.message.chat.id
+#
+#     # Проверяем подписку пользователя
+#     if not await check_subscription_channel(chat_id, callback_query.bot):
+#         # Отправляем сообщение с кнопками "Перейти на канал" и "Я подписался"
+#         message = await callback_query.message.answer(
+#             "VPN работает без рекламы. Чтобы начать пользоваться — подпишитесь на канал PingiVPN.",
+#             reply_markup=subscribe_keyboard()
+#         )
+#         # Сохраняем это сообщение как важное
+#         await store_important_message(callback_query.bot, chat_id, message.message_id, message, "subscription_check")
+#         return
+#
+#     # Если подписка подтверждена, отправляем файл
+#     await send_config_file(callback_query)
+#
+#     await callback_query.answer()

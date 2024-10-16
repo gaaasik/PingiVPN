@@ -1,12 +1,14 @@
 import asyncio
 import logging
 import os
+from datetime import datetime, timedelta
 from pathlib import Path
 import aiosqlite
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.types import InputFile, FSInputFile
 from dotenv import load_dotenv
-from bot.handlers.admin import send_admin_log
+from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.keyboards.inline import create_feedback_keyboard
 from bot.payments2.payments_handler_redis import run_listening_redis_for_duration, listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
@@ -43,28 +45,85 @@ async def on_startup():
 # Функция, которая выполняется каждые 10 секунд
 async def periodic_task(bot: Bot):
     # Ждем 10 секунд после старта бота
-    await asyncio.sleep(1)
+    await asyncio.sleep(10800)
     while True:
-        await send_admin_log(bot, "Пинг бота - прошел 1 час работы бота.")
-        #await check_db(bot) # обновляет базу данных : количество дней с нами, количетсво дней платной подписки
+        await send_admin_log(bot, "Пинг бота - прошел 3 час работы бота.")
 
 
-        # , статус подписки, если закончилась подписка то меняется has_paid
 
         # Пример асинхронного вызова
         # await notify_users_with_free_status(bot)
-        await asyncio.sleep(3600)
+        await asyncio.sleep(10800)
 
+async def send_backup_db_to_admin(bot: Bot):
+    # Проверка, существует ли файл базы данных
+    if not os.path.exists(database_path_local):
+        print(f"Ошибка: Файл базы данных не найден по пути {database_path_local}")
+        return
 
+    # Формируем текст сообщения с текущей датой
+    from datetime import datetime
+    current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    caption = f"Резервная копия базы данных за {current_date}"
+
+    try:
+        # Открываем файл базы данных
+        backup_file = FSInputFile(database_path_local)
+
+        # Отправляем файл каждому администратору из списка
+        for admin_chat_id in ADMIN_CHAT_IDS:
+            print(f"Отправка резервной копии в чат {admin_chat_id}.")
+            await bot.send_document(chat_id=admin_chat_id, document=backup_file, caption=caption)
+
+        print("Резервная копия успешно отправлена.")
+    except Exception as e:
+        print(f"Ошибка при отправке резервной копии: {e}")
+
+async def periodic_backup_task(bot: Bot):
+    while True:
+        # Рассчитываем количество секунд до 3 часов ночи
+        now = datetime.now()
+        next_backup_time = now.replace(hour=4, minute=26, second=0, microsecond=0)
+        if next_backup_time < now:
+            next_backup_time = next_backup_time.replace(day=now.day + 1)
+
+        time_until_backup = (next_backup_time - now).total_seconds()
+
+        # Ожидаем до времени 3:00 ночи
+        await asyncio.sleep(time_until_backup)
+
+        # Отправляем резервную копию
+        await send_backup_db_to_admin(bot)
+
+        # Ждем 24 часа (86400 секунд) до следующего выполнения
+        await asyncio.sleep(86400)
 async def periodic_task_24_hour(bot: Bot):
-    # Ждем 10 секунд после старта бота
+    # Ждем 1 секунду после старта бота (как у тебя)
     await asyncio.sleep(1)
 
     while True:
-        print("Сработала функция 24 часа")
+        # Текущее время
+        now = datetime.now()
+
+        # Время следующего 3:00 ночи
+        next_3am = datetime.combine(now.date(), datetime.min.time()) + timedelta(hours=3,minutes=31)
+
+        # Если сейчас уже после 3:00 ночи, то следующий запуск будет завтра в 3:00
+        if now > next_3am:
+            next_3am += timedelta(days=1)
+
+        # Рассчитываем, сколько времени осталось до следующего 3:00
+        time_to_sleep = (next_3am - now).total_seconds()
+
+        # Спим до следующего 3:00
+        print(f"Следующее выполнение в {next_3am}, ждем {time_to_sleep} секунд.")
+        await asyncio.sleep(time_to_sleep)
+
+        # Когда просыпаемся, выполняем задачу
+        print("Сработала функция в 3:00 ночи")
         try:
             # Сообщаем администратору о начале обновления
-            await send_admin_log(bot, "Пинг бота - прошел 24 часа работы бота. Началось обновление базы данных")
+            await send_admin_log(bot, "Пинг бота - началось обновление базы данных в 3:00.")
 
             # Выполнение проверки базы данных
             await check_db(bot)
@@ -77,9 +136,7 @@ async def periodic_task_24_hour(bot: Bot):
             logging.error(f"Ошибка при выполнении обновления базы данных: {e}")
             await send_admin_log(bot, f"Обновление базы данных завершилось с ошибкой: {e}")
 
-        finally:
-            # Ожидание 24 часа (86400 секунд) перед следующей проверкой
-            await asyncio.sleep(86400)
+        # Мы не ждем фиксированное количество времени, а снова пересчитываем время до следующего 3:00
 
 
 async def main():
@@ -119,6 +176,7 @@ async def main():
     asyncio.create_task(periodic_task(bot))
     asyncio.create_task(periodic_task_24_hour(bot))
     asyncio.create_task(listen_to_redis_queue(bot))  # 1 час
+    asyncio.create_task(periodic_backup_task(bot))
      # Промежуточное ПО для предотвращения спама
     dp.message.middleware(ThrottlingMiddleware(rate_limit=1))
 

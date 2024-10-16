@@ -83,7 +83,7 @@ async def init_db(database_path: str):
     await add_ip_columns(conn)
     await add_days_after_pay(conn)
     await add_columns_in_db(conn, "date_payment_subscription")
-
+    await add_columns_in_db(conn, "date_expire_free_trial")
     # Создание таблицы users с новыми полями
     await conn.execute('''
                CREATE TABLE IF NOT EXISTS users (
@@ -578,6 +578,8 @@ async def update_user_subscription_db(user_id: int):
     db_path = os.getenv('database_path_local')  # Путь к базе данных
     days_after_pay = 0
     try:
+        # Добавляем 30 дней к текущей дате
+        #date_expire_of_paid_subscription = datetime.now() + # тут ошибка datetime.timedelta(days=30)
         # Устанавливаем соединение с базой данных
         async with aiosqlite.connect(db_path) as conn:
             await conn.execute("""

@@ -7,7 +7,7 @@ from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 
 from bot.handlers.admin import send_admin_log
-from bot.handlers.cleanup import store_message, store_important_message
+from bot.handlers.cleanup import store_message, store_important_message, register_message_type
 from bot.keyboards.inline import device_choice_keyboard
 from bot.keyboards.reply import reply_keyboard
 from bot.utils.cache import cached_photo, send_cached_photo
@@ -28,7 +28,7 @@ async def cmd_start(message: types.Message):
     # Получаем ID чата и никнейм пользователя
     chat_id = message.chat.id
     username = message.from_user.username or None  # Используем None, если username отсутствует
-    print(REGISTERED_USERS_DIR)
+
     # Ищем директорию, которая содержит chat_id в названии
     matching_dirs = [d for d in os.listdir(REGISTERED_USERS_DIR) if str(chat_id) in d]
 
@@ -60,8 +60,8 @@ async def cmd_start(message: types.Message):
     await send_cached_photo(message)
 
     sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard())
-    await store_important_message(message.chat.id, sent_message.message_id, sent_message)
-
+    await store_important_message(message.bot, message.chat.id, sent_message.message_id, sent_message,"start")
+    await register_message_type(message.chat.id,sent_message.message_id,"start",message.bot)
     # Получаем данные пользователя из базы данных (включая устройство)
     user = await get_user_by_telegram_id(message.from_user.id)
     # Уведомляем администратора о новом пользователе
