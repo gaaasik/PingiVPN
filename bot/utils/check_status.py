@@ -128,7 +128,7 @@ async def check_everyday_subscription_on_channel(chat_id: int, username: str, bo
             logging.error(f"Ошибка PARTICIPANT_ID_INVALID для chat_id {chat_id}: пользователь не найден в канале.")
             try:
                 warning_message = (
-                    "Мы не можем проверить вашу подписку на канал. Пожалуйста, убедитесь, что вы подписаны."
+                    f"Мы не можем проверить вашу подписку на канал. \n Пожалуйста, убедитесь, что вы подписаны."
                 )
                 await bot.send_message(chat_id, warning_message, reply_markup=subscribe_keyboard())
             except Exception as send_error:
@@ -202,7 +202,8 @@ async def update_subscription_status(chat_id, days_since_registration, db, bot):
                 await check_count_days_new_user(chat_id, days_since_registration, is_notification,db, bot,)
             # Если статус "waiting_pending"
             elif current_status == "waiting_pending":
-                await notification_after_expire_free_trial(chat_id, bot, db)
+                txt="закоментил код надо раскоментить "
+                #await notification_after_expire_free_trial(chat_id, bot, db)
             # Если статус "blocked"
             elif current_status == "blocked":
                 logging.info(f"Пользователь {chat_id} уже заблокирован.")
@@ -259,7 +260,8 @@ async def check_count_days_new_user(chat_id, days_since_registration, is_notific
             ''', (datetime.now().strftime("%Y-%m-%d"), chat_id))
             await db.commit()
             # Уведомляем пользователя о необходимости оплаты
-            await notification_after_expire_free_trial(chat_id, bot, db)
+            #раскоменетить
+            #await notification_after_expire_free_trial(chat_id, bot, db)
         else:
             logging.info(f"Пользователь {chat_id} ещё на пробном периоде: {days_since_registration} дней.")
     except Exception as e:
@@ -290,9 +292,9 @@ async def notification_after_expire_free_trial(chat_id, bot, db):
         if is_notification < 3:
             try:
                 # Попытка отправить уведомление
-                await bot.send_message(chat_id, "Ваш пробный период истек. Пожалуйста, оплатите подписку.",reply_markup=create_payment_button(chat_id))
+                #await bot.send_message(chat_id, "Ваш пробный период истек. Пожалуйста, оплатите подписку.",reply_markup=create_payment_button(chat_id))
                 logging.info(f"Уведомление отправлено пользователю {chat_id}.")
-                await send_admin_log(bot, f"Уведомление о истечении срока отправлено пользователю {chat_id}.")
+                await send_admin_log(bot, f"Уведомление о истечении срока должно отправиься но я закоментил код отправлено пользователю {chat_id}.")
 
             except Exception as e:
                 logging.error(f"Ошибка при уведомлении пользователя {chat_id}: {e}")

@@ -31,65 +31,69 @@ redis_client = redis.Redis(host='217.25.91.109', port=6379, db=0)
 router = Router()
 
 
-#нажатие на кнопку оплатить 199 рублей - отправялет сообщение с ссылкой на оплату
-@router.callback_query(lambda c: c.data == 'payment_199')
-async def process_callback_query(callback_query: types.CallbackQuery):
-    chat_id = callback_query.message.chat.id
-    user_id = callback_query.message.from_user.id
-    bot = callback_query.message.bot
-    await delete_unimportant_messages(chat_id, bot)
-    subscription_status = await get_user_subscription_status(chat_id)
-    print(subscription_status)
-    # if chat_id in ADMIN_CHAT_IDS or chat_id==1388513042:
-    if subscription_status == "waiting_pending" or subscription_status == "new_user":
+# #нажатие на кнопку оплатить 199 рублей - отправялет сообщение с ссылкой на оплату
+# @router.callback_query(lambda c: c.data == 'payment_199')
+# async def process_callback_query(callback_query: types.CallbackQuery):
+#     chat_id = callback_query.message.chat.id
+#     user_id = callback_query.message.from_user.id
+#     bot = callback_query.message.bot
+#     await delete_unimportant_messages(chat_id, bot)
+#     subscription_status = await get_user_subscription_status(chat_id)
+#     print(subscription_status)
+#     # if chat_id in ADMIN_CHAT_IDS or chat_id==1388513042:
+#     if subscription_status == "waiting_pending" or subscription_status == "new_user":
+#
+#         # Создаем платёж и получаем ссылку
+#         one_time_id, one_time_link = create_one_time_payment(chat_id,user_name, user_email)
+#
+#         # Текст сообщения
+#         text_payment = (
+#             "Вы подключаете подписку на наш сервис с помощью\n"
+#             "платёжной системы Юkassa\n\n"
+#             "Стоимость подписки на 1 месяц: 199р 👇👇👇\n"
+#         )
+#
+#         # Создаем клавиатуру с кнопкой
+#         keyboard = InlineKeyboardMarkup(
+#             inline_keyboard=[
+#                 [InlineKeyboardButton(text="Оплатить 199р", url=one_time_link)]
+#
+#             ]
+#         )
+#         # Отправляем сообщение с текстом и клавиатурой
+#         sent_message = await bot.send_message(
+#             chat_id=chat_id,
+#             text=text_payment,
+#             reply_markup=keyboard
+#         )
+#         await register_message_type(chat_id, sent_message.message_id, "msg_with_pay_url", bot)
+#         print("text = ", sent_message.text)
+#     elif subscription_status == "active":
+#         # Отправляем сообщение с текстом и клавиатурой
+#         text_msg = "Ваша подписка активна на месяц"
+#         sent_message = await bot.send_message(
+#             chat_id=chat_id,
+#             text=text_msg,
+#         )
+#         await store_message(chat_id, sent_message.message_id, text_msg, 'bot')
+#
+#     # else:
+#     #     # Отправляем сообщение с текстом и клавиатурой
+#     #     await bot.send_message(
+#     #         chat_id=chat_id,
+#     #         text="Оплата скоро будет доступна"  #,
+#     #         #reply_markup=keyboard
+#     #     )
+#
+#     username = callback_query.message.chat.username
+#     await send_admin_log(bot,
+#                          message=f"@{username}  chat_id = {chat_id}  - нажал кнопку оплатить ID чата: {chat_id})")
+#     # Подтверждаем callback_query, чтобы избежать зависания
+#     await callback_query.answer()
+#
 
-        # Создаем платёж и получаем ссылку
-        one_time_id, one_time_link, one_time_payment_method_id = create_one_time_payment(chat_id)
 
-        # Текст сообщения
-        text_payment = (
-            "Вы подключаете подписку на наш сервис с помощью\n"
-            "платёжной системы Юkassa\n\n"
-            "Стоимость подписки на 1 месяц: 199р 👇👇👇\n"
-        )
 
-        # Создаем клавиатуру с кнопкой
-        keyboard = InlineKeyboardMarkup(
-            inline_keyboard=[
-                [InlineKeyboardButton(text="Оплатить 199р", url=one_time_link)]
-
-            ]
-        )
-        # Отправляем сообщение с текстом и клавиатурой
-        sent_message = await bot.send_message(
-            chat_id=chat_id,
-            text=text_payment,
-            reply_markup=keyboard
-        )
-        await register_message_type(chat_id, sent_message.message_id, "msg_with_pay_url", bot)
-        print("text = ", sent_message.text)
-    elif subscription_status == "active":
-        # Отправляем сообщение с текстом и клавиатурой
-        text_msg = "Ваша подписка активна на месяц"
-        sent_message = await bot.send_message(
-            chat_id=chat_id,
-            text=text_msg,
-        )
-        await store_message(chat_id, sent_message.message_id, text_msg, 'bot')
-
-    # else:
-    #     # Отправляем сообщение с текстом и клавиатурой
-    #     await bot.send_message(
-    #         chat_id=chat_id,
-    #         text="Оплата скоро будет доступна"  #,
-    #         #reply_markup=keyboard
-    #     )
-
-    username = callback_query.message.chat.username
-    await send_admin_log(bot,
-                         message=f"@{username}  chat_id = {chat_id}  - нажал кнопку оплатить ID чата: {chat_id})")
-    # Подтверждаем callback_query, чтобы избежать зависания
-    await callback_query.answer()
 
 
 @router.callback_query(lambda c: c.data == 'delete_user')
@@ -127,16 +131,43 @@ async def run_listening_redis_for_duration(bot: Bot):
         await send_admin_log(bot, "Warning - очредь редис заверешиоа работу")
 
 
-# Функция для создания разового платежа
-def create_one_time_payment(user_id):
+def create_one_time_payment(user_id, user_name, user_email):
     payment = Payment.create({
-        "amount": {"value": "199.00", "currency": "RUB"},
-        "confirmation": {"type": "redirect", "return_url": WEBHOOK_URL},
-        "capture": True,
+        "amount": {
+            "value": "199.00",
+            "currency": "RUB"
+        },
+        "confirmation": {
+            "type": "redirect",
+            "return_url": "https://t.me/PingiVPN_bot"  # это URL, куда пользователь будет перенаправлен после оплаты
+        },
+        "capture": True,  # автоматически подтверждаем оплату
         "description": "Подписка на Telegram-бот",
-        "metadata": {"user_id": user_id}
+        "metadata": {
+            "user_id": user_id,
+            "user_name": user_name  # метаданные, для идентификации пользователя
+        },
+        "receipt": {
+            "customer": {
+                "email": user_email  # Здесь будет email клиента
+            },
+            "items": [
+                {
+                    "description": "Подписка на Telegram-бот",  # Описание услуги или товара
+                    "quantity": "1.00",  # Количество единиц товара или услуги
+                    "amount": {
+                        "value": "199.00",  # Цена товара или услуги
+                        "currency": "RUB"
+                    },
+                    "vat_code": "4",  # Код НДС (1 = 18%, 2 = 10%, 3 = 0%, 4 = без НДС и т.д.)
+                    "payment_mode": "full_prepayment",  # Тип оплаты (предоплата)
+                    "payment_subject": "service"  # Предмет оплаты (товар или услуга)
+                }
+            ]
+        }
     })
-    return payment.id, payment.confirmation.confirmation_url, '0'
+
+    return payment.id, payment.confirmation.confirmation_url
 
 
 async def listen_to_redis_queue(bot: Bot):

@@ -47,7 +47,7 @@ async def periodic_task(bot: Bot):
     # Ждем 10 секунд после старта бота
     await asyncio.sleep(10800)
     while True:
-        await send_admin_log(bot, "Пинг бота - прошел 3 час работы бота.")
+        await send_admin_log(bot, "Пинг бота - прошло 3 час работы бота.")
 
 
 

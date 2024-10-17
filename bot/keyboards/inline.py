@@ -73,6 +73,7 @@ def config_or_qr_keyboard():
     ]
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
+#def keyborad_get_email(){}
 
 def create_payment_button(chat_id):
     # Создаем инлайн-кнопку с текстом "Оплатить 199 рублей" и ссылкой на оплату
