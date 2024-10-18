@@ -84,6 +84,8 @@ async def init_db(database_path: str):
     await add_days_after_pay(conn)
     await add_columns_in_db(conn, "date_payment_subscription")
     await add_columns_in_db(conn, "date_expire_free_trial")
+    await add_columns_in_db(conn, "email")
+
     # Создание таблицы users с новыми полями
     await conn.execute('''
                CREATE TABLE IF NOT EXISTS users (
@@ -703,3 +705,24 @@ async def get_days_since_registration_db(chat_id: int) -> int:
 
 # # Сохраняем изменения в базе данных
 # await db.commit()
+
+# Функция сохранения email в базу данных
+async def save_user_email_to_db(user_id: int, email: str):
+    """
+    Функция для сохранения email пользователя в базу данных.
+    :param user_id: ID пользователя
+    :param email: email пользователя
+    """
+    query = """
+    UPDATE users 
+    SET email = ? 
+    WHERE chat_id = ?
+    """
+
+    try:
+        async with aiosqlite.connect(database_path_local) as db:
+            await db.execute(query, (email, user_id))
+            await db.commit()  # Подтверждаем изменения в базе данных
+            print(f"Email {email} для пользователя {user_id} успешно сохранён.")
+    except Exception as e:
+        print(f"Ошибка при сохранении email для пользователя {user_id}: {e}")
