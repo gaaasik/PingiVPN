@@ -4,6 +4,8 @@ import logging
 import os
 
 import redis
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from dotenv import load_dotenv
 from yookassa import Configuration, Payment
@@ -15,7 +17,8 @@ from bot.payments2.if_user_sucsess_pay import handle_post_payment_actions
 from bot.payments2.payments_db import reset_user_data_db
 from flask_app.all_utils_flask_db import logger
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
-from bot.utils.db import get_user_subscription_status, update_payment_status, update_user_subscription_db
+from bot.utils.db import get_user_subscription_status, update_payment_status, update_user_subscription_db, \
+    save_user_email_to_db
 
 load_dotenv()
 WEBHOOK_URL = os.getenv('WEBHOOK_URL')
@@ -30,6 +33,9 @@ REDIS_QUEUE = 'payment_notifications'
 redis_client = redis.Redis(host='217.25.91.109', port=6379, db=0)
 router = Router()
 
+# Определение машины состояний для ввода email
+class PaymentForm(StatesGroup):
+    awaiting_email = State()  # Состояние для ввода email
 
 # #нажатие на кнопку оплатить 199 рублей - отправялет сообщение с ссылкой на оплату
 # @router.callback_query(lambda c: c.data == 'payment_199')
@@ -93,7 +99,117 @@ router = Router()
 #
 
 
+# 1. Обработчик нажатия на кнопку "Оплатить 199 рублей"
+@router.callback_query(lambda c: c.data == 'payment_199')
+async def handle_payment_request(callback_query: types.CallbackQuery, state: FSMContext):
+    chat_id = callback_query.message.chat.id
+    user_id = callback_query.message.from_user.id
+    bot = callback_query.message.bot
 
+    # Удаляем предыдущие сообщения
+    await delete_unimportant_messages(chat_id, bot)
+
+    # Проверяем статус подписки
+    subscription_status = await get_user_subscription_status(chat_id)
+
+    if subscription_status in ["waiting_pending", "new_user", "blocked"]:
+        # Запрашиваем email
+        await request_user_email(chat_id, bot)
+        await state.set_state(PaymentForm.awaiting_email)  # Устанавливаем состояние ожидания email
+    elif subscription_status == "active":
+        await bot.send_message(chat_id, text="Ваша подписка активна на месяц")
+    else:
+        await bot.send_message(chat_id, text="Оплата скоро будет доступна")
+
+    # Логируем нажатие
+    username = callback_query.message.chat.username
+    await send_admin_log(bot, message=f"@{username} нажал кнопку 'Оплатить', chat_id = {chat_id}")
+
+    # Подтверждаем callback_query
+    await callback_query.answer()
+
+
+# 2. Функция запроса email
+async def request_user_email(chat_id: int, bot: Bot):
+    text = "Пожалуйста, введите ваш email для отправки чека:"
+
+    # Добавляем кнопку "Отменить"
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="Отменить платеж", callback_data="cancel_payment")]
+        ]
+    )
+
+    await bot.send_message(chat_id, text=text, reply_markup=keyboard)
+
+
+# 3. Валидация email
+@router.message(PaymentForm.awaiting_email)
+async def handle_email_input(message: types.Message, state: FSMContext):
+    email = message.text
+    user_id = message.from_user.id
+    user_name = message.from_user.username
+    chat_id = message.chat.id
+    bot = message.bot
+    await store_message(chat_id,message.message_id,message.text,"user")
+    # Валидация email
+    if validate_email(email):
+        # Сохраняем email в базе данных
+        await save_user_email_to_db(chat_id, email)
+        print(email)
+        # Формируем ссылку на оплату
+        one_time_id, one_time_link = await create_one_time_payment(chat_id,user_name, email)
+
+        # Отправляем ссылку на оплату
+        await send_payment_link(chat_id, one_time_link, bot)
+
+        # Сбрасываем состояние
+        await state.clear()
+    else:
+        # Сообщаем о неверном формате и просим ввести повторно
+        send_message = await bot.send_message(chat_id, "Неверный формат email. Пожалуйста, введите корректный email.")
+        await store_message(send_message.chat.id, send_message.message_id,send_message.text,"bot")
+
+
+# 4. Функция отмены платежа
+@router.callback_query(lambda c: c.data == 'cancel_payment')
+async def handle_cancel_payment(callback_query: types.CallbackQuery, state: FSMContext):
+    chat_id = callback_query.message.chat.id
+    bot = callback_query.message.bot
+
+    await state.clear()  # Завершаем любое текущее состояние
+
+    await bot.send_message(chat_id, "Платеж был отменен.")
+    await callback_query.answer()
+
+
+# Вспомогательные функции
+
+# Функция валидации email
+def validate_email(email: str) -> bool:
+    import re
+    # Пример простой регулярки для проверки email
+    pattern = r"^[\w\.-]+@[\w\.-]+\.\w{2,4}$"
+    return bool(re.match(pattern, email))
+
+
+
+
+
+# Функция отправки ссылки на оплату
+async def send_payment_link(chat_id: int, payment_link: str, bot: Bot):
+    text_payment = (
+        "Вы подключаете подписку на наш сервис с помощью\n"
+        "платёжной системы Юkassa\n\n"
+        "Стоимость подписки на 1 месяц: 199р 👇👇👇\n"
+    )
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="Оплатить 199р", url=payment_link)]
+        ]
+    )
+    sent_message = await bot.send_message(chat_id=chat_id, text=text_payment, reply_markup=keyboard)
+    # Логика для сохранения отправленного сообщения, если необходимо
 
 
 @router.callback_query(lambda c: c.data == 'delete_user')
@@ -131,7 +247,8 @@ async def run_listening_redis_for_duration(bot: Bot):
         await send_admin_log(bot, "Warning - очредь редис заверешиоа работу")
 
 
-def create_one_time_payment(user_id, user_name, user_email):
+async def create_one_time_payment(user_id, user_name, user_email):
+
     payment = Payment.create({
         "amount": {
             "value": "199.00",
@@ -142,7 +259,7 @@ def create_one_time_payment(user_id, user_name, user_email):
             "return_url": "https://t.me/PingiVPN_bot"  # это URL, куда пользователь будет перенаправлен после оплаты
         },
         "capture": True,  # автоматически подтверждаем оплату
-        "description": "Подписка на Telegram-бот",
+        "description": "Подписка на канал",
         "metadata": {
             "user_id": user_id,
             "user_name": user_name  # метаданные, для идентификации пользователя
@@ -153,14 +270,14 @@ def create_one_time_payment(user_id, user_name, user_email):
             },
             "items": [
                 {
-                    "description": "Подписка на Telegram-бот",  # Описание услуги или товара
+                    "description": "Подписка на канал",  # Описание услуги или товара
                     "quantity": "1.00",  # Количество единиц товара или услуги
                     "amount": {
                         "value": "199.00",  # Цена товара или услуги
                         "currency": "RUB"
                     },
-                    "vat_code": "4",  # Код НДС (1 = 18%, 2 = 10%, 3 = 0%, 4 = без НДС и т.д.)
-                    "payment_mode": "full_prepayment",  # Тип оплаты (предоплата)
+                    "vat_code": "1",
+                    "payment_mode": "full_payment",  # Тип оплаты (полный расчет)
                     "payment_subject": "service"  # Предмет оплаты (товар или услуга)
                 }
             ]
