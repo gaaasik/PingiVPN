@@ -7,7 +7,6 @@ import datetime
 from datetime import datetime
 
 import pytz
-from aiogram import Bot
 from dotenv import load_dotenv
 
 # Загрузка переменных окружения из файла .env
@@ -146,48 +145,6 @@ async def init_db(database_path: str):
 
     await conn.commit()
     return conn
-
-
-async def add_user(chat_id: int, user_name: str, referrer_id: int = None):
-    registration_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Сохраняем текущее время в формате строки
-
-    async with aiosqlite.connect(database_path_local) as conn:
-        try:
-            # Сначала проверяем, существует ли пользователь с таким chat_id
-            cursor = await conn.execute("SELECT chat_id FROM users WHERE chat_id = ?", (chat_id,))
-            existing_user = await cursor.fetchone()
-
-            if existing_user:
-                print(f"Пользователь с chat_id {chat_id} уже существует.")
-                return
-
-            # Если пользователя нет, добавляем его
-            if referrer_id:
-                await conn.execute(
-                    '''
-                    INSERT INTO users (chat_id, user_name, registration_date, referrer_id)
-                    VALUES (?, ?, ?, ?)
-                    ''',
-                    (chat_id, user_name, registration_date, referrer_id)
-                )
-            else:
-                await conn.execute(
-                    '''
-                    INSERT INTO users (chat_id, user_name, registration_date)
-                    VALUES (?, ?, ?)
-                    ''',
-                    (chat_id, user_name, registration_date)
-                )
-
-            # Коммит транзакции
-            await conn.commit()
-            print(f"Пользователь с chat_id {chat_id} успешно добавлен.")
-
-        except Exception as e:
-            print(f"Ошибка при добавлении пользователя с chat_id {chat_id}: {e}")
-
-        finally:
-            await conn.close()  # Закрываем соединение после завершения работы с БД
 
 
 async def get_user_by_telegram_id(chat_id: int):
@@ -405,26 +362,7 @@ async def who_have_expired_trial(conn):
     return users_with_expired_trial
 
 
-# Функция для получения статуса пользователя
-async def get_user_registration_date_and_username(chat_id):
-    async with aiosqlite.connect(database_path_local) as db:
-        # Проверяем тип данных chat_id и конвертируем его при необходимости
-        if isinstance(chat_id, str) and chat_id.isdigit():
-            chat_id = int(chat_id)  # Приводим к числу, если строка содержит цифры
-        elif not isinstance(chat_id, int):
-            raise ValueError(f"Неподдерживаемый тип данных для chat_id: {type(chat_id)}")
 
-        # Выполняем запрос к базе данных
-        cursor = await db.execute(
-            "SELECT registration_date, days_since_registration, user_name, subscription_status FROM users WHERE chat_id = ?",
-            (chat_id,))
-        result = await cursor.fetchone()
-
-        # Проверяем, найден ли пользователь
-        if result:
-            return result  # Возвращаем только subscription_status
-        else:
-            return None  # Возвращаем None, если пользователь не найден
 
 
 async def add_feedback_status_column(conn):
@@ -439,6 +377,10 @@ async def add_feedback_status_column(conn):
         print("Колонка 'feedback_status' добавлена в таблицу users.")
     else:
         print("Колонка 'feedback_status' уже существует.")
+
+
+
+
 
 
 # Функция для обновления статуса обратной связи в базе данных

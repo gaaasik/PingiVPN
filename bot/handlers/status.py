@@ -4,7 +4,10 @@ from aiogram.filters import Command
 from bot.handlers.cleanup import delete_unimportant_messages, store_message, register_message_type, \
     delete_message_with_type
 from bot.keyboards.inline import create_payment_button
-from bot.database.db import get_user_registration_date_and_username, get_days_since_registration_db
+from bot.database.db import get_days_since_registration_db
+from bot.database.users_db import get_user_registration_date_and_username_db
+from models.user import User
+
 
 #from bot.utils.file_sender import count_files_in_directory
 
@@ -139,23 +142,50 @@ async def generate_status_message(chat_id: int) -> tuple:
     - status_message: сгенерированный текст сообщения.
     - keyboard: клавиатура с кнопкой оплаты, если применимо.
     """
-    # Получаем данные пользователя из базы данных.
-    user_data = await get_user_registration_date_and_username(chat_id)
+
+
+
+
+
+    us = User(chat_id)
+
+    print("count_key = ", us.count_key)
+    new_server = {
+        "name_server": "Сервер test",
+        "country_server": "test",
+        "server_1_ip": "test",
+        "user_ip": "test",
+        "name_conf": "test",
+        "enable": True,
+        "vpn_usage_start_date": None,  # TIMESTAMP placeholder
+        "traffic_up": 0,
+        "traffic_down": 0,
+        "has_paid_key": 1,
+        "status_key": "new_user",  # new_user, key_free, waiting_pending, blocked, active
+        "is_notification": False,
+        "days_after_pay": "30",  # TIMESTAMP placeholder
+        "date_payment_key": "2024-01-01",
+        "date_expire_of_paid_key": "2024-12-31",
+        "date_expire_free_trial": "2024-02-01"
+    }
+    await us.add_server(new_server)
+
+
+
+    status_key = await us.servers[0].get('status_key')
 
     str_count_days = "0"
     # Проверяем, что данные пользователя успешно получены и содержат 4 элемента.
-    if user_data and len(user_data) == 4:
-        # Распаковываем данные пользователя.
-        registration_date, days_since_registration, user_name, subscription_status = user_data
+    if us.count_key >= 0:
+
 
         # Определяем текст статуса подписки и создаем клавиатуру в зависимости от статуса.
-        if subscription_status == "waiting_pending":
+        if status_key == "waiting_pending":
             str_count_days = "подписка закончена"
             status_sub_txt = "Ожидание оплаты подписки"
             keyboard = create_payment_button(chat_id)
-        elif subscription_status == "new_user":
-            #str_count_days = count_day_free_user_db(chat_id)
-            days = await get_days_since_registration_db(chat_id)
+        elif status_key == "new_user":
+            days = us.days_since_registration
 
             if 14 - days < 0:
                 str_count_days = 0
@@ -163,7 +193,7 @@ async def generate_status_message(chat_id: int) -> tuple:
                 str_count_days = 14 - days
             status_sub_txt = "Пробный период"
             keyboard = create_payment_button(chat_id)
-        elif subscription_status == "active":
+        elif status_key == "active":
             str_count_days = "активна на месяц"
             status_sub_txt = "Подписка активна на месяц"
 
@@ -171,14 +201,14 @@ async def generate_status_message(chat_id: int) -> tuple:
 
         else:
             # Для любого другого статуса используем его напрямую.
-            status_sub_txt = subscription_status
+            status_sub_txt = status_key
             keyboard = create_payment_button(chat_id)
 
         # Формируем текст сообщения о статусе пользователя.
         status_message = (
-            f"🕒 Вы с нами уже {days_since_registration} дней! 🚀 Какой прогресс! 😎\n"
+            f"🕒 Вы с нами уже {us.days_since_registration} дней! 🚀 Какой прогресс! 😎\n"
             f"Действие тарифа: {str_count_days}\n"
-            f"Имя пользователя: {user_name}\n"
+            f"Имя пользователя: {us.user_name}\n"
             f"Статус подписки: *{status_sub_txt}*"
         )
     else:

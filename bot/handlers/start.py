@@ -9,7 +9,8 @@ from bot.handlers.admin import send_admin_log
 from bot.handlers.cleanup import store_message, store_important_message, register_message_type
 from bot.keyboards.inline import device_choice_keyboard
 from bot.utils.cache import send_cached_photo
-from bot.database.db import add_user, get_user_by_telegram_id, add_referral, get_user_count
+from bot.database.db import get_user_by_telegram_id, add_referral, get_user_count
+from bot.database.users_db import add_user_db
 
 router = Router()
 # Загрузка переменных из файла .env
@@ -76,7 +77,7 @@ async def cmd_start(message: types.Message):
         )
     else:
         # Если пользователя нет, добавляем его в базу данных
-        await add_user(chat_id=chat_id, user_name=username)
+        await add_user_db(chat_id=chat_id, user_name=username)
 
         # Получаем количество пользователей для уведомления администратора
         count_users = await get_user_count()

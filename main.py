@@ -9,14 +9,15 @@ from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
-from bot.database.db import add_user#, check_24_hour_db
+from bot.database.users_db import add_user_db
 from bot.handlers import start, status, support, share, start_to_connect, instructions, \
     device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request, feedback
 from bot.payments2 import payments_handler_redis
 from bot.utils.cache import cache_media
 from bot.utils.check_status import check_db#, notify_users_with_free_status
 from bot.utils.logger import setup_logger
-from bot.database.db import init_db,database_path_local
+from bot.database.db import database_path_local  #,  init_db
+from bot.database.init_db import init_db
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from flask_app.all_utils_flask_db import initialize_db
@@ -158,6 +159,7 @@ async def main():
     setup_logger("logs/bot.log")
 
     # Указываем путь к базе данных
+    #db_path = Path(os.getenv('database_path_local'))
     db_path = Path(os.getenv('database_path_local'))
     if not db_path.exists():
         print("Файл базы данных не найден!")
@@ -169,7 +171,7 @@ async def main():
 
     # Инициализация базы данных SQLite
     await init_db(db_path)
-    result = await add_user(111224422, "test_user")
+    result = await add_user_db(111224422, "test_user")
 
 
 
