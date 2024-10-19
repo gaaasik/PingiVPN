@@ -163,11 +163,16 @@ async def main():
         print("Файл базы данных не найден!")
         return
     print(f"Путь к базе данных: {db_path}")
-    # Инициализация бота и диспетчера
+
+
+
 
     # Инициализация базы данных SQLite
     await init_db(db_path)
     result = await add_user(111224422, "test_user")
+
+
+
     # Запускаем асинхронную задачу для периодической отправки сообщений админу
     asyncio.create_task(periodic_task(bot))
     asyncio.create_task(periodic_task_24_hour(bot))
