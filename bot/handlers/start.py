@@ -3,16 +3,13 @@ import os
 
 from aiogram import Router, types
 from aiogram.filters import Command
-from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 
 from bot.handlers.admin import send_admin_log
 from bot.handlers.cleanup import store_message, store_important_message, register_message_type
 from bot.keyboards.inline import device_choice_keyboard
-from bot.keyboards.reply import reply_keyboard
-from bot.utils.cache import cached_photo, send_cached_photo
-from bot.utils.db import add_user, drop_table, get_user_by_telegram_id, add_referral, get_user_count
-from models.user import User
+from bot.utils.cache import send_cached_photo
+from bot.database.db import add_user, get_user_by_telegram_id, add_referral, get_user_count
 
 router = Router()
 # Загрузка переменных из файла .env

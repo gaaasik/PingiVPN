@@ -42,7 +42,7 @@ async def check_db(bot: Bot):
 
                 # if status == "activ":
                 #     days_since_registration = calculate_days_since_registration(registration_date)
-                #     await update_user_days_in_db(chat_id, days_since_registration, db)
+                #     await update_user_days_in_db(chat_id, days_since_registration, database)
                 #
 
                 # Обновление статуса подписки
@@ -203,7 +203,7 @@ async def update_subscription_status(chat_id, days_since_registration, db, bot):
             # Если статус "waiting_pending"
             elif current_status == "waiting_pending":
                 txt="закоментил код надо раскоментить "
-                #await notification_after_expire_free_trial(chat_id, bot, db)
+                #await notification_after_expire_free_trial(chat_id, bot, database)
             # Если статус "blocked"
             elif current_status == "blocked":
                 logging.info(f"Пользователь {chat_id} уже заблокирован.")
@@ -261,7 +261,7 @@ async def check_count_days_new_user(chat_id, days_since_registration, is_notific
             await db.commit()
             # Уведомляем пользователя о необходимости оплаты
             #раскоменетить
-            #await notification_after_expire_free_trial(chat_id, bot, db)
+            #await notification_after_expire_free_trial(chat_id, bot, database)
         else:
             logging.info(f"Пользователь {chat_id} ещё на пробном периоде: {days_since_registration} дней.")
     except Exception as e:

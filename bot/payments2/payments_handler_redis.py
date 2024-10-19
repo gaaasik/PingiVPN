@@ -11,13 +11,13 @@ from dotenv import load_dotenv
 from yookassa import Configuration, Payment
 from aiogram import Router, types, Bot
 
-from bot.handlers.cleanup import register_message_type, delete_important_message, store_message, \
+from bot.handlers.cleanup import delete_important_message, store_message, \
     delete_unimportant_messages
 from bot.payments2.if_user_sucsess_pay import handle_post_payment_actions
 from bot.payments2.payments_db import reset_user_data_db
 from flask_app.all_utils_flask_db import logger
-from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
-from bot.utils.db import get_user_subscription_status, update_payment_status, update_user_subscription_db, \
+from bot.handlers.admin import send_admin_log
+from bot.database.db import get_user_subscription_status, update_payment_status, update_user_subscription_db, \
     save_user_email_to_db
 
 load_dotenv()
@@ -33,9 +33,11 @@ REDIS_QUEUE = 'payment_notifications'
 redis_client = redis.Redis(host='217.25.91.109', port=6379, db=0)
 router = Router()
 
+
 # Определение машины состояний для ввода email
 class PaymentForm(StatesGroup):
     awaiting_email = State()  # Состояние для ввода email
+
 
 # #нажатие на кнопку оплатить 199 рублей - отправялет сообщение с ссылкой на оплату
 # @router.callback_query(lambda c: c.data == 'payment_199')
@@ -151,14 +153,14 @@ async def handle_email_input(message: types.Message, state: FSMContext):
     user_name = message.from_user.username
     chat_id = message.chat.id
     bot = message.bot
-    await store_message(chat_id,message.message_id,message.text,"user")
+    await store_message(chat_id, message.message_id, message.text, "user")
     # Валидация email
     if validate_email(email):
         # Сохраняем email в базе данных
         await save_user_email_to_db(chat_id, email)
         print(email)
         # Формируем ссылку на оплату
-        one_time_id, one_time_link = await create_one_time_payment(chat_id,user_name, email)
+        one_time_id, one_time_link = await create_one_time_payment(chat_id, user_name, email)
 
         # Отправляем ссылку на оплату
         await send_payment_link(chat_id, one_time_link, bot)
@@ -168,7 +170,7 @@ async def handle_email_input(message: types.Message, state: FSMContext):
     else:
         # Сообщаем о неверном формате и просим ввести повторно
         send_message = await bot.send_message(chat_id, "Неверный формат email. Пожалуйста, введите корректный email.")
-        await store_message(send_message.chat.id, send_message.message_id,send_message.text,"bot")
+        await store_message(send_message.chat.id, send_message.message_id, send_message.text, "bot")
 
 
 # 4. Функция отмены платежа
@@ -191,9 +193,6 @@ def validate_email(email: str) -> bool:
     # Пример простой регулярки для проверки email
     pattern = r"^[\w\.-]+@[\w\.-]+\.\w{2,4}$"
     return bool(re.match(pattern, email))
-
-
-
 
 
 # Функция отправки ссылки на оплату
@@ -248,15 +247,14 @@ async def run_listening_redis_for_duration(bot: Bot):
 
 
 async def create_one_time_payment(user_id, user_name, user_email):
-
     payment = Payment.create({
         "amount": {
             "value": "199.00",
             "currency": "RUB"
         },
         "confirmation": {
-            "type": "redirect",
-            "return_url": "https://t.me/PingiVPN_bot"  # это URL, куда пользователь будет перенаправлен после оплаты
+            "type": "redirect"
+           # "return_url": "https://t.me/PingiVPN_bot"  # это URL, куда пользователь будет перенаправлен после оплаты
         },
         "capture": True,  # автоматически подтверждаем оплату
         "description": "Подписка на канал",
@@ -268,6 +266,7 @@ async def create_one_time_payment(user_id, user_name, user_email):
             "customer": {
                 "email": user_email  # Здесь будет email клиента
             },
+            "tax_system_code": 2, # УСН доходы
             "items": [
                 {
                     "description": "Подписка на канал",  # Описание услуги или товара

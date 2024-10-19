@@ -1,14 +1,11 @@
 from aiogram import Router, types
 from aiogram.filters import Command
-from aiogram.types import InlineKeyboardMarkup
 
-from bot.handlers.cleanup import delete_unimportant_messages, store_message, messages_for_db, register_message_type, \
+from bot.handlers.cleanup import delete_unimportant_messages, store_message, register_message_type, \
     delete_message_with_type
 from bot.keyboards.inline import create_payment_button
-from bot.utils.db import get_user_registration_date_and_username, get_user_subscription_status, \
-    get_days_since_registration_db
-from datetime import datetime
-from bot.handlers.admin import ADMIN_CHAT_IDS, send_admin_log
+from bot.database.db import get_user_registration_date_and_username, get_days_since_registration_db
+
 #from bot.utils.file_sender import count_files_in_directory
 
 router = Router()

@@ -1,6 +1,6 @@
 from aiogram import Bot
 from aiogram.exceptions import TelegramForbiddenError
-from bot.utils.db import get_user_registration_date_and_username
+from bot.database.db import get_user_registration_date_and_username
 
 
 async def send_messages_to_chats(bot: Bot, chat_ids, message_text, reply_markup):

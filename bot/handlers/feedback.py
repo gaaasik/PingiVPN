@@ -1,11 +1,7 @@
-import logging
+from aiogram import Router, types
 
-from aiogram import Router, types, Bot
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from aiogram.utils.keyboard import InlineKeyboardBuilder
-
-from bot.handlers.admin import ADMIN_CHAT_IDS, send_admin_log
-from bot.utils.db import set_feedback_status  # Ваша функция для обновления статуса
+from bot.handlers.admin import send_admin_log
+from bot.database.db import set_feedback_status  # Ваша функция для обновления статуса
 #from main import send_admin_log  # Ваша функция для отправки сообщения админу
 
 router = Router()

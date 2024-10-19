@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from bot.utils.db import update_user_subscription_status, get_last_subscription_check, update_last_subscription_check
+from bot.database.db import update_user_subscription_status, get_last_subscription_check, update_last_subscription_check
 
 
 # Проверка подписки через Telegram API getChatMember

@@ -3,24 +3,20 @@ import logging
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
-import aiosqlite
-from aiogram import Bot, Dispatcher
-from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.types import InputFile, FSInputFile
+from aiogram import Bot
+from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
-from bot.keyboards.inline import create_feedback_keyboard
-from bot.payments2.payments_handler_redis import run_listening_redis_for_duration, listen_to_redis_queue
+from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
-from bot.utils.add_ip_adress import update_user_ip_info
-from bot.utils.db import who_have_expired_trial, add_user#, check_24_hour_db
-from bot.handlers import start, status, support, admin, share, start_to_connect, instructions, \
+from bot.database.db import add_user#, check_24_hour_db
+from bot.handlers import start, status, support, share, start_to_connect, instructions, \
     device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request, feedback
 from bot.payments2 import payments_handler_redis
 from bot.utils.cache import cache_media
 from bot.utils.check_status import check_db#, notify_users_with_free_status
 from bot.utils.logger import setup_logger
-from bot.utils.db import init_db,database_path_local
+from bot.database.db import init_db,database_path_local
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from flask_app.all_utils_flask_db import initialize_db
