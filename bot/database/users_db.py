@@ -14,6 +14,7 @@ async def add_user_db(chat_id: int, user_name: str, referrer_id: int = None):
 
     async with aiosqlite.connect(database_path_local) as conn:
         try:
+            print(f"Зашли в TRY")
             # Сначала проверяем, существует ли пользователь с таким chat_id
             cursor = await conn.execute("SELECT chat_id FROM users WHERE chat_id = ?", (chat_id,))
             existing_user = await cursor.fetchone()
@@ -30,19 +31,20 @@ async def add_user_db(chat_id: int, user_name: str, referrer_id: int = None):
 
             # Если пользователя нет, добавляем его
             if referrer_id:
+                print(f"Начали добавлять")
                 await conn.execute(
                     '''
-                    INSERT INTO users (chat_id, user_name, registration_date, referrer_id)
-                    VALUES (?, ?, ?, ?)
+                    INSERT INTO users (chat_id, user_name, registration_date, referrer_id, device, is_subscribed_on_channel, days_since_registration, email)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                     ''',
-                    (chat_id, user_name, registration_date, referrer_id)
+                    (chat_id, user_name, registration_date, referrer_id, "", False, 0, "tol.semenoff@mail.ru")
                 )
                 await conn.execute(
                     '''
                     INSERT INTO users_key (chat_id, count_key)
-                    VALUES (?, ?, ?, ?)
+                    VALUES (?, ?)
                     ''',
-                    (chat_id, 0, text_defoult)
+                    (chat_id, 0)
                 )
 
 
@@ -50,15 +52,15 @@ async def add_user_db(chat_id: int, user_name: str, referrer_id: int = None):
             else:
                 await conn.execute(
                     '''
-                    INSERT INTO users (chat_id, user_name, registration_date)
-                    VALUES (?, ?, ?)
+                    INSERT INTO users (chat_id, user_name, registration_date, device, is_subscribed_on_channel, days_since_registration, email)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
                     ''',
-                    (chat_id, user_name, registration_date)
+                    (chat_id, user_name, registration_date, "", False, 0, "tol.semenoff@mail.ru")
                 )
                 await conn.execute(
                     '''
                     INSERT INTO users_key (chat_id, count_key)
-                    VALUES (?, ?, ?, ?)
+                    VALUES (?, ?)
                     ''',
                     (chat_id, 0)
                 )

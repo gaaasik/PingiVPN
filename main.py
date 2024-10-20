@@ -171,7 +171,7 @@ async def main():
 
     # Инициализация базы данных SQLite
     await init_db(db_path)
-    result = await add_user_db(111224422, "test_user")
+    #result = await add_user_db(111224422, "test_user")
 
 
 
