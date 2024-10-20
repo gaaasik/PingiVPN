@@ -141,29 +141,31 @@ async def generate_status_message(chat_id: int) -> tuple:
     - status_message: сгенерированный текст сообщения.
     - keyboard: клавиатура с кнопкой оплаты, если применимо.
     """
+    #################################################################################
     us = await User.create(chat_id)
-    print("count_key = ", us.count_key)
-    new_server = {
-        "name_server": "Server test",
-        "country_server": "test",
-        "server_1_ip": "test",
-        "user_ip": "test",
-        "name_conf": "test",
-        "enable": True,
-        "vpn_usage_start_date": None,  # TIMESTAMP placeholder
-        "traffic_up": 0,
-        "traffic_down": 0,
-        "has_paid_key": 1,
-        "status_key": "new_user",  # new_user, key_free, waiting_pending, blocked, active
-        "is_notification": False,
-        "days_after_pay": 30,  # TIMESTAMP placeholder
-        "date_payment_key": "2024-01-01",
-        "date_expire_of_paid_key": "2024-12-31",
-        "date_expire_free_trial": "2024-02-01"
-    }
-    await us.add_server(new_server)
+    # print("count_key = ", us.count_key)
+    # new_server = {
+    #     "name_server": "Server test",
+    #     "country_server": "test",
+    #     "server_1_ip": "test",
+    #     "user_ip": "test",
+    #     "name_conf": "test",
+    #     "enable": True,
+    #     "vpn_usage_start_date": None,  # TIMESTAMP placeholder
+    #     "traffic_up": 0,
+    #     "traffic_down": 0,
+    #     "has_paid_key": 1,
+    #     "status_key": "new_user",  # new_user, key_free, waiting_pending, blocked, active
+    #     "is_notification": False,
+    #     "days_after_pay": 30,  # TIMESTAMP placeholder
+    #     "date_payment_key": "2024-01-01",
+    #     "date_expire_of_paid_key": "2024-12-31",
+    #     "date_expire_free_trial": "2024-02-01"
+    # }
+    # await us.add_server(new_server)
 
 
+    #################################################################################
 
     await us.days_since_registration.update_meaning(13)
 
@@ -186,7 +188,7 @@ async def generate_status_message(chat_id: int) -> tuple:
             status_sub_txt = "Ожидание оплаты подписки"
             keyboard = create_payment_button(chat_id)
         elif status_key == "new_user":
-            days = us.days_since_registration
+            days = us.days_since_registration.get()
 
             if 14 - days < 0:
                 str_count_days = 0
@@ -207,9 +209,9 @@ async def generate_status_message(chat_id: int) -> tuple:
 
         # Формируем текст сообщения о статусе пользователя.
         status_message = (
-            f"🕒 Вы с нами уже {us.days_since_registration} дней! 🚀 Какой прогресс! 😎\n"
+            f"🕒 Вы с нами уже {us.days_since_registration.get()} дней! 🚀 Какой прогресс! 😎\n"
             f"Действие тарифа: {str_count_days}\n"
-            f"Имя пользователя: {us.user_name}\n"
+            f"Имя пользователя: {us.user_name.get()}\n"
             f"Статус подписки: *{status_sub_txt}*"
         )
     else:

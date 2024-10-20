@@ -24,7 +24,6 @@ class Field:
     def get(self):
         return self.value
 
-
 class User:
     def __init__(self, chat_id):
         self.chat_id = chat_id
@@ -37,11 +36,14 @@ class User:
         self.email = None
         self.servers = []  # Поле для хранения списка серверов (из users_key)
         self.count_key = 0  # Поле для хранения количества серверов
+        self.status_key = None  # Новое поле для хранения статуса ключа
 
-    async def create(cls, chat_id):
-        user = cls(chat_id)
-        await user.load_user_data()
-        return user
+    @classmethod
+    async def create(cls, chat_id: int):
+        self = cls(chat_id)
+        await self.load_user_data()  # Загружаем данные пользователя
+        await self.load_servers()  # Загружаем сервера и status_key
+        return self
 
     async def load_user_data(self):
         async with aiosqlite.connect(database_path_local) as db:
@@ -67,7 +69,7 @@ class User:
                     self.days_since_registration = Field('days_since_registration', self.days_since_registration, self)
 
     async def load_servers(self):
-        """Загрузка списка серверов для пользователя"""
+        """Загрузка списка серверов для пользователя и инициализация статуса ключа"""
         async with aiosqlite.connect(database_path_local) as db:
             query = """
             SELECT value_key, count_key FROM users_key WHERE chat_id = ?
@@ -78,7 +80,14 @@ class User:
                 if result:
                     value_key, self.count_key = result
                     try:
-                        self.servers = json.loads(value_key)
+                        servers_data = json.loads(value_key)
+                        self.servers = servers_data
+
+                        # Инициализация поля status_key
+                        if len(self.servers) > 0:
+                            self.status_key = self.servers[0].get('status_key', 'new_user')  # Инициализируем status_key
+                        else:
+                            self.status_key = 'new_user'
                     except json.JSONDecodeError:
                         print(f"Ошибка при парсинге JSON для пользователя с chat_id {self.chat_id}")
                 else:
@@ -86,7 +95,6 @@ class User:
 
     async def add_server(self, server_params: dict):
         """Добавление нового сервера в JSON формате"""
-        # Добавляем новый сервер в список servers
         self.servers.append(server_params)
         self.count_key += 1  # Увеличиваем количество серверов
 
@@ -98,15 +106,6 @@ class User:
         value_key_json = json.dumps(self.servers)
 
         async with aiosqlite.connect(database_path_local) as db:
-            query_check = """
-            SELECT COUNT(*) FROM users_key WHERE chat_id = ?
-            """
-            async with db.execute(query_check, (self.chat_id,)) as cursor:
-                result = await cursor.fetchone()
-                if result[0] == 0:
-                    print(f"В таблице users_key не найден chat_id: {self.chat_id}")
-                    return
-
             query_update = """
             UPDATE users_key 
             SET value_key = ?, count_key = ? 
