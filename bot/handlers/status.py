@@ -6,7 +6,7 @@ from bot.handlers.cleanup import delete_unimportant_messages, store_message, reg
 from bot.keyboards.inline import create_payment_button
 from bot.database.db import get_days_since_registration_db
 from bot.database.users_db import get_user_registration_date_and_username_db
-from models.user import User
+from models.User_cl import User
 
 #from bot.utils.file_sender import count_files_in_directory
 

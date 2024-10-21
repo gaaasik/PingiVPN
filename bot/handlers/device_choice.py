@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery
 
 from bot.handlers.cleanup import store_message, delete_unimportant_messages, store_important_message
 from bot.keyboards.inline import download_app_keyboard
-from models.user import User
+from models.User_cl import User
 
 router = Router()
 
