@@ -6,7 +6,7 @@ from bot.handlers.cleanup import delete_unimportant_messages, store_message, reg
 from bot.keyboards.inline import create_payment_button
 from bot.database.db import get_days_since_registration_db
 from bot.database.users_db import get_user_registration_date_and_username_db
-from models.User_cl import User
+from models.User_cl import User_cl
 
 #from bot.utils.file_sender import count_files_in_directory
 
@@ -142,12 +142,12 @@ async def generate_status_message(chat_id: int) -> tuple:
     - keyboard: клавиатура с кнопкой оплаты, если применимо.
     """
     #################################################################################
-    us = await User.create(chat_id)
+    us = await User_cl.create(chat_id)
     # print("count_key = ", us.count_key)
     # new_server = {
-    #     "name_server": "Server test",
-    #     "country_server": "test",
-    #     "server_1_ip": "test",
+    #     "name_server": "Server test22222",
+    #     "country_server": "22222",
+    #     "server_1_ip": "2222222",
     #     "user_ip": "test",
     #     "name_conf": "test",
     #     "enable": True,
@@ -155,7 +155,7 @@ async def generate_status_message(chat_id: int) -> tuple:
     #     "traffic_up": 0,
     #     "traffic_down": 0,
     #     "has_paid_key": 1,
-    #     "status_key": "new_user",  # new_user, key_free, waiting_pending, blocked, active
+    #     "status_key": "free_key",  # new_user, key_free, waiting_pending, blocked, active
     #     "is_notification": False,
     #     "days_after_pay": 30,  # TIMESTAMP placeholder
     #     "date_payment_key": "2024-01-01",
@@ -167,17 +167,8 @@ async def generate_status_message(chat_id: int) -> tuple:
 
     #################################################################################
 
-    await us.days_since_registration.update_meaning(13)
+    status_key = us.servers[0].status_key.get()
 
-    str_count_days = "0"
-    if us.servers and len(us.servers) > 0:  # Проверяем, что список не пуст
-        status_key = us.servers[0].get('status_key')  # Достаем значение ключа 'status_key' у первого сервера
-        if status_key is not None:
-            print(f"Status key: {status_key}")
-        else:
-            print("status_key not found in the server data.")
-    else:
-        print("No servers available.")
 
     # Проверяем, что данные пользователя успешно получены и содержат 4 элемента.
     if us.count_key >= 0:
@@ -210,7 +201,7 @@ async def generate_status_message(chat_id: int) -> tuple:
         # Формируем текст сообщения о статусе пользователя.
         status_message = (
             f"🕒 Вы с нами уже {us.days_since_registration.get()} дней! 🚀 Какой прогресс! 😎\n"
-            f"Действие тарифа: {str_count_days}\n"
+            f"Действие тарифа: {us.servers[0].days_after_pay.get()}\n"
             f"Имя пользователя: {us.user_name.get()}\n"
             f"Статус подписки: *{status_sub_txt}*"
         )

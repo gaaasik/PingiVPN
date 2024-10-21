@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery
 
 from bot.handlers.cleanup import store_message, delete_unimportant_messages, store_important_message
 from bot.keyboards.inline import download_app_keyboard
-from models.User_cl import User
+from models.User_cl import User_cl
 
 router = Router()
 
@@ -37,7 +37,7 @@ async def handle_device_choice(callback_query: CallbackQuery):
     )
 
     # Обновляем устройство пользователя в базе данных
-    User.update_device(callback_query.from_user.id, device)
+    User_cl.update_device(callback_query.from_user.id, device)
     print(f"Пользователь {callback_query.from_user.id} - @{callback_query.from_user.username} выбрал устройство: {device}")
 
     # Сохраняем сообщение как важное с типом 'device_choice'
