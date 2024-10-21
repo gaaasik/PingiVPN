@@ -16,7 +16,7 @@ class Field_cl:
         self.value = value  # Текущее значение поля
         self.user = user  # Ссылка на объект User
 
-    async def update_meaning(self, new_value):
+    async def set(self, new_value):
         self.value = new_value
         setattr(self.user, f"_{self.name}", new_value)
         await self.user._update_field_in_db(self.name, new_value)

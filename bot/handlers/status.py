@@ -142,7 +142,7 @@ async def generate_status_message(chat_id: int) -> tuple:
     - keyboard: клавиатура с кнопкой оплаты, если применимо.
     """
     #################################################################################
-    us = await User_cl.create(chat_id)
+
     # print("count_key = ", us.count_key)
     # new_server = {
     #     "name_server": "Server test22222",
@@ -166,6 +166,11 @@ async def generate_status_message(chat_id: int) -> tuple:
 
 
     #################################################################################
+    us = await User_cl.create(chat_id)
+    await us.servers[0].enable.set(True)
+    await us.servers[1].status_key.set("active")
+    await us.days_since_registration.set(100)
+    print("NAME ", await us.user_name.get(), "----------------------------------------------------")
 
     status_key = us.servers[0].status_key.get()
 

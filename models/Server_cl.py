@@ -58,3 +58,4 @@ class Field:
         self.value = new_value
         setattr(self.server, f"_{self.name}", new_value)
         await self.server.update_in_db()  # Обновление данных в базе через объект Server_cl
+
