@@ -1,9 +1,14 @@
+import os
+import json
+import paramiko
+
+
 class Server_cl:
     def __init__(self, server_data: dict, user):
         # Инициализация всех полей, переданных в JSON
         self.name_server = Field('name_server', server_data.get("name_server", None), self)
         self.country_server = Field('country_server', server_data.get("country_server", None), self)
-        self.server_1_ip = Field('server_1_ip', server_data.get("server_1_ip", None), self)
+        self.server_ip = Field('server_ip', server_data.get("server_ip", None), self)
         self.user_ip = Field('user_ip', server_data.get("user_ip", None), self)
         self.name_conf = Field('name_conf', server_data.get("name_conf", None), self)
         self.enable = Field('enable', server_data.get("enable", None), self)
@@ -28,7 +33,7 @@ class Server_cl:
         return {
             "name_server": self.name_server.get(),
             "country_server": self.country_server.get(),
-            "server_1_ip": self.server_1_ip.get(),
+            "server_ip": self.server_1_ip.get(),
             "user_ip": self.user_ip.get(),
             "name_conf": self.name_conf.get(),
             "enable": self.enable.get(),
@@ -43,6 +48,78 @@ class Server_cl:
             "date_expire_of_paid_key": self.date_expire_of_paid_key.get(),
             "date_expire_free_trial": self.date_expire_free_trial.get()
         }
+
+
+        """Обновляет файл JSON на сервере через SSH"""
+
+
+    async def _update_json_on_server(self, new_enable_value: bool):
+        """Обновляет файл JSON на сервере через SSH и изменяет поле enable"""
+        ssh_host = "195.133.14.202"
+        ssh_user = "root"
+        ssh_password = "jzH^zvfW1J4qRX"
+        json_file_path = '/root/.wg-easy/wg0.json'
+
+        try:
+            # Установка SSH-соединения
+            print("Устанавливаем SSH-соединение...")
+            client = paramiko.SSHClient()
+            client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            client.connect(ssh_host, username=ssh_user, password=ssh_password)
+
+            print("К серверу подключились успешно")  # Выводим фразу при успешном подключении
+
+            # Открываем SFTP-соединение
+            sftp = client.open_sftp()
+
+            # Проверка существования файла JSON на сервере
+            print(f"Пытаемся открыть JSON-файл по пути {json_file_path}")
+            try:
+                with sftp.open(json_file_path, 'r') as json_file:
+                    wg_config = json.load(json_file)
+                print(f"Файл {json_file_path} успешно считан с сервера.")
+            except FileNotFoundError:
+                print(f"Файл {json_file_path} не найден на сервере.")
+                return
+            except Exception as e:
+                print(f"Ошибка при чтении файла: {e}")
+                return
+
+            # Находим нужного клиента по user_ip и обновляем его enable значение
+            client_key = next(
+                (key for key, client in wg_config['clients'].items() if client['address'] == self.user_ip.get()), None)
+            if client_key:
+                print(f"Найден клиент с IP: {self.user_ip.get()}, обновляем enabled на {new_enable_value}")
+                wg_config['clients'][client_key]['enabled'] = new_enable_value
+                self.enable = new_enable_value  # Обновляем локально в объекте Server_cl
+            else:
+                print(f"Клиент с IP {self.user_ip.get()} не найден в JSON-файле.")
+                return
+
+            # Записываем изменения обратно в файл на сервере
+            print(f"Записываем изменения в файл {json_file_path}")
+            with sftp.open(json_file_path, 'w') as json_file:
+                json.dump(wg_config, json_file, indent=4)
+                print(f"Файл {json_file_path} успешно обновлен на сервере")
+
+            # Перезапускаем WireGuard Easy через Docker
+            print("Перезапускаем WireGuard Easy...")
+            stdin, stdout, stderr = client.exec_command('docker restart wg-easy')
+            stdout.channel.recv_exit_status()
+            print("WireGuard перезапущен")
+
+            # Закрываем соединение
+            sftp.close()
+            client.close()
+
+        except paramiko.SSHException as ssh_err:
+            print(f"Ошибка SSH: {ssh_err}")
+        except Exception as e:
+            print(f"Ошибка при обновлении JSON на сервере: {e}")
+
+    async def update_enable(self, new_enable_value: bool):
+        """Метод обновления enable поля на сервере и в объекте"""
+        await self._update_json_on_server(new_enable_value)
 
 class Field:
     def __init__(self, name, value, server):
