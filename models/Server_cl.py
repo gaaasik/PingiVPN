@@ -5,13 +5,15 @@ import paramiko
 
 class Server_cl:
     def __init__(self, server_data: dict, user):
+        self.enable = Field('enable', server_data.get("enable", None), self, is_protected=True)
+
         # Инициализация всех полей, переданных в JSON
         self.name_server = Field('name_server', server_data.get("name_server", None), self)
         self.country_server = Field('country_server', server_data.get("country_server", None), self)
         self.server_ip = Field('server_ip', server_data.get("server_ip", None), self)
         self.user_ip = Field('user_ip', server_data.get("user_ip", None), self)
         self.name_conf = Field('name_conf', server_data.get("name_conf", None), self)
-        self.enable = Field('enable', server_data.get("enable", None), self)
+        #self.enable = Field('enable', server_data.get("enable", None), self)
         self.vpn_usage_start_date = Field('vpn_usage_start_date', server_data.get("vpn_usage_start_date", None), self)
         self.traffic_up = Field('traffic_up', server_data.get("traffic_up", 0), self)
         self.traffic_down = Field('traffic_down', server_data.get("traffic_down", 0), self)
@@ -91,7 +93,7 @@ class Server_cl:
             if client_key:
                 print(f"Найден клиент с IP: {self.user_ip.get()}, обновляем enabled на {new_enable_value}")
                 wg_config['clients'][client_key]['enabled'] = new_enable_value
-                await self.enable.set(new_enable_value)  # Обновляем локально в объекте Server_cl
+                await self.enable._set(new_enable_value)  # Обновляем локально в объекте Server_cl
             else:
                 print(f"Клиент с IP {self.user_ip.get()} не найден в JSON-файле.")
                 return
@@ -122,17 +124,26 @@ class Server_cl:
         await self._update_json_on_server(new_enable_value)
 
 class Field:
-    def __init__(self, name, value, server):
-        self.name = name  # Название поля (например, 'status_key')
-        self.value = value  # Текущее значение поля
-        self.server = server  # Ссылка на объект Server_cl
+    def __init__(self, name, value, server, is_protected=False):
+        self._name = name  # Приватное название поля
+        self._value = value  # Приватное значение поля
+        self._server = server  # Ссылка на объект Server_cl
+        self._is_protected = is_protected  # Флаг для защиты поля от публичного изменения
 
+    # Публичный метод для получения значения
     def get(self):
-        return self.value
+        return self._value
 
+    # Приватный метод для изменения поля, если это поле защищено (is_protected=True)
+    async def _set(self, new_value):
+        """Приватный метод обновления значения поля."""
+        self._value = new_value
+        setattr(self._server, f"_{self._name}", new_value)
+        await self._server.update_in_db()  # Обновление данных в базе через объект Server_cl
+
+    # Публичный метод для изменения значения, если поле не защищено
     async def set(self, new_value):
-        """Обновление значения поля и данных в базе через объект Server_cl."""
-        self.value = new_value
-        setattr(self.server, f"_{self.name}", new_value)
-        await self.server.update_in_db()  # Обновление данных в базе через объект Server_cl
+        if self._is_protected:
+            raise AttributeError(f"Field '{self._name}' is protected and cannot be changed directly.")
+        await self._set(new_value)
 

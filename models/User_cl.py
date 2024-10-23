@@ -35,7 +35,7 @@ class User_cl:
         self.is_subscribed_on_channel = None
         self.days_since_registration = None
         self.email = None
-        self.servers = []  # Поле для хранения списка серверов (список объектов Server_cl)
+        self.servers: list[Server_cl]  # Явное указание типа поля servers  # Поле для хранения списка серверов (список объектов Server_cl)
         self.count_key = 0  # Поле для хранения количества серверов
 
     @classmethod
