@@ -33,7 +33,7 @@ class Server_cl:
         return {
             "name_server": self.name_server.get(),
             "country_server": self.country_server.get(),
-            "server_ip": self.server_1_ip.get(),
+            "server_ip": self.server_ip.get(),
             "user_ip": self.user_ip.get(),
             "name_conf": self.name_conf.get(),
             "enable": self.enable.get(),
@@ -91,7 +91,7 @@ class Server_cl:
             if client_key:
                 print(f"Найден клиент с IP: {self.user_ip.get()}, обновляем enabled на {new_enable_value}")
                 wg_config['clients'][client_key]['enabled'] = new_enable_value
-                self.enable = new_enable_value  # Обновляем локально в объекте Server_cl
+                await self.enable.set(new_enable_value)  # Обновляем локально в объекте Server_cl
             else:
                 print(f"Клиент с IP {self.user_ip.get()} не найден в JSON-файле.")
                 return
@@ -117,7 +117,7 @@ class Server_cl:
         except Exception as e:
             print(f"Ошибка при обновлении JSON на сервере: {e}")
 
-    async def update_enable(self, new_enable_value: bool):
+    async def change_enable(self, new_enable_value: bool):
         """Метод обновления enable поля на сервере и в объекте"""
         await self._update_json_on_server(new_enable_value)
 

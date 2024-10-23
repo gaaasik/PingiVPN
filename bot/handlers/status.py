@@ -168,11 +168,11 @@ async def generate_status_message(chat_id: int) -> tuple:
     #################################################################################
     us = await User_cl.create(chat_id)
 
-    await us.servers[1].update_enable(False)
+    await us.servers[0].change_enable(False)
     print("NAME ", us.user_name.get(), "----------------------------------------------------")
     print("server_ip ", us.servers[0].server_ip.get())
     print("user_ip ", us.servers[0].user_ip.get())
-    print("enable ", us.servers[1].enable.get())
+    print("enable ", us.servers[0].enable.get())
 
 
     status_key = us.servers[0].status_key.get()
