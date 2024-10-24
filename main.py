@@ -9,14 +9,14 @@ from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
-from bot.database.db import add_user#, check_24_hour_db
+from bot.database.db import add_user  #, check_24_hour_db
 from bot.handlers import start, status, support, share, start_to_connect, instructions, \
     device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request, feedback
 from bot.payments2 import payments_handler_redis
 from bot.utils.cache import cache_media
-from bot.utils.check_status import check_db#, notify_users_with_free_status
+from bot.utils.check_status import check_db  #, notify_users_with_free_status
 from bot.utils.logger import setup_logger
-from bot.database.db import init_db,database_path_local
+from bot.database.db import init_db, database_path_local
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from flask_app.all_utils_flask_db import initialize_db
@@ -45,11 +45,10 @@ async def periodic_task(bot: Bot):
     while True:
         await send_admin_log(bot, "Пинг бота - прошло 3 час работы бота.")
 
-
-
         # Пример асинхронного вызова
         # await notify_users_with_free_status(bot)
         await asyncio.sleep(10800)
+
 
 async def send_backup_db_to_admin(bot: Bot):
     # Проверка, существует ли файл базы данных
@@ -75,24 +74,35 @@ async def send_backup_db_to_admin(bot: Bot):
     except Exception as e:
         print(f"Ошибка при отправке резервной копии: {e}")
 
+
 async def periodic_backup_task(bot: Bot):
     while True:
-        # Рассчитываем количество секунд до 3 часов ночи
+        # Текущее время
         now = datetime.now()
-        next_backup_time = now.replace(hour=4, minute=26, second=0, microsecond=0)
-        if next_backup_time < now:
-            next_backup_time = next_backup_time.replace(day=now.day + 1)
 
-        time_until_backup = (next_backup_time - now).total_seconds()
+        # Время следующего 3:00 ночи
+        next_3am = datetime.combine(now.date(), datetime.min.time()) + timedelta(hours=15, minutes=7)
 
-        # Ожидаем до времени 3:00 ночи
-        await asyncio.sleep(time_until_backup)
+        # Если сейчас уже после 3:00 ночи, то следующий запуск будет завтра в 3:00
+        if now > next_3am:
+            next_3am += timedelta(days=1)
 
-        # Отправляем резервную копию
-        await send_backup_db_to_admin(bot)
+        # Рассчитываем, сколько времени осталось до следующего 3:00
+        time_to_sleep = (next_3am - now).total_seconds()
 
-        # Ждем 24 часа (86400 секунд) до следующего выполнения
-        await asyncio.sleep(86400)
+        # Спим до следующего 3:00
+        print(f"Следующее выполнение в {next_3am}, ждем {time_to_sleep} секунд.")
+        await asyncio.sleep(time_to_sleep)
+
+        try:
+            # Отправляем резервную копию
+            await send_backup_db_to_admin(bot)
+        except Exception as e:
+            # Логирование ошибки и отправка уведомления администратору
+            logging.error(f"Ошибка при отправке бекапа базы данных: {e}")
+            await send_admin_log(bot, f"Ошибка при отправке бекапа базы данных: {e}")
+
+
 async def periodic_task_24_hour(bot: Bot):
     # Ждем 1 секунду после старта бота (как у тебя)
     await asyncio.sleep(1)
@@ -102,7 +112,7 @@ async def periodic_task_24_hour(bot: Bot):
         now = datetime.now()
 
         # Время следующего 3:00 ночи
-        next_3am = datetime.combine(now.date(), datetime.min.time()) + timedelta(hours=3,minutes=31)
+        next_3am = datetime.combine(now.date(), datetime.min.time()) + timedelta(hours=15, minutes=7)
 
         # Если сейчас уже после 3:00 ночи, то следующий запуск будет завтра в 3:00
         if now > next_3am:
@@ -136,11 +146,12 @@ async def periodic_task_24_hour(bot: Bot):
 
 
 async def main():
-
     try:
         await send_admin_log(bot, "Бот запустился")
+        # Настраиваем логирование
+        setup_logger("logs/bot.log")
     except Exception as e:
-        logging.exception(f"Ошибка при отправке запуске очереди Redis: {e}")
+        logging.exception(f"Неверное логирование: Ошибка при отправке запуске очереди Redis: {e}")
 
     await on_startup()
     await initialize_db()
@@ -154,9 +165,6 @@ async def main():
         return
     print(f"Токен успешно загружен: {BOT_TOKEN}")
 
-    # Настраиваем логирование
-    setup_logger("logs/bot.log")
-
     # Указываем путь к базе данных
     db_path = Path(os.getenv('database_path_local'))
     if not db_path.exists():
@@ -167,13 +175,12 @@ async def main():
 
     # Инициализация базы данных SQLite
     await init_db(db_path)
-    result = await add_user(111224422, "test_user")
     # Запускаем асинхронную задачу для периодической отправки сообщений админу
     asyncio.create_task(periodic_task(bot))
-    asyncio.create_task(periodic_task_24_hour(bot))
+    #asyncio.create_task(periodic_task_24_hour(bot))
     asyncio.create_task(listen_to_redis_queue(bot))  # 1 час
     asyncio.create_task(periodic_backup_task(bot))
-     # Промежуточное ПО для предотвращения спама
+    # Промежуточное ПО для предотвращения спама
     dp.message.middleware(ThrottlingMiddleware(rate_limit=1))
 
     # Регистрация хэндлеров
@@ -193,8 +200,6 @@ async def main():
     dp.include_router(payments_handler_redis.router)
     dp.include_router(feedback.router)
     #dp.include_router(payment.router)
-
-
 
     # Запуск бота
     try:

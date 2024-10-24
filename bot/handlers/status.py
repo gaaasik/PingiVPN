@@ -1,6 +1,7 @@
 from aiogram import Router, types
 from aiogram.filters import Command
 
+from bot.handlers.admin import ADMIN_CHAT_IDS
 from bot.handlers.cleanup import delete_unimportant_messages, store_message, register_message_type, \
     delete_message_with_type
 from bot.keyboards.inline import create_payment_button
@@ -151,7 +152,8 @@ async def generate_status_message(chat_id: int) -> tuple:
         # Определяем текст статуса подписки и создаем клавиатуру в зависимости от статуса.
         if subscription_status == "waiting_pending":
             str_count_days = "подписка закончена"
-            status_sub_txt = "Ожидание оплаты подписки"
+            status_sub_txt = "пробный период закончился"
+            #status_sub_txt = "Ожидание оплаты подписки"
             keyboard = create_payment_button(chat_id)
         elif subscription_status == "new_user":
             #str_count_days = count_day_free_user_db(chat_id)
@@ -174,6 +176,8 @@ async def generate_status_message(chat_id: int) -> tuple:
             status_sub_txt = subscription_status
             keyboard = create_payment_button(chat_id)
 
+        if user_name == None:
+            user_name = chat_id
         # Формируем текст сообщения о статусе пользователя.
         status_message = (
             f"🕒 Вы с нами уже {days_since_registration} дней! 🚀 Какой прогресс! 😎\n"
@@ -186,4 +190,6 @@ async def generate_status_message(chat_id: int) -> tuple:
         status_message = "Ваши данные не найдены в системе. Обратитесь в поддержку, мы на связи."
         keyboard = None  # В случае ошибки клавиатура не требуется.
 
+    if chat_id not in ADMIN_CHAT_IDS:
+        keyboard = None
     return status_message, keyboard

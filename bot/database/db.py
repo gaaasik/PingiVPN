@@ -22,7 +22,7 @@ def get_moscow_time():
     return datetime.now(moscow_tz)
 
 
-async def get_users_with_days_since_registration(min_days: int = 21):
+async def get_users_with_days_since_registration(min_days: int = 14):
     """
     Возвращает список пользователей, у которых количество пройденных дней с момента регистрации >= min_days.
 
@@ -36,7 +36,7 @@ async def get_users_with_days_since_registration(min_days: int = 21):
                 (min_days,)
         ) as cursor:
             users = await cursor.fetchall()
-    print(users)
+
     return users  # Возвращаем список пользователей
 
 
@@ -78,7 +78,7 @@ async def init_db(database_path: str):
     await add_columns_to_users_sub(conn)
     #await calculate_days_and_update_status(conn)
     await add_is_notification_column(conn)
-    await get_users_with_days_since_registration()
+    #await get_users_with_days_since_registration()
     await add_feedback_status_column(conn)
     await add_ip_columns(conn)
     await add_days_after_pay(conn)
@@ -204,15 +204,15 @@ async def get_all_users():
     return users
 
 
-async def get_user_registration_date_and_username(user_id: int):
-    async with aiosqlite.connect(database_path_local) as conn:
-        async with conn.execute('SELECT registration_date, user_name FROM users WHERE chat_id = ?',
-                                (user_id,)) as cursor:
-            user = await cursor.fetchone()
-            if user:
-                registration_date, user_name = user
-                return registration_date, user_name
-    return None
+# async def get_user_registration_date_and_username(user_id: int):
+#     async with aiosqlite.connect(database_path_local) as conn:
+#         async with conn.execute('SELECT registration_date, user_name FROM users WHERE chat_id = ?',
+#                                 (user_id,)) as cursor:
+#             user = await cursor.fetchone()
+#             if user:
+#                 registration_date, user_name = user
+#                 return registration_date, user_name
+#     return None
 
 
 async def add_user_question(chat_id: int, user_id: int, question_text: str):

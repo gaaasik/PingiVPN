@@ -12,7 +12,8 @@ from yookassa import Configuration, Payment
 from aiogram import Router, types, Bot
 
 from bot.handlers.cleanup import delete_important_message, store_message, \
-    delete_unimportant_messages
+    delete_unimportant_messages, register_message_type
+from bot.handlers.status import generate_status_message
 from bot.payments2.if_user_sucsess_pay import handle_post_payment_actions
 from bot.payments2.payments_db import reset_user_data_db
 from flask_app.all_utils_flask_db import logger
@@ -39,68 +40,6 @@ class PaymentForm(StatesGroup):
     awaiting_email = State()  # Состояние для ввода email
 
 
-# #нажатие на кнопку оплатить 199 рублей - отправялет сообщение с ссылкой на оплату
-# @router.callback_query(lambda c: c.data == 'payment_199')
-# async def process_callback_query(callback_query: types.CallbackQuery):
-#     chat_id = callback_query.message.chat.id
-#     user_id = callback_query.message.from_user.id
-#     bot = callback_query.message.bot
-#     await delete_unimportant_messages(chat_id, bot)
-#     subscription_status = await get_user_subscription_status(chat_id)
-#     print(subscription_status)
-#     # if chat_id in ADMIN_CHAT_IDS or chat_id==1388513042:
-#     if subscription_status == "waiting_pending" or subscription_status == "new_user":
-#
-#         # Создаем платёж и получаем ссылку
-#         one_time_id, one_time_link = create_one_time_payment(chat_id,user_name, user_email)
-#
-#         # Текст сообщения
-#         text_payment = (
-#             "Вы подключаете подписку на наш сервис с помощью\n"
-#             "платёжной системы Юkassa\n\n"
-#             "Стоимость подписки на 1 месяц: 199р 👇👇👇\n"
-#         )
-#
-#         # Создаем клавиатуру с кнопкой
-#         keyboard = InlineKeyboardMarkup(
-#             inline_keyboard=[
-#                 [InlineKeyboardButton(text="Оплатить 199р", url=one_time_link)]
-#
-#             ]
-#         )
-#         # Отправляем сообщение с текстом и клавиатурой
-#         sent_message = await bot.send_message(
-#             chat_id=chat_id,
-#             text=text_payment,
-#             reply_markup=keyboard
-#         )
-#         await register_message_type(chat_id, sent_message.message_id, "msg_with_pay_url", bot)
-#         print("text = ", sent_message.text)
-#     elif subscription_status == "active":
-#         # Отправляем сообщение с текстом и клавиатурой
-#         text_msg = "Ваша подписка активна на месяц"
-#         sent_message = await bot.send_message(
-#             chat_id=chat_id,
-#             text=text_msg,
-#         )
-#         await store_message(chat_id, sent_message.message_id, text_msg, 'bot')
-#
-#     # else:
-#     #     # Отправляем сообщение с текстом и клавиатурой
-#     #     await bot.send_message(
-#     #         chat_id=chat_id,
-#     #         text="Оплата скоро будет доступна"  #,
-#     #         #reply_markup=keyboard
-#     #     )
-#
-#     username = callback_query.message.chat.username
-#     await send_admin_log(bot,
-#                          message=f"@{username}  chat_id = {chat_id}  - нажал кнопку оплатить ID чата: {chat_id})")
-#     # Подтверждаем callback_query, чтобы избежать зависания
-#     await callback_query.answer()
-#
-
-
 # 1. Обработчик нажатия на кнопку "Оплатить 199 рублей"
 @router.callback_query(lambda c: c.data == 'payment_199')
 async def handle_payment_request(callback_query: types.CallbackQuery, state: FSMContext):
@@ -116,12 +55,14 @@ async def handle_payment_request(callback_query: types.CallbackQuery, state: FSM
 
     if subscription_status in ["waiting_pending", "new_user", "blocked"]:
         # Запрашиваем email
-        await request_user_email(chat_id, bot)
+        await request_user_email(chat_id, bot, state)
         await state.set_state(PaymentForm.awaiting_email)  # Устанавливаем состояние ожидания email
     elif subscription_status == "active":
-        await bot.send_message(chat_id, text="Ваша подписка активна на месяц")
+        sent_message = await bot.send_message(chat_id, text="Ваша подписка активна на месяц")
+        await store_message(chat_id, sent_message.message_id, sent_message.text, "bot")
     else:
-        await bot.send_message(chat_id, text="Оплата скоро будет доступна")
+        sent_message2 = await bot.send_message(chat_id, text="Оплата скоро будет доступна")
+        await store_message(chat_id, sent_message2.message_id, sent_message2.text, "bot")
 
     # Логируем нажатие
     username = callback_query.message.chat.username
@@ -132,7 +73,9 @@ async def handle_payment_request(callback_query: types.CallbackQuery, state: FSM
 
 
 # 2. Функция запроса email
-async def request_user_email(chat_id: int, bot: Bot):
+async def request_user_email(chat_id: int, bot: Bot, state: FSMContext):
+    # Удаляем предыдущие сообщения
+    await delete_unimportant_messages(chat_id, bot)
     text = "Пожалуйста, введите ваш email для отправки чека:"
 
     # Добавляем кнопку "Отменить"
@@ -142,7 +85,14 @@ async def request_user_email(chat_id: int, bot: Bot):
         ]
     )
 
-    await bot.send_message(chat_id, text=text, reply_markup=keyboard)
+    sent_message = await bot.send_message(chat_id, text=text, reply_markup=keyboard)
+    await register_message_type(chat_id, sent_message.message_id, "request_email_msg", bot)
+
+    # Устанавливаем состояние ожидания email
+    await state.set_state(PaymentForm.awaiting_email)
+
+    # Запускаем таймер для сброса состояния через 1 час
+    asyncio.create_task(start_email_timeout(chat_id, state))
 
 
 # 3. Валидация email
@@ -153,12 +103,45 @@ async def handle_email_input(message: types.Message, state: FSMContext):
     user_name = message.from_user.username
     chat_id = message.chat.id
     bot = message.bot
-    await store_message(chat_id, message.message_id, message.text, "user")
+    await delete_unimportant_messages(chat_id, bot)
     # Валидация email
     if validate_email(email):
-        # Сохраняем email в базе данных
-        await save_user_email_to_db(chat_id, email)
-        print(email)
+        # Сохраняем email во временном состоянии FSM
+        await state.update_data(email=email)
+
+        # Отправляем сообщение с подтверждением email
+        text = f"Отправить чек на почту {email}?"
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text="Да", callback_data="confirm_email")],  # Кнопка "Да" на отдельной строке
+                [  # Кнопки "Изменить почту" и "Отменить платеж" на одной строке
+                    InlineKeyboardButton(text="Изменить почту", callback_data="edit_email"),
+                    InlineKeyboardButton(text="Отменить платеж", callback_data="cancel_payment")
+                ]
+            ]
+        )
+        sent_message = await bot.send_message(chat_id, text=text, reply_markup=keyboard)
+        await store_message(chat_id, sent_message.message_id, sent_message.text, "bot")
+
+    else:
+        # Сообщаем о неверном формате и просим ввести повторно
+        send_message = await bot.send_message(chat_id, "Неверный формат email. Пожалуйста, введите корректный email.")
+        await store_message(send_message.chat.id, send_message.message_id, send_message.text, "bot")
+
+
+@router.callback_query(lambda c: c.data in ["confirm_email", "edit_email"])
+async def handle_email_confirmation(callback_query: types.CallbackQuery, state: FSMContext):
+    chat_id = callback_query.message.chat.id
+    user_name = callback_query.message.chat.username
+    bot = callback_query.message.bot
+
+    if callback_query.data == "confirm_email":
+        # Пользователь подтвердил email
+        await delete_unimportant_messages(chat_id, bot)
+        await delete_important_message(chat_id, "request_email_msg", bot)
+        data = await state.get_data()
+        email = data.get("email")
+        await save_user_email_to_db(chat_id,email)
         # Формируем ссылку на оплату
         one_time_id, one_time_link = await create_one_time_payment(chat_id, user_name, email)
 
@@ -167,21 +150,43 @@ async def handle_email_input(message: types.Message, state: FSMContext):
 
         # Сбрасываем состояние
         await state.clear()
-    else:
-        # Сообщаем о неверном формате и просим ввести повторно
-        send_message = await bot.send_message(chat_id, "Неверный формат email. Пожалуйста, введите корректный email.")
-        await store_message(send_message.chat.id, send_message.message_id, send_message.text, "bot")
 
+    elif callback_query.data == "edit_email":
+        # Пользователь хочет изменить email, возвращаем его в состояние ожидания email
+        await request_user_email(chat_id, bot,state)
+        await state.set_state(PaymentForm.awaiting_email)
+
+    # Подтверждаем callback_query
+    await callback_query.answer()
+async def start_email_timeout(chat_id: int, state: FSMContext, timeout: int = 3600):
+    await asyncio.sleep(timeout)  # Ожидание в течение 1 часа
+    current_state = await state.get_state()
+    if current_state == PaymentForm.awaiting_email:
+        await state.clear()  # Сбрасываем состояние, если время истекло
 
 # 4. Функция отмены платежа
+
 @router.callback_query(lambda c: c.data == 'cancel_payment')
 async def handle_cancel_payment(callback_query: types.CallbackQuery, state: FSMContext):
     chat_id = callback_query.message.chat.id
     bot = callback_query.message.bot
-
+    await delete_unimportant_messages(chat_id,bot)
     await state.clear()  # Завершаем любое текущее состояние
 
     await bot.send_message(chat_id, "Платеж был отменен.")
+
+    #отправляем сообщение с статусом
+
+    # Используем функцию generate_status_message для получения текста и клавиатуры.
+    status_message, keyboard = await generate_status_message(chat_id)
+    # Отправляем новое сообщение с информацией об аккаунте и кнопкой оплаты, если она есть.
+    sent_message = await bot.send_message(chat_id, status_message, parse_mode="Markdown", reply_markup=keyboard)
+
+    # Сохраняем сообщение в базе, если оно было успешно отправлено.
+    if sent_message and sent_message.message_id:
+        await store_message(chat_id, sent_message.message_id, status_message, 'bot')
+        await register_message_type(chat_id, sent_message.message_id, 'account_status', bot)
+
     await callback_query.answer()
 
 
@@ -208,6 +213,7 @@ async def send_payment_link(chat_id: int, payment_link: str, bot: Bot):
         ]
     )
     sent_message = await bot.send_message(chat_id=chat_id, text=text_payment, reply_markup=keyboard)
+
     # Логика для сохранения отправленного сообщения, если необходимо
 
 
@@ -253,8 +259,8 @@ async def create_one_time_payment(user_id, user_name, user_email):
             "currency": "RUB"
         },
         "confirmation": {
-            "type": "redirect"
-           # "return_url": "https://t.me/PingiVPN_bot"  # это URL, куда пользователь будет перенаправлен после оплаты
+            "type": "redirect",
+            "return_url": "https://t.me/PingiVPN_bot"  # это URL, куда пользователь будет перенаправлен после оплаты
         },
         "capture": True,  # автоматически подтверждаем оплату
         "description": "Подписка на канал",
@@ -310,7 +316,7 @@ async def listen_to_redis_queue(bot: Bot):
                 a = 1
                 #logging.info("Очередь Redis пуста, ждем следующую задачу")
 
-            await asyncio.sleep(3)
+            await asyncio.sleep(4)
 
         except redis.exceptions.ConnectionError as e:
             logging.error(f"Ошибка подключения к Redis: {e}")

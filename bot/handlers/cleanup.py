@@ -52,6 +52,7 @@ async def register_message_type(chat_id: int, message_id: int, message_type: str
     """
     Регистрируем новый тип сообщения для конкретного чата и сохраняем его.
     """
+
     if chat_id not in message_types_mapping:
         message_types_mapping[chat_id] = {}
 
@@ -82,27 +83,6 @@ async def register_message_type(chat_id: int, message_id: int, message_type: str
     print(important_messages[chat_id])
 
 
-# === Новая логика для маппинга типов сообщений ===
-
-# async def register_share_message_type(chat_id: int, message_id: int, bot):
-#     """
-#     Асинхронная регистрация сообщения с типом 'share_message' для конкретного чата.
-#     """
-#     if chat_id not in share_message_types_mapping:
-#         share_message_types_mapping[chat_id] = {}
-#
-#     # Если уже есть сообщение типа 'share_message', удаляем его
-#     if 'share_message' in share_message_types_mapping[chat_id]:
-#         old_message_id = share_message_types_mapping[chat_id]['share_message']
-#         try:
-#             await bot.delete_message(chat_id, old_message_id)  # Удаление старого сообщения
-#         except Exception as e:
-#             print(f"Не удалось удалить старое сообщение с ID {old_message_id}: {e}")
-#
-#     # Сохраняем новое сообщение по типу
-#     share_message_types_mapping[chat_id]['share_message'] = message_id
-
-# Изменение логики удаления и хранения сообщений по типу
 async def store_important_message(bot, chat_id: int, message_id: int, message: types.Message = None,
                                   message_type: str = None):
     """
