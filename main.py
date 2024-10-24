@@ -91,7 +91,7 @@ async def periodic_backup_task(bot: Bot):
         time_to_sleep = (next_3am - now).total_seconds()
 
         # Спим до следующего 3:00
-        print(f"Следующее выполнение в {next_3am}, ждем {time_to_sleep} секунд.")
+        print(f"Следующая отправка бд в чат телеграма в {next_3am}, ждем {time_to_sleep} секунд.")
         await asyncio.sleep(time_to_sleep)
 
         try:
