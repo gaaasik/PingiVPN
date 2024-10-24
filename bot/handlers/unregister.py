@@ -3,7 +3,7 @@ from aiogram import Router, types, Bot
 from aiogram.filters import Command
 
 from bot.handlers.cleanup import store_message, clear_chat_history
-from bot.utils.db import get_user_by_telegram_id
+from bot.database.db import get_user_by_telegram_id
 
 
 router = Router()

@@ -1,23 +1,22 @@
 import asyncio
 import logging
 import os
+from datetime import datetime, timedelta
 from pathlib import Path
-import aiosqlite
-from aiogram import Bot, Dispatcher
-from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram import Bot
+from aiogram.types import FSInputFile
 from dotenv import load_dotenv
-from bot.handlers.admin import send_admin_log
-from bot.keyboards.inline import create_feedback_keyboard
-from bot.payments2.payments_handler import listen_to_redis_queue
-from bot.utils.add_ip_adress import update_user_ip_info
-from bot.utils.db import who_have_expired_trial, add_user
-from bot.handlers import start, status, support, admin, share, start_to_connect, instructions, \
+from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
+from bot.payments2.payments_handler_redis import listen_to_redis_queue
+#from bot.payments2.payments_handler_redis import listen_to_redis_queue
+from bot.database.db import add_user  #, check_24_hour_db
+from bot.handlers import start, status, support, share, start_to_connect, instructions, \
     device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request, feedback
-from bot.payments2 import payments_handler
+from bot.payments2 import payments_handler_redis
 from bot.utils.cache import cache_media
-from bot.utils.check_status import check_db, notify_users_with_free_status
+from bot.utils.check_status import check_db  #, notify_users_with_free_status
 from bot.utils.logger import setup_logger
-from bot.utils.db import init_db,database_path_local
+from bot.database.db import init_db, database_path_local
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from flask_app.all_utils_flask_db import initialize_db
@@ -30,7 +29,7 @@ load_dotenv()
 PATH_TO_IMAGES = os.getenv('PATH_TO_IMAGES')
 video_path = os.getenv("video_path")
 REGISTERED_USERS_DIR = os.getenv('REGISTERED_USERS_DIR')
-database_path_local = os.getenv('database_path_local')
+
 
 async def on_startup():
     """Кэширование изображений при старте"""
@@ -42,20 +41,117 @@ async def on_startup():
 # Функция, которая выполняется каждые 10 секунд
 async def periodic_task(bot: Bot):
     # Ждем 10 секунд после старта бота
-    await asyncio.sleep(3600)
+    await asyncio.sleep(10800)
     while True:
-        await send_admin_log(bot, "Пинг бота - прошел 1 час работы бота.")
-        #await check_db(bot)
+        await send_admin_log(bot, "Пинг бота - прошло 3 час работы бота.")
 
         # Пример асинхронного вызова
         # await notify_users_with_free_status(bot)
-        await asyncio.sleep(3600)
-async def main():
+        await asyncio.sleep(10800)
+
+
+async def send_backup_db_to_admin(bot: Bot):
+    # Проверка, существует ли файл базы данных
+    if not os.path.exists(database_path_local):
+        print(f"Ошибка: Файл базы данных не найден по пути {database_path_local}")
+        return
+
+    # Формируем текст сообщения с текущей датой
+    from datetime import datetime
+    current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    caption = f"Резервная копия базы данных за {current_date}"
 
     try:
-        await send_admin_log(bot, "Бот запустился")
+        # Открываем файл базы данных
+        backup_file = FSInputFile(database_path_local)
+
+        # Отправляем файл каждому администратору из списка
+        for admin_chat_id in ADMIN_CHAT_IDS:
+            print(f"Отправка резервной копии в чат {admin_chat_id}.")
+            await bot.send_document(chat_id=admin_chat_id, document=backup_file, caption=caption)
+
+        print("Резервная копия успешно отправлена.")
     except Exception as e:
-        logging.exception(f"Ошибка при отправке запуске очереди Redis: {e}")
+        print(f"Ошибка при отправке резервной копии: {e}")
+
+
+async def periodic_backup_task(bot: Bot):
+    while True:
+        # Текущее время
+        now = datetime.now()
+
+        # Время следующего 3:00 ночи
+        next_3am = datetime.combine(now.date(), datetime.min.time()) + timedelta(hours=15, minutes=7)
+
+        # Если сейчас уже после 3:00 ночи, то следующий запуск будет завтра в 3:00
+        if now > next_3am:
+            next_3am += timedelta(days=1)
+
+        # Рассчитываем, сколько времени осталось до следующего 3:00
+        time_to_sleep = (next_3am - now).total_seconds()
+
+        # Спим до следующего 3:00
+        print(f"Следующая отправка бд в чат телеграма в {next_3am}, ждем {time_to_sleep} секунд.")
+        await asyncio.sleep(time_to_sleep)
+
+        try:
+            # Отправляем резервную копию
+            await send_backup_db_to_admin(bot)
+        except Exception as e:
+            # Логирование ошибки и отправка уведомления администратору
+            logging.error(f"Ошибка при отправке бекапа базы данных: {e}")
+            await send_admin_log(bot, f"Ошибка при отправке бекапа базы данных: {e}")
+
+
+async def periodic_task_24_hour(bot: Bot):
+    # Ждем 1 секунду после старта бота (как у тебя)
+    await asyncio.sleep(1)
+
+    while True:
+        # Текущее время
+        now = datetime.now()
+
+        # Время следующего 3:00 ночи
+        next_3am = datetime.combine(now.date(), datetime.min.time()) + timedelta(hours=15, minutes=7)
+
+        # Если сейчас уже после 3:00 ночи, то следующий запуск будет завтра в 3:00
+        if now > next_3am:
+            next_3am += timedelta(days=1)
+
+        # Рассчитываем, сколько времени осталось до следующего 3:00
+        time_to_sleep = (next_3am - now).total_seconds()
+
+        # Спим до следующего 3:00
+        print(f"Следующее выполнение в {next_3am}, ждем {time_to_sleep} секунд.")
+        await asyncio.sleep(time_to_sleep)
+
+        # Когда просыпаемся, выполняем задачу
+        print("Сработала функция в 3:00 ночи")
+        try:
+            # Сообщаем администратору о начале обновления
+            await send_admin_log(bot, "Пинг бота - началось обновление базы данных в 3:00.")
+
+            # Выполнение проверки базы данных
+            await check_db(bot)
+
+            # Уведомление об успешном завершении
+            await send_admin_log(bot, "Обновление базы данных прошло успешно.")
+
+        except Exception as e:
+            # Логирование ошибки и отправка уведомления администратору
+            logging.error(f"Ошибка при выполнении обновления базы данных: {e}")
+            await send_admin_log(bot, f"Обновление базы данных завершилось с ошибкой: {e}")
+
+        # Мы не ждем фиксированное количество времени, а снова пересчитываем время до следующего 3:00
+
+
+async def main():
+    try:
+        await send_admin_log(bot, "Бот запустился")
+        # Настраиваем логирование
+        setup_logger("logs/bot.log")
+    except Exception as e:
+        logging.exception(f"Неверное логирование: Ошибка при отправке запуске очереди Redis: {e}")
 
     await on_startup()
     await initialize_db()
@@ -69,9 +165,6 @@ async def main():
         return
     print(f"Токен успешно загружен: {BOT_TOKEN}")
 
-    # Настраиваем логирование
-    setup_logger("logs/bot.log")
-
     # Указываем путь к базе данных
     db_path = Path(os.getenv('database_path_local'))
     if not db_path.exists():
@@ -82,11 +175,12 @@ async def main():
 
     # Инициализация базы данных SQLite
     await init_db(db_path)
-    result = await add_user(111224422, "test_user")
     # Запускаем асинхронную задачу для периодической отправки сообщений админу
     asyncio.create_task(periodic_task(bot))
-
-     # Промежуточное ПО для предотвращения спама
+    #asyncio.create_task(periodic_task_24_hour(bot))
+    asyncio.create_task(listen_to_redis_queue(bot))  # 1 час
+    asyncio.create_task(periodic_backup_task(bot))
+    # Промежуточное ПО для предотвращения спама
     dp.message.middleware(ThrottlingMiddleware(rate_limit=1))
 
     # Регистрация хэндлеров
@@ -103,11 +197,9 @@ async def main():
     dp.include_router(file_or_qr.router)
     dp.include_router(subscription.router)
     dp.include_router(user_help_request.router)
-    dp.include_router(payments_handler.router)
+    dp.include_router(payments_handler_redis.router)
     dp.include_router(feedback.router)
     #dp.include_router(payment.router)
-
-
 
     # Запуск бота
     try:

@@ -1,6 +1,5 @@
 # bot/handlers/support.py
-from aiogram import Router, types
-from bot.utils.db import add_user_question  # Импорт функции добавления вопроса в базу данных
+from bot.database.db import add_user_question  # Импорт функции добавления вопроса в базу данных
 from aiogram import Router, types
 from aiogram.filters import Command
 from bot.handlers.cleanup import store_message, delete_unimportant_messages, register_message_type

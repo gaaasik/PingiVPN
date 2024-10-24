@@ -1,18 +1,15 @@
 # Это файл handlers/file_or_qr.py
 import os
-import re
 
-from aiogram import Router, types
-from aiogram.types import CallbackQuery, FSInputFile, InlineKeyboardMarkup
+from aiogram import Router
+from aiogram.types import CallbackQuery, InlineKeyboardMarkup
 from dotenv import load_dotenv
 
-from bot.handlers.cleanup import store_important_message, delete_unimportant_messages
+from bot.handlers.cleanup import store_important_message
 from bot.keyboards.inline import subscribe_keyboard, get_detailed_instruction_button, get_file_button, \
     get_qr_code_button
-from bot.utils.db import update_user_subscription_status
 from bot.utils.file_sender import send_config_file, send_qr_code, send_instruction_video
-from bot.utils.subscription_check import should_check_subscription, update_subscription_status, check_subscription_channel
-from data.text_messages import detailed_instructions_message
+from bot.utils.subscription_check import check_subscription_channel
 
 router = Router()
 load_dotenv()
@@ -85,21 +82,21 @@ async def handle_get_qr_code(callback_query: CallbackQuery):
     await callback_query.answer()
 
 
-async def handle_get_file(callback_query: CallbackQuery):
-    chat_id = callback_query.message.chat.id
-
-    # Проверяем подписку пользователя
-    if not await check_subscription_channel(chat_id, callback_query.bot):
-        # Отправляем сообщение с кнопками "Перейти на канал" и "Я подписался"
-        message = await callback_query.message.answer(
-            "VPN работает без рекламы. Чтобы начать пользоваться — подпишитесь на канал PingiVPN.",
-            reply_markup=subscribe_keyboard()
-        )
-        # Сохраняем это сообщение как важное
-        await store_important_message(callback_query.bot, chat_id, message.message_id, message, "subscription_check")
-        return
-
-    # Если подписка подтверждена, отправляем файл
-    await send_config_file(callback_query)
-
-    await callback_query.answer()
+# async def handle_get_file(callback_query: CallbackQuery):
+#     chat_id = callback_query.message.chat.id
+#
+#     # Проверяем подписку пользователя
+#     if not await check_subscription_channel(chat_id, callback_query.bot):
+#         # Отправляем сообщение с кнопками "Перейти на канал" и "Я подписался"
+#         message = await callback_query.message.answer(
+#             "VPN работает без рекламы. Чтобы начать пользоваться — подпишитесь на канал PingiVPN.",
+#             reply_markup=subscribe_keyboard()
+#         )
+#         # Сохраняем это сообщение как важное
+#         await store_important_message(callback_query.bot, chat_id, message.message_id, message, "subscription_check")
+#         return
+#
+#     # Если подписка подтверждена, отправляем файл
+#     await send_config_file(callback_query)
+#
+#     await callback_query.answer()
