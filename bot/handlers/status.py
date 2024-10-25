@@ -148,6 +148,7 @@ async def generate_status_message(chat_id: int) -> tuple:
     if user_data and len(user_data) == 4:
         # Распаковываем данные пользователя.
         registration_date, days_since_registration, user_name, subscription_status = user_data
+        days = await get_days_since_registration_db(chat_id)
 
         # Определяем текст статуса подписки и создаем клавиатуру в зависимости от статуса.
         if subscription_status == "waiting_pending":
@@ -157,7 +158,7 @@ async def generate_status_message(chat_id: int) -> tuple:
             keyboard = create_payment_button(chat_id)
         elif subscription_status == "new_user":
             #str_count_days = count_day_free_user_db(chat_id)
-            days = await get_days_since_registration_db(chat_id)
+
 
             if 14 - days < 0:
                 str_count_days = 0
@@ -180,7 +181,7 @@ async def generate_status_message(chat_id: int) -> tuple:
             user_name = chat_id
         # Формируем текст сообщения о статусе пользователя.
         status_message = (
-            f"🕒 Вы с нами уже {days_since_registration} дней! 🚀 Какой прогресс! 😎\n"
+            f"🕒 Вы с нами уже {days} дней! 🚀 Какой прогресс! 😎\n"
             f"Действие тарифа: {str_count_days}\n"
             f"Имя пользователя: {user_name}\n"
             f"Статус подписки: *{status_sub_txt}*"
