@@ -6,7 +6,7 @@ from bot.handlers.cleanup import delete_unimportant_messages, store_message, reg
 from bot.keyboards.inline import create_payment_button
 from bot.database.db import get_days_since_registration_db
 from bot.database.users_db import get_user_registration_date_and_username_db
-from models.User_cl import User_cl
+from models.UserCl import UserCl
 
 #from bot.utils.file_sender import count_files_in_directory
 
@@ -142,7 +142,7 @@ async def generate_status_message(chat_id: int) -> tuple:
     - keyboard: клавиатура с кнопкой оплаты, если применимо.
     """
     #################################################################################
-    us = await User_cl.create(chat_id)
+    us = await UserCl.load_user(chat_id)
     # print("count_key = ", us.count_key)
     # new_server = {
     #     "name_server": "Server test22222",
@@ -166,9 +166,9 @@ async def generate_status_message(chat_id: int) -> tuple:
 
 
     #################################################################################
-
+    await us.count_key.set(6)
     await us.user_name.set("TOL")
-    await us.referrer_id.set(11111111)
+
     await us.registration_date.set()
     await us.user_name.set("TOL")
     await us.user_name.set("TOL")

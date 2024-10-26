@@ -9,7 +9,7 @@ from datetime import datetime
 
 
 
-async def add_user_db(chat_id: int, user_name: str, referrer_id: int = None):
+async def add_user_db(chat_id: int, user_name: str, referral_old_chat_id: int = None):
     registration_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Сохраняем текущее время в формате строки
 
     async with aiosqlite.connect(database_path_local) as conn:
@@ -23,21 +23,18 @@ async def add_user_db(chat_id: int, user_name: str, referrer_id: int = None):
                 print(f"Пользователь с chat_id {chat_id} уже существует.")
                 return
 
-
-
-
             text_defoult = ""
 
 
             # Если пользователя нет, добавляем его
-            if referrer_id:
+            if referral_old_chat_id:
                 print(f"Начали добавлять")
                 await conn.execute(
                     '''
-                    INSERT INTO users (chat_id, user_name, registration_date, referrer_id, device, is_subscribed_on_channel, days_since_registration, email)
+                    INSERT INTO users (chat_id, user_name, registration_date, referral_old_chat_id, device, is_subscribed_on_channel, days_since_registration, email)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                     ''',
-                    (chat_id, user_name, registration_date, referrer_id, "", False, 0, "tol.semenoff@mail.ru")
+                    (chat_id, user_name, registration_date, referral_old_chat_id, "", False, 0, "tol.semenoff@mail.ru")
                 )
                 await conn.execute(
                     '''

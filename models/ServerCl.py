@@ -3,7 +3,36 @@ import json
 import paramiko
 
 
-class Server_cl:
+
+
+class Field:
+    def __init__(self, name, value, server, is_protected=False):
+        self._name = name  # Приватное название поля
+        self._value = value  # Приватное значение поля
+        self._server = server  # Ссылка на объект Server_cl
+        self._is_protected = is_protected  # Флаг для защиты поля от публичного изменения
+
+    # Публичный метод для получения значения
+    def get(self):
+        return self._value
+
+    # Приватный метод для изменения поля, если это поле защищено (is_protected=True)
+    async def _set(self, new_value):
+        """Приватный метод обновления значения поля."""
+        self._value = new_value
+        setattr(self._server, f"_{self._name}", new_value)
+        await self._server.update_in_db()  # Обновление данных в базе через объект Server_cl
+
+    # Публичный метод для изменения значения, если поле не защищено
+    async def set(self, new_value):
+        if self._is_protected:
+            raise AttributeError(f"Field '{self._name}' is protected and cannot be changed directly.")
+        await self._set(new_value)
+
+
+
+
+class ServerCl:
     def __init__(self, server_data: dict, user):
         self.enable = Field('enable', server_data.get("enable", None), self, is_protected=True)
 
@@ -119,26 +148,4 @@ class Server_cl:
         await self._update_json_on_server(new_enable_value)
 
 
-class Field:
-    def __init__(self, name, value, server, is_protected=False):
-        self._name = name  # Приватное название поля
-        self._value = value  # Приватное значение поля
-        self._server = server  # Ссылка на объект Server_cl
-        self._is_protected = is_protected  # Флаг для защиты поля от публичного изменения
 
-    # Публичный метод для получения значения
-    def get(self):
-        return self._value
-
-    # Приватный метод для изменения поля, если это поле защищено (is_protected=True)
-    async def _set(self, new_value):
-        """Приватный метод обновления значения поля."""
-        self._value = new_value
-        setattr(self._server, f"_{self._name}", new_value)
-        await self._server.update_in_db()  # Обновление данных в базе через объект Server_cl
-
-    # Публичный метод для изменения значения, если поле не защищено
-    async def set(self, new_value):
-        if self._is_protected:
-            raise AttributeError(f"Field '{self._name}' is protected and cannot be changed directly.")
-        await self._set(new_value)
