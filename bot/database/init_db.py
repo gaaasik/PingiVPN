@@ -25,11 +25,11 @@ async def init_db(database_path: str):
         # Таблица referrals
         await db.execute('''CREATE TABLE IF NOT EXISTS "referrals" (
             "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-            "referrer_id" INTEGER NOT NULL,
-            "referred_id" INTEGER NOT NULL,
+            "referral_old_chat_id" INTEGER NOT NULL,
+            "referral_new_chat_id" INTEGER NOT NULL,
             "timestamp" DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY("referred_id") REFERENCES "users"("id"),
-            FOREIGN KEY("referrer_id") REFERENCES "users"("id")
+            FOREIGN KEY("referral_old_chat_id") REFERENCES "users"("id"),
+            FOREIGN KEY("referral_new_chat_id") REFERENCES "users"("id")
         );''')
 
         # Таблица user_questions
@@ -47,12 +47,12 @@ async def init_db(database_path: str):
             "chat_id" INTEGER UNIQUE,
             "user_name" TEXT,
             "registration_date" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            "referrer_id" INTEGER,
+            "referral_old_chat_id" INTEGER,
             "device" TEXT,
             "is_subscribed_on_channel" BOOLEAN DEFAULT 0,
             "days_since_registration" INTEGER DEFAULT 0,
             "email" TEXT,
-            FOREIGN KEY("referrer_id") REFERENCES "users"("id")
+            FOREIGN KEY("referral_old_chat_id") REFERENCES "users"("id")
         );''')
 
         # Таблица users_key (по chat_id)

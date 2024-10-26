@@ -11,6 +11,7 @@ from bot.keyboards.inline import device_choice_keyboard
 from bot.utils.cache import send_cached_photo
 from bot.database.db import get_user_by_telegram_id, add_referral, get_user_count
 from bot.database.users_db import add_user_db
+from models.User_cl import User_cl
 
 router = Router()
 # Загрузка переменных из файла .env
@@ -68,6 +69,15 @@ async def cmd_start(message: types.Message):
     user = await get_user_by_telegram_id(chat_id)
     print(user)
     test = 111122222
+    us = User_cl.create(chat_id)
+    print("-----------------------------------------------")
+    print("us = ", us)
+    if us:
+        print("Он есть")
+    else:
+        print("Его нету")
+    print("-----------------------------------------------")
+
 
     if user:
         # Если пользователь уже существует, уведомляем администратора
@@ -91,6 +101,6 @@ async def cmd_start(message: types.Message):
     # Сохраняем в базе данных реферальную информацию (если есть)
     args = message.text.split()[1] if len(message.text.split()) > 1 else None
     if args:
-        referrer_id = int(args)
-        await add_referral(referrer_id, chat_id)
+        referral_old_chat_id = int(args)
+        await add_referral(referral_old_chat_id, chat_id)
 

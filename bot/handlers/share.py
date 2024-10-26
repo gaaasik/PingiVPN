@@ -69,7 +69,7 @@ async def cmd_share(message: types.Message):
 @router.callback_query(lambda callback_query: callback_query.data == "share_friend")
 async def cmd_share_callback(callback_query: types.CallbackQuery):
 
-    user_id = callback_query.from_user.id
+
     bot = callback_query.bot
     chat_id = callback_query.from_user.id  # Получаем chat_id через from_user.id для callback_query
     share_message = (
@@ -80,7 +80,7 @@ async def cmd_share_callback(callback_query: types.CallbackQuery):
 
     )
     # Генерация реферальной ссылки
-    referral_link = f"https://t.me/{name_bot}?start={user_id}"
+    referral_link = f"https://t.me/{name_bot}?start={chat_id}"
 
     # Создаем инлайн-кнопку с реферальной ссылкой
     share_link_button = InlineKeyboardMarkup(

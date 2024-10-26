@@ -13,7 +13,6 @@ class Server_cl:
         self.server_ip = Field('server_ip', server_data.get("server_ip", None), self)
         self.user_ip = Field('user_ip', server_data.get("user_ip", None), self)
         self.name_conf = Field('name_conf', server_data.get("name_conf", None), self)
-        #self.enable = Field('enable', server_data.get("enable", None), self)
         self.vpn_usage_start_date = Field('vpn_usage_start_date', server_data.get("vpn_usage_start_date", None), self)
         self.traffic_up = Field('traffic_up', server_data.get("traffic_up", 0), self)
         self.traffic_down = Field('traffic_down', server_data.get("traffic_down", 0), self)
@@ -51,16 +50,12 @@ class Server_cl:
             "date_expire_free_trial": self.date_expire_free_trial.get()
         }
 
-
-        """Обновляет файл JSON на сервере через SSH"""
-
-
     async def _update_json_on_server(self, new_enable_value: bool):
-        """Обновляет файл JSON на сервере через SSH и изменяет поле enable"""
+        """Обновляет файл JSON на сервере через SSH и изменяет поле enable."""
         ssh_host = "195.133.14.202"
         ssh_user = "root"
         ssh_password = "jzH^zvfW1J4qRX"
-        json_file_path = '/root/.wg-easy/wg0.json'
+        json_file_path = "/root/.wg-easy/wg0.json"
 
         try:
             # Установка SSH-соединения
@@ -123,6 +118,7 @@ class Server_cl:
         """Метод обновления enable поля на сервере и в объекте"""
         await self._update_json_on_server(new_enable_value)
 
+
 class Field:
     def __init__(self, name, value, server, is_protected=False):
         self._name = name  # Приватное название поля
@@ -146,4 +142,3 @@ class Field:
         if self._is_protected:
             raise AttributeError(f"Field '{self._name}' is protected and cannot be changed directly.")
         await self._set(new_value)
-

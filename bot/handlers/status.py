@@ -142,12 +142,12 @@ async def generate_status_message(chat_id: int) -> tuple:
     - keyboard: клавиатура с кнопкой оплаты, если применимо.
     """
     #################################################################################
-
+    us = await User_cl.create(chat_id)
     # print("count_key = ", us.count_key)
     # new_server = {
     #     "name_server": "Server test22222",
     #     "country_server": "22222",
-    #     "server_1_ip": "2222222",
+    #     "server_ip": "2222222",
     #     "user_ip": "test",
     #     "name_conf": "test",
     #     "enable": True,
@@ -166,16 +166,24 @@ async def generate_status_message(chat_id: int) -> tuple:
 
 
     #################################################################################
-    us = await User_cl.create(chat_id)
 
-    await us.servers[1].change_enable(True)
+    await us.user_name.set("TOL")
+    await us.referrer_id.set(11111111)
+    await us.registration_date.set()
+    await us.user_name.set("TOL")
+    await us.user_name.set("TOL")
+
+
+    await us.servers[2].user_ip.set("127.127.127.127")
+    await us.servers[0].change_enable(True)
     print("NAME ", us.user_name.get(), "----------------------------------------------------")
-    print("server_ip ", us.servers[0].server_ip.get())
-    print("user_ip ", us.servers[0].user_ip.get())
-    print("enable ", us.servers[0].enable.get())
+    print("server_ip ", us.servers[2].server_ip.get())
+    print("user_ip ", us.servers[2].user_ip.get())
+    print("enable ", us.servers[2].enable.get())
+    print("count_key ", us.count_key)
 
 
-    status_key = us.servers[0].status_key.get()
+    status_key = await us.servers[0].status_key.get()
 
 
     # Проверяем, что данные пользователя успешно получены и содержат 4 элемента.

@@ -182,7 +182,7 @@ async def add_user_question(chat_id: int, user_id: int, question_text: str):
 
 
 # //////////////////////////////////////////////////////////////////
-async def add_referral(referrer_id: int, referred_id: int):
+async def add_referral(referral_old_chat_id: int, referral_new_chat_id: int):
     async with aiosqlite.connect(database_path_local) as conn:
         # Проверяем, есть ли уже столбец referrer_id в таблице
         async with conn.execute("PRAGMA table_info(users)") as cursor:
@@ -194,8 +194,8 @@ async def add_referral(referrer_id: int, referred_id: int):
             await conn.execute('ALTER TABLE users ADD COLUMN referrer_id INTEGER')
 
         await conn.execute(
-            'INSERT INTO referrals (referrer_id, referred_id, timestamp) VALUES (?, ?, CURRENT_TIMESTAMP)',
-            (referrer_id, referred_id)
+            'INSERT INTO referrals (referral_old_chat_id, referral_new_chat_id, timestamp) VALUES (?, ?, CURRENT_TIMESTAMP)',
+            (referral_old_chat_id, referral_new_chat_id)
         )
 
         await conn.commit()
