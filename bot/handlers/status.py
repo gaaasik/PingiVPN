@@ -182,9 +182,6 @@ async def generate_status_message(chat_id: int) -> tuple:
     await us.user_name.set("TOL")
 
 
-    # await us.servers[2].user_ip.set("127.127.127.127")
-    # await us.servers[0].change_enable(True)
-
     print("NAME ", us.user_name.get(), "----------------------------------------------------")
     await us.count_key.set(1)
     print("count_key ", us.count_key.get())
@@ -194,8 +191,7 @@ async def generate_status_message(chat_id: int) -> tuple:
     status_key = 0
 
     # Проверяем, что данные пользователя успешно получены и содержат 4 элемента.
-    #if us.count_key.get() > 0:
-    if status_key > 0:
+    if us.count_key.get() > 0:
 
         # Определяем текст статуса подписки и создаем клавиатуру в зависимости от статуса.
         if status_key == "waiting_pending":
