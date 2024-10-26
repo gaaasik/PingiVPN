@@ -19,12 +19,13 @@ class Field:
 
     async def set(self, new_value):
         if self.name == "count_key":
-            print("нельзя менять coutn_key не изнутри класса ")
+            print("нельзя менять coutn_key не изнутри класса")
             return
         self.value = new_value
         setattr(self.user, f"_{self.name}", new_value)
         await self.user._update_field_in_db(self.name, new_value)
-    async def _setcount(self, new_value: int) -> None:
+
+    async def _set_count_key(self, new_value):
         if self.name == "count_key":
             self.value = new_value
             setattr(self.user, f"_{self.name}", new_value)
@@ -77,12 +78,17 @@ class UserCl:
         from bot_instance import bot  # Импорт бота, если он не передан напрямую
         try:
             status = await bot.get_chat_member(channel_username, self.chat_id)
-            return status.status in ["member", "administrator", "creator"]
+            is_subscribed = status.status in ["member", "administrator", "creator"]
+            # Обновляем поле is_subscribed_on_channel на основе статуса подписки
+            await self.is_subscribed_on_channel.set(1 if is_subscribed else 0)
+            return is_subscribed
         except Exception as e:
             print(f"Ошибка при проверке подписки на канал: {e}")
+            # Если произошла ошибка, поле is_subscribed_on_channel остается неизменным или устанавливается в 0.
+            await self.is_subscribed_on_channel.set(0)
             return False
 
-    async def add_user_to_database(self, chat_id, user_name, referral_old_chat_id):
+    async def add_user_to_database(self, user_name, referral_old_chat_id):
         """Добавляет нового пользователя в базу данных"""
 
         # Устанавливаем значения user_name, registration_date и referral_old_chat_id через set()
@@ -90,57 +96,61 @@ class UserCl:
         current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         await self.registration_date.set(current_date)
         await self.referral_old_chat_id.set(referral_old_chat_id)
+
+        # Проверка подписки пользователя на канал
         is_subscribed = await self.check_subscription_channel()
-        if is_subscribed:
-            print("Пользователь подписан на канал.")
-        else:
-            print("Пользователь не подписан на канал.")
+        await self.is_subscribed_on_channel.set(1 if is_subscribed else 0)
+        print("Пользователь подписан на канал." if is_subscribed else "Пользователь не подписан на канал.")
 
+        try:
+            async with aiosqlite.connect(database_path_local) as db:
+                # Проверка существования пользователя в таблице users
+                query_check_user = "SELECT chat_id FROM users WHERE chat_id = ?"
+                async with db.execute(query_check_user, (self.chat_id,)) as cursor:
+                    result_user = await cursor.fetchone()
+                    if result_user:
+                        print(f"Пользователь с chat_id {self.chat_id} уже существует в таблице users.")
+                        return False  # Прерывание, если пользователь существует
 
-
-        async with aiosqlite.connect(database_path_local) as db:
-            # Проверка, существует ли пользователь в таблице users
-            query_check_user = "SELECT chat_id FROM users WHERE chat_id = ?"
-            async with db.execute(query_check_user, (chat_id,)) as cursor:
-                result_user = await cursor.fetchone()
-                if result_user:
-                    print(f"Пользователь с chat_id {chat_id} уже существует в таблице users.")
-                else:
+                    # Добавляем запись в таблицу users, если пользователя нет
                     query_add_user = """
                     INSERT INTO users (chat_id, user_name, registration_date, referral_old_chat_id, device, 
                                        is_subscribed_on_channel, days_since_registration, email)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                     """
                     await db.execute(query_add_user, (
-                        chat_id,
+                        self.chat_id,
                         self.user_name.get(),
                         self.registration_date.get(),
                         self.referral_old_chat_id.get(),
-                        self.device,
-                        self.is_subscribed_on_channel,
-                        self.days_since_registration,
-                        self.email
+                        self.device.get() if hasattr(self.device, 'get') else None,
+                        self.is_subscribed_on_channel.get(),
+                        self.days_since_registration.get() if hasattr(self.days_since_registration, 'get') else None,
+                        self.email.get() if hasattr(self.email, 'get') else None
                     ))
                     print(f"Пользователь {user_name} добавлен в таблицу users.")
 
-            # Проверка, существует ли запись в таблице users_key
-            query_check_user_key = "SELECT chat_id FROM users_key WHERE chat_id = ?"
-            async with db.execute(query_check_user_key, (chat_id,)) as cursor:
-                result_user_key = await cursor.fetchone()
-                if result_user_key:
-                    print(f"Запись с chat_id {chat_id} уже существует в таблице users_key.")
-                else:
-                    query_add_user_key = """
-                    INSERT INTO users_key (chat_id, count_key, value_key)
-                    VALUES (?, ?, ?)
-                    """
-                    await db.execute(query_add_user_key, (chat_id, 0, ""))  # count_key = 0 и value_key пустое
-                    print(f"Пользователь {user_name} добавлен в таблицу users_key.")
+                # Проверка существования записи в таблице users_key
+                query_check_user_key = "SELECT chat_id FROM users_key WHERE chat_id = ?"
+                async with db.execute(query_check_user_key, (self.chat_id,)) as cursor:
+                    result_user_key = await cursor.fetchone()
+                    if result_user_key:
+                        print(f"Запись с chat_id {self.chat_id} уже существует в таблице users_key.")
+                    else:
+                        query_add_user_key = """
+                        INSERT INTO users_key (chat_id, count_key, value_key)
+                        VALUES (?, ?, ?)
+                        """
+                        await db.execute(query_add_user_key, (self.chat_id, 0, ""))
+                        print(f"Пользователь {user_name} добавлен в таблицу users_key.")
 
-            # Подтверждаем все изменения
-            await db.commit()
-            print(f"Все изменения для пользователя {user_name} с chat_id {chat_id} сохранены в базе.")
-            return True  # Успешное добавление
+                # Подтверждаем все изменения
+                await db.commit()
+                print(f"Все изменения для пользователя {user_name} с chat_id {self.chat_id} сохранены в базе.")
+                return True  # Успешное добавление
+        except Exception as e:
+            print(f"Ошибка при добавлении пользователя в базу данных: {e}")
+            return False
 
 
     async def _load_user_data(self):
@@ -198,7 +208,6 @@ class UserCl:
                 else:
                     print(f"Нет серверов для пользователя с chat_id {self.chat_id}")
                     self.servers = []
-
 
 
     async def _update_servers_in_db(self):
