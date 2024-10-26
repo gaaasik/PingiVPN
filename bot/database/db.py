@@ -638,7 +638,7 @@ async def get_days_since_registration_db(chat_id: int) -> int:
 
                 date_registration_str = row[0]
                 print(f"Дата регистрации пользователя: {date_registration_str}")
-
+                date_registration_str = date_registration_str.split('.')[0]
                 # Преобразуем дату регистрации из строки в объект datetime
                 # Извлекаем только дату, игнорируя время
                 date_registration = datetime.strptime(date_registration_str, "%Y-%m-%d %H:%M:%S").date()
