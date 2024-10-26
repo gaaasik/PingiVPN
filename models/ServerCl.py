@@ -37,21 +37,23 @@ class ServerCl:
         self.enable = Field('enable', server_data.get("enable", None), self, is_protected=True)
 
         # Инициализация всех полей, переданных в JSON
-        self.name_server = Field('name_server', server_data.get("name_server", None), self)
-        self.country_server = Field('country_server', server_data.get("country_server", None), self)
-        self.server_ip = Field('server_ip', server_data.get("server_ip", None), self)
-        self.user_ip = Field('user_ip', server_data.get("user_ip", None), self)
-        self.name_conf = Field('name_conf', server_data.get("name_conf", None), self)
-        self.vpn_usage_start_date = Field('vpn_usage_start_date', server_data.get("vpn_usage_start_date", None), self)
+        self.name_protocol = Field('name_protocol', server_data.get("name_protocol", ""), self)
+        self.name_server = Field('name_server', server_data.get("name_server", ""), self)
+        self.country_server = Field('country_server', server_data.get("country_server", ""), self)
+        self.server_ip = Field('server_ip', server_data.get("server_ip", ""), self)
+        self.user_ip = Field('user_ip', server_data.get("user_ip", ""), self)
+        self.name_conf = Field('name_conf', server_data.get("name_conf", ""), self)
+        self.vpn_usage_start_date = Field('vpn_usage_start_date', server_data.get("vpn_usage_start_date", ""), self)
         self.traffic_up = Field('traffic_up', server_data.get("traffic_up", 0), self)
         self.traffic_down = Field('traffic_down', server_data.get("traffic_down", 0), self)
         self.has_paid_key = Field('has_paid_key', server_data.get("has_paid_key", 1), self)
         self.status_key = Field('status_key', server_data.get("status_key", 'new_user'), self)
         self.is_notification = Field('is_notification', server_data.get("is_notification", False), self)
-        self.days_after_pay = Field('days_after_pay', server_data.get("days_after_pay", None), self)
-        self.date_payment_key = Field('date_payment_key', server_data.get("date_payment_key", None), self)
-        self.date_expire_of_paid_key = Field('date_expire_of_paid_key', server_data.get("date_expire_of_paid_key", None), self)
-        self.date_expire_free_trial = Field('date_expire_free_trial', server_data.get("date_expire_free_trial", None), self)
+        self.days_after_pay = Field('days_after_pay', server_data.get("days_after_pay", ""), self)
+        self.date_payment_key = Field('date_payment_key', server_data.get("date_payment_key", ""), self)
+        self.date_expire_of_paid_key = Field('date_expire_of_paid_key', server_data.get("date_expire_of_paid_key", ""), self)
+        self.date_expire_free_trial = Field('date_expire_free_trial', server_data.get("date_expire_free_trial", ""), self)
+        self.url_vless = Field('url_vless', server_data.get("url_vless", ""), self)
         self.user = user  # Ссылка на объект User для обновления данных в базе
 
     async def update_in_db(self):
@@ -61,6 +63,7 @@ class ServerCl:
     def to_dict(self):
         """Преобразуем объект сервера в JSON."""
         return {
+            "name_protocol": self.name_protocol.get(),
             "name_server": self.name_server.get(),
             "country_server": self.country_server.get(),
             "server_ip": self.server_ip.get(),
@@ -76,7 +79,8 @@ class ServerCl:
             "days_after_pay": self.days_after_pay.get(),
             "date_payment_key": self.date_payment_key.get(),
             "date_expire_of_paid_key": self.date_expire_of_paid_key.get(),
-            "date_expire_free_trial": self.date_expire_free_trial.get()
+            "date_expire_free_trial": self.date_expire_free_trial.get(),
+            "url_vless": self.url_vless.get()
         }
 
     async def _update_json_on_server(self, new_enable_value: bool):
@@ -146,6 +150,26 @@ class ServerCl:
     async def change_enable(self, new_enable_value: bool):
         """Метод обновления enable поля на сервере и в объекте"""
         await self._update_json_on_server(new_enable_value)
+
+    async def delete(self):
+        """Удаляет текущий сервер из списка серверов пользователя и обновляет базу данных."""
+
+        # Проверяем, что текущий сервер есть в списке servers пользователя
+        if self in self.user.servers:
+            # Удаляем сервер из списка servers
+            self.user.servers.remove(self)
+
+            # Обновляем count_key: уменьшаем на 1 и сохраняем в базе данных
+            await self.user.count_key._setcount(self.user.count_key.get() - 1)
+
+            # Обновляем value_key в базе данных (список серверов) после удаления
+            await self.user._update_servers_in_db()
+
+            print(f"Сервер {self.name_server.get()} успешно удален из списка и базы данных.")
+            return True
+        else:
+            print("Сервер не найден в списке пользователя.")
+            return False
 
 
 

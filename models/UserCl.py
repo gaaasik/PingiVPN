@@ -18,16 +18,17 @@ class Field:
         self.user = user  # Ссылка на объект User
 
     async def set(self, new_value):
-        if self.name == "coutn_key":
+        if self.name == "count_key":
             print("нельзя менять coutn_key не изнутри класса ")
             return
         self.value = new_value
         setattr(self.user, f"_{self.name}", new_value)
         await self.user._update_field_in_db(self.name, new_value)
-    async def _setcount(self, new_value):
-        self.value = new_value
-        setattr(self.user, f"_{self.name}", new_value)
-        await self.user._update_field_in_db(self.name, new_value)
+    async def _setcount(self, new_value: int) -> None:
+        if self.name == "count_key":
+            self.value = new_value
+            setattr(self.user, f"_{self.name}", new_value)
+            await self.user._update_count_key_in_db(self.name, new_value)
 
 
 
@@ -61,7 +62,7 @@ class UserCl:
         # Преобразуем параметры в объект Server_cl и добавляем его в список servers
         new_server = ServerCl(server_params, self)
         self.servers.append(new_server)
-        self.count_key += 1  # Увеличиваем количество серверов
+        await self.count_key._setcount(self.count_key.get() + 1)
 
         # Обновляем поле value_key (список серверов) и count_key в базе данных
         await self._update_servers_in_db()
@@ -88,7 +89,6 @@ class UserCl:
         await self.user_name.set(user_name)
         current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         await self.registration_date.set(current_date)
-        await self.referral_old_chat_id.set(referral_old_chat_id)
         await self.referral_old_chat_id.set(referral_old_chat_id)
         is_subscribed = await self.check_subscription_channel()
         if is_subscribed:
@@ -155,16 +155,20 @@ class UserCl:
                 result = await cursor.fetchone()
 
                 if result:
-                    (self.chat_id, self.user_name, self.registration_date, self.referral_old_chat_id,
-                     self.device, self.is_subscribed_on_channel, self.days_since_registration,
-                     self.email) = result
+                    # Извлекаем данные из базы
+                    (chat_id, user_name, registration_date, referral_old_chat_id,
+                     device, is_subscribed_on_channel, days_since_registration,
+                     email) = result
 
-                    # Создаем объекты Field для всех полей
-                    self.user_name = Field('user_name', self.user_name, self)
-                    self.is_subscribed_on_channel = Field('is_subscribed_on_channel', self.is_subscribed_on_channel, self)
-                    self.device = Field('device', self.device, self)
-                    self.email = Field('email', self.email, self)
-                    self.days_since_registration = Field('days_since_registration', self.days_since_registration, self)
+                    # Устанавливаем значения через `set` для сохранения типа `Field`
+                    self.user_name.value = user_name
+                    self.registration_date.value = registration_date
+                    self.referral_old_chat_id.value = referral_old_chat_id
+                    self.device.value = device
+                    self.is_subscribed_on_channel.value = is_subscribed_on_channel
+                    self.days_since_registration.value = days_since_registration
+                    self.email.value = email
+
 
     async def _load_servers(self):
         """Загрузка списка серверов для пользователя"""
@@ -175,7 +179,8 @@ class UserCl:
             async with db.execute(query, (self.chat_id,)) as cursor:
                 result = await cursor.fetchone()
                 if result:
-                    value_key, self.count_key = result
+                    value_key, load_count_key = result
+                    self.count_key.value = load_count_key
                     if value_key:
                         try:
                             servers_data = json.loads(value_key)
@@ -208,7 +213,7 @@ class UserCl:
             SET value_key = ?, count_key = ? 
             WHERE chat_id = ?
             """
-            await db.execute(query_update, (value_key_json, self.count_key, self.chat_id))
+            await db.execute(query_update, (value_key_json, self.count_key.get(), self.chat_id))
             await db.commit()
 
     async def _update_field_in_db(self, field_name, value):
@@ -235,4 +240,10 @@ class UserCl:
                 await db.commit()
                 print(f"Поле '{field_name}' обновлено для пользователя с chat_id {self.chat_id}.")
 
-
+    async def _update_count_key_in_db(self, field_name, value):
+        """Обновление count_key в таблице users_key для текущего пользователя."""
+        async with aiosqlite.connect(database_path_local) as db:
+            if field_name == "count_key":
+                query = "UPDATE users_key SET count_key = ? WHERE chat_id = ?"
+                await db.execute(query, (value, self.chat_id))
+                await db.commit()

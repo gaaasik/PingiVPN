@@ -142,52 +142,62 @@ async def generate_status_message(chat_id: int) -> tuple:
     - keyboard: клавиатура с кнопкой оплаты, если применимо.
     """
     #################################################################################
+
+
     us = await UserCl.load_user(chat_id)
+
+    # if us.servers:
+    #     await us.servers[0].delete()
+    # else:
+    #     print("Список серверов пуст. Нечего удалять.")
+
     # print("count_key = ", us.count_key)
-    # new_server = {
-    #     "name_server": "Server test22222",
-    #     "country_server": "22222",
-    #     "server_ip": "2222222",
-    #     "user_ip": "test",
-    #     "name_conf": "test",
-    #     "enable": True,
-    #     "vpn_usage_start_date": None,  # TIMESTAMP placeholder
-    #     "traffic_up": 0,
-    #     "traffic_down": 0,
-    #     "has_paid_key": 1,
-    #     "status_key": "free_key",  # new_user, key_free, waiting_pending, blocked, active
-    #     "is_notification": False,
-    #     "days_after_pay": 30,  # TIMESTAMP placeholder
-    #     "date_payment_key": "2024-01-01",
-    #     "date_expire_of_paid_key": "2024-12-31",
-    #     "date_expire_free_trial": "2024-02-01"
-    # }
-    # await us.add_server(new_server)
+    new_server = {
+        "name_protocol": "wire_guard",
+        "name_server": "My server test",
+        "country_server": "22222",
+        "server_ip": "195.133.14.202",
+        "user_ip": "10.8.0.3",
+        "name_conf": "test",
+        "enable": False,
+        "vpn_usage_start_date": "2024-10-26 19:43:52",  # TIMESTAMP placeholder
+        "traffic_up": 0,
+        "traffic_down": 0,
+        "has_paid_key": 1,
+        "status_key": "free_key",  # new_user, key_free, waiting_pending, blocked, active
+        "is_notification": False,
+        "days_after_pay": 30,  # TIMESTAMP placeholder
+        "date_payment_key": "2024-10-26 19:43:52",
+        "date_expire_of_paid_key": "2024-10-26 19:43:52",
+        "date_expire_free_trial": "2024-10-26 19:43:52",
+        "url_vless": ""
+    }
+    await us.add_server(new_server)
 
 
     #################################################################################
-    await us.count_key.set(6)
-    await us.user_name.set("TOL")
+    #await us.count_key.set(6)
+    # await us.user_name.set("TOL")
+    #
+    # await us.registration_date.set()
+    # await us.user_name.set("TOL")
+    # await us.user_name.set("TOL")
 
-    await us.registration_date.set()
-    await us.user_name.set("TOL")
-    await us.user_name.set("TOL")
 
+    # await us.servers[2].user_ip.set("127.127.127.127")
+    # await us.servers[0].change_enable(True)
 
-    await us.servers[2].user_ip.set("127.127.127.127")
-    await us.servers[0].change_enable(True)
     print("NAME ", us.user_name.get(), "----------------------------------------------------")
-    print("server_ip ", us.servers[2].server_ip.get())
-    print("user_ip ", us.servers[2].user_ip.get())
-    print("enable ", us.servers[2].enable.get())
-    print("count_key ", us.count_key)
+    await us.count_key.set(1)
+    print("count_key ", us.count_key.get())
 
 
-    status_key = await us.servers[0].status_key.get()
-
+    # status_key = await us.servers[0].status_key.get()
+    status_key = 0
 
     # Проверяем, что данные пользователя успешно получены и содержат 4 элемента.
-    if us.count_key >= 0:
+    #if us.count_key.get() > 0:
+    if status_key > 0:
 
         # Определяем текст статуса подписки и создаем клавиатуру в зависимости от статуса.
         if status_key == "waiting_pending":
