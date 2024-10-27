@@ -63,7 +63,7 @@ async def cmd_start(message: types.Message):
     await register_message_type(message.chat.id, sent_message.message_id, "start", message.bot)
 
     # Уведомляем администратора о новом пользователе
-    count_users = await get_user_count()
+    #count_users = await get_user_count()
 
 
 
@@ -86,13 +86,17 @@ async def cmd_start(message: types.Message):
         #await add_user_db(chat_id=chat_id, user_name=username)
 
         args = message.text.split()[1] if len(message.text.split()) > 1 else None
+        print(f"args: {args}_________________________________________")
         referral_old_chat_id = int(args) if args else None
+        print(f"referral: {referral_old_chat_id}_________________________________________")
         us = await UserCl.add_user_to_database(chat_id, username, referral_old_chat_id)
 
-        # Получаем количество пользователей для уведомления администратора
-        count_users = await get_user_count()
-
         print("УВЕДОМЛЕНИЕ АДМИНУ НЕЕЕТУ")
+
+        # Получаем количество пользователей для уведомления администратора
+        #count_users = await get_user_count()
+
+
         # Уведомляем администратора о новом пользователе
         # await send_admin_log(
         #     bot=message.bot,

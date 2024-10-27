@@ -12,7 +12,7 @@ def device_choice_keyboard():
     buttons = [
         [
             InlineKeyboardButton(text="Android", callback_data="device_android"),
-            InlineKeyboardButton(text="iPhone", callback_data="device_iphone")
+            InlineKeyboardButton(text="iPhone", callback_data="device_iPhone")
         ],
         [
             InlineKeyboardButton(text="Mac", callback_data="device_mac"),

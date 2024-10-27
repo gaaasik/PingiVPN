@@ -146,35 +146,37 @@ async def generate_status_message(chat_id: int) -> tuple:
 
     us = await UserCl.load_user(chat_id)
 
+
+
     # if us.servers:
     #     await us.servers[0].delete()
     # else:
     #     print("Список серверов пуст. Нечего удалять.")
 
     # print("count_key = ", us.count_key)
-    # new_server = {
-    #     "name_key": "key_1_Netherlands",
-    #     "name_protocol": "wire_guard",
-    #     "name_server": "My server test",
-    #     "country_server": "22222",
-    #     "server_ip": "195.133.14.202",
-    #     "user_ip": "10.8.0.3",
-    #     "name_conf": "test",
-    #     "enable": False,
-    #     "vpn_usage_start_date": "2024-10-26 19:43:52",  # TIMESTAMP placeholder
-    #     "traffic_up": 0,
-    #     "traffic_down": 0,
-    #     "has_paid_key": 1,
-    #     "status_key": "free_key",  # new_user, key_free, waiting_pending, blocked, active
-    #     "is_notification": False,
-    #     "days_after_pay": 30,  # TIMESTAMP placeholder
-    #     "date_payment_key": "2024-10-26 19:43:52",
-    #     "date_expire_of_paid_key": "2024-10-26 19:43:52",
-    #     "date_creation_key": "2024-10-26 19:43:52",
-    #     "date_expire_free_trial": "2024-10-26 19:43:52",
-    #     "url_vless": ""
-    # }
-    # await us.add_server(new_server)
+    new_server = {
+        "name_key": "key_1_Netherlands",
+        "name_protocol": "wire_guard",
+        "name_server": "My server test",
+        "country_server": "22222",
+        "server_ip": "195.133.14.202",
+        "user_ip": "10.8.0.3",
+        "name_conf": "test",
+        "enable": False,
+        "vpn_usage_start_date": "2024-10-26 19:43:52",  # TIMESTAMP placeholder
+        "traffic_up": 0,
+        "traffic_down": 0,
+        "has_paid_key": 1,
+        "status_key": "free_key",  # new_user, key_free, waiting_pending, blocked, active
+        "is_notification": False,
+        "days_after_pay": 30,  # TIMESTAMP placeholder
+        "date_payment_key": "2024-10-26 19:43:52",
+        "date_expire_of_paid_key": "2024-10-26 19:43:52",
+        "date_creation_key": "2024-10-26 19:43:52",
+        "date_expire_free_trial": "2024-10-26 19:43:52",
+        "url_vless": ""
+    }
+    await us.add_server_json(new_server)
 
 
     #################################################################################
