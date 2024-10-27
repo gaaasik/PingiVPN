@@ -41,7 +41,7 @@ class Field:
 
 class UserCl:
     def __init__(self, chat_id):
-        self.chat_id = Field('chat_id', "", self)
+        self.chat_id = chat_id
         self.user_name = Field('user_name', "", self)
         self.registration_date = Field('registration_date', None, self)
         self.referral_old_chat_id = Field('referral_old_chat_id', 0, self)
@@ -79,7 +79,7 @@ class UserCl:
 
         from bot_instance import bot  # Импорт бота, если он не передан напрямую
         try:
-            status = await bot.get_chat_member(channel_username, await self.chat_id.get())
+            status = await bot.get_chat_member(channel_username, self.chat_id)
             is_subscribed = status.status in ["member", "administrator", "creator"]
             # Обновляем поле is_subscribed_on_channel на основе статуса подписки
             await self.is_subscribed_on_channel.set(1 if is_subscribed else 0)
@@ -90,15 +90,8 @@ class UserCl:
             await self.is_subscribed_on_channel.set(0)
             return False
 
-    async def add_user_to_database(self, user_name, referral_old_chat_id):
+    async def add_user_to_database(self, chat_id: int, user_name: str, referral_old_chat_id: int = None):
         """Добавляет нового пользователя в базу данных"""
-
-        # Устанавливаем значения user_name, registration_date и referral_old_chat_id через set()
-        await self.user_name.set(user_name)
-        current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        await self.registration_date.set(current_date)
-        await self.referral_old_chat_id.set(referral_old_chat_id)
-
         # Проверка подписки пользователя на канал
         is_subscribed = await self.check_subscription_channel()
         await self.is_subscribed_on_channel.set(1 if is_subscribed else 0)
@@ -108,33 +101,23 @@ class UserCl:
             async with aiosqlite.connect(database_path_local) as db:
                 # Проверка существования пользователя в таблице users
                 query_check_user = "SELECT chat_id FROM users WHERE chat_id = ?"
-                async with db.execute(query_check_user, (await self.chat_id.get(),)) as cursor:
+                async with db.execute(query_check_user, (self.chat_id,)) as cursor:
                     result_user = await cursor.fetchone()
                     if result_user:
-                        print(f"Пользователь с chat_id {await self.chat_id.get()} уже существует в таблице users.")
+                        print(f"Пользователь с chat_id {self.chat_id} уже существует в таблице users.")
                         return False  # Прерывание, если пользователь существует
 
                     # Добавляем запись в таблицу users, если пользователя нет
                     query_add_user = """
-                    INSERT INTO users (chat_id, user_name, registration_date, referral_old_chat_id, device, 
-                                       is_subscribed_on_channel, days_since_registration, email)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO users (chat_id)
+                    VALUES (?)
                     """
-                    await db.execute(query_add_user, (
-                        await self.chat_id.get(),
-                        await self.user_name.get(),
-                        await self.registration_date.get(),
-                        await self.referral_old_chat_id.get(),
-                        await self.device.get() if hasattr(self.device, 'get') else None,
-                        await self.is_subscribed_on_channel.get(),
-                        await self.days_since_registration.get() if hasattr(self.days_since_registration, 'get') else None,
-                        await self.email.get() if hasattr(self.email, 'get') else None
-                    ))
+                    await db.execute(query_add_user, (self.chat_id))
                     print(f"Пользователь {user_name} добавлен в таблицу users.")
 
                 # Проверка существования записи в таблице users_key
                 query_check_user_key = "SELECT chat_id FROM users_key WHERE chat_id = ?"
-                async with db.execute(query_check_user_key, (await self.chat_id.get(),)) as cursor:
+                async with db.execute(query_check_user_key, (self.chat_id,)) as cursor:
                     result_user_key = await cursor.fetchone()
                     if result_user_key:
                         print(f"Запись с chat_id {await self.user_name.get()} уже существует в таблице users_key.")
@@ -143,12 +126,23 @@ class UserCl:
                         INSERT INTO users_key (chat_id, count_key, value_key)
                         VALUES (?, ?, ?)
                         """
-                        await db.execute(query_add_user_key, (await self.chat_id.get(), 0, ""))
+                        await db.execute(query_add_user_key, (self.chat_id, 0, ""))
                         print(f"Пользователь {user_name} добавлен в таблицу users_key.")
 
                 # Подтверждаем все изменения
                 await db.commit()
-                print(f"Все изменения для пользователя {user_name} с chat_id {await self.chat_id.get()} сохранены в базе.")
+
+                # Устанавливаем значения user_name, registration_date и referral_old_chat_id через set()
+                await self.chat_id.set(chat_id)
+                await self.user_name.set(user_name)
+                current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                await self.registration_date.set(current_date)
+                await self.referral_old_chat_id.set(referral_old_chat_id)
+                await self.check_subscription_channel()
+                await self.days_since_registration.set(0)
+                self.count_key.value = 0
+
+                print(f"Все изменения для пользователя {user_name} с chat_id {self.chat_id} сохранены в базе.")
                 return True  # Успешное добавление
         except Exception as e:
             print(f"Ошибка при добавлении пользователя в базу данных: {e}")
@@ -163,7 +157,7 @@ class UserCl:
             FROM users
             WHERE chat_id = ?
             """
-            async with db.execute(query, (await self.chat_id.get(),)) as cursor:
+            async with db.execute(query, (self.chat_id,)) as cursor:
                 result = await cursor.fetchone()
 
                 if result:
@@ -188,7 +182,7 @@ class UserCl:
             query = """
             SELECT value_key, count_key FROM users_key WHERE chat_id = ?
             """
-            async with db.execute(query, (await self.chat_id.get(),)) as cursor:
+            async with db.execute(query, (self.chat_id,)) as cursor:
                 result = await cursor.fetchone()
                 if result:
                     value_key, load_count_key = result
@@ -204,11 +198,11 @@ class UserCl:
                             else:
                                 self.servers = []
                         except json.JSONDecodeError:
-                            print(f"Ошибка при парсинге JSON для пользователя с chat_id {await self.chat_id.get()}")
+                            print(f"Ошибка при парсинге JSON для пользователя с chat_id {self.chat_id}")
                     else:
                         self.servers = []  # Если value_key пуст, значит серверов нет
                 else:
-                    print(f"Нет серверов для пользователя с chat_id {await self.chat_id.get()}")
+                    print(f"Нет серверов для пользователя с chat_id {self.chat_id}")
                     self.servers = []
 
 
@@ -224,7 +218,7 @@ class UserCl:
             SET value_key = ?, count_key = ? 
             WHERE chat_id = ?
             """
-            await db.execute(query_update, (value_key_json, await self.count_key.get(), await self.chat_id.get()))
+            await db.execute(query_update, (value_key_json, await self.count_key.get(), self.chat_id))
             await db.commit()
 
     async def _update_field_in_db(self, field_name, value):
@@ -249,12 +243,12 @@ class UserCl:
                 query = f"UPDATE users SET {field_name} = ? WHERE chat_id = ?"
                 await db.execute(query, (value, self.chat_id))
                 await db.commit()
-                print(f"Поле '{field_name}' обновлено для пользователя с chat_id {await self.chat_id.get()}.")
+                print(f"Поле '{field_name}' обновлено для пользователя с chat_id {self.chat_id}.")
 
     async def _update_count_key_in_db(self, field_name, value):
         """Обновление count_key в таблице users_key для текущего пользователя."""
         async with aiosqlite.connect(database_path_local) as db:
             if field_name == "count_key":
                 query = "UPDATE users_key SET count_key = ? WHERE chat_id = ?"
-                await db.execute(query, (value, await self.chat_id.get()))
+                await db.execute(query, (value, self.chat_id))
                 await db.commit()

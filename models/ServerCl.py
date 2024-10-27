@@ -13,7 +13,7 @@ class Field:
         self._is_protected = is_protected  # Флаг для защиты поля от публичного изменения
 
     # Публичный метод для получения значения
-    def get(self):
+    async def get(self):
         return self._value
 
     # Приватный метод для изменения поля, если это поле защищено (is_protected=True)
@@ -60,27 +60,27 @@ class ServerCl:
         """Метод для обновления сервера в базе данных через родительский объект User."""
         await self.user._update_servers_in_db()
 
-    def to_dict(self):
+    async def to_dict(self):
         """Преобразуем объект сервера в JSON."""
         return {
-            "name_protocol": self.name_protocol.get(),
-            "name_server": self.name_server.get(),
-            "country_server": self.country_server.get(),
-            "server_ip": self.server_ip.get(),
-            "user_ip": self.user_ip.get(),
-            "name_conf": self.name_conf.get(),
-            "enable": self.enable.get(),
-            "vpn_usage_start_date": self.vpn_usage_start_date.get(),
-            "traffic_up": self.traffic_up.get(),
-            "traffic_down": self.traffic_down.get(),
-            "has_paid_key": self.has_paid_key.get(),
-            "status_key": self.status_key.get(),
-            "is_notification": self.is_notification.get(),
-            "days_after_pay": self.days_after_pay.get(),
-            "date_payment_key": self.date_payment_key.get(),
-            "date_expire_of_paid_key": self.date_expire_of_paid_key.get(),
-            "date_expire_free_trial": self.date_expire_free_trial.get(),
-            "url_vless": self.url_vless.get()
+            "name_protocol": await self.name_protocol.get(),
+            "name_server": await self.name_server.get(),
+            "country_server": await self.country_server.get(),
+            "server_ip": await self.server_ip.get(),
+            "user_ip": await self.user_ip.get(),
+            "name_conf": await self.name_conf.get(),
+            "enable": await self.enable.get(),
+            "vpn_usage_start_date": await self.vpn_usage_start_date.get(),
+            "traffic_up": await self.traffic_up.get(),
+            "traffic_down": await self.traffic_down.get(),
+            "has_paid_key": await self.has_paid_key.get(),
+            "status_key": await self.status_key.get(),
+            "is_notification": await self.is_notification.get(),
+            "days_after_pay": await self.days_after_pay.get(),
+            "date_payment_key": await self.date_payment_key.get(),
+            "date_expire_of_paid_key": await self.date_expire_of_paid_key.get(),
+            "date_expire_free_trial": await self.date_expire_free_trial.get(),
+            "url_vless": await self.url_vless.get()
         }
 
     async def _update_json_on_server(self, new_enable_value: bool):
@@ -160,12 +160,12 @@ class ServerCl:
             self.user.servers.remove(self)
 
             # Обновляем count_key: уменьшаем на 1 и сохраняем в базе данных
-            await self.user.count_key._setcount(self.user.count_key.get() - 1)
+            await self.user.count_key._setcount( await self.user.count_key.get() - 1)
 
             # Обновляем value_key в базе данных (список серверов) после удаления
             await self.user._update_servers_in_db()
 
-            print(f"Сервер {self.name_server.get()} успешно удален из списка и базы данных.")
+            print(f"Сервер { await self.name_server.get()} успешно удален из списка и базы данных.")
             return True
         else:
             print("Сервер не найден в списке пользователя.")

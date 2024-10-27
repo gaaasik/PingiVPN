@@ -182,16 +182,16 @@ async def generate_status_message(chat_id: int) -> tuple:
     await us.user_name.set("TOL")
 
 
-    print("NAME ", us.user_name.get(), "----------------------------------------------------")
+    print("NAME ", await us.user_name.get(), "----------------------------------------------------")
     await us.count_key.set(1)
-    print("count_key ", us.count_key.get())
+    print("count_key ", await us.count_key.get())
 
 
     # status_key = await us.servers[0].status_key.get()
     status_key = 0
 
     # Проверяем, что данные пользователя успешно получены и содержат 4 элемента.
-    if us.count_key.get() > 0:
+    if await us.count_key.get() > 0:
 
         # Определяем текст статуса подписки и создаем клавиатуру в зависимости от статуса.
         if status_key == "waiting_pending":
@@ -220,9 +220,9 @@ async def generate_status_message(chat_id: int) -> tuple:
 
         # Формируем текст сообщения о статусе пользователя.
         status_message = (
-            f"🕒 Вы с нами уже {us.days_since_registration.get()} дней! 🚀 Какой прогресс! 😎\n"
-            f"Действие тарифа: {us.servers[0].days_after_pay.get()}\n"
-            f"Имя пользователя: {us.user_name.get()}\n"
+            f"🕒 Вы с нами уже {await us.days_since_registration.get()} дней! 🚀 Какой прогресс! 😎\n"
+            f"Действие тарифа: {await us.servers[0].days_after_pay.get()}\n"
+            f"Имя пользователя: {await us.user_name.get()}\n"
             f"Статус подписки: *{status_sub_txt}*"
         )
     else:
