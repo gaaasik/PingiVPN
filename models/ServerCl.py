@@ -39,7 +39,9 @@ class ServerCl:
         # Инициализация всех полей, переданных в JSON
         self.name_protocol = Field('name_protocol', server_data.get("name_protocol", ""), self)
         self.name_server = Field('name_server', server_data.get("name_server", ""), self)
-        self.name_key = Field('name_key', server_data.get("name_key", ""), self)
+        self.name_key_for_user = Field('name_key_for_user', server_data.get("name_key_for_user", ""), self)
+        self.uuid_id = Field('uuid_id', server_data.get("uuid_id", ""), self)
+        self.email_key = Field('email_key', server_data.get("email_key", ""), self)
         self.country_server = Field('country_server', server_data.get("country_server", ""), self)
         self.server_ip = Field('server_ip', server_data.get("server_ip", ""), self)
         self.user_ip = Field('user_ip', server_data.get("user_ip", ""), self)
@@ -66,7 +68,9 @@ class ServerCl:
         """Преобразуем объект сервера в JSON."""
         return {
             "name_protocol": await self.name_protocol.get(),
-            "name_key": await self.name_key.get(),
+            "email_key": await self.email_key.get(),
+            "name_key_for_user": await self.name_key_for_user.get(),
+            "uuid_id": await self.uuid_id.get(),
             "name_server": await self.name_server.get(),
             "country_server": await self.country_server.get(),
             "server_ip": await self.server_ip.get(),
@@ -163,12 +167,13 @@ class ServerCl:
             # Удаляем сервер из списка servers
             self.user.servers.remove(self)
 
-            # Обновляем count_key: уменьшаем на 1 и сохраняем в базе данных
-            await self.user.count_key._setcount( await self.user.count_key.get() - 1)
+
+
 
             # Обновляем value_key в базе данных (список серверов) после удаления
             await self.user._update_servers_in_db()
-
+            # Обновляем count_key
+            await self.user.count_key._update_count_key()
             print(f"Сервер { await self.name_server.get()} успешно удален из списка и базы данных.")
             return True
         else:
