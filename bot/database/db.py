@@ -647,7 +647,23 @@ async def get_days_since_registration_db(chat_id: int) -> int:
                 # Получаем текущую дату
                 current_date = datetime.now().date()
                 print(f"Текущая дата: {current_date}")
-                разобраться с датами и дальше тестировать оплату с тестовым магазином и с оплатой и чеками
+
+
+
+
+
+
+
+
+                #разобраться с датами и дальше тестировать оплату с тестовым магазином и с оплатой и чеками
+
+
+
+
+
+
+
+
 
                 # Вычисляем количество дней с момента регистрации
                 days_since_registration = (current_date - date_registration).days
