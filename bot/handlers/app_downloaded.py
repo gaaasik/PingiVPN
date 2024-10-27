@@ -19,9 +19,8 @@ async def handle_app_downloaded(callback_query: CallbackQuery):
 
 
     us = await UserCl.load_user(callback_query.message.chat.id)
-    print(f"cout_key  ДО начала добавления: {await us.count_key.get()}________________________________________")
+
     await us.add_key_vless()
-    print(f"cout_key после добавления: {await us.count_key.get()}________________________________________")
     url_vless = await us.servers[0].url_vless.get()
 
 
@@ -29,7 +28,7 @@ async def handle_app_downloaded(callback_query: CallbackQuery):
     try:
         # Отправляем дальнейшую инструкцию с кнопками для скачивания конфигурации и QR-кода
         message = await callback_query.message.answer(
-            f"Импортируйте конфигурационный файл в приложении \n\nИли отсканируйте QR-код через приложение. \n\n Для простоты понимания в подробной инструкции есть видео {url_vless}/n coutn_key{await us.count_key.get()}",
+            f"Импортируйте конфигурационный файл в приложении \n\nИли отсканируйте QR-код через приложение. \n\n Для простоты понимания в подробной инструкции есть видео {url_vless}",
             reply_markup=config_or_qr_keyboard()
         )
     except IndexError:
