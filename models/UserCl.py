@@ -1,6 +1,8 @@
 import os
 from datetime import datetime
 from pathlib import Path
+from typing import Optional
+
 import aiosqlite
 import json
 from dotenv import load_dotenv
@@ -55,7 +57,10 @@ class UserCl:
     @classmethod
     async def load_user(cls, chat_id: int):
         self = cls(chat_id)
-        await self._load_user_data()  # Загружаем данные пользователя
+        user_data_loaded = await self._load_user_data()
+        if not user_data_loaded:
+            return None
+
         await self._load_servers()  # Загружаем сервера
         return self
 
@@ -90,13 +95,12 @@ class UserCl:
             await self.is_subscribed_on_channel.set(0)
             return False
 
-    async def add_user_to_database(self, chat_id: int, user_name: str, referral_old_chat_id: int = None):
+    @classmethod
+    async def add_user_to_database(cls, chat_id: int, user_name: str, referral_old_chat_id: Optional[int] = 0):
         """Добавляет нового пользователя в базу данных"""
+        self = cls(chat_id)
         # Проверка подписки пользователя на канал
-        is_subscribed = await self.check_subscription_channel()
-        await self.is_subscribed_on_channel.set(1 if is_subscribed else 0)
-        print("Пользователь подписан на канал." if is_subscribed else "Пользователь не подписан на канал.")
-
+        from bot_instance import bot
         try:
             async with aiosqlite.connect(database_path_local) as db:
                 # Проверка существования пользователя в таблице users
@@ -112,7 +116,7 @@ class UserCl:
                     INSERT INTO users (chat_id)
                     VALUES (?)
                     """
-                    await db.execute(query_add_user, (self.chat_id))
+                    await db.execute(query_add_user, (self.chat_id,))
                     print(f"Пользователь {user_name} добавлен в таблицу users.")
 
                 # Проверка существования записи в таблице users_key
@@ -133,7 +137,6 @@ class UserCl:
                 await db.commit()
 
                 # Устанавливаем значения user_name, registration_date и referral_old_chat_id через set()
-                await self.chat_id.set(chat_id)
                 await self.user_name.set(user_name)
                 current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 await self.registration_date.set(current_date)
@@ -174,6 +177,11 @@ class UserCl:
                     self.is_subscribed_on_channel.value = is_subscribed_on_channel
                     self.days_since_registration.value = days_since_registration
                     self.email.value = email
+                    return True
+                else:
+                    print(f"Пользователь с chat_id {self.chat_id} не найден в базе данных.")
+                    return False  # Пользователь не найден
+
 
 
     async def _load_servers(self):
