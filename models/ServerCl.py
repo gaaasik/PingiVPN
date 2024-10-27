@@ -39,6 +39,7 @@ class ServerCl:
         # Инициализация всех полей, переданных в JSON
         self.name_protocol = Field('name_protocol', server_data.get("name_protocol", ""), self)
         self.name_server = Field('name_server', server_data.get("name_server", ""), self)
+        self.name_key = Field('name_key', server_data.get("name_key", ""), self)
         self.country_server = Field('country_server', server_data.get("country_server", ""), self)
         self.server_ip = Field('server_ip', server_data.get("server_ip", ""), self)
         self.user_ip = Field('user_ip', server_data.get("user_ip", ""), self)
@@ -53,6 +54,7 @@ class ServerCl:
         self.date_payment_key = Field('date_payment_key', server_data.get("date_payment_key", ""), self)
         self.date_expire_of_paid_key = Field('date_expire_of_paid_key', server_data.get("date_expire_of_paid_key", ""), self)
         self.date_expire_free_trial = Field('date_expire_free_trial', server_data.get("date_expire_free_trial", ""), self)
+        self.date_creation_key = Field('date_creation_key', server_data.get("date_creation_key", ""), self)
         self.url_vless = Field('url_vless', server_data.get("url_vless", ""), self)
         self.user = user  # Ссылка на объект User для обновления данных в базе
 
@@ -64,6 +66,7 @@ class ServerCl:
         """Преобразуем объект сервера в JSON."""
         return {
             "name_protocol": await self.name_protocol.get(),
+            "name_key": await self.name_key.get(),
             "name_server": await self.name_server.get(),
             "country_server": await self.country_server.get(),
             "server_ip": await self.server_ip.get(),
@@ -80,6 +83,7 @@ class ServerCl:
             "date_payment_key": await self.date_payment_key.get(),
             "date_expire_of_paid_key": await self.date_expire_of_paid_key.get(),
             "date_expire_free_trial": await self.date_expire_free_trial.get(),
+            "date_creation_key": await self.date_creation_key.get(),
             "url_vless": await self.url_vless.get()
         }
 

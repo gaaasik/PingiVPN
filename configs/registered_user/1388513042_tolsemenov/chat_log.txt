@@ -927,3 +927,63 @@
 2024-10-27 08:39:25 Bot: На каком устройстве вы хотите настроить VPN?
 2024-10-27 08:41:38 User: /start
 2024-10-27 08:41:39 Bot: На каком устройстве вы хотите настроить VPN?
+2024-10-27 08:49:25 User: /start
+2024-10-27 08:49:26 Bot: На каком устройстве вы хотите настроить VPN?
+2024-10-27 08:49:43 User: /start
+2024-10-27 08:50:02 User: /start
+2024-10-27 10:04:29 User: /start
+2024-10-27 10:51:49 Bot: Импортируйте конфигурационный файл в приложении 
+
+Или отсканируйте QR-код через приложение. 
+
+ Для простоты понимания в подробной инструкции есть видео
+2024-10-27 10:51:49 Bot: Импортируйте конфигурационный файл в приложении 
+
+Или отсканируйте QR-код через приложение. 
+
+ Для простоты понимания в подробной инструкции есть видео
+2024-10-27 12:04:06 User: /start
+2024-10-27 12:06:20 User: /start
+2024-10-27 12:06:58 Bot: Скачайте официальное приложение для vless протокола на ваше устройство.
+2024-10-27 12:07:15 Bot: Скачайте официальное приложение для vless протокола на ваше устройство.
+2024-10-27 13:46:59 Bot: Скачайте официальное приложение для vless протокола на ваше устройство.
+2024-10-27 14:09:31 Bot: Импортируйте конфигурационный файл в приложении 
+
+Или отсканируйте QR-код через приложение. 
+
+ Для простоты понимания в подробной инструкции есть видео vless://7515db97-76fa-4998-85cb-05da52a464ac@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=yahoo.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#Vless-vless_3_Netherlands
+2024-10-27 14:09:31 Bot: Импортируйте конфигурационный файл в приложении 
+
+Или отсканируйте QR-код через приложение. 
+
+ Для простоты понимания в подробной инструкции есть видео vless://7515db97-76fa-4998-85cb-05da52a464ac@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=yahoo.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#Vless-vless_3_Netherlands
+2024-10-27 14:11:52 Bot: Импортируйте конфигурационный файл в приложении 
+
+Или отсканируйте QR-код через приложение. 
+
+ Для простоты понимания в подробной инструкции есть видео vless://468e1d65-17a3-441a-ba00-6a0308fa9a20@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=yahoo.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#Vless-vless_4_Netherlands/n coutn_key2
+2024-10-27 14:11:52 Bot: Импортируйте конфигурационный файл в приложении 
+
+Или отсканируйте QR-код через приложение. 
+
+ Для простоты понимания в подробной инструкции есть видео vless://468e1d65-17a3-441a-ba00-6a0308fa9a20@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=yahoo.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#Vless-vless_4_Netherlands/n coutn_key2
+2024-10-27 14:22:35 Bot: Импортируйте конфигурационный файл в приложении 
+
+Или отсканируйте QR-код через приложение. 
+
+ Для простоты понимания в подробной инструкции есть видео vless://90b5d83f-e3c6-4381-91c4-7d624dc1c490@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=yahoo.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#Vless-vless_5_Netherlands/n coutn_key2
+2024-10-27 14:22:35 Bot: Импортируйте конфигурационный файл в приложении 
+
+Или отсканируйте QR-код через приложение. 
+
+ Для простоты понимания в подробной инструкции есть видео vless://90b5d83f-e3c6-4381-91c4-7d624dc1c490@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=yahoo.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#Vless-vless_5_Netherlands/n coutn_key2
+2024-10-27 14:32:23 Bot: Импортируйте конфигурационный файл в приложении 
+
+Или отсканируйте QR-код через приложение. 
+
+ Для простоты понимания в подробной инструкции есть видео vless://90b5d83f-e3c6-4381-91c4-7d624dc1c490@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=yahoo.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#Vless-vless_5_Netherlands/n coutn_key2
+2024-10-27 14:32:23 Bot: Импортируйте конфигурационный файл в приложении 
+
+Или отсканируйте QR-код через приложение. 
+
+ Для простоты понимания в подробной инструкции есть видео vless://90b5d83f-e3c6-4381-91c4-7d624dc1c490@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=yahoo.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#Vless-vless_5_Netherlands/n coutn_key2

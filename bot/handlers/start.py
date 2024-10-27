@@ -59,8 +59,8 @@ async def cmd_start(message: types.Message):
     await send_cached_photo(message)
 
     sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard())
-    await store_important_message(message.bot, message.chat.id, sent_message.message_id, sent_message,"start")
-    await register_message_type(message.chat.id,sent_message.message_id,"start",message.bot)
+    #await store_important_message(message.bot, message.chat.id, sent_message.message_id, sent_message,"start")
+    await register_message_type(message.chat.id, sent_message.message_id, "start", message.bot)
 
     # Уведомляем администратора о новом пользователе
     count_users = await get_user_count()

@@ -153,6 +153,7 @@ async def generate_status_message(chat_id: int) -> tuple:
 
     # print("count_key = ", us.count_key)
     # new_server = {
+    #     "name_key": "key_1_Netherlands",
     #     "name_protocol": "wire_guard",
     #     "name_server": "My server test",
     #     "country_server": "22222",
@@ -169,6 +170,7 @@ async def generate_status_message(chat_id: int) -> tuple:
     #     "days_after_pay": 30,  # TIMESTAMP placeholder
     #     "date_payment_key": "2024-10-26 19:43:52",
     #     "date_expire_of_paid_key": "2024-10-26 19:43:52",
+    #     "date_creation_key": "2024-10-26 19:43:52",
     #     "date_expire_free_trial": "2024-10-26 19:43:52",
     #     "url_vless": ""
     # }

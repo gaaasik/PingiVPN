@@ -1,8 +1,9 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional
 
+import aiofiles
 import aiosqlite
 import json
 from dotenv import load_dotenv
@@ -27,11 +28,26 @@ class Field:
         setattr(self.user, f"_{self.name}", new_value)
         await self.user._update_field_in_db(self.name, new_value)
 
-    async def _set_count_key(self, new_value):
+    async def _update_count_key(self):
         if self.name == "count_key":
-            self.value = new_value
-            setattr(self.user, f"_{self.name}", new_value)
-            await self.user._update_count_key_in_db(self.name, new_value)
+            # Открываем соединение с базой данных
+            async with aiosqlite.connect(database_path_local) as db:
+                # Извлекаем поле value_key для пользователя из таблицы users_key
+                query = "SELECT value_key FROM users_key WHERE chat_id = ?"
+                async with db.execute(query, (self.user.chat_id,)) as cursor:
+                    result = await cursor.fetchone()
+                    if result and result[0]:
+                        # Загружаем JSON данных серверов из поля value_key
+                        servers_data = json.loads(result[0])
+                        # Подсчитываем количество серверов
+                        new_value = len(servers_data) if isinstance(servers_data, list) else 0
+                    else:
+                        new_value = 0  # Если value_key пуст, значение count_key = 0
+
+                # Обновляем значение count_key в классе и базе данных
+                self.value = new_value
+                setattr(self.user, f"_{self.name}", new_value)
+                await self.user._update_count_key_in_db(self.name, new_value)
 
 
 
@@ -55,7 +71,7 @@ class UserCl:
         self.count_key = Field('count_key', 0, self)  # Поле для хранения количества серверов
 
     @classmethod
-    async def load_user(cls, chat_id: int):
+    async def load_user(cls, chat_id: int) -> Optional["UserCl"]:
         self = cls(chat_id)
         user_data_loaded = await self._load_user_data()
         if not user_data_loaded:
@@ -65,15 +81,17 @@ class UserCl:
         return self
 
 
-    async def add_server(self, server_params: dict):
+    async def add_server_json(self, server_params: dict):
         """Добавление нового сервера в JSON формате"""
         # Преобразуем параметры в объект Server_cl и добавляем его в список servers
         new_server = ServerCl(server_params, self)
         self.servers.append(new_server)
-        await self.count_key._setcount(await self.count_key.get() + 1)
+
 
         # Обновляем поле value_key (список серверов) и count_key в базе данных
         await self._update_servers_in_db()
+
+        await self.count_key._update_count_key()
 
     async def check_subscription_channel(self, channel_username="@pingi_hub"):
         """
@@ -151,6 +169,85 @@ class UserCl:
             print(f"Ошибка при добавлении пользователя в базу данных: {e}")
             return False
 
+    async def add_key_vless(self):
+        """Создает сервер VLESS с фиксированными параметрами, используя первый доступный URL и добавляет его в список серверов пользователя."""
+        free_day = 3  # Количество бесплатных дней
+        current_date = datetime.now()
+
+        # Определение путей к файлам
+        project_root = Path(__file__).resolve().parent.parent
+        url_vless_new_path = project_root / "configs" / "url_vless_new"
+        url_vless_user_path = project_root / "configs" / "url_vless_user"
+
+        # Асинхронное чтение URL из файла
+        url_vless = await self._get_first_available_url(url_vless_new_path, url_vless_user_path)
+        if not url_vless:
+            print("Нет доступных URL для VLESS.")
+            return False
+
+        # Параметры нового сервера VLESS
+        server_params = self._generate_server_params(current_date, url_vless, free_day)
+
+        # Создание нового сервера и обновление базы данных
+        await self.add_server_json(server_params)
+        print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
+        return True
+
+    async def _get_first_available_url(self, new_path, used_path):
+        """Получает первый доступный URL из файла, перемещает его в использованные и возвращает URL."""
+        try:
+            async with aiofiles.open(new_path, "r") as file:
+                urls = await file.readlines()
+
+            if not urls:
+                return None
+
+            url_vless = urls[0].strip()
+            remaining_urls = urls[1:]
+
+            # Запись оставшихся URL и обновление использованных
+            async with aiofiles.open(new_path, "w") as file:
+                await file.writelines(remaining_urls)
+
+            async with aiofiles.open(used_path, "a") as file:
+                await file.write(url_vless + "\n")
+
+            print(f"Осталось {len(remaining_urls)} доступных URL для VLESS.")
+            return url_vless
+
+        except Exception as e:
+            print(f"Ошибка при работе с файлами URL: {e}")
+            return None
+
+    def _generate_server_params(self, current_date, url_vless, free_day):
+        """Генерирует параметры нового сервера VLESS."""
+        return {
+            "name_protocol": "vless",
+            "name_key": "VLESS_Key",
+            "name_server": "VLESS Server",
+            "country_server": "Country Name",
+            "server_ip": "123.45.67.89",
+            "user_ip": f"10.8.0.1",                  # Уникальный IP
+            "name_conf": "vless_config",
+            "enable": True,
+            "vpn_usage_start_date": current_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "traffic_up": 0,
+            "traffic_down": 0,
+            "has_paid_key": 1,
+            "status_key": "active",
+            "is_notification": False,
+            "days_after_pay": 30,
+            "date_payment_key": current_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "date_expire_of_paid_key": (current_date.replace(year=current_date.year + 1)).strftime("%Y-%m-%d %H:%M:%S"),
+            "date_creation_key": current_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "date_expire_free_trial": (current_date + timedelta(days=free_day)).strftime("%Y-%m-%d %H:%M:%S"),
+            "url_vless": url_vless
+        }
+
+
+
+
+
 
     async def _load_user_data(self):
         async with aiosqlite.connect(database_path_local) as db:
@@ -217,16 +314,16 @@ class UserCl:
     async def _update_servers_in_db(self):
         """Обновление списка серверов и количества серверов в базе данных"""
         # Преобразуем каждый сервер обратно в словарь перед сохранением в базу данных
-        servers_data = [server.to_dict() for server in self.servers]
+        servers_data = [await server.to_dict() for server in self.servers]
         value_key_json = json.dumps(servers_data)
 
         async with aiosqlite.connect(database_path_local) as db:
             query_update = """
             UPDATE users_key 
-            SET value_key = ?, count_key = ? 
+            SET value_key = ?
             WHERE chat_id = ?
             """
-            await db.execute(query_update, (value_key_json, await self.count_key.get(), self.chat_id))
+            await db.execute(query_update, (value_key_json, self.chat_id))
             await db.commit()
 
     async def _update_field_in_db(self, field_name, value):
