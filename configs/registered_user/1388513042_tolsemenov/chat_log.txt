@@ -1170,3 +1170,6 @@ vless://7515db97-76fa-4998-85cb-05da52a464ac@194.87.208.18:443?type=tcp&security
 
 
 vless://7515db97-76fa-4998-85cb-05da52a464ac@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=yahoo.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#Vless-vless_3_Netherlands
+2024-10-28 00:31:47 User: /start
+2024-10-28 00:48:57 Bot: Выберите устройство для настройки VPN.
+2024-10-28 00:48:59 Bot: Скачайте официальное приложение для vless протокола на ваше устройство.
