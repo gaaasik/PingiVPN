@@ -1,18 +1,15 @@
-import asyncio
 import logging
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from bot.handlers.admin import send_admin_log
 from aiogram import Bot
 import aiosqlite
 from aiogram.exceptions import TelegramForbiddenError
-from pytz import timezone
 
-from bot.keyboards.inline import create_feedback_keyboard, account_info_keyboard, subscribe_keyboard, \
+from bot.keyboards.inline import subscribe_keyboard, \
     create_payment_button
 from bot.utils.subscription_check import check_subscription_channel
-from data.text_messages import attention_message
 
 # Настройки
 

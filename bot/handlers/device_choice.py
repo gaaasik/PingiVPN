@@ -50,6 +50,7 @@ async def handle_device_choice(callback_query: CallbackQuery):
     )
 
     # Обновляем устройство пользователя в базе данных
+
     us = await UserCl.load_user(chat_id)
     await us.device.set(device)
     print(f"Пользователь {callback_query.from_user.id} - @{callback_query.from_user.username} выбрал устройство: {device}")

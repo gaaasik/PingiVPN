@@ -6,10 +6,8 @@ from aiogram.types import FSInputFile
 import logging
 
 from bot.handlers.admin import send_admin_log
-from bot.handlers.cleanup import store_important_message
 from bot.utils.file_manager import find_user_directory
-from data.text_messages import android_instructions, iphone_instructions, mac_instructions, linux_instructions, \
-    windows_instructions
+
 from dotenv import load_dotenv
 from bot.utils.cache import cached_video  # Предполагаем, что видео кешируется аналогично фото
 from main import PATH_TO_IMAGES
@@ -23,27 +21,6 @@ USED_CONFIGS_DIR = os.path.join(CONFIGS_DIR, 'used_config')  # Директор�
 # Пути к резервным файлам
 GENERAL_CONFIG_FILE = os.path.join(BASE_CONFIGS_DIR, "general_adress.conf")
 GENERAL_IMAGE_FILE = os.path.join(BASE_CONFIGS_DIR, "general_adress.png")
-
-
-# Отправка инструкций по устройству
-async def send_files_by_device(message, chat_id, device):
-    if device == 'android':
-        await message.answer(android_instructions)
-    elif device == 'iphone':
-        await message.answer(iphone_instructions)
-    elif device == 'mac':
-        await message.answer(mac_instructions)
-    elif device == 'linux':
-        await message.answer(linux_instructions)
-    elif device == 'windows':
-        await message.answer(windows_instructions)
-
-    # Путь к общему конфигурационному файлу для всех устройств
-    config_file_path = os.path.join(BASE_CONFIGS_DIR, "vpn_config.conf")
-    if os.path.exists(config_file_path):
-        await message.answer_document(FSInputFile(config_file_path))
-    else:
-        await message.answer("Конфигурационный файл не найден. Пожалуйста, свяжитесь с поддержкой.")
 
 
 async def send_config_file(callback_query):

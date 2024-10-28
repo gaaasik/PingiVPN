@@ -5,13 +5,10 @@ from aiogram import Router, types
 from aiogram.filters import Command
 from dotenv import load_dotenv
 
-from bot.handlers.admin import send_admin_log
-from bot.handlers.cleanup import store_message, store_important_message, register_message_type
+from bot.handlers.cleanup import store_message, register_message_type
 from bot.keyboards.inline import device_choice_keyboard
 from bot.utils.cache import send_cached_photo
-from bot.database.db import get_user_by_telegram_id, add_referral, get_user_count
-from bot.database.users_db import add_user_db
-from data.text_messages import start_messages
+from bot.all_message.text_messages import start_messages
 from models.UserCl import UserCl
 
 router = Router()

@@ -74,6 +74,11 @@ class UserCl:
     @classmethod
     async def load_user(cls, chat_id: int) -> Optional["UserCl"]:
         self = cls(chat_id)
+
+###############################################################################
+# проверка на существование пользователя
+###############################################################################
+
         user_data_loaded = await self._load_user_data()
         if not user_data_loaded:
             return None
