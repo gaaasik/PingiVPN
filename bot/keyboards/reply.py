@@ -26,3 +26,14 @@ reply_keyboard = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True
 )
+
+reply_keyboard_main_menu = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Главное меню"),
+
+        ]
+
+    ],
+    resize_keyboard=True
+)

@@ -11,6 +11,11 @@ start_messages = (
 )
 
 
+main_messages = (
+
+)
+
+
 
 device_android_messages = (
     "Мы используем самый соверменный протокол подключения VLESS\n"

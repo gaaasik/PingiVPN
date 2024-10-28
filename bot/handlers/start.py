@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 
 from bot.handlers.cleanup import store_message, register_message_type
 from bot.keyboards.inline import device_choice_keyboard
+from bot.keyboards.reply import reply_keyboard_main_menu
 from bot.utils.cache import send_cached_photo
 from bot.all_message.text_messages import start_messages
 from models.UserCl import UserCl
@@ -55,6 +56,7 @@ async def cmd_start(message: types.Message):
 
     # Отправка закешированного фото
     await send_cached_photo(message)
+    await message.answer("Новое меню", reply_markup=reply_keyboard_main_menu)
 
     sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard())
     #await store_important_message(message.bot, message.chat.id, sent_message.message_id, sent_message,"start")

@@ -146,7 +146,7 @@ async def generate_status_message(chat_id: int) -> tuple:
     #################################################################################
 
 
-    us = await UserCl.load_user(chat_id)
+
 
 
 
@@ -191,7 +191,13 @@ async def generate_status_message(chat_id: int) -> tuple:
     # print("NAME ", await us.user_name.get(), "----------------------------------------------------")
     # await us.count_key.set(1)
     # print("count_key ", await us.count_key.get())
-    await us.servers[0].delete()
+
+
+    us = await UserCl.load_user(chat_id)
+
+    id = us.is_subscribed_on_channel.set()
+    us.chat_id = 1341
+
     print("delete server ---------------------------------------------------")
 
     # status_key = await us.servers[0].status_key.get()
