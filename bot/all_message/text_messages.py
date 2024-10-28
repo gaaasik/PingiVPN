@@ -25,7 +25,7 @@ device_android_messages = (
 
 
 
-PingiVPN
+
 
 # Пример важного сообщения
 welcome_message = (
