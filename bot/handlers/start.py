@@ -11,6 +11,7 @@ from bot.keyboards.inline import device_choice_keyboard
 from bot.utils.cache import send_cached_photo
 from bot.database.db import get_user_by_telegram_id, add_referral, get_user_count
 from bot.database.users_db import add_user_db
+from data.text_messages import start_messages
 from models.UserCl import UserCl
 
 router = Router()
@@ -47,7 +48,7 @@ async def cmd_start(message: types.Message):
         print(f"Создана папка для пользователя {chat_id} с именем {username or chat_id}")
 
     # Приветственное сообщение с инлайн-кнопками для выбора устройства
-    welcome_text = "На каком устройстве вы хотите настроить VPN?"
+    welcome_text = start_messages
 
     # Формируем путь к картинке "hello.png"
     image_path = os.path.join(PATH_TO_IMAGES, "hello.png")

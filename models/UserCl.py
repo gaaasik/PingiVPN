@@ -8,6 +8,7 @@ import aiosqlite
 import json
 from dotenv import load_dotenv
 from models.ServerCl import ServerCl
+import re
 
 # Загрузка переменных окружения из файла .env
 load_dotenv()
@@ -220,21 +221,36 @@ class UserCl:
             return None
 
     def _generate_server_params(self, current_date, url_vless, free_day):
-        """Генерирует параметры нового сервера VLESS."""
+        """Генерирует параметры нового сервера VLESS, извлекая информацию из URL."""
+
+        # Извлечение uuid, server_ip и name_key из URL
+        uuid_match = re.search(r'vless://([a-f0-9\-]+)@', url_vless)
+        server_ip_match = re.search(r'@([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+):', url_vless)
+        name_key_match = re.search(r'#([^ ]+)', url_vless)
+        country_match = re.search(r'_([A-Za-z]+)$', url_vless)
+
+        uuid_id = uuid_match.group(1) if uuid_match else ""
+        server_ip = server_ip_match.group(1) if server_ip_match else ""
+        name_key = name_key_match.group(1).replace("Vless-", "") if name_key_match else ""
+        #name_key = name_key_match.group(1) if name_key_match else ""
+        country_server = country_match.group(1) if country_match else "Unknown"
+
         return {
             "name_protocol": "vless",
-            "name_key": "VLESS_Key",
-            "name_server": "VLESS Server",
-            "country_server": "Country Name",
-            "server_ip": "123.45.67.89",
-            "user_ip": f"10.8.0.1",                  # Уникальный IP
+            "email_key": name_key,
+            "uuid_id": uuid_id,
+            "name_server": f"VLESS Server {server_ip}",
+            "country_server": country_server,
+            "server_ip": server_ip,
+            "name_key_for_user": name_key,
+            "user_ip": "",  # Уникальный IP
             "name_conf": "vless_config",
             "enable": True,
             "vpn_usage_start_date": current_date.strftime("%Y-%m-%d %H:%M:%S"),
             "traffic_up": 0,
             "traffic_down": 0,
-            "has_paid_key": 1,
-            "status_key": "active",
+            "has_paid_key": 0,
+            "status_key": "key_free",
             "is_notification": False,
             "days_after_pay": 30,
             "date_payment_key": current_date.strftime("%Y-%m-%d %H:%M:%S"),
