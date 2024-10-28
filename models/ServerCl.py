@@ -88,7 +88,7 @@ class ServerCl:
         }
 
     async def _update_json_on_server(self, new_enable_value: bool):
-        """Обновляет файл JSON на сервере через SSH и изменяет поле enable."""
+        """Обновляет файл JSONschecна сервере через SSH и изменяет поле enable."""
         ssh_host = "195.133.14.202"
         ssh_user = "root"
         ssh_password = "jzH^zvfW1J4qRX"
