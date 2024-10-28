@@ -11,7 +11,7 @@ from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
 from bot.database.users_db import add_user_db
 from bot.handlers import start, status, support, share, start_to_connect, instructions, \
-    device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request, feedback
+    device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request,main_menu, feedback
 from bot.payments2 import payments_handler_redis
 from bot.utils.cache import cache_media
 from bot.utils.check_status import check_db  #, notify_users_with_free_status
@@ -206,7 +206,7 @@ async def main():
     dp.include_router(user_help_request.router)
     dp.include_router(payments_handler_redis.router)
     dp.include_router(feedback.router)
-    #dp.include_router(payment.router)
+    dp.include_router(main_menu.router)
 
     # Запуск бота
     try:

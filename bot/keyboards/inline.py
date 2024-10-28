@@ -73,6 +73,7 @@ def config_or_qr_keyboard():
     ]
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
+
 #def keyborad_get_email(){}
 
 def create_payment_button(chat_id):
@@ -118,3 +119,15 @@ def account_info_keyboard():
         ]
     ]
     return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def main_menu_inline_keyboard():
+    # Создание клавиатуры с кнопками
+    buttons = [
+        [InlineKeyboardButton(text="Купить VPN", callback_data="buy_vpn")],
+        [InlineKeyboardButton(text="Мои ключи", callback_data="my_keys"), InlineKeyboardButton(text="Помощь", callback_data="help")],
+        [InlineKeyboardButton(text="Пригласить", callback_data="share"), InlineKeyboardButton(text="Всё о PingiVPN", callback_data="about_vpn")]
+    ]
+    # Создаем клавиатуру с кнопками
+    keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
+    return keyboard
