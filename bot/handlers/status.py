@@ -5,11 +5,15 @@ from bot.handlers.admin import ADMIN_CHAT_IDS
 from bot.handlers.cleanup import delete_unimportant_messages, store_message, register_message_type, \
     delete_message_with_type
 from bot.keyboards.inline import create_payment_button
-from bot.database.db import get_user_registration_date_and_username, get_days_since_registration_db
+from bot.database.db import get_days_since_registration_db
+from bot.database.users_db import get_user_registration_date_and_username_db
+from models.UserCl import UserCl
 
 #from bot.utils.file_sender import count_files_in_directory
 
 router = Router()
+
+
 # @router.message(Command("status"))
 # @router.message(lambda message: message.text == "Информация об аккаунте ℹ️")
 # async def cmd_status(message: types.Message):
@@ -115,7 +119,6 @@ async def cmd_status(message: types.Message):
         await store_message(chat_id, sent_message.message_id, status_message, 'bot')
         await register_message_type(chat_id, sent_message.message_id, 'account_status', bot)
 
-
         # Удаление сообщения пользователя после обработки.
     try:
         await bot.delete_message(chat_id, message.message_id)
@@ -124,7 +127,6 @@ async def cmd_status(message: types.Message):
 
     # Удаляем неважные сообщения.
     await delete_unimportant_messages(chat_id, bot)
-
 
 
 async def generate_status_message(chat_id: int) -> tuple:
@@ -140,25 +142,75 @@ async def generate_status_message(chat_id: int) -> tuple:
     - status_message: сгенерированный текст сообщения.
     - keyboard: клавиатура с кнопкой оплаты, если применимо.
     """
+
+    #################################################################################
+
+
+    us = await UserCl.load_user(chat_id)
+
+
+
+    # if us.servers:
+    #     await us.servers[0].delete()
+    # else:
+    #     print("Список серверов пуст. Нечего удалять.")
+
+    # print("count_key = ", us.count_key)
+    # new_server = {
+    #     "name_key": "key_1_Netherlands",
+    #     "name_protocol": "wire_guard",
+    #     "name_server": "My server test",
+    #     "country_server": "22222",
+    #     "server_ip": "195.133.14.202",
+    #     "user_ip": "10.8.0.3",
+    #     "name_conf": "test",
+    #     "enable": False,
+    #     "vpn_usage_start_date": "2024-10-26 19:43:52",  # TIMESTAMP placeholder
+    #     "traffic_up": 0,
+    #     "traffic_down": 0,
+    #     "has_paid_key": 1,
+    #     "status_key": "free_key",  # new_user, key_free, waiting_pending, blocked, active
+    #     "is_notification": False,
+    #     "days_after_pay": 30,  # TIMESTAMP placeholder
+    #     "date_payment_key": "2024-10-26 19:43:52",
+    #     "date_expire_of_paid_key": "2024-10-26 19:43:52",
+    #     "date_creation_key": "2024-10-26 19:43:52",
+    #     "date_expire_free_trial": "2024-10-26 19:43:52",
+    #     "url_vless": ""
+    # }
+    # await us.add_server_json(new_server)
+
+
+    #################################################################################
+    # await us.count_key.set(6)
+    # await us.user_name.set("TOL")
+    # await us.check_subscription_channel()
+    # await us.user_name.set("TOL")
+
+
+    # print("NAME ", await us.user_name.get(), "----------------------------------------------------")
+    # await us.count_key.set(1)
+    # print("count_key ", await us.count_key.get())
+    await us.servers[0].delete()
+    print("delete server ---------------------------------------------------")
+
+    # status_key = await us.servers[0].status_key.get()
+    status_key = 0
+
     # Получаем данные пользователя из базы данных.
-    user_data = await get_user_registration_date_and_username(chat_id)
+    #user_data = await get_user_registration_date_and_username(chat_id)
 
     str_count_days = "0"
     # Проверяем, что данные пользователя успешно получены и содержат 4 элемента.
-    if user_data and len(user_data) == 4:
-        # Распаковываем данные пользователя.
-        registration_date, days_since_registration, user_name, subscription_status = user_data
-        days = await get_days_since_registration_db(chat_id)
+    if await us.count_key.get() > 0:
 
         # Определяем текст статуса подписки и создаем клавиатуру в зависимости от статуса.
-        if subscription_status == "waiting_pending":
+        if status_key == "waiting_pending":
             str_count_days = "подписка закончена"
-            status_sub_txt = "пробный период закончился"
-            #status_sub_txt = "Ожидание оплаты подписки"
+            status_sub_txt = "Ожидание оплаты подписки"
             keyboard = create_payment_button(chat_id)
-        elif subscription_status == "new_user":
-            #str_count_days = count_day_free_user_db(chat_id)
-
+        elif status_key == "new_user":
+            days = us.days_since_registration.get()
 
             if 14 - days < 0:
                 str_count_days = 0
@@ -166,7 +218,7 @@ async def generate_status_message(chat_id: int) -> tuple:
                 str_count_days = 14 - days
             status_sub_txt = "Пробный период"
             keyboard = create_payment_button(chat_id)
-        elif subscription_status == "active":
+        elif status_key == "active":
             str_count_days = "активна на месяц"
             status_sub_txt = "Подписка активна на месяц"
 
@@ -174,16 +226,14 @@ async def generate_status_message(chat_id: int) -> tuple:
 
         else:
             # Для любого другого статуса используем его напрямую.
-            status_sub_txt = subscription_status
+            status_sub_txt = status_key
             keyboard = create_payment_button(chat_id)
 
-        if user_name == None:
-            user_name = chat_id
         # Формируем текст сообщения о статусе пользователя.
         status_message = (
-            f"🕒 Вы с нами уже {days} дней! 🚀 Какой прогресс! 😎\n"
-            f"Действие тарифа: {str_count_days}\n"
-            f"Имя пользователя: {user_name}\n"
+            f"🕒 Вы с нами уже {await us.days_since_registration.get()} дней! 🚀 Какой прогресс! 😎\n"
+            f"Действие тарифа: {await us.servers[0].days_after_pay.get()}\n"
+            f"Имя пользователя: {await us.user_name.get()}\n"
             f"Статус подписки: *{status_sub_txt}*"
         )
     else:

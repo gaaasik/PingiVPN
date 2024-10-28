@@ -9,7 +9,10 @@ from bot.handlers.admin import send_admin_log
 from bot.handlers.cleanup import store_message, store_important_message, register_message_type
 from bot.keyboards.inline import device_choice_keyboard
 from bot.utils.cache import send_cached_photo
-from bot.database.db import add_user, get_user_by_telegram_id, add_referral, get_user_count
+from bot.database.db import get_user_by_telegram_id, add_referral, get_user_count
+from bot.database.users_db import add_user_db
+from data.text_messages import start_messages
+from models.UserCl import UserCl
 
 router = Router()
 # Загрузка переменных из файла .env
@@ -45,7 +48,7 @@ async def cmd_start(message: types.Message):
         print(f"Создана папка для пользователя {chat_id} с именем {username or chat_id}")
 
     # Приветственное сообщение с инлайн-кнопками для выбора устройства
-    welcome_text = "На каком устройстве вы хотите настроить VPN?"
+    welcome_text = start_messages
 
     # Формируем путь к картинке "hello.png"
     image_path = os.path.join(PATH_TO_IMAGES, "hello.png")
@@ -57,39 +60,53 @@ async def cmd_start(message: types.Message):
     await send_cached_photo(message)
 
     sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard())
-    await store_important_message(message.bot, message.chat.id, sent_message.message_id, sent_message,"start")
-    await register_message_type(message.chat.id,sent_message.message_id,"start",message.bot)
-    # Получаем данные пользователя из базы данных (включая устройство)
-    user = await get_user_by_telegram_id(message.from_user.id)
+    #await store_important_message(message.bot, message.chat.id, sent_message.message_id, sent_message,"start")
+    await register_message_type(message.chat.id, sent_message.message_id, "start", message.bot)
+
     # Уведомляем администратора о новом пользователе
-    count_users = await get_user_count()
+    #count_users = await get_user_count()
+
+
+
+
+
     # Получаем данные пользователя из базы данных
-    user = await get_user_by_telegram_id(chat_id)
-    print(user)
-    test = 111122222
+    user = await UserCl.load_user(chat_id)
+
 
     if user:
         # Если пользователь уже существует, уведомляем администратора
-        await send_admin_log(
-            bot=message.bot,
-            message=f"Пользователь уже существует: @{username} (ID чата: {chat_id})"
-        )
+        # await send_admin_log(
+        #     bot=message.bot,
+        #     message=f"Пользователь уже существует: @{username} (ID чата: {chat_id})"
+        # )
+        print("Пользователь уже есть______________________Нужно админу")
     else:
         # Если пользователя нет, добавляем его в базу данных
-        await add_user(chat_id=chat_id, user_name=username)
+        print("Новый пользователь______________________Нужно админу")
+        #await add_user_db(chat_id=chat_id, user_name=username)
+
+        args = message.text.split()[1] if len(message.text.split()) > 1 else None
+        print(f"args: {args}_________________________________________")
+        referral_old_chat_id = int(args) if args else None
+        print(f"referral: {referral_old_chat_id}_________________________________________")
+        us = await UserCl.add_user_to_database(chat_id, username, referral_old_chat_id)
+
+        print("УВЕДОМЛЕНИЕ АДМИНУ НЕЕЕТУ")
 
         # Получаем количество пользователей для уведомления администратора
-        count_users = await get_user_count()
+        #count_users = await get_user_count()
+
 
         # Уведомляем администратора о новом пользователе
-        await send_admin_log(
-            bot=message.bot,
-            message=f"Добавлен новый пользователь: @{username} (ID чата: {chat_id}) \nКоличество пользователей: {count_users}"
-        )
+        # await send_admin_log(
+        #     bot=message.bot,
+        #     message=f"Добавлен новый пользователь: @{username} (ID чата: {chat_id}) \nКоличество пользователей: {count_users}"
+        # )
 
     # Сохраняем в базе данных реферальную информацию (если есть)
-    args = message.text.split()[1] if len(message.text.split()) > 1 else None
-    if args:
-        referrer_id = int(args)
-        await add_referral(referrer_id, chat_id)
+    # args = message.text.split()[1] if len(message.text.split()) > 1 else None
+    # if args:
+    #     referral_old_chat_id = int(args)
+    #     await add_referral(referral_old_chat_id, chat_id)
 
