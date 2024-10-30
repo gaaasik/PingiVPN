@@ -4,7 +4,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQu
 from bot.handlers.cleanup import delete_unimportant_messages, store_message, messages_for_db, register_message_type
 import os
 from models.UserCl import UserCl
-from bot.keyboards.inline import main_menu_inline_keyboard, device_choice_keyboard
+from bot.keyboards.inline import main_menu_inline_keyboard
 
 router = Router()
 

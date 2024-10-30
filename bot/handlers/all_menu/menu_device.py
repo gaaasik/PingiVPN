@@ -71,6 +71,9 @@ def get_instruction_text_for_device(device: str) -> str:
 # Обработчик для выбора устройства
 @router.callback_query(lambda c: c.data.startswith("device_"))
 async def handle_device_choice(callback_query: CallbackQuery):
+
+
+
     chat_id = callback_query.message.chat.id
     bot=callback_query.bot
     # Удаляем неважные сообщения

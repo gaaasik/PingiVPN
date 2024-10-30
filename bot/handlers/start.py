@@ -5,11 +5,11 @@ from aiogram import Router, types
 from aiogram.filters import Command
 from dotenv import load_dotenv
 
+from bot.handlers.all_menu.menu_connect_vpn import connect_text_messages, device_choice_keyboard
 from bot.handlers.cleanup import store_message, register_message_type
-from bot.keyboards.inline import device_choice_keyboard
+
 from bot.keyboards.reply import reply_keyboard_main_menu
 from bot.utils.cache import send_cached_photo
-from bot.all_message.text_messages import connect_text_messages
 from models.UserCl import UserCl
 
 router = Router()

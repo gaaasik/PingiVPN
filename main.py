@@ -199,7 +199,6 @@ async def main():
     dp.include_router(share.router)
     #dp.include_router(start_to_connect.router)
     dp.include_router(instructions.router)
-    dp.include_router(menu_device.router)
     dp.include_router(app_downloaded.router)
     dp.include_router(file_or_qr.router)
     dp.include_router(subscription.router)
