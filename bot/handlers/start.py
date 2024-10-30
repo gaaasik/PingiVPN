@@ -9,7 +9,7 @@ from bot.handlers.cleanup import store_message, register_message_type
 from bot.keyboards.inline import device_choice_keyboard
 from bot.keyboards.reply import reply_keyboard_main_menu
 from bot.utils.cache import send_cached_photo
-from bot.all_message.text_messages import start_messages
+from bot.all_message.text_messages import connect_text_messages
 from models.UserCl import UserCl
 
 router = Router()
@@ -46,7 +46,7 @@ async def cmd_start(message: types.Message):
         print(f"Создана папка для пользователя {chat_id} с именем {username or chat_id}")
 
     # Приветственное сообщение с инлайн-кнопками для выбора устройства
-    welcome_text = start_messages
+    welcome_text = connect_text_messages
 
     # Формируем путь к картинке "hello.png"
     image_path = os.path.join(PATH_TO_IMAGES, "hello.png")
@@ -56,18 +56,13 @@ async def cmd_start(message: types.Message):
 
     # Отправка закешированного фото
     await send_cached_photo(message)
-    await message.answer("Новое меню", reply_markup=reply_keyboard_main_menu)
-
-    sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard())
+    sent_message = await message.answer("Приветствуем в мире надежного и скоростного VPN! 🚀\n\n", parse_mode="Markdown")
+    sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard(),parse_mode="Markdown")
     #await store_important_message(message.bot, message.chat.id, sent_message.message_id, sent_message,"start")
     await register_message_type(message.chat.id, sent_message.message_id, "start", message.bot)
 
     # Уведомляем администратора о новом пользователе
     #count_users = await get_user_count()
-
-
-
-
 
     # Получаем данные пользователя из базы данных
     user = await UserCl.load_user(chat_id)

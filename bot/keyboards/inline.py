@@ -30,11 +30,15 @@ def device_choice_keyboard():
 
 # Клавиатура для скачивания приложения и подтверждения скачивания
 def download_app_keyboard(download_link):
-    buttons = [
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="Открыть магазин приложений", url=download_link)],  # Ведет на ссылку для скачивания
-        [InlineKeyboardButton(text="Я скачал ✅", callback_data="app_downloaded")]
-    ]
-    keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)  # Передаем список кнопок в конструктор
+        [InlineKeyboardButton(text="Инструкция с картинками", callback_data="a")],
+        [InlineKeyboardButton(text="Главное меню", callback_data="main_menu")]
+    ])
+    return keyboard
+
+
+     # Передаем список кнопок в конструктор
     return keyboard
 
 
@@ -42,7 +46,7 @@ def download_app_keyboard(download_link):
 def subscribe_keyboard():
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="Перейти на канал", url="https://t.me/pingi_hub")],
-        [InlineKeyboardButton(text="Я подписался", callback_data="check_subscription")]
+        [InlineKeyboardButton(text="Я подписался", callback_data="app_downloaded")]
     ])
     return keyboard
 
@@ -126,7 +130,8 @@ def main_menu_inline_keyboard():
     buttons = [
         [InlineKeyboardButton(text="Купить VPN", callback_data="buy_vpn")],
         [InlineKeyboardButton(text="Мои ключи", callback_data="my_keys"), InlineKeyboardButton(text="Помощь", callback_data="help")],
-        [InlineKeyboardButton(text="Пригласить", callback_data="share"), InlineKeyboardButton(text="Всё о PingiVPN", callback_data="about_vpn")]
+        [InlineKeyboardButton(text="Пригласить", callback_data="share"), InlineKeyboardButton(text="Всё о PingiVPN", callback_data="about_vpn")],
+        [InlineKeyboardButton(text="Подключить VPN", callback_data="connect_vpn")]
     ]
     # Создаем клавиатуру с кнопками
     keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
