@@ -7,13 +7,11 @@ from aiogram import Bot
 from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
-from bot.handlers.my_keys import menu_my_key
+from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_about_vpn, menu_help, menu_share,menu_connect_vpn
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
-from bot.database.users_db import add_user_db
-from bot.handlers import start, status, support, share, start_to_connect, instructions, \
-    device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request, main_menu, feedback, \
-    menu_buy_vpn
+from bot.handlers import start, status, support, share, instructions, \
+    app_downloaded, file_or_qr, subscription, speedtest, user_help_request, feedback
 from bot.payments2 import payments_handler_redis
 from bot.utils.cache import cache_media
 from bot.utils.check_status import check_db  #, notify_users_with_free_status
@@ -199,9 +197,9 @@ async def main():
     dp.include_router(support.router)
     #dp.include_router(admin.router)
     dp.include_router(share.router)
-    dp.include_router(start_to_connect.router)
+    #dp.include_router(start_to_connect.router)
     dp.include_router(instructions.router)
-    dp.include_router(device_choice.router)
+    dp.include_router(menu_device.router)
     dp.include_router(app_downloaded.router)
     dp.include_router(file_or_qr.router)
     dp.include_router(subscription.router)
@@ -210,7 +208,12 @@ async def main():
     dp.include_router(feedback.router)
     dp.include_router(main_menu.router)
     dp.include_router(menu_buy_vpn.router)
-    dp.include_router(menu_my_key.router)
+    dp.include_router(menu_share.router)
+    dp.include_router(menu_help.router)
+    dp.include_router(menu_device.router)
+    dp.include_router(menu_connect_vpn.router)
+    dp.include_router(menu_my_keys.router)
+    dp.include_router(menu_about_vpn.router)
 
     # Запуск бота
     try:

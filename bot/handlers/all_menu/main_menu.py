@@ -34,21 +34,11 @@ async def show_main_menu(chat_id: int, bot: Bot, status: str,  days_since_regist
 
 # Обработчики для кнопок главного меню
 
-@router.callback_query(lambda c: c.data == "my_keys")
-async def handle_my_keys(callback_query: CallbackQuery):
-    await callback_query.answer("Мои ключи: функционал пока не реализован.")
 
-@router.callback_query(lambda c: c.data == "help")
-async def handle_help(callback_query: CallbackQuery):
-    await callback_query.answer("Помощь: функционал пока не реализован.")
 
-@router.callback_query(lambda c: c.data == "share")
-async def handle_share(callback_query: CallbackQuery):
-    await callback_query.answer("Пригласить: функционал пока не реализован.")
 
-@router.callback_query(lambda c: c.data == "about_vpn")
-async def handle_about_vpn(callback_query: CallbackQuery):
-    await callback_query.answer("Всё о PingiVPN: функционал пока не реализован.")
+
+
 
 # Универсальный обработчик для главного меню
 # Универсальный обработчик для главного меню

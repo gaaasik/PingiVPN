@@ -1,4 +1,4 @@
-# bot/handlers/device_choice.py
+# bot/handlers/menu_device.py
 
 from aiogram import Router, types
 from aiogram.types import CallbackQuery

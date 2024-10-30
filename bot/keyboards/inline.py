@@ -5,27 +5,7 @@ from bot.handlers.admin import ADMIN_CHAT_IDS
 
 # Создаем инлайн-кнопки для выбора устройства
 # Создаем инлайн-кнопки для выбора устройства
-def device_choice_keyboard():
-    """Клавиатура для выбора устройства"""
 
-    # Создаем кнопки
-    buttons = [
-        [
-            InlineKeyboardButton(text="Android", callback_data="device_android"),
-            InlineKeyboardButton(text="iPhone", callback_data="device_iPhone")
-        ],
-        [
-            InlineKeyboardButton(text="Mac", callback_data="device_mac"),
-            InlineKeyboardButton(text="Linux", callback_data="device_linux")
-        ],
-        [
-            InlineKeyboardButton(text="Windows", callback_data="device_windows")
-        ],
-    ]
-
-    # Передаем список кнопок в InlineKeyboardMarkup
-    keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
-    return keyboard
 
 
 # Клавиатура для скачивания приложения и подтверждения скачивания
