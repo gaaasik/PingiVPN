@@ -20,6 +20,12 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
 
 
 
+
+
+
+
+
+
 ############# не нужный код в будущем
 # Обработчик для кнопки "Подключиться 🚀"
 @router.message(lambda message: message.text == "Подключиться 🚀")

@@ -7,6 +7,7 @@ from aiogram import Bot
 from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
+from bot.handlers.my_keys import menu_my_key
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
 from bot.database.users_db import add_user_db
@@ -209,6 +210,7 @@ async def main():
     dp.include_router(feedback.router)
     dp.include_router(main_menu.router)
     dp.include_router(menu_buy_vpn.router)
+    dp.include_router(menu_my_key.router)
 
     # Запуск бота
     try:
