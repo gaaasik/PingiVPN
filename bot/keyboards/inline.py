@@ -22,13 +22,7 @@ def download_app_keyboard(download_link):
     return keyboard
 
 
-# Кнопка для перехода на канал и кнопка для проверки подписки
-def subscribe_keyboard():
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="Перейти на канал", url="https://t.me/pingi_hub")],
-        [InlineKeyboardButton(text="Я подписался", callback_data="app_downloaded")]
-    ])
-    return keyboard
+
 
 
 # Функция для кнопки "Получить файл"

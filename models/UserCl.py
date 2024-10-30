@@ -110,13 +110,19 @@ class UserCl:
         :return: True, если пользователь подписан на канал; иначе False.
         """
 
+
+
+
         from bot_instance import bot  # Импорт бота, если он не передан напрямую
         try:
+
             status = await bot.get_chat_member(channel_username, self.chat_id)
-            is_subscribed = status.status in ["member", "administrator", "creator"]
-            # Обновляем поле is_subscribed_on_channel на основе статуса подписки
-            await self.is_subscribed_on_channel.set(1 if is_subscribed else 0)
-            return is_subscribed
+            if status.status in ["member", "administrator", "creator"]:
+                await self.is_subscribed_on_channel.set(1)
+                return True
+            await self.is_subscribed_on_channel.set(0)
+            return False
+
         except Exception as e:
             print(f"Ошибка при проверке подписки на канал: {e}")
             # Если произошла ошибка, поле is_subscribed_on_channel остается неизменным или устанавливается в 0.

@@ -14,7 +14,7 @@ from bot.handlers import start, status, support, share, instructions, \
     app_downloaded, file_or_qr, subscription, speedtest, user_help_request, feedback
 from bot.payments2 import payments_handler_redis
 from bot.utils.cache import cache_media
-from bot.utils.check_status import check_db  #, notify_users_with_free_status
+#from bot.utils.check_status import check_db  #, notify_users_with_free_status
 from bot.utils.logger import setup_logger
 from bot.database.db import database_path_local  #,  init_db
 from bot.database.init_db import init_db
@@ -133,7 +133,7 @@ async def periodic_task_24_hour(bot: Bot):
             await send_admin_log(bot, "Пинг бота - началось обновление базы данных в 3:00.")
 
             # Выполнение проверки базы данных
-            await check_db(bot)
+            #await check_db(bot)
 
             # Уведомление об успешном завершении
             await send_admin_log(bot, "Обновление базы данных прошло успешно.")
@@ -199,9 +199,9 @@ async def main():
     dp.include_router(share.router)
     #dp.include_router(start_to_connect.router)
     dp.include_router(instructions.router)
-    dp.include_router(app_downloaded.router)
-    dp.include_router(file_or_qr.router)
-    dp.include_router(subscription.router)
+    #dp.include_router(app_downloaded.router)
+    #dp.include_router(file_or_qr.router)
+    #dp.include_router(subscription.router)
     dp.include_router(user_help_request.router)
     dp.include_router(payments_handler_redis.router)
     dp.include_router(feedback.router)
@@ -219,10 +219,18 @@ async def main():
         await dp.start_polling(bot)
     except Exception as e:
         logging.exception(f"Произошла ошибка: {e}")
+    except KeyboardInterrupt:
+        print("Работа прервана пользователем")
     finally:
         await send_admin_log(bot, "Бот завершил работу и пошел отдыхать")
         await bot.session.close()
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Завершение работы...")
+
+
+

@@ -1,17 +1,17 @@
-# Это файл handlers/app_downloaded.py
-
-from aiogram import Router, types
-from aiogram.types import CallbackQuery
-from bot.keyboards.inline import config_or_qr_keyboard, subscribe_keyboard
-from bot.handlers.cleanup import store_message, delete_unimportant_messages, \
-    store_important_message  # Используем функцию удаления сообщений
-from bot.utils.subscription_check import check_subscription_channel
-from models.UserCl import UserCl
-
-router = Router()
-
-
-
+# # Это файл handlers/app_downloaded.py
+#
+# from aiogram import Router, types
+# from aiogram.types import CallbackQuery
+# from bot.keyboards.inline import config_or_qr_keyboard, subscribe_keyboard
+# from bot.handlers.cleanup import store_message, delete_unimportant_messages, \
+#     store_important_message  # Используем функцию удаления сообщений
+# from bot.utils.subscription_check import check_subscription_channel
+# from models.UserCl import UserCl
+# 
+# router = Router()
+#
+#
+#
 
 
 # Обработчик для нажатия на кнопку "Я скачал ✅"

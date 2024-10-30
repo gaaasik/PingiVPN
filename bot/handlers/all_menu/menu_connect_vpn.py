@@ -48,6 +48,7 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
 
     sent_message = await callback_query.message.answer(connect_text_messages, reply_markup=device_choice_keyboard(),
                                                        parse_mode="Markdown")
+    await callback_query.answer()
 
 
 
