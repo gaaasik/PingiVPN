@@ -3,11 +3,45 @@ from aiogram.filters import Command
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from bot.handlers.cleanup import delete_unimportant_messages, store_message, messages_for_db, register_message_type
 import os
+
+from flask_app.all_utils_flask_db import logger
 from models.UserCl import UserCl
 from bot.keyboards.inline import main_menu_inline_keyboard
 
 router = Router()
 
+
+async def get_user_status_text(us):
+    try:
+        # Получаем количество ключей
+        count_key = await us.count_key.get()
+
+        if count_key == 0:
+            # Если ключей нет
+            return "У вас нет ключа"
+
+        # Если ключи есть, проверяем статус первого ключа
+        status_key = await us.servers[0].status_key.get()
+
+        # Определяем текст статуса в зависимости от статуса ключа
+        if status_key == "key_free":
+            # Пробный период
+            trial_end_date = await us.servers[0].date_expire_free_trial.get()
+            return f"Пробный период до *{trial_end_date[:10] }*"
+        elif status_key == "blocked":
+            # Ключ заблокирован
+            return f"*Ключ заблокирован*"
+        elif status_key == "active":
+            # Ключ активен, дата окончания активации
+            active_end_date = await us.servers[0].date_expire_of_paid_key.get()
+            return f"Ключ активен до *{active_end_date[:10]}*"
+        else:
+            # Если статус не распознан
+            return "Статус ключа не распознан"
+
+    except Exception as e:
+        logger.error("Ошибка при проверке статуса пользователя: %s", e)
+        return "Произошла ошибка при проверке статуса. Попробуйте позже."
 
 # Функция для отображения основного меню
 async def show_main_menu(chat_id: int, bot: Bot):
@@ -18,20 +52,10 @@ async def show_main_menu(chat_id: int, bot: Bot):
     #await us.add_key_vless()
 
     user_name_full = await us.user_name_full.get()
-    status = ""
+
     days_since_registration = await us.days_since_registration.get()
-    try:
-        count_key = await us.count_key.get()
-        if count_key > 0:
-            if await us.servers[0].status_key.get() == "key_free":
-                status = "пробный период"
-            print("status = ", status)
-
-        else:
-            status = "нет ключей"
-
-    except:
-        pass
+    # Получаем статус пользователя
+    status_text = await get_user_status_text(us)
 
     print()
     # Формирование текста главного меню
@@ -43,7 +67,7 @@ async def show_main_menu(chat_id: int, bot: Bot):
         "📶 Устойчивость к блокировкам\n"
         "🚀 Высокая скорость\n"
         "💻 Поддержка любых устройств\n\n"
-        f"🔑 Статус: {status}\n"
+        f"🔑 Статус: {status_text}\n"
         f"🕓 Вы с нами уже {days_since_registration} дней! 🥳\n"
     )
 

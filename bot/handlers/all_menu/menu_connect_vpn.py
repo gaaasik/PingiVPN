@@ -34,6 +34,8 @@ def device_choice_keyboard():
         ],
         [
             InlineKeyboardButton(text="Windows", callback_data="device_windows")
+        ], [
+            InlineKeyboardButton(text="Главное меню", callback_data="main_menu")
         ],
     ]
 
