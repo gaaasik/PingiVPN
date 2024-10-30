@@ -15,7 +15,7 @@ async def show_main_menu(chat_id: int, bot: Bot):
     # Добавить в базу данных
     us = await UserCl.load_user(chat_id)
 
-    await us.add_key_vless()
+    #await us.add_key_vless()
 
     user_name_full = await us.user_name_full.get()
     status = ""
