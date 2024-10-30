@@ -75,9 +75,13 @@ class UserCl:
     async def load_user(cls, chat_id: int) -> Optional["UserCl"]:
         self = cls(chat_id)
 
-###############################################################################
-# проверка на существование пользователя
-###############################################################################
+        async with aiosqlite.connect(database_path_local) as db:
+            query = "SELECT 1 FROM users WHERE chat_id = ?"
+            async with db.execute(query, (chat_id,)) as cursor:
+                result = await cursor.fetchone()
+                if not result:
+                    print(f"Пользователь с chat_id {chat_id} не найден в базе данных.")
+                    return None
 
         user_data_loaded = await self._load_user_data()
         if not user_data_loaded:
