@@ -8,15 +8,35 @@ from bot.keyboards.inline import main_menu_inline_keyboard
 
 router = Router()
 
-# Функция для отображения основного меню
-async def show_main_menu(chat_id: int, bot: Bot, status: str,  days_since_registration: int):
-    # Получаем данные о пользователе по chat_id
-    user = await bot.get_chat(chat_id)
-    user_name = f"{user.first_name} {user.last_name or ''}".strip()
 
+# Функция для отображения основного меню
+async def show_main_menu(chat_id: int, bot: Bot):
+    # Получаем данные о пользователе по chat_id
+    # Добавить в базу данных
+    us = await UserCl.load_user(chat_id)
+
+    await us.add_key_vless()
+
+    user_name_full = await us.user_name_full.get()
+    status = ""
+    days_since_registration = await us.days_since_registration.get()
+    try:
+        count_key = await us.count_key.get()
+        if count_key > 0:
+            if await us.servers[0].status_key.get() == "key_free":
+                status = "пробный период"
+            print("status = ", status)
+
+        else:
+            status = "нет ключей"
+
+    except:
+        pass
+
+    print()
     # Формирование текста главного меню
     text = (
-        f"Привет {user_name}! 🕶\n\n"
+        f"Привет {user_name_full}! 🕶\n\n"
         "PingiVPN - быстрый и безопасный доступ к свободному интернету без ограничений\n\n"
         "📱 Доступ к любым социальным сетям\n"
         "🛡 Анонимность\n"
@@ -27,17 +47,11 @@ async def show_main_menu(chat_id: int, bot: Bot, status: str,  days_since_regist
         f"🕓 Вы с нами уже {days_since_registration} дней! 🥳\n"
     )
 
-
-
     # Отправка сообщения с меню
-    await bot.send_message(chat_id=chat_id, text=text, reply_markup=main_menu_inline_keyboard(),parse_mode="Markdown")
+    await bot.send_message(chat_id=chat_id, text=text, reply_markup=main_menu_inline_keyboard(), parse_mode="Markdown")
+
 
 # Обработчики для кнопок главного меню
-
-
-
-
-
 
 
 # Универсальный обработчик для главного меню
@@ -55,9 +69,5 @@ async def handle_main_menu(event: types.Message | types.CallbackQuery):
         chat_id = event.chat.id
         bot = event.bot
 
-    # Пример данных, которые могут быть получены из базы данных
-    status = ":актуальный статус:"  # Пример статуса
-    days_since_registration = 100
-
     # Отображение главного меню
-    await show_main_menu(chat_id, bot, status, days_since_registration)
+    await show_main_menu(chat_id, bot)

@@ -45,7 +45,8 @@ async def init_db(database_path: str):
         await db.execute('''CREATE TABLE IF NOT EXISTS "users" (
             "id" INTEGER PRIMARY KEY AUTOINCREMENT,
             "chat_id" INTEGER UNIQUE,
-            "user_name" TEXT,
+            "user_name_full" TEXT,
+            "user_login" TEXT,
             "registration_date" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             "referral_old_chat_id" INTEGER,
             "device" TEXT,
