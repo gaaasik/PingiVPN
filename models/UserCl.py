@@ -49,12 +49,14 @@ class Field:
                 self.value = new_value
                 setattr(self.user, f"_{self.name}", new_value)
                 await self.user._update_count_key_in_db(self.name, new_value)
+                return new_value
+
 
 
 
     async def get(self):
         if self.name == "count_key":
-            await self._update_count_key()
+            return await self._update_count_key()
         if self.name == "is_subscribed_on_channel":
             return await self.user.check_subscription_channel
         return self.value
@@ -251,17 +253,16 @@ class UserCl:
 
         uuid_id = uuid_match.group(1) if uuid_match else ""
         server_ip = server_ip_match.group(1) if server_ip_match else ""
-        name_key = name_key_match.group(1).replace("Vless-", "") if name_key_match else ""
+        email_key = name_key_match.group(1).replace("Vless-", "") if name_key_match else ""
+        name_key = name_key_match.group(1).replace("Vless-", "").rpartition('_')[0] if name_key_match else ""
         country_server = country_match.group(1) if country_match else "Unknown"
 
         return {
             "name_protocol": "vless",
-            "email_key": name_key,
+            "email_key": email_key,
             "uuid_id": uuid_id,
             "name_server": f"VLESS Server {server_ip}",
-            #######################################################################################
             "name_key": f"{name_key}",
-            ######################################################################################
             "country_server": country_server,
             "server_ip": server_ip,
             "enable": True,

@@ -79,7 +79,7 @@ async def handle_payment_request(callback_query: types.CallbackQuery, state: FSM
         await request_user_email(chat_id, bot, state)
         await state.set_state(PaymentForm.awaiting_email)
     elif status_key == "active":
-        expire_key_after_payment = us.servers[0].date_expire_of_paid_key.get()
+        expire_key_after_payment = us.servers[0].date_key_off.get_date()
         await bot.send_message(chat_id, text=f"Ваша подписка активна до *{expire_key_after_payment}*")
     else:
         await bot.send_message(chat_id, text="Оплата скоро будет доступна.")
