@@ -48,13 +48,13 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
         status_key = await us.servers[0].status_key.get()
         key_name = await us.servers[0].email_key.get()
 
-        if status_key == "key_free":
+        if status_key == "free_key":
             # Пробный период ключа
-            trial_end_date = await us.servers[0].date_expire_free_trial.get()  # Обрезаем до 'ГГГГ-ММ-ДД'
+            trial_end_date = await us.servers[0].date_key_off.get_date()  # Обрезаем до 'ГГГГ-ММ-ДД'
             text = (
                 f"Ваш ключ: {key_name}\n"
                 f"Его статус: *пробный период*\n"
-                f"Пробный период ключа до *{trial_end_date[:10]}*\n\n"
+                f"Пробный период ключа до *{trial_end_date}*\n\n"
                 "Стоимость подписки на *30* дней: *199₽*"
             )
             keyboard = get_payment_keyboard()
@@ -72,11 +72,11 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
 
         elif status_key == "active":
             # Ключ активен
-            active_end_date = await us.servers[0].date_expire_of_paid_key.get()  # Обрезаем до 'ГГГГ-ММ-ДД'
+            active_end_date = await us.servers[0].date_key_off.get_date()  # Обрезаем до 'ГГГГ-ММ-ДД'
             text = (
                 f"Ваш ключ: {key_name}\n"
                 f"Cтатус: *активен*\n"
-                f"Ключ активен до: *{active_end_date[:10]}*\n\n"
+                f"Ключ активен до: *{active_end_date}*\n\n"
                 "При оплате вы продлите срок активного ключа еще на *30 дней*"
             )
             keyboard = get_payment_keyboard()

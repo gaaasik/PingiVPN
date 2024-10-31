@@ -269,7 +269,7 @@ class UserCl:
             "traffic_up": 0,
             "traffic_down": 0,
             "has_paid_key": 0,
-            "status_key": "key_free",
+            "status_key": "free_key",
             "is_notification": False,
             "date_payment_key": "",
             "date_creation_key": current_date.strftime("%d.%m.%Y %H:%M:%S"),

@@ -169,7 +169,7 @@ async def generate_status_message(chat_id: int) -> tuple:
     #     "traffic_up": 0,
     #     "traffic_down": 0,
     #     "has_paid_key": 1,
-    #     "status_key": "free_key",  # new_user, key_free, waiting_pending, blocked, active
+    #     "status_key": "free_key",  # new_user, free_key, waiting_pending, blocked, active
     #     "is_notification": False,
     #     "days_after_pay": 30,  # TIMESTAMP placeholder
     #     "date_payment_key": "2024-10-26 19:43:52",

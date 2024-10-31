@@ -24,9 +24,9 @@ async def get_user_status_text(us):
         status_key = await us.servers[0].status_key.get()
 
         # Определяем текст статуса в зависимости от статуса ключа
-        if status_key == "key_free":
+        if status_key == "free_key":
             # Пробный период
-            trial_end_date = await us.servers[0].date_expire_free_trial.get()
+            trial_end_date = await us.servers[0].date_key_off.get_date()
             return f"Пробный период до *{trial_end_date[:10] }*"
         elif status_key == "blocked":
             # Ключ заблокирован
