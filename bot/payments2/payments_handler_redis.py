@@ -147,25 +147,34 @@ async def process_payment_message(message: str, bot: Bot):
         if status == 'payment.succeeded':
             us = await UserCl.load_user(user_id)
 
+            # Устанавливаем статус ключа на "active"
             await us.servers[0].status_key.set("active")
-            # Обновление даты платежа
-            # Предположим, что date_expire_of_paid_key хранится в формате строки "YYYY-MM-DD HH:MM:SS"
-            date_expire_of_paid_key = await us.servers[0].date_expire_of_paid_key.get()
 
-            # Преобразуем строку в объект datetime
-            expiry_date = datetime.strptime(date_expire_of_paid_key, "%Y-%m-%d %H:%M:%S")
+            # Получаем текущую дату
+            current_date = datetime.now()
 
-            # Добавляем 30 дней
-            new_expiry_date = expiry_date + timedelta(days=30)
+            # Получаем дату окончания ключа из базы
+            date_key_off = await us.servers[0].date_key_off.get()
 
-            # Преобразуем обратно в строку
-            new_expiry_date_str = new_expiry_date.strftime("%Y-%m-%d %H:%M:%S")
+            # Преобразуем строку в объект datetime, используя формат "DD.MM.YYYY HH:MM:SS"
+            expiry_date = datetime.strptime(date_key_off, "%d.%m.%Y %H:%M:%S")
 
-            # Сохраняем обратно в формате строки
-            await us.servers[0].date_expire_of_paid_key.set(new_expiry_date_str)
+            # Проверяем, истекла ли дата окончания ключа
+            if expiry_date < current_date:
+                # Если дата истекла, устанавливаем новую дату на 30 дней от текущего момента
+                new_expiry_date = current_date + timedelta(days=30)
+            else:
+                # Если дата не истекла, добавляем 30 дней к существующей дате окончания
+                new_expiry_date = expiry_date + timedelta(days=30)
+
+            # Преобразуем новую дату обратно в строку в формате "DD.MM.YYYY HH:MM:SS"
+            new_expiry_date_str = new_expiry_date.strftime("%d.%m.%Y %H:%M:%S")
+
+            # Сохраняем новую дату окончания и обновляем статус платного ключа
+            await us.servers[0].date_key_off.set(new_expiry_date_str)
             await us.servers[0].has_paid_key.set(1)
 
-            #await update_user_subscription_db(user_id)
+            # Выполнение последующих действий после оплаты
             await handle_post_payment_actions(bot, user_id)
 
 

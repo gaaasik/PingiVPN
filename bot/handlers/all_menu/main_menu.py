@@ -53,7 +53,7 @@ async def show_main_menu(chat_id: int, bot: Bot):
 
     user_name_full = await us.user_name_full.get()
 
-    days_since_registration = await us.days_since_registration.get()
+    days_since_registration = us.days_since_registration.get()
     # Получаем статус пользователя
     status_text = await get_user_status_text(us)
 

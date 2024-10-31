@@ -70,7 +70,7 @@ class UserCl:
         self.device = Field('device', "", self)
         self.is_subscribed_on_channel = Field('is_subscribed_on_channel', 0, self)
         self.days_since_registration = Field('days_since_registration', 0, self)
-        self.email = Field('count_key', "", self)
+        self.email = Field('email', "", self)
         self.servers: list[ServerCl]  # Явное указание типа поля servers  # Поле для хранения списка серверов (список объектов Server_cl)
         self.count_key = Field('count_key', 0, self)  # Поле для хранения количества серверов
 

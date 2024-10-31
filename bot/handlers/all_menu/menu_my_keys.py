@@ -45,19 +45,19 @@ async def handle_my_keys(callback_query: CallbackQuery):
     text_day_activ = ""
     text_traffic = "Трафик: 200Gb в/мес"
     text_url = ""
-    date_expire_free_trial
+
 
     if await us.count_key.get() > 0:
         keyboard = keyboard_one_key()
         text_count = "1 ключ"
-        text_key_name = await us.servers[0].email_key.get()
+        text_key_name = await us.servers[0].name_key.get()
         text_country_key = await us.servers[0].country_server.get()
         text_status = await us.servers[0].status_key.get()
         text_url = await us.servers[0].url_vless.get()
         if await us.servers[0].status_key.get() == "free_key":
             text_status = "пробный период"
             text_day_activ = f"Пробный период активен до: {await us.servers[0].date_key_off.get_date()}\n\n"
-        elif await us.servers[0].status_key.get() == "activ":
+        elif await us.servers[0].status_key.get() == "active":
             text_status = "ключ активен"
             text_day_activ = f"Пробный период активен до: {await us.servers[0].date_key_off.get_date()}\n\n"
         else:
