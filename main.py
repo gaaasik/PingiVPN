@@ -7,7 +7,8 @@ from aiogram import Bot
 from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
-from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_about_vpn, menu_help, menu_share,menu_connect_vpn
+from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_about_vpn, menu_help, \
+    menu_share, menu_connect_vpn, menu_payment
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
 from bot.handlers import start, status, support, share, instructions, \
@@ -203,7 +204,7 @@ async def main():
     #dp.include_router(file_or_qr.router)
     #dp.include_router(subscription.router)
     dp.include_router(user_help_request.router)
-    dp.include_router(payments_handler_redis.router)
+    dp.include_router(menu_payment.router)
     dp.include_router(feedback.router)
     dp.include_router(main_menu.router)
     dp.include_router(menu_buy_vpn.router)
