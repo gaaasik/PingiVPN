@@ -163,11 +163,7 @@ async def handle_device_choice(callback_query: CallbackQuery):
         device = await us.device.get()
         text = get_instruction_text_for_device(device)
         print(device)
-        vpn_link = (
-            "vless://90b5d83f-e3c6-4381-91c4-7d624dc1c490@194.87.208.18:443?"
-            "type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&"
-            "fp=chrome&sni=yahoo.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#Vless-vless_5_Netherlands"
-        )
+        vpn_link = await us.servers[0].url_vless.get()
         message = await callback_query.message.answer(
             f"{text}\n```\n{vpn_link}\n```",
             parse_mode="Markdown",
