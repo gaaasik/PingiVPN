@@ -45,7 +45,7 @@ async def handle_my_keys(callback_query: CallbackQuery):
     text_day_activ = ""
     text_traffic = "Трафик: 200Gb в/мес"
     text_url = ""
-    date_expire_free_trial
+
 
     if await us.count_key.get() > 0:
         keyboard = keyboard_one_key()
