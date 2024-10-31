@@ -51,10 +51,39 @@ class Field:
                 await self.user._update_count_key_in_db(self.name, new_value)
                 return new_value
 
+    async def get_date(self):
+        # Проверяем, можно ли использовать данный метод для текущего поля
+        if self._name not in ["date_key_off", "date_creation_key", "date_payment_key"]:
+            raise AttributeError(f"Метод get_date не может быть использован для поля '{self._name}'")
 
+        # Преобразуем строку в datetime и возвращаем только дату
+        if isinstance(self._value, str):
+            date_obj = datetime.strptime(self._value, "%d.%m.%Y %H:%M:%S")
+        elif isinstance(self._value, datetime):
+            date_obj = self._value
+        else:
+            raise ValueError("Неправильный формат даты")
 
+        return date_obj.strftime("%d.%m.%Y")
+
+    async def _update_days_since_registration(self):
+        if self.name == "days_since_registration":
+            registration_date_value = await self.user.registration_date.get()
+
+            if not registration_date_value:
+                print("Дата регистрации не установлена.")
+                return
+
+            registration_date = datetime.strptime(registration_date_value, "%d.%m.%Y %H:%M:%S")
+
+            current_date = datetime.now()
+            days_since_registration = (current_date - registration_date).days
+            await self.user.days_since_registration.set(days_since_registration)
+            return days_since_registration
 
     async def get(self):
+        if self.name == "days_since_registration":
+            return await self._update_days_since_registration()
         if self.name == "count_key":
             return await self._update_count_key()
         if self.name == "is_subscribed_on_channel":
@@ -73,7 +102,8 @@ class UserCl:
         self.is_subscribed_on_channel = Field('is_subscribed_on_channel', 0, self)
         self.days_since_registration = Field('days_since_registration', 0, self)
         self.email = Field('count_key', "", self)
-        self.servers: list[ServerCl]  # Явное указание типа поля servers  # Поле для хранения списка серверов (список объектов Server_cl)
+        self.servers: list[
+            ServerCl]  # Явное указание типа поля servers  # Поле для хранения списка серверов (список объектов Server_cl)
         self.count_key = Field('count_key', 0, self)  # Поле для хранения количества серверов
 
     @classmethod
@@ -96,7 +126,8 @@ class UserCl:
         return self
 
     @classmethod
-    async def add_user_to_database(cls, chat_id: int, user_name_full: str, user_login: str, referral_old_chat_id: Optional[int] = 0):
+    async def add_user_to_database(cls, chat_id: int, user_name_full: str, user_login: str,
+                                   referral_old_chat_id: Optional[int] = 0):
         """Добавляет нового пользователя в базу данных"""
         self = cls(chat_id)
         # Проверка подписки пользователя на канал
@@ -158,7 +189,6 @@ class UserCl:
         new_server = ServerCl(server_params, self)
         self.servers.append(new_server)
 
-
         # Обновляем поле value_key (список серверов) и count_key в базе данных
         await self._update_servers_in_db()
 
@@ -170,9 +200,6 @@ class UserCl:
         :param channel_username: Имя пользователя канала в Telegram (по умолчанию "@pingi_hub").
         :return: True, если пользователь подписан на канал; иначе False.
         """
-
-
-
 
         from bot_instance import bot  # Импорт бота, если он не передан напрямую
         try:
@@ -190,11 +217,9 @@ class UserCl:
             await self.is_subscribed_on_channel.set(0)
             return False
 
-
-
-    async def add_key_vless(self, free_day = 7):
+    async def add_key_vless(self, free_day=7):
         """Создает сервер VLESS с фиксированными параметрами, используя первый доступный URL и добавляет его в список серверов пользователя."""
-          # Количество бесплатных дней
+        # Количество бесплатных дней
         current_date = datetime.now()
 
         # Определение путей к файлам
@@ -278,11 +303,6 @@ class UserCl:
             "url_vless": url_vless
         }
 
-
-
-
-
-
     async def _load_user_data(self):
         async with aiosqlite.connect(database_path_local) as db:
             query = """
@@ -314,8 +334,6 @@ class UserCl:
                     print(f"Пользователь с chat_id {self.chat_id} не найден в базе данных.")
                     return False  # Пользователь не найден
 
-
-
     async def _load_servers(self):
         """Загрузка списка серверов для пользователя"""
         async with aiosqlite.connect(database_path_local) as db:
@@ -344,7 +362,6 @@ class UserCl:
                 else:
                     print(f"Нет серверов для пользователя с chat_id {self.chat_id}")
                     self.servers = []
-
 
     async def _update_servers_in_db(self):
         """Обновление списка серверов и количества серверов в базе данных"""

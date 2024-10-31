@@ -63,7 +63,6 @@ async def handle_my_keys(callback_query: CallbackQuery):
             text_count = "1 ключ"
             text_key_name = "Ваш ключ: " + await us.servers[0].name_key.get()
             text_country_key = "Страна сервера: " + await us.servers[0].country_server.get_country()
-            text_status = await us.servers[0].status_key.get()
             text_url = await us.servers[0].url_vless.get()
             text_traffic = "Трафик: 200Gb в/мес\n"
             if await us.servers[0].status_key.get() == "free_key":
