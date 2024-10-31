@@ -240,7 +240,7 @@ class UserCl:
             print(f"Ошибка при работе с файлами URL: {e}")
             return None
 
-    def _generate_server_params(self, current_date, url_vless, free_day):
+    def _generate_server_params(self, current_date, url_vless, free_day=5):
         """Генерирует параметры нового сервера VLESS, извлекая информацию из URL."""
 
         # Извлечение uuid, server_ip и name_key из URL
@@ -262,21 +262,21 @@ class UserCl:
             "name_server": f"VLESS Server {server_ip}",
             "country_server": country_server,
             "server_ip": server_ip,
-            "name_key_for_user": name_key,
+            #"name_key_for_user": name_key,
             "user_ip": "",  # Уникальный IP
-            "name_conf": "vless_config",
+            #"name_conf": "vless_config",
             "enable": True,
-            "vpn_usage_start_date": current_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "vpn_usage_start_date": current_date.strftime("%d.%m.%Y %H:%M:%S"),
             "traffic_up": 0,
             "traffic_down": 0,
             "has_paid_key": 0,
             "status_key": "key_free",
             "is_notification": False,
-            "days_after_pay": 30,
-            "date_payment_key": current_date.strftime("%Y-%m-%d %H:%M:%S"),
-            "date_expire_of_paid_key": (current_date.replace(year=current_date.year + 1)).strftime("%Y-%m-%d %H:%M:%S"),
-            "date_creation_key": current_date.strftime("%Y-%m-%d %H:%M:%S"),
-            "date_expire_free_trial": (current_date + timedelta(days=free_day)).strftime("%Y-%m-%d %H:%M:%S"),
+            #"days_after_pay": 30,
+            "date_payment_key": current_date.strftime("%d.%m.%Y %H:%M:%S"),
+            #"date_expire_of_paid_key": (current_date.replace(year=current_date.year + 1)).strftime("%d.%m.%Y %H:%M:%S"),
+            "date_creation_key": current_date.strftime("%d.%m.%Y %H:%M:%S"),
+            "date_key_off": (current_date + timedelta(days=free_day)).strftime("%d.%m.%Y %H:%M:%S"),
             "url_vless": url_vless
         }
 
