@@ -24,20 +24,24 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
     text_country_key = ""
     text_status = ""
     text_day_activ = ""
+    text_traffic = "Трафик: 200Gb в/мес"
+    text_url = ""
 
     if await us.count_key.get() > 0:
         text_count = "1 ключ"
         text_key_name = await us.servers[0].name_key_for_user.get()
         text_country_key = await us.servers[0].country_server.get()
         text_status = us.servers[0].status_key.get()
+        text_url = us.servers[0].url_vless
         if us.servers[0].status_key.get() == "free_key":
             text_status = "пробный период"
-            text_day_activ = f"Пробный период активен до: {us.servers[0].da}*\n\n"
+            text_day_activ = f"Пробный период активен до: {us.servers[0].date_key_off.get_date()}\n\n"
         elif us.servers[0].status_key.get() == "activ":
             text_status = "ключ активен"
-
+            text_day_activ = f"Пробный период активен до: {us.servers[0].date_key_off.get_date()}\n\n"
         else:
             text_status = "ожидание платежа"
+            text_day_activ = "Для работы ключа требуется оплата"
 
     else:
         text_count = "0 ключей"
@@ -50,7 +54,9 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
         f"Ваш ключ: {text_key_name}\n"
         f"Страна сервера: {text_country_key}\n"
         f"Cтатус: {text_status}\n"
-        f"{text_day_activ}"
+        f"{text_day_activ}\n"
+        f"{text_traffic}\n"
+        f"```\n{text_url}\n```"
         "При оплате вы продлите срок активного ключа еще на *30 дней*"
 
     )
