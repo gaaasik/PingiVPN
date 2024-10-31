@@ -56,22 +56,18 @@ class ServerCl:
         # Инициализация всех полей, переданных в JSON
         self.name_protocol = Field('name_protocol', server_data.get("name_protocol", ""), self)
         self.name_server = Field('name_server', server_data.get("name_server", ""), self)
-        #self.name_key_for_user = Field('name_key_for_user', server_data.get("name_key_for_user", ""), self)
+        self.name_key = Field('name_key', server_data.get("name_key", ""), self)
         self.uuid_id = Field('uuid_id', server_data.get("uuid_id", ""), self)
         self.email_key = Field('email_key', server_data.get("email_key", ""), self)
         self.country_server = Field('country_server', server_data.get("country_server", ""), self)
         self.server_ip = Field('server_ip', server_data.get("server_ip", ""), self)
         #self.user_ip = Field('user_ip', server_data.get("user_ip", ""), self)
-        #self.name_conf = Field('name_conf', server_data.get("name_conf", ""), self)
         self.vpn_usage_start_date = Field('vpn_usage_start_date', server_data.get("vpn_usage_start_date", ""), self)
         self.traffic_up = Field('traffic_up', server_data.get("traffic_up", 0), self)
         self.traffic_down = Field('traffic_down', server_data.get("traffic_down", 0), self)
         self.has_paid_key = Field('has_paid_key', server_data.get("has_paid_key", 1), self)
         self.status_key = Field('status_key', server_data.get("status_key", 'new_user'), self)
-        #self.is_notification = Field('is_notification', server_data.get("is_notification", False), self)
-        #self.days_after_pay = Field('days_after_pay', server_data.get("days_after_pay", ""), self)
         self.date_payment_key = Field('date_payment_key', server_data.get("date_payment_key", ""), self)
-        #self.date_expire_of_paid_key = Field('date_expire_of_paid_key', server_data.get("date_expire_of_paid_key", ""), self)
         self.date_key_off = Field('date_key_off', server_data.get("date_key_off", ""), self)
         self.date_creation_key = Field('date_creation_key', server_data.get("date_creation_key", ""), self)
         self.url_vless = Field('url_vless', server_data.get("url_vless", ""), self)
@@ -86,23 +82,18 @@ class ServerCl:
         return {
             "name_protocol": await self.name_protocol.get(),
             "email_key": await self.email_key.get(),
-            #"name_key_for_user": await self.name_key_for_user.get(),
+            "name_key": await self.name_key.get(),
             "uuid_id": await self.uuid_id.get(),
             "name_server": await self.name_server.get(),
             "country_server": await self.country_server.get(),
             "server_ip": await self.server_ip.get(),
-            #"user_ip": await self.user_ip.get(),
-            #"name_conf": await self.name_conf.get(),
             "enable": await self.enable.get(),
             "vpn_usage_start_date": await self.vpn_usage_start_date.get(),
             "traffic_up": await self.traffic_up.get(),
             "traffic_down": await self.traffic_down.get(),
             "has_paid_key": await self.has_paid_key.get(),
             "status_key": await self.status_key.get(),
-            #"is_notification": await self.is_notification.get(),
-            #"days_after_pay": await self.days_after_pay.get(),
             "date_payment_key": await self.date_payment_key.get(),
-            #"date_expire_of_paid_key": await self.date_expire_of_paid_key.get(),
             "date_key_off": await self.date_key_off.get(),
             "date_creation_key": await self.date_creation_key.get(),
             "url_vless": await self.url_vless.get()

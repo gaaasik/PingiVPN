@@ -46,7 +46,7 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
     else:
         # Получаем статус первого ключа
         status_key = await us.servers[0].status_key.get()
-        key_name = await us.servers[0].name_key_for_user.get()
+        key_name = await us.servers[0].email_key.get()
 
         if status_key == "key_free":
             # Пробный период ключа

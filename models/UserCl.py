@@ -190,9 +190,9 @@ class UserCl:
 
 
 
-    async def add_key_vless(self):
+    async def add_key_vless(self, free_day = 7):
         """Создает сервер VLESS с фиксированными параметрами, используя первый доступный URL и добавляет его в список серверов пользователя."""
-        free_day = 3  # Количество бесплатных дней
+          # Количество бесплатных дней
         current_date = datetime.now()
 
         # Определение путей к файлам
@@ -240,7 +240,7 @@ class UserCl:
             print(f"Ошибка при работе с файлами URL: {e}")
             return None
 
-    def _generate_server_params(self, current_date, url_vless, free_day=5):
+    def _generate_server_params(self, current_date, url_vless, free_day):
         """Генерирует параметры нового сервера VLESS, извлекая информацию из URL."""
 
         # Извлечение uuid, server_ip и name_key из URL
@@ -252,7 +252,6 @@ class UserCl:
         uuid_id = uuid_match.group(1) if uuid_match else ""
         server_ip = server_ip_match.group(1) if server_ip_match else ""
         name_key = name_key_match.group(1).replace("Vless-", "") if name_key_match else ""
-        #name_key = name_key_match.group(1) if name_key_match else ""
         country_server = country_match.group(1) if country_match else "Unknown"
 
         return {
@@ -260,11 +259,11 @@ class UserCl:
             "email_key": name_key,
             "uuid_id": uuid_id,
             "name_server": f"VLESS Server {server_ip}",
+            #######################################################################################
+            "name_key": f"{name_key}",
+            ######################################################################################
             "country_server": country_server,
             "server_ip": server_ip,
-            #"name_key_for_user": name_key,
-            "user_ip": "",  # Уникальный IP
-            #"name_conf": "vless_config",
             "enable": True,
             "vpn_usage_start_date": current_date.strftime("%d.%m.%Y %H:%M:%S"),
             "traffic_up": 0,
@@ -272,9 +271,7 @@ class UserCl:
             "has_paid_key": 0,
             "status_key": "key_free",
             "is_notification": False,
-            #"days_after_pay": 30,
-            "date_payment_key": current_date.strftime("%d.%m.%Y %H:%M:%S"),
-            #"date_expire_of_paid_key": (current_date.replace(year=current_date.year + 1)).strftime("%d.%m.%Y %H:%M:%S"),
+            "date_payment_key": "",
             "date_creation_key": current_date.strftime("%d.%m.%Y %H:%M:%S"),
             "date_key_off": (current_date + timedelta(days=free_day)).strftime("%d.%m.%Y %H:%M:%S"),
             "url_vless": url_vless
