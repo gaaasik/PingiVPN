@@ -27,14 +27,14 @@ async def get_user_status_text(us):
         if status_key == "free_key":
             # Пробный период
             trial_end_date = await us.servers[0].date_key_off.get_date()
-            return f"Пробный период до *{trial_end_date[:10] }*"
+            return f"Пробный период до *{trial_end_date}*"
         elif status_key == "blocked":
             # Ключ заблокирован
             return f"*Ключ заблокирован*"
         elif status_key == "active":
             # Ключ активен, дата окончания активации
-            active_end_date = await us.servers[0].date_expire_of_paid_key.get()
-            return f"Ключ активен до *{active_end_date[:10]}*"
+            active_end_date = await us.servers[0].date_key_off.get_date()
+            return f"Ключ активен до *{active_end_date}*"
         else:
             # Если статус не распознан
             return "Статус ключа не распознан"

@@ -137,7 +137,7 @@ class UserCl:
                 # Устанавливаем значения user_name, registration_date и referral_old_chat_id через set()
                 await self.user_name_full.set(user_name_full)
                 await self.user_login.set(user_login)
-                current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                current_date = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
                 await self.registration_date.set(current_date)
                 await self.referral_old_chat_id.set(referral_old_chat_id)
                 await self.check_subscription_channel()
