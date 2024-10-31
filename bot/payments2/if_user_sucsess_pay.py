@@ -5,6 +5,7 @@ from aiogram import Bot
 import os
 
 from bot.handlers.admin import ADMIN_CHAT_IDS
+from bot.handlers.all_menu.main_menu import show_main_menu
 from bot.handlers.cleanup import message_types_mapping, delete_message_with_type, store_message
 from bot.handlers.status import generate_status_message
 
@@ -24,17 +25,8 @@ async def handle_post_payment_actions(bot: Bot, chat_id: int):
             chat_id=chat_id,
             text=f"Спасибо за оплату. Ваш платеж успешно заверешен.\n Ваша подписка активна"
         )
+        await show_main_menu(chat_id,bot)
 
-        # Вызов функции для генерации сообщения о статусе и клавиатуры.
-        status_message, keyboard = await generate_status_message(chat_id)
-
-        # Отправка сообщения с информацией о статусе пользователя и клавиатурой.
-        await bot.send_message(
-            chat_id=chat_id,
-            text=status_message,
-            parse_mode="Markdown",  # Указываем, что текст должен использовать Markdown для форматирования.
-            reply_markup=keyboard  # Передаем сгенерированную клавиатуру.
-        )
 
         logging.info(f"Сообщение пользователю {chat_id} об успешной оплате отправлено.")
     except Exception as e:
