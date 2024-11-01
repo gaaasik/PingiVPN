@@ -21,6 +21,7 @@ from bot.database.db import database_path_local  #,  init_db
 from bot.database.init_db import init_db
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
+from communication_3x_ui.send_json import process_task_queue
 from flask_app.all_utils_flask_db import initialize_db
 
 # Загружаем переменные окружения из файла .env
@@ -181,13 +182,18 @@ async def main():
     await init_db(db_path)
     #result = await add_user_db(111224422, "test_user")
 
-
+    # await asyncio.gather(
+    #     periodic_task(bot),  # Периодическая задача
+    #     listen_to_redis_queue(bot),  # Прослушивание очереди Redis
+    #     process_task_queue(),  # Обработка задач из Redis
+    # )
 
     # Запускаем асинхронную задачу для периодической отправки сообщений админу
     asyncio.create_task(periodic_task(bot))
     #asyncio.create_task(periodic_task_24_hour(bot))
     asyncio.create_task(listen_to_redis_queue(bot))  # 1 час
     asyncio.create_task(periodic_backup_task(bot))
+    asyncio.create_task(process_task_queue())
     # Промежуточное ПО для предотвращения спама
     dp.message.middleware(ThrottlingMiddleware(rate_limit=1))
 

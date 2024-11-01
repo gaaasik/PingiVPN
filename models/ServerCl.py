@@ -2,9 +2,9 @@ import os
 import json
 from datetime import datetime
 
+import aioredis
 import paramiko
-
-
+from fastapi import requests
 
 
 class Field:
@@ -66,6 +66,31 @@ class Field:
         # Получаем страну из поля и возвращаем перевод
         country = self._value
         return COUNTRY_TRANSLATIONS.get(country, "Неизвестная страна")
+
+    async def set_enable(self, enable_value: bool):
+        """Обновляет значение enable и добавляет задачу на отправку в Redis."""
+        if self._name != "enable":
+            raise AttributeError("Метод set_enable можно вызывать только для поля 'enable'.")
+
+        # Обновляем значение в объекте и в базе данных
+        await self._set(enable_value)
+
+        # Получаем uuid из объекта сервера
+        uuid_value = await self._server.uuid_id.get()
+
+        # Формируем данные для отправки
+        task_data = {
+            "id": uuid_value,
+            "enable": enable_value
+        }
+
+        # Подключаемся к Redis и добавляем задачу в очередь
+        redis = aioredis.from_url("redis://localhost", db=1)
+        try:
+            await redis.rpush("send_3x_ui", json.dumps(task_data))
+            print(f"Задача на отправку JSON для UUID {uuid_value} добавлена в очередь.")
+        finally:
+            await redis.close()
 
 
 class ServerCl:
