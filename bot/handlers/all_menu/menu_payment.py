@@ -43,7 +43,7 @@ async def request_user_email(chat_id: int, bot: Bot, state: FSMContext):
         text = "Пожалуйста, введите ваш email для отправки чека:"
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
-                [InlineKeyboardButton(text="Отменить платеж", callback_data="cancel_payment")]
+                [InlineKeyboardButton(text="❌ Отменить платеж", callback_data="cancel_payment")]
             ]
         )
         sent_message = await bot.send_message(chat_id, text=text, reply_markup=keyboard)
@@ -60,16 +60,16 @@ async def send_payment_link(chat_id: int, bot: Bot, user_login: str, email: str,
             f"Вы подключаете подписку на наш сервис с помощью\n"
             "платёжной системы Юkassa\n\n"
             "Стоимость подписки на 1 месяц: 199₽ 👇👇👇\n\n"
-            f"Чек об оплате придет на почту {email}\n\n"
+            f"Чек об оплате придет на почту *{email}*\n\n"
 
         )
 
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
-                [InlineKeyboardButton(text="Оплатить через Юкассу", url=one_time_link)],
+                [InlineKeyboardButton(text="💳 Оплатить через Юкассу", url=one_time_link)],
                 [
-                    InlineKeyboardButton(text="Изменить почту", callback_data="edit_email"),
-                    InlineKeyboardButton(text="Отменить платеж", callback_data="cancel_payment")
+                    InlineKeyboardButton(text="✏️ Изменить почту", callback_data="edit_email"),
+                    InlineKeyboardButton(text="❌ Отменить платеж", callback_data="cancel_payment")
                 ]
             ]
         )

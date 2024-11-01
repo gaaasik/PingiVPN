@@ -28,7 +28,7 @@ def generate_referral_text(invite_count: int):
 def referral_menu_keyboard():
     return InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="Поделиться", callback_data="show_referral_link")],
+            [InlineKeyboardButton(text="🔗 Поделиться", callback_data="show_referral_link")],
             [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
         ]
     )
@@ -76,7 +76,7 @@ async def show_referral_link(callback_query: CallbackQuery, bot: Bot):
     # Кнопка для получения доступа
     referral_button = InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="Получить бесплатный VPN", url=referral_link)]
+            [InlineKeyboardButton(text="🎁 Получить бесплатный VPN", url=referral_link)]
         ]
     )
 

@@ -80,7 +80,7 @@ async def show_main_menu(chat_id: int, bot: Bot):
 
 # Универсальный обработчик для главного меню
 # Универсальный обработчик для главного меню
-@router.message(F.text == "Главное меню")
+@router.message(F.text == "🏠 Главное меню")
 @router.message(Command(commands=["menu"]))
 @router.callback_query(F.data == "main_menu")
 async def handle_main_menu(event: types.Message | types.CallbackQuery):

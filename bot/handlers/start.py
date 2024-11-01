@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log
 from bot.handlers.all_menu.menu_connect_vpn import connect_text_messages, device_choice_keyboard
 from bot.handlers.cleanup import register_message_type
+from bot.keyboards.reply import reply_keyboard_main_menu
 from bot.utils.cache import send_cached_photo
 from models.UserCl import UserCl
 
@@ -81,7 +82,12 @@ async def cmd_start(message: types.Message):
 
     # Отправка закешированного фото
     await send_cached_photo(message)
-    sent_message = await message.answer("Приветствуем в мире надежного и скоростного VPN! 🚀\n\n", parse_mode="Markdown")
+    sent_message = await message.answer(
+        "🧊 Добро пожаловать 🚀\n\n"
+        "🥶 Мы *кардинально* выделяемся, потому что используем уникальные серверы в *Антарктиде* \n\n "
+        "🧊 И предлагаем *неограниченную* скорость и безопасность! ",
+        parse_mode="Markdown",reply_markup=reply_keyboard_main_menu
+    )
     sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard(), parse_mode="Markdown")
 
     #await store_important_message(message.bot, message.chat.id, sent_message.message_id, sent_message,"start")

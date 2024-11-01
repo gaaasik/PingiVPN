@@ -30,7 +30,7 @@ reply_keyboard = ReplyKeyboardMarkup(
 reply_keyboard_main_menu = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text="Главное меню"),
+            KeyboardButton(text="🏠 Главное меню"),
 
         ]
 
