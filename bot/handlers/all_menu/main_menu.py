@@ -45,6 +45,13 @@ async def get_user_status_text(us):
 
 # Функция для отображения основного меню
 async def show_main_menu(chat_id: int, bot: Bot):
+
+    user = await UserCl.load_user(chat_id)
+
+    if not user:
+        await bot.send_message(chat_id,"Для начала нажмите /start ",)
+        return
+
     # Получаем данные о пользователе по chat_id
     # Добавить в базу данных
     us = await UserCl.load_user(chat_id)

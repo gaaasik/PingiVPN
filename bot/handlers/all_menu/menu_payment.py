@@ -57,11 +57,10 @@ async def send_payment_link(chat_id: int, bot: Bot, user_login: str, email: str,
     try:
         one_time_id, one_time_link = await create_one_time_payment(chat_id, user_login, email)
         text = (
-            f"Вы подключаете подписку на наш сервис с помощью\n"
-            "платёжной системы Юkassa\n\n"
-            "Стоимость подписки на 1 месяц: 199₽ 👇👇👇\n\n"
-            f"Чек об оплате придет на почту *{email}*\n\n"
-
+            "🛡 *Оформление подписки через ЮKassa*\n\n"
+            "💵 1 месяц: *199₽*\n\n"
+            f"📧 Чек отправим на *{email}*\n\n"
+            "⬇️ Нажмите для оплаты ⬇️"
         )
 
         keyboard = InlineKeyboardMarkup(
@@ -73,7 +72,7 @@ async def send_payment_link(chat_id: int, bot: Bot, user_login: str, email: str,
                 ]
             ]
         )
-        await bot.send_message(chat_id, text=text, reply_markup=keyboard)
+        await bot.send_message(chat_id, text=text, reply_markup=keyboard,parse_mode="Markdown")
         logging.info(f"Отправлена ссылка на оплату пользователю: chat_id={chat_id}")
 
         # Сбрасываем состояние FSM

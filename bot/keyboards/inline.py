@@ -9,19 +9,34 @@ from bot.handlers.admin import ADMIN_CHAT_IDS
 
 
 # Клавиатура для скачивания приложения и подтверждения скачивания
-def download_app_keyboard(download_link):
+def download_app_keyboard(device: str) -> InlineKeyboardMarkup:
+    # Определяем ссылку для скачивания в зависимости от устройства
+    if device.lower() == 'android':
+        download_link = "https://play.google.com/store/apps/details?id=com.hiddify"
+        instruction_link = "https://telegra.ph/Instrukciya-dlya-Android-01-01"
+    elif device.lower() == 'iphone':
+        download_link = "https://apps.apple.com/us/app/streisand/id6450534064"
+        instruction_link = "https://telegra.ph/Instrukciya-dlya-iPhone-01-01"
+    elif device.lower() == 'mac':
+        download_link = "https://apps.apple.com/us/app/foxray/id6448898396"
+        instruction_link = "https://telegra.ph/Instrukciya-dlya-Mac-01-01"
+    elif device.lower() == 'linux':
+        download_link = "https://github.com/MatsuriDayo/nekoray/"
+        instruction_link = "https://telegra.ph/Instrukciya-dlya-Linux-01-01"
+    elif device.lower() == 'windows':
+        download_link = "https://apps.microsoft.com/detail/9pdfnl3qv2s5?hl=ru-ru&gl=RU"
+        instruction_link = "https://telegra.ph/Instrukciya-dlya-Windows-01-01"
+    else:
+        download_link = "#"
+        instruction_link = "#"
+
+    # Создаем клавиатуру с кнопками
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🛒 Открыть магазин приложений", url=download_link)],  # Ведет на ссылку для скачивания
-        [InlineKeyboardButton(text="📷 Инструкция с картинками", callback_data="a")],
+        [InlineKeyboardButton(text="📷 Инструкция с картинками", url=instruction_link)],  # Ссылка на статью в Telegraph
         [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
     ])
     return keyboard
-
-###############Это не лишнее??????????###########################################################################
-     # Передаем список кнопок в конструктор
-    return keyboard
-###########################################################################
-
 
 
 

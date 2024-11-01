@@ -2,9 +2,8 @@
 
 from aiogram import Router, types
 from aiogram.types import CallbackQuery
-
 from bot.handlers.all_menu.menu_subscriptoin_check import subscribe_keyboard
-from bot.handlers.cleanup import store_message, delete_unimportant_messages, store_important_message
+from bot.handlers.cleanup import delete_unimportant_messages, store_important_message
 from bot.keyboards.inline import download_app_keyboard
 from bot.utils.subscription_check import check_subscription_channel
 from models.UserCl import UserCl
@@ -12,58 +11,52 @@ from models.UserCl import UserCl
 router = Router()
 
 
-def get_instruction_text_for_device(device: str) -> str:
+def get_instruction_text_for_device(device: str, vpn_link: str) -> str:
     # Общий текст инструкций, уникальный для каждого устройства
     if device.lower() == "android":
         instruction_text = (
-            "Инструкция для Android:\n\n"
-            "1) Нажмите на ваш ключ VLESS (скопируйте)\n"
-            "2) Откройте приложение [Hiddify (Play Market)]("
-            "https://play.google.com/store/apps/details?id=com.hiddify)  и выберите ➕ «Импорт из буфера обмена».\n\n"
-            "3) Нажмите круглую кнопку для подключения — и наслаждайтесь быстрой связью!"
-            "\n *Ваш ключ:*"
+            f"📱 <b>Инструкция для Android:</b>\n\n"
+            f"1️⃣ Нажмите на ваш ключ <b>VLESS</b> (скопируйте его).\n"
+            f"2️⃣ Откройте приложение <a href='https://play.google.com/store/apps/details?id=com.hiddify'><b>Hiddify</b> (Play Market)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
+            f"3️⃣ Нажмите круглую кнопку для подключения — и наслаждайтесь быстрой связью! 🌐\n\n"
+            f"<b>Ваш ключ:</b>\n<pre>{vpn_link}</pre>"
         )
 
     elif device.lower() == "iphone":
         instruction_text = (
-            "Инструкция для iPhone:\n\n"
-            "1) Нажмите на ваш ключ VLESS (скопируйте)\n"
-            "2) Откройте приложение: [Streisand (App Store)](https://apps.apple.com/us/app/streisand/id6450534064) и "
-            "выберите ➕ «Импорт из буфера обмена».\n\n"
-            "3) Подключитесь и наслаждайтесь стабильной работой!"
-            "\n *Ваш ключ:*"
+            f"📱 <b>Инструкция для iPhone:</b>\n\n"
+            f"1️⃣ Нажмите на ваш ключ <b>VLESS</b> (скопируйте его).\n"
+            f"2️⃣ Откройте приложение <a href='https://apps.apple.com/us/app/streisand/id6450534064'><b>Streisand</b> (App Store)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
+            f"3️⃣ Подключитесь и наслаждайтесь стабильной работой! 🚀\n\n"
+            f"<b>Ваш ключ:</b>\n<pre>{vpn_link}</pre>"
         )
 
     elif device.lower() == "mac":
         instruction_text = (
-            "Инструкция для Mac:\n\n"
-            "1) Нажмите на ваш ключ VLESS (скопируйте)\n"
-            "2) Откройте приложение: [Foxray (App Store)](https://apps.apple.com/us/app/foxray/id6448898396) и "
-            "выберите ➕ «Импорт из буфера обмена».\n\n"
-            "3) Подключитесь и наслаждайтесь стабильной работой!"
-            "\n *Ваш ключ:*"
+            f"💻 <b>Инструкция для Mac:</b>\n\n"
+            f"1️⃣ Нажмите на ваш ключ <b>VLESS</b> (скопируйте его).\n"
+            f"2️⃣ Откройте приложение <a href='https://apps.apple.com/us/app/foxray/id6448898396'><b>Foxray</b> (App Store)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
+            f"3️⃣ Подключитесь и наслаждайтесь стабильной работой! 🚀\n\n"
+            f"<b>Ваш ключ:</b>\n<pre>{vpn_link}</pre>"
         )
 
     elif device.lower() == "linux":
         instruction_text = (
-            "Инструкция для Linux:\n\n"
-            "1) Нажмите на ваш ключ VLESS (скопируйте)\n"
-            "2) Откройте приложение: [Nekoray](https://github.com/MatsuriDayo/nekoray/) и выберите ➕ «Импорт из "
-            "буфера обмена».\n\n"
-            "3) Подключитесь и наслаждайтесь стабильной работой!"
-            "\n *Ваш ключ:*"
-
+            f"🐧 <b>Инструкция для Linux:</b>\n\n"
+            f"1️⃣ Нажмите на ваш ключ <b>VLESS</b> (скопируйте его).\n"
+            f"2️⃣ Откройте приложение <a href='https://github.com/MatsuriDayo/nekoray/'><b>Nekoray</b> (GitHub)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
+            f"3️⃣ Подключитесь и наслаждайтесь стабильной работой! 🚀\n\n"
+            f"<b>Ваш ключ:</b>\n<pre>{vpn_link}</pre>"
         )
 
     elif device.lower() == "windows":
         instruction_text = (
-            "Инструкция для Windows:\n\n"
-            "1) Нажмите на ваш ключ VLESS (скопируйте)\n"
-            "2) Откройте приложение: [Hiddify](https://apps.microsoft.com/detail/9pdfnl3qv2s5?hl=ru-ru&gl=RU) и выберите ➕ «Импорт из буфера обмена».\n\n"
-            "3) Подключитесь и наслаждайтесь стабильной работой!"
-            "\n *Ваш ключ:*"
+            f"💻 <b>Инструкция для Windows:</b>\n\n"
+            f"1️⃣ Нажмите на ваш ключ <b>VLESS</b> (скопируйте его).\n"
+            f"2️⃣ Откройте приложение <a href='https://apps.microsoft.com/detail/9pdfnl3qv2s5?hl=ru-ru&gl=RU'><b>Hiddify</b> (Microsoft Store)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
+            f"3️⃣ Подключитесь и наслаждайтесь стабильной работой! 🚀\n\n"
+            f"<b>Ваш ключ:</b>\n<pre>{vpn_link}</pre>"
         )
-
     else:
         instruction_text = "Пожалуйста, выберите устройство для получения инструкции."
 
@@ -81,102 +74,50 @@ async def handle_device_choice(callback_query: CallbackQuery):
     await delete_unimportant_messages(callback_query.message.chat.id, callback_query.bot)
 
     if not await us.check_subscription_channel():
-        message = await callback_query.message.answer(
-            "VPN работает без рекламы. Чтобы начать пользоваться — подпишитесь на канал Pingi Hub",
-            reply_markup=subscribe_keyboard())
+        await callback_query.message.answer(
+            f"VPN работает *без рекламы*. Чтобы начать пользоваться — *подпишитесь* на канал *Pingi Hub*",
+            reply_markup=subscribe_keyboard(),
+            parse_mode="Markdown"
+
+        )
         await callback_query.answer()
         return
 
-    # # Проверяем подписку пользователя
-    # if not await check_subscription_channel(chat_id, bot):
-    #     # Отправляем сообщение с кнопками "Перейти на канал" и "Я подписался"
-    #     message = await callback_query.message.answer(
-    #         "VPN работает без рекламы. Чтобы начать пользоваться — подпишитесь на канал Pingi Hub",
-    #         reply_markup=subscribe_keyboard()
-    #     )
-    #     # Сохраняем это сообщение как важное
-    #     # await store_important_message(bot, chat_id, message.message_id, message,
-    #     #                              "subscription_check")
-    #     await callback_query.answer()
-    #     return
-
     device = callback_query.data.split('_')[1]
-
-    # # Определяем ссылку для скачивания в зависимости от устройства
-    # if device == 'android':
-    #     download_link = "https://play.google.com/store/apps/details?id=com.wireguard.android"
-    # elif device == 'iphone':
-    #     download_link = "https://apps.apple.com/us/app/wireguard/id1441195209"
-    # elif device == 'mac':
-    #     download_link = "https://www.wireguard.com/install/"
-    # elif device == 'linux':
-    #     download_link = "https://www.wireguard.com/install/"
-    # elif device == 'windows':
-    #     download_link = "https://www.wireguard.com/install/"
-
-    # Определяем ссылку для скачивания в зависимости от устройства
-    if device == 'android':
-        download_link = "https://play.google.com/store/apps/details?id=com.v2ray.ang"
-    elif device == 'iPhone':
-        download_link = "https://apps.apple.com/us/app/streisand/id6450534064"
-    elif device == 'mac':
-        download_link = "https://apps.apple.com/us/app/foxray/id6448898396"
-    elif device == 'linux':
-        download_link = "https://github.com/MatsuriDayo/nekoray/"
-    elif device == 'windows':
-        download_link = "https://apps.microsoft.com/detail/9pdfnl3qv2s5?hl=ru-ru&gl=RU"
-
-    #Промежуточное меню
-
-    # # Отправляем сообщение с кнопками для скачивания приложения
-    # message = await callback_query.message.answer(
-    #     f"Установите официальное приложение для <b><a href='{download_link}'>{device}</a></b>\n\n<b><a href='{download_link}'>Скачать</a></b>\n \nИ <b>возвращайтесь</b> в бота, чтобы закончить настройку\n\n",
-    #     reply_markup=download_app_keyboard(download_link),
-    #     parse_mode="HTML",
-    #     disable_web_page_preview=True  # Отключает предпросмотр ссылки
-    # )
-
-    # Обновляем устройство пользователя в базе данных
-
     await us.device.set(device)
-    print(
-        f"Пользователь {callback_query.from_user.id} - @{callback_query.from_user.username} выбрал устройство: {device}")
+    ################################################
+    #НАДО ПОМЕНЯТЬ
 
+    # Логика для проверки протокола VLESS
     check_protocol_vless = False
-
     for server in us.servers:
         if await server.name_protocol.get() == "vless":
             check_protocol_vless = True
-        else:
-            check_protocol_vless = False
+            break
 
+    # Если VLESS протокол найден, используем соответствующий URL
     if check_protocol_vless:
         for server in us.servers:
             if await server.name_protocol.get() == "vless":
                 url_vless = await server.url_vless.get()
+                break
     else:
         await us.add_key_vless()
         url_vless = await us.servers[0].url_vless.get()
-
+    #############################################
     try:
-
-        device = await us.device.get()
-        text = get_instruction_text_for_device(device)
-        print(device)
-        vpn_link = await us.servers[0].url_vless.get()
+        text = get_instruction_text_for_device(device, url_vless)
         message = await callback_query.message.answer(
-            f"{text}\n```\n{vpn_link}\n```",
-            parse_mode="Markdown",
-            disable_web_page_preview=True, reply_markup=download_app_keyboard(download_link)
+            text,
+            parse_mode="HTML",
+            disable_web_page_preview=True,
+            reply_markup=download_app_keyboard(device)  # Передаём `device` в `download_app_keyboard`
         )
         await callback_query.answer()
-
 
     except IndexError:
         print("Список серверов пуст или указан индекс вне диапазона.")
         return None  # Возвращаем None, если списка серверов нет или он пуст
-
-    await callback_query.answer()
 
     # Сохраняем сообщение как важное с типом 'device_choice'
     await store_important_message(callback_query.bot, callback_query.message.chat.id, message.message_id, message,

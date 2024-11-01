@@ -1,109 +1,112 @@
-
-# bot/handlers/show_qr.py
-from aiogram import Router, types, Bot
-from aiogram.filters import Command
+from aiogram import types, Router
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
-from bot.handlers.cleanup import store_message, delete_unimportant_messages, store_important_message
-
-import os
-
+from bot.handlers.all_menu.menu_buy_vpn import get_add_key_keyboard
 from models.UserCl import UserCl
+import logging
 
 router = Router()
 
-def keyboard_one_key():
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="💳 Оплатить ключ", callback_data="buy_vpn")],  # Оплата ключа
-        [InlineKeyboardButton(text="➕ Добавить ключ", callback_data="add_key")],
-        [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
-    ])
-    return keyboard
+
+# Вспомогательные функции для клавиатур
+def get_payment_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="💳 Оплатить ключ", callback_data="buy_vpn")],
+            [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
+        ]
+    )
 
 
 def keyboard_without_key():
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="➕ Добавить ключ", callback_data="connect_vpn")]
-    ])
-    return keyboard
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="➕ Добавить ключ", callback_data="connect_vpn")]
+        ]
+    )
 
+import logging
 
-# Обработчик текста, для экранирования
 def escape_markdown(text: str) -> str:
-    """
-    Экранирует специальные символы для MarkdownV2.
-    """
-    special_chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}',  '!']   #'.',
+    special_chars = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '!']
     for char in special_chars:
         text = text.replace(char, f"\\{char}")
     return text
 
 
-@router.callback_query(lambda c: c.data == "add_key")
-async def handle_add_key(callback_query: CallbackQuery):
-    await callback_query.answer("Пока доступен только один ключ")
+async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
+    """
+    Генерирует текст сообщения о состоянии ключа пользователя и возвращает его вместе с клавиатурой.
+    """
+    count_key = await us.count_key.get()
 
-    await callback_query.answer()
+    if count_key == 0:
+        # Если у пользователя нет ключей
+        text = (
+            "<b>У вас нет ключей для оплаты.</b>\n"
+            "Пожалуйста, создайте ключ."
+        )
+        keyboard = get_add_key_keyboard()
 
+    else:
+        # Получаем данные ключа
+        key_name = await us.servers[0].email_key.get()
+        country_flag = await us.servers[0].country_server.get_country()
+        traffic_limit = "150Gb в/мес"
+        vless_url = await us.servers[0].url_vless.get()
 
+        # Определяем статус и срок действия ключа
+        status_key = await us.servers[0].status_key.get()
+
+        if status_key == "free_key":
+            status_text = "пробный период"
+            expiration_text = f" {await us.servers[0].date_key_off.get_date()}"
+            keyboard = get_payment_keyboard()
+
+        elif status_key == "blocked":
+            status_text = "заблокирован"
+            expiration_text = "Для активации ключа требуется оплата."
+            keyboard = get_payment_keyboard()
+
+        elif status_key == "active":
+            status_text = "Активен"
+            expiration_text = f"{await us.servers[0].date_key_off.get_date()}"
+            keyboard = get_payment_keyboard()
+
+        else:
+            status_text = "неизвестен"
+            expiration_text = "Статус ключа не определен. Обратитесь в поддержку."
+            keyboard = get_add_key_keyboard()
+
+        # Формируем текст сообщения в формате HTML
+        text = (
+            f"🔐 <b>Ваш VPN-ключ:</b>\n\n"
+            f"- <b>Имя ключа</b>: {key_name}\n"
+            f"- <b>Страна сервера</b>: {country_flag}\n"
+            f"- <b>Статус</b>: {status_text}\n"
+            f"- <b>Действителен до</b>: <b>{expiration_text}</b>\n\n"
+            f"🌐 <b>Лимит трафика</b>: {traffic_limit}\n\n"
+            f"<b>Ссылка для подключения:</b>\n"
+            f"<pre>{vless_url}</pre>"
+        )
+
+    return text, keyboard
 
 @router.callback_query(lambda c: c.data == "my_keys")
 async def handle_my_keys(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
     us = await UserCl.load_user(chat_id)
-    text_count = "0 ключей"
-    text_key_name = ""
-    text_country_key = ""
-    text_status = ""
-    text_day_activ = ""
-    text_traffic = ""
-    text_url = ""
 
     try:
-        if await us.count_key.get() > 0:
-            keyboard = keyboard_one_key()
-            text_count = "1 ключ"
-            text_key_name = "Ваш ключ: " + await us.servers[0].name_key.get()
-            text_country_key = "Страна сервера: " + await us.servers[0].country_server.get_country()
-            text_url = await us.servers[0].url_vless.get()
-            text_traffic = "Трафик: 200Gb в/мес\n"
-            if await us.servers[0].status_key.get() == "free_key":
-                text_status = "пробный период"
-                text_day_activ = f"Пробный период активен до: {await us.servers[0].date_key_off.get_date()}\n"
-            elif await us.servers[0].status_key.get() == "active":
-                text_status = "ключ активен"
-                text_day_activ = f"Пробный период активен до: {await us.servers[0].date_key_off.get_date()}\n"
-            else:
-                text_status = "ожидание платежа"
-                text_day_activ = "Для работы ключа требуется оплата"
+        # Генерируем текст и клавиатуру для ответа
+        text, keyboard = await generate_key_status_text(us)
 
-        else:
-            text_count = "0 ключей"
-            text_status = "добавьте ключ"
-            keyboard = keyboard_without_key()
+        # Отправляем сообщение
+        await callback_query.message.answer(text, reply_markup=keyboard, disable_web_page_preview=True,
+                                            parse_mode="HTML")
+
     except Exception as e:
+        logging.error(f"Ошибка при генерации сообщения о ключах: {e}")
+        await callback_query.message.answer("Произошла ошибка при проверке статуса. Попробуйте позже.")
 
-        return "Произошла ошибка при проверке статуса. Попробуйте позже."
-
-
-
-
-    text = escape_markdown(
-        f"У вас есть: {text_count}\n"
-        f"{text_key_name}\n"
-        f"{text_country_key}\n"
-        f"Cтатус: {text_status}\n"
-        f"{text_day_activ}\n"
-        f"{text_traffic}\n"
-        #"При оплате вы продлите срок активного ключа еще на *30 дней*"
-    )
-    text = text + f"```\n{text_url}\n```"
-
-    await callback_query.message.answer(text,  reply_markup=keyboard, disable_web_page_preview=True, parse_mode="Markdown")
     await callback_query.answer()
-
-
-
-
-
-
