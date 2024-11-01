@@ -21,34 +21,21 @@ class PaymentForm(StatesGroup):
     awaiting_email = State()
 
 # Функция валидации email
+
 def validate_email(email: str) -> bool:
     """
-    Проверяет, является ли email корректным с точки зрения синтаксиса и наличия MX-записи домена.
+    Проверяет, является ли email корректным с точки зрения синтаксиса.
     :param email: Email-адрес для проверки.
     :return: True, если email-адрес корректен, иначе False.
     """
     if not isinstance(email, str):
         return False
 
-    # Регулярное выражение для более строгой проверки email
+    # Регулярное выражение для проверки синтаксиса email
     pattern = r"^(?!.*\.\.)(?!.*\.$)(?!.*@.*@)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
 
     # Синтаксическая проверка с использованием регулярного выражения
-    if not re.match(pattern, email):
-        return False
-
-    # Проверка наличия MX-записи домена
-    domain = email.split('@')[-1]
-    try:
-        # Если у домена есть MX-записи, он существует и принимает почту
-        dns.resolver.resolve(domain, 'MX')
-        return True
-    except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN, dns.resolver.NoNameservers):
-        # Если нет MX-записи или домен не существует
-        return False
-    except Exception as e:
-        print(f"Ошибка при проверке MX-записи: {e}")
-        return False
+    return bool(re.match(pattern, email))
 
 # Функция запроса email
 async def request_user_email(chat_id: int, bot: Bot, state: FSMContext):

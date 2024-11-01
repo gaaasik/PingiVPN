@@ -16,13 +16,13 @@ help_text_message = (
 def help_options_keyboard():
     buttons = [
         [
-            InlineKeyboardButton(text="🔌 Как подключиться к VPN?", callback_data="help_connect_vpn"),
+            InlineKeyboardButton(text="🚀 Как подключиться к VPN?", callback_data="help_connect_vpn"),
         ],
         [
-            InlineKeyboardButton(text="❓ Что делать, если VPN не работает?", callback_data="help_vpn_not_working"),
+            InlineKeyboardButton(text="🛠️ Что делать, если VPN не работает?", callback_data="help_vpn_not_working"),
         ],
         [
-            InlineKeyboardButton(text="✉️ Задать вопрос", callback_data="help_ask_question"),
+            InlineKeyboardButton(text="💬 Задать вопрос", callback_data="help_ask_question"),
         ],
         [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
     ]

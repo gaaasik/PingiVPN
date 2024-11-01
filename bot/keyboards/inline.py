@@ -11,9 +11,9 @@ from bot.handlers.admin import ADMIN_CHAT_IDS
 # Клавиатура для скачивания приложения и подтверждения скачивания
 def download_app_keyboard(download_link):
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="Открыть магазин приложений", url=download_link)],  # Ведет на ссылку для скачивания
-        [InlineKeyboardButton(text="Инструкция с картинками", callback_data="a")],
-        [InlineKeyboardButton(text="Главное меню", callback_data="main_menu")]
+        [InlineKeyboardButton(text="🛒 Открыть магазин приложений", url=download_link)],  # Ведет на ссылку для скачивания
+        [InlineKeyboardButton(text="📷 Инструкция с картинками", callback_data="a")],
+        [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
     ])
     return keyboard
 
@@ -102,10 +102,10 @@ def account_info_keyboard():
 def main_menu_inline_keyboard():
     # Создание клавиатуры с кнопками
     buttons = [
-        [InlineKeyboardButton(text="Купить VPN", callback_data="buy_vpn")],
-        [InlineKeyboardButton(text="Мои ключи", callback_data="my_keys"), InlineKeyboardButton(text="Помощь", callback_data="help")],
-        [InlineKeyboardButton(text="Пригласить", callback_data="share"), InlineKeyboardButton(text="Всё о PingiVPN", callback_data="about_vpn")],
-        [InlineKeyboardButton(text="Подключить VPN", callback_data="connect_vpn")]
+        [InlineKeyboardButton(text="🛒 Купить VPN", callback_data="buy_vpn")],
+        [InlineKeyboardButton(text="🔑 Мои ключи", callback_data="my_keys"), InlineKeyboardButton(text="❓ Помощь", callback_data="help")],
+        [InlineKeyboardButton(text="📨 Пригласить", callback_data="share"), InlineKeyboardButton(text="ℹ️ Всё о PingiVPN", callback_data="about_vpn")],
+        [InlineKeyboardButton(text="🔌 Подключить VPN", callback_data="connect_vpn")]
     ]
     # Создаем клавиатуру с кнопками
     keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)

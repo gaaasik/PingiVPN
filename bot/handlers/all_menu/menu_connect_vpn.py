@@ -25,19 +25,23 @@ def device_choice_keyboard():
     # Создаем кнопки
     buttons = [
         [
-            InlineKeyboardButton(text="Android", callback_data="device_android"),
-            InlineKeyboardButton(text="iPhone", callback_data="device_iPhone")
+            InlineKeyboardButton(text="🤖 Android", callback_data="device_android"),
+            InlineKeyboardButton(text="📱 iPhone", callback_data="device_iPhone")
         ],
         [
-            InlineKeyboardButton(text="Mac", callback_data="device_mac"),
-            InlineKeyboardButton(text="Linux", callback_data="device_linux")
+            InlineKeyboardButton(text="💻 Mac", callback_data="device_mac"),
+            InlineKeyboardButton(text="🐧 Linux", callback_data="device_linux")
         ],
         [
-            InlineKeyboardButton(text="Windows", callback_data="device_windows")
-        ], [
-            InlineKeyboardButton(text="Главное меню", callback_data="main_menu")
+            InlineKeyboardButton(text="🖥️ Windows", callback_data="device_windows")
+        ],
+        [
+            InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")
         ],
     ]
+    # Создаем клавиатуру с кнопками
+    keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
+    return keyboard
 
     # Передаем список кнопок в InlineKeyboardMarkup
     keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
