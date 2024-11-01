@@ -157,15 +157,14 @@ async def process_payment_message(message: str, bot: Bot):
             date_key_off = await us.servers[0].date_key_off.get()
 
             # Преобразуем строку в объект datetime, используя формат "DD.MM.YYYY HH:MM:SS"
-            expiry_date = datetime.strptime(date_key_off, "%d.%m.%Y %H:%M:%S")
-
+            date_key_off = datetime.strptime(date_key_off, "%d.%m.%Y %H:%M:%S")
             # Проверяем, истекла ли дата окончания ключа
-            if expiry_date < current_date:
+            if date_key_off < current_date:
                 # Если дата истекла, устанавливаем новую дату на 30 дней от текущего момента
                 new_expiry_date = current_date + timedelta(days=30)
             else:
                 # Если дата не истекла, добавляем 30 дней к существующей дате окончания
-                new_expiry_date = expiry_date + timedelta(days=30)
+                new_expiry_date = date_key_off + timedelta(days=30)
 
             # Преобразуем новую дату обратно в строку в формате "DD.MM.YYYY HH:MM:SS"
             new_expiry_date_str = new_expiry_date.strftime("%d.%m.%Y %H:%M:%S")

@@ -15,7 +15,8 @@ router = Router()
 def keyboard_one_key():
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="Оплатить ключ", callback_data="buy_vpn")],  # Ведет на ссылку для скачивания
-        [InlineKeyboardButton(text="Добавить ключ", callback_data="add_key")]
+        [InlineKeyboardButton(text="Добавить ключ", callback_data="add_key")],
+        [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
     ])
     return keyboard
 

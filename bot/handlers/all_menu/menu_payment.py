@@ -5,9 +5,11 @@ from aiogram import Router, types, Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
+from bot.handlers.all_menu.main_menu import show_main_menu
 from models.UserCl import UserCl
 from bot.payments2.payments_handler_redis import create_one_time_payment
-
+import dns.resolver
 # Инициализация логирования
 logging.basicConfig(level=logging.INFO)
 
@@ -19,12 +21,34 @@ class PaymentForm(StatesGroup):
     awaiting_email = State()
 
 # Функция валидации email
-def validate_email(email) -> bool:
-    # Если email None или не является строкой, возвращаем False
+def validate_email(email: str) -> bool:
+    """
+    Проверяет, является ли email корректным с точки зрения синтаксиса и наличия MX-записи домена.
+    :param email: Email-адрес для проверки.
+    :return: True, если email-адрес корректен, иначе False.
+    """
     if not isinstance(email, str):
         return False
-    pattern = r"^[\w\.-]+@[\w\.-]+\.\w{2,4}$"
-    return bool(re.match(pattern, email))
+
+    # Регулярное выражение для более строгой проверки email
+    pattern = r"^(?!.*\.\.)(?!.*\.$)(?!.*@.*@)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+
+    # Синтаксическая проверка с использованием регулярного выражения
+    if not re.match(pattern, email):
+        return False
+
+    # Проверка наличия MX-записи домена
+    domain = email.split('@')[-1]
+    try:
+        # Если у домена есть MX-записи, он существует и принимает почту
+        dns.resolver.resolve(domain, 'MX')
+        return True
+    except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN, dns.resolver.NoNameservers):
+        # Если нет MX-записи или домен не существует
+        return False
+    except Exception as e:
+        print(f"Ошибка при проверке MX-записи: {e}")
+        return False
 
 # Функция запроса email
 async def request_user_email(chat_id: int, bot: Bot, state: FSMContext):
@@ -164,6 +188,7 @@ async def handle_cancel_payment(callback_query: types.CallbackQuery, state: FSMC
 
     await state.clear()
     await bot.send_message(chat_id, "Платеж был отменен.")
+    await show_main_menu(chat_id,bot)
     logging.info(f"Платеж отменен пользователем: chat_id={chat_id}")
 
     await callback_query.answer()
