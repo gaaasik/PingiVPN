@@ -16,7 +16,7 @@ def download_app_keyboard(device: str) -> InlineKeyboardMarkup:
         instruction_link = "https://telegra.ph/Instrukciya-dlya-Android-01-01"
     elif device.lower() == 'iphone':
         download_link = "https://apps.apple.com/us/app/streisand/id6450534064"
-        instruction_link = "https://telegra.ph/Instrukciya-dlya-iPhone-01-01"
+        instruction_link = "https://telegra.ph/Podklyuchenie-PingiVPN-na-iPhone-11-01"
     elif device.lower() == 'mac':
         download_link = "https://apps.apple.com/us/app/foxray/id6448898396"
         instruction_link = "https://telegra.ph/Instrukciya-dlya-Mac-01-01"
