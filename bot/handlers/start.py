@@ -3,8 +3,11 @@ import os
 from aiogram import Router, types
 from aiogram.filters import Command
 from dotenv import load_dotenv
+
+from bot.handlers.admin import send_admin_log
 from bot.handlers.all_menu.menu_connect_vpn import connect_text_messages, device_choice_keyboard
 from bot.handlers.cleanup import register_message_type
+from bot.keyboards.reply import reply_keyboard_main_menu
 from bot.utils.cache import send_cached_photo
 from models.UserCl import UserCl
 
@@ -15,7 +18,7 @@ PATH_TO_IMAGES = os.getenv('PATH_TO_IMAGES')  # Получаем путь к п�
 
 # Получение пути к папке с зарегистрированными пользователями
 REGISTERED_USERS_DIR = os.getenv('REGISTERED_USERS_DIR')
-
+referral_old_chat_id =0
 
 @router.message(Command("start"))
 async def cmd_start(message: types.Message):
@@ -24,7 +27,9 @@ async def cmd_start(message: types.Message):
     user_name_full = f"{user.first_name} {user.last_name or ''}".strip()
     user_login = message.from_user.username or None  # Используем None, если username отсутствует
     # Выводим значения с подписями
-
+    # добавление реферального id
+    args = message.text.split()[1] if len(message.text.split()) > 1 else None
+    referral_old_chat_id = int(args) if args else None
 
 
 
@@ -38,9 +43,7 @@ async def cmd_start(message: types.Message):
         # Если пользователя нет, добавляем его в базу данных
         print("Новый пользователь______________________Нужно админу")
 
-        # добавление реферального id
-        args = message.text.split()[1] if len(message.text.split()) > 1 else None
-        referral_old_chat_id = int(args) if args else None
+
 
         us = await UserCl.add_user_to_database(chat_id, user_name_full, user_login, referral_old_chat_id)
 
@@ -79,11 +82,19 @@ async def cmd_start(message: types.Message):
 
     # Отправка закешированного фото
     await send_cached_photo(message)
-    sent_message = await message.answer("Приветствуем в мире надежного и скоростного VPN! 🚀\n\n", parse_mode="Markdown")
+    sent_message = await message.answer(
+        "🧊 Добро пожаловать 🚀\n\n"
+        "🥶 Мы *кардинально* выделяемся, потому что используем уникальные серверы в *Антарктиде* \n\n "
+        "🧊 И предлагаем *неограниченную* скорость и безопасность! ",
+        parse_mode="Markdown",reply_markup=reply_keyboard_main_menu
+    )
     sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard(), parse_mode="Markdown")
+
     #await store_important_message(message.bot, message.chat.id, sent_message.message_id, sent_message,"start")
     await register_message_type(message.chat.id, sent_message.message_id, "start", message.bot)
-
+    await send_admin_log(            bot=message.bot,
+            message=f"Добавлен новый пользователь: (ID чата: {chat_id}) реферальный аргумент {referral_old_chat_id} \n"
+        )
     # Получаем данные пользователя из базы данных
 
 

@@ -45,6 +45,13 @@ async def get_user_status_text(us):
 
 # Функция для отображения основного меню
 async def show_main_menu(chat_id: int, bot: Bot):
+
+    user = await UserCl.load_user(chat_id)
+
+    if not user:
+        await bot.send_message(chat_id,"Для начала нажмите /start ",)
+        return
+
     # Получаем данные о пользователе по chat_id
     # Добавить в базу данных
     us = await UserCl.load_user(chat_id)
@@ -53,7 +60,7 @@ async def show_main_menu(chat_id: int, bot: Bot):
 
     user_name_full = await us.user_name_full.get()
 
-    days_since_registration = us.days_since_registration.get()
+    days_since_registration = await us.days_since_registration.get()
     # Получаем статус пользователя
     status_text = await get_user_status_text(us)
 
@@ -80,7 +87,7 @@ async def show_main_menu(chat_id: int, bot: Bot):
 
 # Универсальный обработчик для главного меню
 # Универсальный обработчик для главного меню
-@router.message(F.text == "Главное меню")
+@router.message(F.text == "🏠 Главное меню")
 @router.message(Command(commands=["menu"]))
 @router.callback_query(F.data == "main_menu")
 async def handle_main_menu(event: types.Message | types.CallbackQuery):

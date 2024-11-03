@@ -5,9 +5,11 @@ from aiogram import Router, types, Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
+from bot.handlers.all_menu.main_menu import show_main_menu
 from models.UserCl import UserCl
 from bot.payments2.payments_handler_redis import create_one_time_payment
-
+import dns.resolver
 # Инициализация логирования
 logging.basicConfig(level=logging.INFO)
 
@@ -19,11 +21,20 @@ class PaymentForm(StatesGroup):
     awaiting_email = State()
 
 # Функция валидации email
-def validate_email(email) -> bool:
-    # Если email None или не является строкой, возвращаем False
+
+def validate_email(email: str) -> bool:
+    """
+    Проверяет, является ли email корректным с точки зрения синтаксиса.
+    :param email: Email-адрес для проверки.
+    :return: True, если email-адрес корректен, иначе False.
+    """
     if not isinstance(email, str):
         return False
-    pattern = r"^[\w\.-]+@[\w\.-]+\.\w{2,4}$"
+
+    # Регулярное выражение для проверки синтаксиса email
+    pattern = r"^(?!.*\.\.)(?!.*\.$)(?!.*@.*@)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+
+    # Синтаксическая проверка с использованием регулярного выражения
     return bool(re.match(pattern, email))
 
 # Функция запроса email
@@ -32,7 +43,7 @@ async def request_user_email(chat_id: int, bot: Bot, state: FSMContext):
         text = "Пожалуйста, введите ваш email для отправки чека:"
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
-                [InlineKeyboardButton(text="Отменить платеж", callback_data="cancel_payment")]
+                [InlineKeyboardButton(text="❌ Отменить платеж", callback_data="cancel_payment")]
             ]
         )
         sent_message = await bot.send_message(chat_id, text=text, reply_markup=keyboard)
@@ -46,23 +57,22 @@ async def send_payment_link(chat_id: int, bot: Bot, user_login: str, email: str,
     try:
         one_time_id, one_time_link = await create_one_time_payment(chat_id, user_login, email)
         text = (
-            f"Вы подключаете подписку на наш сервис с помощью\n"
-            "платёжной системы Юkassa\n\n"
-            "Стоимость подписки на 1 месяц: 199₽ 👇👇👇\n\n"
-            f"Чек об оплате придет на почту {email}\n\n"
-
+            "🛡 *Оформление подписки через ЮKassa*\n\n"
+            "💵 1 месяц: *199₽*\n\n"
+            f"📧 Чек отправим на *{email}*\n\n"
+            "⬇️ Нажмите для оплаты ⬇️"
         )
 
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
-                [InlineKeyboardButton(text="Оплатить через Юкассу", url=one_time_link)],
+                [InlineKeyboardButton(text="💳 Оплатить через Юкассу", url=one_time_link)],
                 [
-                    InlineKeyboardButton(text="Изменить почту", callback_data="edit_email"),
-                    InlineKeyboardButton(text="Отменить платеж", callback_data="cancel_payment")
+                    InlineKeyboardButton(text="✏️ Изменить почту", callback_data="edit_email"),
+                    InlineKeyboardButton(text="❌ Отменить платеж", callback_data="cancel_payment")
                 ]
             ]
         )
-        await bot.send_message(chat_id, text=text, reply_markup=keyboard)
+        await bot.send_message(chat_id, text=text, reply_markup=keyboard,parse_mode="Markdown")
         logging.info(f"Отправлена ссылка на оплату пользователю: chat_id={chat_id}")
 
         # Сбрасываем состояние FSM
@@ -164,6 +174,7 @@ async def handle_cancel_payment(callback_query: types.CallbackQuery, state: FSMC
 
     await state.clear()
     await bot.send_message(chat_id, "Платеж был отменен.")
+    await show_main_menu(chat_id,bot)
     logging.info(f"Платеж отменен пользователем: chat_id={chat_id}")
 
     await callback_query.answer()

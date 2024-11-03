@@ -4,6 +4,8 @@ import logging
 import os
 from datetime import datetime, timedelta
 
+import aiosqlite
+import pytz
 import redis
 from dotenv import load_dotenv
 from yookassa import Configuration, Payment
@@ -18,7 +20,7 @@ from bot.database.db import  update_payment_status, update_user_subscription_db
 load_dotenv()
 WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 listen_task = None  # Переменная для хранения задачи прослушивания
-
+db_path = os.getenv('database_path_local')
 # Настройка API Юкассы
 Configuration.account_id = os.getenv('SHOPID')
 Configuration.secret_key = os.getenv('API_KEY')
@@ -27,7 +29,20 @@ REDIS_QUEUE = 'payment_notifications'
 # Инициализация Redis клиента
 redis_client = redis.Redis(host='217.25.91.109', port=6379, db=0)
 router = Router()
+async def save_payment_to_db(user_id, payment_id, amount, currency, status, payment_method_id, payment_json):
+    # Определяем московский часовой пояс
+    moscow_tz = pytz.timezone("Europe/Moscow")
 
+    # Время создания и обновления записи в московском времени
+    created_at = datetime.now(moscow_tz).strftime("%Y-%m-%d %H:%M:%S")
+    updated_at = created_at
+
+    async with aiosqlite.connect(db_path) as db:
+        await db.execute("""
+            INSERT INTO payments (user_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at, payment_json)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (user_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at, json.dumps(payment_json)))
+        await db.commit()
 
 async def run_listening_redis_for_duration(bot: Bot):
     """Запускает прослушивание Redis на определенный промежуток времени."""
@@ -108,7 +123,7 @@ async def listen_to_redis_queue(bot: Bot):
                 pass
                 #logging.info("Очередь Redis пуста, ждем следующую задачу")
 
-            await asyncio.sleep(4)
+            await asyncio.sleep(1)
 
         except redis.exceptions.ConnectionError as e:
             logging.error(f"Ошибка подключения к Redis: {e}")
@@ -129,14 +144,21 @@ async def process_payment_message(message: str, bot: Bot):
         currency = data.get('currency')
         status = data.get('status')
         payment_id = data.get('payment_id')
+        payment_json = data.get('payload_json')
         # Проверка наличия всех необходимых данных
         if not all([user_id, amount, currency, status, payment_id]):
             await send_admin_log(bot,f"Некорректное сообщение о платеже: {data}")
             return
 
-
-
-
+        await save_payment_to_db(
+            user_id=user_id,
+            payment_id=payment_id,
+            amount=amount,
+            currency=currency,
+            status=status,
+            payment_method_id=payment_id,
+            payment_json=payment_json
+        )
         # обноление таблицы payment
         #await update_payment_status(payment_id, user_id, amount, currency, status)
         await send_admin_log(bot, f"Пойман платеж от {user_id}, c статусом {status}")
@@ -157,15 +179,14 @@ async def process_payment_message(message: str, bot: Bot):
             date_key_off = await us.servers[0].date_key_off.get()
 
             # Преобразуем строку в объект datetime, используя формат "DD.MM.YYYY HH:MM:SS"
-            expiry_date = datetime.strptime(date_key_off, "%d.%m.%Y %H:%M:%S")
-
+            date_key_off = datetime.strptime(date_key_off, "%d.%m.%Y %H:%M:%S")
             # Проверяем, истекла ли дата окончания ключа
-            if expiry_date < current_date:
+            if date_key_off < current_date:
                 # Если дата истекла, устанавливаем новую дату на 30 дней от текущего момента
                 new_expiry_date = current_date + timedelta(days=30)
             else:
                 # Если дата не истекла, добавляем 30 дней к существующей дате окончания
-                new_expiry_date = expiry_date + timedelta(days=30)
+                new_expiry_date = date_key_off + timedelta(days=30)
 
             # Преобразуем новую дату обратно в строку в формате "DD.MM.YYYY HH:MM:SS"
             new_expiry_date_str = new_expiry_date.strftime("%d.%m.%Y %H:%M:%S")

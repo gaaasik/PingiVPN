@@ -14,7 +14,8 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQu
 def get_payment_keyboard():
     # Создаем клавиатуру с вложенным списком кнопок
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="1 месяц: 199₽", callback_data="payment_199")]
+        [InlineKeyboardButton(text="🗓️ 1 месяц: 199₽", callback_data="payment_199")],
+        [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
     ])
     return keyboard
 

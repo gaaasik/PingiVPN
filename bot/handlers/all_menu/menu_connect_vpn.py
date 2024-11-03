@@ -8,12 +8,12 @@ router = Router()
 
 connect_text_messages = (
 
-    "🌐 Узнайте, что такое настоящее подключение — с протоколом *VLESS* и серверами на *10 Gbit/s*"
-    "\n🚀 Ваша скорость ограничена только вашим провайдером!\n\n "
+    "🌐 Узнайте, что такое настоящее подключение — с протоколом *VLESS* и серверами на *10 Gbit/s*\n\n"
+    "🚀 Ваша скорость ограничена только вашим провайдером!\n\n "
 
     "🔐 Гарантируем защиту ваших данных \n\n"
 
-    "📱 Готовы начать? \n *Выберите устройство для настройки VPN*"
+    "📱 *Выберите устройство для настройки VPN*"
 )
 
 
@@ -25,23 +25,24 @@ def device_choice_keyboard():
     # Создаем кнопки
     buttons = [
         [
-            InlineKeyboardButton(text="Android", callback_data="device_android"),
-            InlineKeyboardButton(text="iPhone", callback_data="device_iPhone")
+            InlineKeyboardButton(text="🤖 Android", callback_data="device_android"),
+            InlineKeyboardButton(text="📱 iPhone", callback_data="device_iPhone")
         ],
         [
-            InlineKeyboardButton(text="Mac", callback_data="device_mac"),
-            InlineKeyboardButton(text="Linux", callback_data="device_linux")
+            InlineKeyboardButton(text="💻 Mac", callback_data="device_mac"),
+            InlineKeyboardButton(text="🐧 Linux", callback_data="device_linux")
         ],
         [
-            InlineKeyboardButton(text="Windows", callback_data="device_windows")
-        ], [
-            InlineKeyboardButton(text="Главное меню", callback_data="main_menu")
+            InlineKeyboardButton(text="🖥️ Windows", callback_data="device_windows")
+        ],
+        [
+            InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")
         ],
     ]
-
-    # Передаем список кнопок в InlineKeyboardMarkup
+    # Создаем клавиатуру с кнопками
     keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
     return keyboard
+
 
 
 @router.callback_query(lambda c: c.data == "connect_vpn")
