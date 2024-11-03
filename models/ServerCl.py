@@ -8,11 +8,11 @@ from fastapi import requests
 
 
 class Field:
-    def __init__(self, name, value, server, is_protected=False):
+    def __init__(self, name, value, server: 'ServerCl'):
         self._name = name  # Приватное название поля
         self._value = value  # Приватное значение поля
         self._server = server  # Ссылка на объект Server_cl
-        self._is_protected = is_protected  # Флаг для защиты поля от публичного изменения
+
 
     # Публичный метод для получения значения
     async def get(self):
@@ -27,6 +27,9 @@ class Field:
 
     # Публичный метод для изменения значения, если поле не защищено
     async def set(self, new_value):
+        if self._name == "enable":
+            await self.set_enable(new_value)
+
         if self._is_protected:
             raise AttributeError(f"Field '{self._name}' is protected and cannot be changed directly.")
         await self._set(new_value)
@@ -78,9 +81,10 @@ class Field:
 
         # Получаем uuid из объекта сервера
         uuid_value = await self._server.uuid_id.get()
-
+        server_ip = await self._server.server_ip.get()
         # Формируем данные для отправки
         task_data = {
+            "server_ip": server_ip,
             "id": uuid_value,
             "enable": enable_value
         }
@@ -96,7 +100,7 @@ class Field:
 
 class ServerCl:
     def __init__(self, server_data: dict, user):
-        self.enable = Field('enable', server_data.get("enable", None), self, is_protected=True)
+        self.enable = Field('enable', server_data.get("enable", None), self)
 
         # Инициализация всех полей, переданных в JSON
         self.name_protocol = Field('name_protocol', server_data.get("name_protocol", ""), self)
