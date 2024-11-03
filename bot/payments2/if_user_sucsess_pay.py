@@ -7,7 +7,7 @@ import os
 from bot.handlers.admin import ADMIN_CHAT_IDS
 from bot.handlers.all_menu.main_menu import show_main_menu
 from bot.handlers.cleanup import message_types_mapping, delete_message_with_type, store_message
-from bot.handlers.status import generate_status_message
+
 
 
 # Обработка действий после успешной оплаты

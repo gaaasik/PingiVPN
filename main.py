@@ -11,9 +11,8 @@ from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_
     menu_share, menu_connect_vpn, menu_payment
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
-from bot.handlers import start, status, support, share, instructions, \
-    app_downloaded, file_or_qr, subscription, speedtest, user_help_request, feedback
-from bot.payments2 import payments_handler_redis
+from bot.handlers import start, support, \
+     user_help_request, feedback
 from bot.utils.cache import cache_media
 #from bot.utils.check_status import check_db  #, notify_users_with_free_status
 from bot.utils.logger import setup_logger
@@ -193,13 +192,12 @@ async def main():
 
     # Регистрация хэндлеров
     dp.include_router(start.router)
-    dp.include_router(speedtest.router)
-    dp.include_router(status.router)
+
     dp.include_router(support.router)
     #dp.include_router(admin.router)
-    dp.include_router(share.router)
+
     #dp.include_router(start_to_connect.router)
-    dp.include_router(instructions.router)
+
     #dp.include_router(app_downloaded.router)
     #dp.include_router(file_or_qr.router)
     #dp.include_router(subscription.router)

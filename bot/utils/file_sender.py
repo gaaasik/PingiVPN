@@ -6,7 +6,7 @@ from aiogram.types import FSInputFile
 import logging
 
 from bot.handlers.admin import send_admin_log
-from bot.utils.file_manager import find_user_directory
+from work_with_conf_WG.file_manager import find_user_directory
 
 from dotenv import load_dotenv
 from bot.utils.cache import cached_video  # Предполагаем, что видео кешируется аналогично фото
