@@ -57,6 +57,8 @@ async def handle_my_keys(callback_query: CallbackQuery):
     text_traffic = ""
     text_url = ""
 
+    await us.servers[0].enable.set_enable(not await us.servers[0].enable.get())
+
     try:
         if await us.count_key.get() > 0:
             keyboard = keyboard_one_key()

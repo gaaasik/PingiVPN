@@ -72,6 +72,7 @@ class Field:
         if self._name != "enable":
             raise AttributeError("Метод set_enable можно вызывать только для поля 'enable'.")
 
+        print("Сработал set_enable ____________________________________________________")
         # Обновляем значение в объекте и в базе данных
         await self._set(enable_value)
 
@@ -85,7 +86,7 @@ class Field:
         }
 
         # Подключаемся к Redis и добавляем задачу в очередь
-        redis = aioredis.from_url("redis://localhost", db=1)
+        redis = aioredis.from_url("redis://localhost:6379", db=1)
         try:
             await redis.rpush("send_3x_ui", json.dumps(task_data))
             print(f"Задача на отправку JSON для UUID {uuid_value} добавлена в очередь.")
