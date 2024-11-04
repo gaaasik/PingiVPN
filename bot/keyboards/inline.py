@@ -25,7 +25,7 @@ def download_app_keyboard(device: str) -> InlineKeyboardMarkup:
         instruction_link = "https://telegra.ph/Instrukciya-dlya-Linux-01-01"
     elif device.lower() == 'windows':
         download_link = "https://apps.microsoft.com/detail/9pdfnl3qv2s5?hl=ru-ru&gl=RU"
-        instruction_link = "https://telegra.ph/Instrukciya-dlya-Windows-01-01"
+        instruction_link = "https://telegra.ph/Podklyuchenie-PingiVPN-na-windows-11-01"
     else:
         download_link = "#"
         instruction_link = "#"
@@ -119,7 +119,7 @@ def main_menu_inline_keyboard():
     buttons = [
         [InlineKeyboardButton(text="🛒 Купить VPN", callback_data="buy_vpn")],
         [InlineKeyboardButton(text="🔑 Мои ключи", callback_data="my_keys"), InlineKeyboardButton(text="❓ Помощь", callback_data="help")],
-        [InlineKeyboardButton(text="📨 Пригласить", callback_data="share"), InlineKeyboardButton(text="ℹ️ Всё о PingiVPN", callback_data="about_vpn")],
+        [InlineKeyboardButton(text="📨 Пригласить", callback_data="share"), InlineKeyboardButton(text="ℹ️ Всё о PingiVPN", callback_data="about_pingi")],
         [InlineKeyboardButton(text="🔌 Подключить VPN", callback_data="connect_vpn")]
     ]
     # Создаем клавиатуру с кнопками

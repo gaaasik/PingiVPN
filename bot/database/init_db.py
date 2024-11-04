@@ -7,16 +7,19 @@ async def init_db(database_path: str):
         # Начало транзакции
         await db.execute("BEGIN TRANSACTION;")
 
-
-
-        # Таблица referrals
-        await db.execute('''CREATE TABLE IF NOT EXISTS "referrals" (
-            "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-            "referral_old_chat_id" INTEGER NOT NULL,
-            "referral_new_chat_id" INTEGER NOT NULL,
-            FOREIGN KEY("referral_old_chat_id") REFERENCES "users"("id"),
-            FOREIGN KEY("referral_new_chat_id") REFERENCES "users"("id")
-        );''')
+        await db.execute('''
+                   CREATE TABLE IF NOT EXISTS "referrals" (
+                       "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+                       "referral_old_chat_id" INTEGER NOT NULL,
+                       "referral_new_chat_id" INTEGER NOT NULL,
+                       "date_referred" DATETIME NOT NULL,
+                       "referral_status" VARCHAR NOT NULL DEFAULT 'invited',
+                       "bonus_status" VARCHAR NOT NULL DEFAULT 'no_bonus',
+                       "date_bonus_awarded" DATETIME,
+                       FOREIGN KEY("referral_old_chat_id") REFERENCES "users"("id"),
+                       FOREIGN KEY("referral_new_chat_id") REFERENCES "users"("id")
+                   );
+               ''')
 
         # Таблица user_questions
         await db.execute('''CREATE TABLE IF NOT EXISTS "user_questions" (
