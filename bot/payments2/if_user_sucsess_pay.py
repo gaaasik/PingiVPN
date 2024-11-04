@@ -4,6 +4,8 @@ import logging
 from aiogram import Bot
 import os
 
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
 from bot.handlers.admin import ADMIN_CHAT_IDS
 from bot.handlers.all_menu.main_menu import show_main_menu
 from bot.handlers.cleanup import message_types_mapping, delete_message_with_type, store_message
@@ -21,11 +23,27 @@ async def handle_post_payment_actions(bot: Bot, chat_id: int):
 
     # Отправка сообщения пользователю
     try:
+        # Создание клавиатуры с кнопками
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text="Супер!", callback_data="super")],
+                [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
+            ]
+        )
+        #await show_main_menu(chat_id,bot)
         sent_message = await bot.send_message(
             chat_id=chat_id,
-            text=f"Спасибо за оплату. Ваш платеж успешно заверешен.\n Ваша подписка активна"
+            text=(
+                "🎉 Спасибо за оплату! 🎉\n\n"
+                "🙌 Ваш платеж успешно завершен, и ваша подписка *активна*. \n\n"
+                "🌍 Мы ценим ваше доверие и рады, что вы выбрали *Pingi VPN* для безопасного доступа к интернету. \n\n"
+                "🚀 Если у вас возникнут вопросы или проблемы, наша поддержка всегда готова помочь. \n\n"
+                "👥 Делитесь с друзьями и получайте *бонусные дни*\n\n"
+                "💫 *Приятного использования и стабильного соединения!* 🌐✨"
+            ),
+            parse_mode="Markdown",
+            reply_markup=keyboard
         )
-        await show_main_menu(chat_id,bot)
 
 
         logging.info(f"Сообщение пользователю {chat_id} об успешной оплате отправлено.")
@@ -42,3 +60,4 @@ async def handle_post_payment_actions(bot: Bot, chat_id: int):
             logging.info(f"Уведомление об оплате отправлено администратору {admin_chat_id}.")
         except Exception as e:
             logging.error(f"Ошибка при отправке уведомления администратору {admin_chat_id}: {e}")
+

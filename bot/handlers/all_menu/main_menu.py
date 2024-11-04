@@ -1,3 +1,5 @@
+import asyncio
+
 from aiogram import Router, types, Bot, F
 from aiogram.filters import Command
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
@@ -111,7 +113,7 @@ async def show_main_menu(chat_id: int, bot: Bot):
         "📶 Устойчивость к блокировкам\n"
         "🚀 Высокая скорость\n"
         "💻 Поддержка любых устройств\n\n"
-        f"🔑 Статус: {status_text}\n"
+        f"🔑 Статус: {status_text}\n\n"
         f"{days_since_registration_text}\n"
     )
 
@@ -134,4 +136,18 @@ async def handle_main_menu(event: types.Message | types.CallbackQuery):
         bot = event.bot
 
     # Отображение главного меню
+    await show_main_menu(chat_id, bot)
+
+# Обработчик для кнопки "Супер!"
+@router.callback_query(lambda c: c.data == "super")
+async def handle_super_button(callback_query: CallbackQuery):
+    chat_id = callback_query.message.chat.id
+    bot = callback_query.bot
+
+    # Отправляем "Пупер!"
+    await bot.send_message(chat_id=chat_id, text="Пупер!")
+    await callback_query.answer()  # Закрываем уведомление о нажатии кнопки
+
+    # Задержка в 2 секунды перед отправкой главного меню
+    await asyncio.sleep(2)
     await show_main_menu(chat_id, bot)

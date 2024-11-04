@@ -7,7 +7,7 @@ from aiogram import Bot
 from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
-from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_about_vpn, menu_help, \
+from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
     menu_share, menu_connect_vpn, menu_payment,menu_about_pingi
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
@@ -197,7 +197,6 @@ async def main():
     #dp.include_router(admin.router)
 
     #dp.include_router(start_to_connect.router)
-
     #dp.include_router(app_downloaded.router)
     #dp.include_router(file_or_qr.router)
     dp.include_router(menu_about_pingi.router)
@@ -211,7 +210,7 @@ async def main():
     dp.include_router(menu_device.router)
     dp.include_router(menu_connect_vpn.router)
     dp.include_router(menu_my_keys.router)
-    dp.include_router(menu_about_vpn.router)
+
 
     # Запуск бота
     try:
