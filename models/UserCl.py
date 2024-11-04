@@ -182,6 +182,20 @@ class UserCl:
             print(f"Ошибка при добавлении пользователя в базу данных: {e}")
             return False
 
+    @classmethod
+    async def get_all_users(cls) -> list:
+        """Возвращает список всех пользователей (chat_id) из базы данных."""
+        user_ids = []
+        try:
+            async with aiosqlite.connect(database_path_local) as db:
+                query = "SELECT chat_id FROM users"
+                async with db.execute(query) as cursor:
+                    user_ids = [row[0] for row in await cursor.fetchall()]
+            print(f"Найдено пользователей: {len(user_ids)}")
+        except Exception as e:
+            print(f"Ошибка при получении всех пользователей: {e}")
+        return user_ids
+
     async def add_server_json(self, server_params: dict):
         """Добавление нового сервера в JSON формате"""
         # Преобразуем параметры в объект Server_cl и добавляем его в список servers

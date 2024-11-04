@@ -8,11 +8,14 @@ from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
-    menu_share, menu_connect_vpn, menu_payment,menu_about_pingi
+    menu_share, menu_connect_vpn, menu_payment, menu_about_pingi
+from bot.notification_users.notification_migrate_from_wg import send_initial_update_notification, \
+    send_choice_notification
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
 from bot.handlers import start, support, \
-     user_help_request, feedback
+    user_help_request, feedback
+from bot.notification_users import notification_migrate_from_wg
 from bot.utils.cache import cache_media
 #from bot.utils.check_status import check_db  #, notify_users_with_free_status
 from bot.utils.logger import setup_logger
@@ -21,6 +24,7 @@ from bot.database.init_db import init_db
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from flask_app.all_utils_flask_db import initialize_db
+from models.UserCl import UserCl
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
@@ -146,6 +150,14 @@ async def periodic_task_24_hour(bot: Bot):
         # Мы не ждем фиксированное количество времени, а снова пересчитываем время до следующего 3:00
 
 
+async def notify_users_about_protocol_change(bot: Bot):
+    all_chat_id = await UserCl.get_all_users()
+    for chat_id in all_chat_id:
+        await send_initial_update_notification(chat_id, bot)
+        await asyncio.sleep(1)  # Можно добавить задержку между уведомлениями для снижения нагрузки
+        await send_choice_notification(chat_id, bot)
+
+
 async def main():
     try:
         await send_admin_log(bot, "Бот запустился")
@@ -173,14 +185,9 @@ async def main():
         return
     print(f"Путь к базе данных: {db_path}")
 
-
-
-
     # Инициализация базы данных SQLite
     await init_db(db_path)
     #result = await add_user_db(111224422, "test_user")
-
-
 
     # Запускаем асинхронную задачу для периодической отправки сообщений админу
     asyncio.create_task(periodic_task(bot))
@@ -194,11 +201,6 @@ async def main():
     dp.include_router(start.router)
 
     dp.include_router(support.router)
-    #dp.include_router(admin.router)
-
-    #dp.include_router(start_to_connect.router)
-    #dp.include_router(app_downloaded.router)
-    #dp.include_router(file_or_qr.router)
     dp.include_router(menu_about_pingi.router)
     dp.include_router(user_help_request.router)
     dp.include_router(menu_payment.router)
@@ -210,8 +212,8 @@ async def main():
     dp.include_router(menu_device.router)
     dp.include_router(menu_connect_vpn.router)
     dp.include_router(menu_my_keys.router)
-
-
+    dp.include_router(notification_migrate_from_wg.router)
+    await notify_users_about_protocol_change(bot)
     # Запуск бота
     try:
         await dp.start_polling(bot)
@@ -229,6 +231,3 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         print("Завершение работы...")
-
-
-
