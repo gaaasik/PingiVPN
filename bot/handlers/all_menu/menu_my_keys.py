@@ -52,7 +52,7 @@ async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
         # Получаем данные ключа
         key_name = await us.servers[0].email_key.get()
         country_flag = await us.servers[0].country_server.get_country()
-        traffic_limit = "150Gb в/мес"
+        traffic_limit = "200 Gb в/мес"
         vless_url = await us.servers[0].url_vless.get()
 
         # Определяем статус и срок действия ключа

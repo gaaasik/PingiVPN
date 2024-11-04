@@ -10,6 +10,42 @@ from bot.keyboards.inline import main_menu_inline_keyboard
 
 router = Router()
 
+from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+# Функция для получения корректного склонения для дней
+def get_days_text(days):
+    if 11 <= days % 100 <= 14:
+        return f"{days} дней"
+    elif days % 10 == 1:
+        return f"{days} день"
+    elif 2 <= days % 10 <= 4:
+        return f"{days} дня"
+    else:
+        return f"{days} дней"
+
+
+# Функция для получения количества дней с момента регистрации
+async def get_count_days_since_registration(us):
+    try:
+        # Предполагаем, что дата регистрации хранится в формате "дд.мм.гггг чч:мм:сс"
+        registration_date_str = await us.registration_date.get()
+        registration_date = datetime.strptime(registration_date_str, "%d.%m.%Y %H:%M:%S")
+        days_since_registration = (datetime.now() - registration_date).days
+        days_text = get_days_text(days_since_registration)
+
+        # Формируем сообщение в зависимости от количества дней
+        if days_since_registration == 0:
+            return "🎉 Вы с нами Первый день! Настройте VPN один раз и забудьте о проблемах с доступом! 🚀"
+        else:
+            return f"🕓 Вы с нами уже {days_text}! Мы ценим ваше доверие! 🚀"
+    except Exception as e:
+        logger.error("Ошибка при расчёте дней с момента регистрации: %s", e)
+        return "Произошла ошибка при проверке даты регистрации."
+
 
 async def get_user_status_text(us):
     try:
@@ -18,53 +54,54 @@ async def get_user_status_text(us):
 
         if count_key == 0:
             # Если ключей нет
-            return "У вас нет ключа"
+            return f"Нажмите *Подключить VPN*\n"
 
-        # Если ключи есть, проверяем статус первого ключа
+        # Проверяем статус первого ключа
         status_key = await us.servers[0].status_key.get()
+        end_date_str = await us.servers[0].date_key_off.get_date()
 
-        # Определяем текст статуса в зависимости от статуса ключа
+        # Парсим строку даты в объект datetime для расчётов
+        end_date = datetime.strptime(end_date_str, "%d.%m.%Y")
+
+        # Рассчитываем оставшиеся дни
+        today = datetime.now()
+        remaining_days = (end_date - today).days
+
+        # Формируем текст статуса в зависимости от статуса ключа
         if status_key == "free_key":
-            # Пробный период
-            trial_end_date = await us.servers[0].date_key_off.get_date()
-            return f"Пробный период до *{trial_end_date}*"
+            return f"Пробный период до *{end_date_str}* (осталось {remaining_days} дней)"
+
         elif status_key == "blocked":
-            # Ключ заблокирован
-            return f"*Ключ заблокирован*"
+            return "*Ключ заблокирован*"
+
         elif status_key == "active":
-            # Ключ активен, дата окончания активации
-            active_end_date = await us.servers[0].date_key_off.get_date()
-            return f"Ключ активен до *{active_end_date}*"
+            return f"Ключ активен до *{end_date_str}* (осталось {remaining_days} дней)"
+
         else:
-            # Если статус не распознан
             return "Статус ключа не распознан"
 
     except Exception as e:
         logger.error("Ошибка при проверке статуса пользователя: %s", e)
         return "Произошла ошибка при проверке статуса. Попробуйте позже."
 
+
 # Функция для отображения основного меню
 async def show_main_menu(chat_id: int, bot: Bot):
-
     user = await UserCl.load_user(chat_id)
 
     if not user:
-        await bot.send_message(chat_id,"Для начала нажмите /start ",)
+        await bot.send_message(chat_id, "Для начала нажмите /start")
         return
 
     # Получаем данные о пользователе по chat_id
-    # Добавить в базу данных
     us = await UserCl.load_user(chat_id)
 
-    #await us.add_key_vless()
-
     user_name_full = await us.user_name_full.get()
+    days_since_registration_text = await get_count_days_since_registration(us)
 
-    days_since_registration = await us.days_since_registration.get()
     # Получаем статус пользователя
     status_text = await get_user_status_text(us)
 
-    print()
     # Формирование текста главного меню
     text = (
         f"Привет {user_name_full}! 🕶\n\n"
@@ -75,7 +112,7 @@ async def show_main_menu(chat_id: int, bot: Bot):
         "🚀 Высокая скорость\n"
         "💻 Поддержка любых устройств\n\n"
         f"🔑 Статус: {status_text}\n"
-        f"🕓 Вы с нами уже {days_since_registration} дней! 🥳\n"
+        f"{days_since_registration_text}\n"
     )
 
     # Отправка сообщения с меню
@@ -83,10 +120,6 @@ async def show_main_menu(chat_id: int, bot: Bot):
 
 
 # Обработчики для кнопок главного меню
-
-
-# Универсальный обработчик для главного меню
-# Универсальный обработчик для главного меню
 @router.message(F.text == "🏠 Главное меню")
 @router.message(Command(commands=["menu"]))
 @router.callback_query(F.data == "main_menu")

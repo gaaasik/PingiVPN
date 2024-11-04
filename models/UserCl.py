@@ -216,7 +216,7 @@ class UserCl:
             await self.is_subscribed_on_channel.set(0)
             return False
 
-    async def add_key_vless(self, free_day=7):
+    async def add_key_vless(self, free_day=8):
         """Создает сервер VLESS с фиксированными параметрами, используя первый доступный URL и добавляет его в список серверов пользователя."""
         # Количество бесплатных дней
         current_date = datetime.now()
