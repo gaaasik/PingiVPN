@@ -110,7 +110,7 @@ class ServerCl:
         self.email_key = Field('email_key', server_data.get("email_key", ""), self)
         self.country_server = Field('country_server', server_data.get("country_server", ""), self)
         self.server_ip = Field('server_ip', server_data.get("server_ip", ""), self)
-        #self.user_ip = Field('user_ip', server_data.get("user_ip", ""), self)
+        self.user_ip = Field('user_ip', server_data.get("user_ip", ""), self)
         self.vpn_usage_start_date = Field('vpn_usage_start_date', server_data.get("vpn_usage_start_date", ""), self)
         self.traffic_up = Field('traffic_up', server_data.get("traffic_up", 0), self)
         self.traffic_down = Field('traffic_down', server_data.get("traffic_down", 0), self)
@@ -136,6 +136,7 @@ class ServerCl:
             "name_server": await self.name_server.get(),
             "country_server": await self.country_server.get(),
             "server_ip": await self.server_ip.get(),
+            "user_ip": await self.user_ip.get(),
             "enable": await self.enable.get(),
             "vpn_usage_start_date": await self.vpn_usage_start_date.get(),
             "traffic_up": await self.traffic_up.get(),
