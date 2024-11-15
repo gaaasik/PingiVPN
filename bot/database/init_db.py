@@ -67,5 +67,15 @@ async def init_db(database_path: str):
             "data_json" TEXT
         );''')
 
+        # Создаем или изменяем таблицу notifications
+        await db.execute('''
+               CREATE TABLE IF NOT EXISTS "notifications" (
+                   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+                   "chat_id" INTEGER NOT NULL UNIQUE,               -- Идентификатор пользователя
+                   "notification_data" JSON NOT NULL DEFAULT '{}',  -- JSON-структура для хранения всех уведомлений
+                   FOREIGN KEY("chat_id") REFERENCES "users"("chat_id")
+               );
+           ''')
+
         # Завершаем транзакцию
         await db.commit()

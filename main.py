@@ -10,7 +10,7 @@ from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
     menu_share, menu_connect_vpn, menu_payment, menu_about_pingi
 from bot.notification_users.notification_migrate_from_wg import send_initial_update_notification, \
-    send_choice_notification
+    send_choice_notification, get_stay_on_wg_count
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
 from bot.handlers import start, support, \
@@ -46,9 +46,15 @@ async def on_startup():
 # Функция, которая выполняется каждые 10 секунд
 async def periodic_task(bot: Bot):
     # Ждем 10 секунд после старта бота
-    await asyncio.sleep(10800)
+    await asyncio.sleep(1)
     while True:
-        await send_admin_log(bot, "Пинг бота - прошло 3 час работы бота.")
+        count_stay_on_wg = await get_stay_on_wg_count()
+        report_text = (
+            f"📊 *Ежедневный отчет*\n\n"
+            f"{count_stay_on_wg} пользователей нажали 'Остаться на WireGuard' сегодня.\n"
+            "Рекомендуем поддержать их в переходе на VLESS."
+        )
+        await send_admin_log(bot, report_text)
 
         # Пример асинхронного вызова
         # await notify_users_with_free_status(bot)
