@@ -6,6 +6,7 @@ import pytz
 import redis
 from flask import Flask, jsonify, request
 from flask_app.all_utils_flask_db import initialize_db, logger#, update_payment_status
+from models.UserCl import database_path_local
 
 app = Flask(__name__)
 redis_client = redis.Redis(host='localhost', port=6379)
@@ -14,7 +15,7 @@ async def save_invalid_payment_to_db(payment_json):
     moscow_tz = pytz.timezone("Europe/Moscow")
     created_at = datetime.now(moscow_tz).strftime("%Y-%m-%d %H:%M:%S")
 
-    async with aiosqlite.connect("payments.db") as db:
+    async with aiosqlite.connect(database_path_local) as db:
         await db.execute("""
             INSERT INTO payments (user_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at, payment_json)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -29,7 +30,7 @@ async def save_payment_to_db(user_id, payment_id, amount, currency, status, paym
     created_at = datetime.now(moscow_tz).strftime("%Y-%m-%d %H:%M:%S")
     updated_at = created_at
 
-    async with aiosqlite.connect("payments.db") as db:
+    async with aiosqlite.connect(database_path_local) as db:
         await db.execute("""
             INSERT INTO payments (user_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at, payment_json)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
