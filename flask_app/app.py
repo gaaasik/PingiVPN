@@ -7,7 +7,7 @@ import redis
 from flask import Flask, jsonify, request
 from flask_app.all_utils_flask_db import initialize_db, logger#, update_payment_status
 from models.UserCl import database_path_local
-
+localhost
 app = Flask(__name__)
 redis_client = redis.Redis(host='localhost', port=6379)
 # Сохраняем некорректный payload в таблицу payments

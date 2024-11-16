@@ -97,7 +97,7 @@ async def handle_my_keys(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
     us = await UserCl.load_user(chat_id)
 
-    await us.servers[0].enable.set_enable(not await us.servers[0].enable.get())
+    #await us.servers[0].enable.set_enable(not await us.servers[0].enable.get())
 
     try:
         # Генерируем текст и клавиатуру для ответа

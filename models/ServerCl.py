@@ -4,7 +4,7 @@ from datetime import datetime
 
 import aioredis
 import paramiko
-from fastapi import requests
+#from fastapi import requests
 
 
 class Field:
@@ -29,10 +29,12 @@ class Field:
     async def set(self, new_value):
         if self._name == "enable":
             await self.set_enable(new_value)
-
-        if self._is_protected:
-            raise AttributeError(f"Field '{self._name}' is protected and cannot be changed directly.")
+            return
         await self._set(new_value)
+
+        # if self._is_protected:
+        #     raise AttributeError(f"Field '{self._name}' is protected and cannot be changed directly.")
+        # await self._set(new_value)
 
     async def get_date(self):
         # Проверяем, можно ли использовать данный метод для текущего поля
@@ -63,6 +65,7 @@ class Field:
             "Russia": "🇷🇺 Россия",
             "China": "🇨🇳 Китай",
             "Japan": "🇯🇵 Япония",
+            "Poland": "🇵🇱 Польша"
             # Добавьте другие страны, если нужно
         }
 

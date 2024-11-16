@@ -14,7 +14,7 @@ from bot.notification_users.notification_migrate_from_wg import send_initial_upd
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
 from bot.handlers import start, support, \
-    user_help_request, feedback
+    user_help_request, feedback, app_downloaded,file_or_qr
 from bot.notification_users import notification_migrate_from_wg
 from bot.utils.cache import cache_media
 #from bot.utils.check_status import check_db  #, notify_users_with_free_status
@@ -227,7 +227,13 @@ async def main():
     dp.include_router(menu_connect_vpn.router)
     dp.include_router(menu_my_keys.router)
     dp.include_router(notification_migrate_from_wg.router)
-    await notify_users_about_protocol_change(bot)
+
+    dp.include_router(app_downloaded.router)
+    dp.include_router(file_or_qr.router)
+
+    #уведомление о переходе на vless
+
+    #await notify_users_about_protocol_change(bot)
     # Запуск бота
     try:
         await dp.start_polling(bot)

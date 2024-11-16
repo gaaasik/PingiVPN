@@ -133,21 +133,27 @@ async def listen_to_redis_queue(bot: Bot):
             await asyncio.sleep(5)
 
 #обновление базы данных при успешной оплате
+# обноление базы данных при успешной оплате
 async def process_payment_message(message: str, bot: Bot):
     """Обработка сообщения из Redis с информацией о платеже."""
     try:
-
         logging.info(f"Начинаем обработку сообщения: {message}")
         data = json.loads(message)
+        logging.info(f"Распарсенные данные сообщения: {data}")
+
+        # Извлечение необходимых данных
         user_id = data.get('user_id')
         amount = data.get('amount')
         currency = data.get('currency')
         status = data.get('status')
         payment_id = data.get('payment_id')
         payment_json = data.get('payload_json')
+        logging.info(f"Данные пользователя: user_id={user_id}, amount={amount}, currency={currency}, status={status}, payment_id={payment_id}")
+
         # Проверка наличия всех необходимых данных
         if not all([user_id, amount, currency, status, payment_id]):
-            await send_admin_log(bot,f"Некорректное сообщение о платеже: {data}")
+            await send_admin_log(bot, f"Некорректное сообщение о платеже: {data}")
+            logging.error("Сообщение не содержит всех необходимых данных.")
             return
 
         await save_payment_to_db(
@@ -159,48 +165,61 @@ async def process_payment_message(message: str, bot: Bot):
             payment_method_id=payment_id,
             payment_json=payment_json
         )
-        # обноление таблицы payment
-        #await update_payment_status(payment_id, user_id, amount, currency, status)
-        await send_admin_log(bot, f"Пойман платеж от {user_id}, c статусом {status}")
+        logging.info("Платеж сохранён в базе данных.")
 
+        await send_admin_log(bot, f"Пойман платеж от {user_id}, c статусом {status}")
 
         ###############################################
         # Формирование сообщения в зависимости от статуса платежа
         if status == 'payment.succeeded':
+            logging.info(f"Платеж успешно завершён для пользователя {user_id}. Загружаем данные пользователя...")
             us = await UserCl.load_user(user_id)
 
+            # Логирование серверов пользователя
+            logging.info(f"Сервера пользователя: {us.servers}")
+            if not us.servers:
+                logging.error(f"У пользователя {user_id} нет серверов. Завершаем обработку.")
+                return
+
+            server = us.servers[0]
+            logging.info(f"Первый сервер пользователя: {server}")
+
             # Устанавливаем статус ключа на "active"
-            await us.servers[0].status_key.set("active")
+            await server.status_key.set("active")
+            logging.info(f"Статус ключа для сервера пользователя {user_id} установлен на 'active'.")
 
             # Получаем текущую дату
             current_date = datetime.now()
+            logging.info(f"Текущая дата: {current_date}")
 
             # Получаем дату окончания ключа из базы
-            date_key_off = await us.servers[0].date_key_off.get()
+            date_key_off = await server.date_key_off.get()
+            logging.info(f"Дата окончания ключа: {date_key_off}")
 
-            # Преобразуем строку в объект datetime, используя формат "DD.MM.YYYY HH:MM:SS"
+            # Преобразуем строку в объект datetime
             date_key_off = datetime.strptime(date_key_off, "%d.%m.%Y %H:%M:%S")
-            # Проверяем, истекла ли дата окончания ключа
             if date_key_off < current_date:
-                # Если дата истекла, устанавливаем новую дату на 30 дней от текущего момента
+                logging.info("Ключ истёк. Устанавливаем новую дату на 30 дней от текущей.")
                 new_expiry_date = current_date + timedelta(days=30)
             else:
-                # Если дата не истекла, добавляем 30 дней к существующей дате окончания
+                logging.info("Ключ активен. Добавляем 30 дней к текущей дате окончания.")
                 new_expiry_date = date_key_off + timedelta(days=30)
 
-            # Преобразуем новую дату обратно в строку в формате "DD.MM.YYYY HH:MM:SS"
+            # Преобразуем новую дату обратно в строку
             new_expiry_date_str = new_expiry_date.strftime("%d.%m.%Y %H:%M:%S")
+            logging.info(f"Новая дата окончания ключа: {new_expiry_date_str}")
 
             # Сохраняем новую дату окончания и обновляем статус платного ключа
-            await us.servers[0].date_key_off.set(new_expiry_date_str)
-            await us.servers[0].has_paid_key.set(1)
+            await server.date_key_off.set(new_expiry_date_str)
+            logging.info(f"Дата окончания ключа обновлена для сервера пользователя {user_id}.")
+            await server.has_paid_key.set(1)
+            logging.info(f"Статус платного ключа установлен на 1 для сервера пользователя {user_id}.")
 
             # Выполнение последующих действий после оплаты
             await handle_post_payment_actions(bot, user_id)
-
+            logging.info(f"Постоплатные действия выполнены для пользователя {user_id}.")
 
     except json.JSONDecodeError as e:
         logger.error(f"Ошибка декодирования JSON: {e}, данные: {message}")
     except Exception as e:
         logger.error(f"Ошибка при обработке сообщения о платеже: {e}")
-

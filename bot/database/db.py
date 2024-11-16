@@ -60,91 +60,91 @@ async def drop_table(database_path: str, table_name: str):
             print(f"Ошибка при удалении таблицы {table_name}: {e}")
 
 
-async def init_db(database_path: str):
-    if not os.path.exists(database_path_local):
-        print(f"Файл базы данных не найден по пути: {database_path_local}")
-    db_directory = os.path.dirname(database_path)
-    if db_directory and not os.path.exists(db_directory):
-        os.makedirs(db_directory)
-
-    conn = await aiosqlite.connect(database_path)
-
-    # Добавляем новые столбцы, если они не существуют
-    await add_device_column(conn)
-    await add_is_subscribed_column(conn)
-    await add_vpn_usage_start_date_column(conn)
-    await add_traffic_used_column(conn)
-    await add_columns_to_users_sub(conn)
-    #await calculate_days_and_update_status(conn)
-    await add_is_notification_column(conn)
-    #await get_users_with_days_since_registration()
-    await add_feedback_status_column(conn)
-    await add_ip_columns(conn)
-    await add_days_after_pay(conn)
-    await add_columns_in_db(conn, "date_payment_subscription")
-    await add_columns_in_db(conn, "date_expire_free_trial")
-    await add_columns_in_db(conn, "email")
-
-    # Создание таблицы users с новыми полями
-    await conn.execute('''
-               CREATE TABLE IF NOT EXISTS users (
-                   id INTEGER PRIMARY KEY AUTOINCREMENT,
-                   chat_id INTEGER UNIQUE,
-                   user_name TEXT,
-                   registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                   referrer_id INTEGER,  -- Поле для хранения ID пригласившего пользователя
-                   device TEXT,  -- Поле для устройства
-                   is_subscribed BOOLEAN DEFAULT 0,  -- Поле для отслеживания подписки
-                   date_payment_subscription TIMESTAMP,  -- Дата начала использования VPN
-                   traffic_used INTEGER DEFAULT 0,  -- Потраченный трафик (в мегабайтах)
-                   has_paid_subscription INTEGER NOT NULL DEFAULT 0,  -- Новое поле для оплаты подписки
-                   subscription_status TEXT DEFAULT 'new_user',  -- Новое поле для статуса подписки
-                   days_since_registration INTEGER DEFAULT 0,  -- Новое поле для количества дней с момента регистрации
-                   FOREIGN KEY(referrer_id) REFERENCES users(id)
-               )
-           ''')
-
-    # Создание остальных таблиц
-    await conn.execute('''
-        CREATE TABLE IF NOT EXISTS connections (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(user_id) REFERENCES users(id)
-        )
-    ''')
-
-    await conn.execute('''
-        CREATE TABLE IF NOT EXISTS configurations (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            file_name TEXT UNIQUE NOT NULL,
-            status TEXT DEFAULT 'free'
-        )
-    ''')
-
-    await conn.execute('''
-        CREATE TABLE IF NOT EXISTS user_questions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            chat_id INTEGER NOT NULL,
-            user_id INTEGER NOT NULL,
-            question_text TEXT NOT NULL,
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-
-    await conn.execute('''
-        CREATE TABLE IF NOT EXISTS referrals (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            referrer_id INTEGER NOT NULL,
-            referred_id INTEGER NOT NULL,
-            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(referrer_id) REFERENCES users(id),
-            FOREIGN KEY(referred_id) REFERENCES users(id)
-        )
-    ''')
-
-    await conn.commit()
-    return conn
+# async def init_db(database_path: str):
+#     if not os.path.exists(database_path_local):
+#         print(f"Файл базы данных не найден по пути: {database_path_local}")
+#     db_directory = os.path.dirname(database_path)
+#     if db_directory and not os.path.exists(db_directory):
+#         os.makedirs(db_directory)
+#
+#     conn = await aiosqlite.connect(database_path)
+#
+#     # Добавляем новые столбцы, если они не существуют
+#     await add_device_column(conn)
+#     await add_is_subscribed_column(conn)
+#     await add_vpn_usage_start_date_column(conn)
+#     await add_traffic_used_column(conn)
+#     await add_columns_to_users_sub(conn)
+#     #await calculate_days_and_update_status(conn)
+#     await add_is_notification_column(conn)
+#     #await get_users_with_days_since_registration()
+#     await add_feedback_status_column(conn)
+#     await add_ip_columns(conn)
+#     await add_days_after_pay(conn)
+#     await add_columns_in_db(conn, "date_payment_subscription")
+#     await add_columns_in_db(conn, "date_expire_free_trial")
+#     await add_columns_in_db(conn, "email")
+#
+#     # Создание таблицы users с новыми полями
+#     await conn.execute('''
+#                CREATE TABLE IF NOT EXISTS users (
+#                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+#                    chat_id INTEGER UNIQUE,
+#                    user_name TEXT,
+#                    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+#                    referrer_id INTEGER,  -- Поле для хранения ID пригласившего пользователя
+#                    device TEXT,  -- Поле для устройства
+#                    is_subscribed BOOLEAN DEFAULT 0,  -- Поле для отслеживания подписки
+#                    date_payment_subscription TIMESTAMP,  -- Дата начала использования VPN
+#                    traffic_used INTEGER DEFAULT 0,  -- Потраченный трафик (в мегабайтах)
+#                    has_paid_subscription INTEGER NOT NULL DEFAULT 0,  -- Новое поле для оплаты подписки
+#                    subscription_status TEXT DEFAULT 'new_user',  -- Новое поле для статуса подписки
+#                    days_since_registration INTEGER DEFAULT 0,  -- Новое поле для количества дней с момента регистрации
+#                    FOREIGN KEY(referrer_id) REFERENCES users(id)
+#                )
+#            ''')
+#
+#     # Создание остальных таблиц
+#     await conn.execute('''
+#         CREATE TABLE IF NOT EXISTS connections (
+#             id INTEGER PRIMARY KEY AUTOINCREMENT,
+#             user_id INTEGER,
+#             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+#             FOREIGN KEY(user_id) REFERENCES users(id)
+#         )
+#     ''')
+#
+#     await conn.execute('''
+#         CREATE TABLE IF NOT EXISTS configurations (
+#             id INTEGER PRIMARY KEY AUTOINCREMENT,
+#             file_name TEXT UNIQUE NOT NULL,
+#             status TEXT DEFAULT 'free'
+#         )
+#     ''')
+#
+#     await conn.execute('''
+#         CREATE TABLE IF NOT EXISTS user_questions (
+#             id INTEGER PRIMARY KEY AUTOINCREMENT,
+#             chat_id INTEGER NOT NULL,
+#             user_id INTEGER NOT NULL,
+#             question_text TEXT NOT NULL,
+#             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+#         )
+#     ''')
+#
+#     await conn.execute('''
+#         CREATE TABLE IF NOT EXISTS referrals (
+#             id INTEGER PRIMARY KEY AUTOINCREMENT,
+#             referrer_id INTEGER NOT NULL,
+#             referred_id INTEGER NOT NULL,
+#             timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+#             FOREIGN KEY(referrer_id) REFERENCES users(id),
+#             FOREIGN KEY(referred_id) REFERENCES users(id)
+#         )
+#     ''')
+#
+#     await conn.commit()
+#     return conn
 
 
 async def get_user_by_telegram_id(chat_id: int):
@@ -685,3 +685,4 @@ async def save_user_email_to_db(user_id: int, email: str):
             print(f"Email {email} для пользователя {user_id} успешно сохранён.")
     except Exception as e:
         print(f"Ошибка при сохранении email для пользователя {user_id}: {e}")
+
