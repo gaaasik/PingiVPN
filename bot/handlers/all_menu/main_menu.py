@@ -50,24 +50,37 @@ async def get_count_days_since_registration(us):
 
 
 async def get_user_status_text(us):
+    """
+    Проверяет статус пользователя и возвращает текст статуса.
+    """
     try:
         # Получаем количество ключей
         count_key = await us.count_key.get()
+        logger.info(f"Количество ключей: {count_key}")
 
         if count_key == 0:
             # Если ключей нет
+            logger.info("У пользователя нет ключей. Возвращаем сообщение о подключении VPN.")
             return f"Нажмите *Подключить VPN*\n"
 
         # Проверяем статус первого ключа
         status_key = await us.servers[0].status_key.get()
+        logger.info(f"Статус первого ключа: {status_key}")
+
         end_date_str = await us.servers[0].date_key_off.get_date()
+        logger.info(f"Дата окончания ключа: {end_date_str}")
 
         # Парсим строку даты в объект datetime для расчётов
-        end_date = datetime.strptime(end_date_str, "%d.%m.%Y")
+        try:
+            end_date = datetime.strptime(end_date_str, "%d.%m.%Y")
+        except ValueError as date_error:
+            logger.error(f"Ошибка преобразования строки даты {end_date_str} в объект datetime: {date_error}")
+            return "Неверный формат даты ключа. Обратитесь в поддержку."
 
         # Рассчитываем оставшиеся дни
         today = datetime.now()
         remaining_days = (end_date - today).days
+        logger.info(f"Сегодня: {today.strftime('%d.%m.%Y')}, осталось {remaining_days} дней до окончания ключа.")
 
         # Формируем текст статуса в зависимости от статуса ключа
         if status_key == "free_key":
@@ -80,10 +93,11 @@ async def get_user_status_text(us):
             return f"Ключ активен до *{end_date_str}* (осталось {remaining_days} дней)"
 
         else:
+            logger.warning(f"Неизвестный статус ключа: {status_key}")
             return "Статус ключа не распознан"
 
     except Exception as e:
-        logger.error("Ошибка при проверке статуса пользователя: %s", e)
+        logger.error("Ошибка при проверке статуса пользователя: %s", e, exc_info=True)
         return "Произошла ошибка при проверке статуса. Попробуйте позже."
 
 

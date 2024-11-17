@@ -29,7 +29,7 @@ REDIS_QUEUE = 'payment_notifications'
 # Инициализация Redis клиента
 redis_client = redis.Redis(host='217.25.91.109', port=6379, db=0)
 router = Router()
-async def save_payment_to_db(user_id, payment_id, amount, currency, status, payment_method_id, payment_json):
+async def save_payment_to_db(chat_id, payment_id, amount, currency, status, payment_method_id, payment_json):
     # Определяем московский часовой пояс
     moscow_tz = pytz.timezone("Europe/Moscow")
 
@@ -39,9 +39,9 @@ async def save_payment_to_db(user_id, payment_id, amount, currency, status, paym
 
     async with aiosqlite.connect(db_path) as db:
         await db.execute("""
-            INSERT INTO payments (user_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at, payment_json)
+            INSERT INTO payments (chat_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at, payment_json)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (user_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at, json.dumps(payment_json)))
+        """, (chat_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at, json.dumps(payment_json)))
         await db.commit()
 
 async def run_listening_redis_for_duration(bot: Bot):
@@ -142,22 +142,22 @@ async def process_payment_message(message: str, bot: Bot):
         logging.info(f"Распарсенные данные сообщения: {data}")
 
         # Извлечение необходимых данных
-        user_id = data.get('user_id')
+        chat_id = data.get('user_id')
         amount = data.get('amount')
         currency = data.get('currency')
         status = data.get('status')
         payment_id = data.get('payment_id')
         payment_json = data.get('payload_json')
-        logging.info(f"Данные пользователя: user_id={user_id}, amount={amount}, currency={currency}, status={status}, payment_id={payment_id}")
+        logging.info(f"Данные пользователя: user_id={chat_id}, amount={amount}, currency={currency}, status={status}, payment_id={payment_id}")
 
         # Проверка наличия всех необходимых данных
-        if not all([user_id, amount, currency, status, payment_id]):
+        if not all([chat_id, amount, currency, status, payment_id]):
             await send_admin_log(bot, f"Некорректное сообщение о платеже: {data}")
             logging.error("Сообщение не содержит всех необходимых данных.")
             return
 
         await save_payment_to_db(
-            user_id=user_id,
+            chat_id=chat_id,
             payment_id=payment_id,
             amount=amount,
             currency=currency,
@@ -167,18 +167,18 @@ async def process_payment_message(message: str, bot: Bot):
         )
         logging.info("Платеж сохранён в базе данных.")
 
-        await send_admin_log(bot, f"Пойман платеж от {user_id}, c статусом {status}")
+        await send_admin_log(bot, f"Пойман платеж от {chat_id}, c статусом {status}")
 
         ###############################################
         # Формирование сообщения в зависимости от статуса платежа
         if status == 'payment.succeeded':
-            logging.info(f"Платеж успешно завершён для пользователя {user_id}. Загружаем данные пользователя...")
-            us = await UserCl.load_user(user_id)
+            logging.info(f"Платеж успешно завершён для пользователя {chat_id}. Загружаем данные пользователя...")
+            us = await UserCl.load_user(chat_id)
 
             # Логирование серверов пользователя
             logging.info(f"Сервера пользователя: {us.servers}")
             if not us.servers:
-                logging.error(f"У пользователя {user_id} нет серверов. Завершаем обработку.")
+                logging.error(f"У пользователя {chat_id} нет серверов. Завершаем обработку.")
                 return
 
             server = us.servers[0]
@@ -186,7 +186,7 @@ async def process_payment_message(message: str, bot: Bot):
 
             # Устанавливаем статус ключа на "active"
             await server.status_key.set("active")
-            logging.info(f"Статус ключа для сервера пользователя {user_id} установлен на 'active'.")
+            logging.info(f"Статус ключа для сервера пользователя {chat_id} установлен на 'active'.")
 
             # Получаем текущую дату
             current_date = datetime.now()
@@ -211,13 +211,13 @@ async def process_payment_message(message: str, bot: Bot):
 
             # Сохраняем новую дату окончания и обновляем статус платного ключа
             await server.date_key_off.set(new_expiry_date_str)
-            logging.info(f"Дата окончания ключа обновлена для сервера пользователя {user_id}.")
+            logging.info(f"Дата окончания ключа обновлена для сервера пользователя {chat_id}.")
             await server.has_paid_key.set(1)
-            logging.info(f"Статус платного ключа установлен на 1 для сервера пользователя {user_id}.")
+            logging.info(f"Статус платного ключа установлен на 1 для сервера пользователя {chat_id}.")
 
             # Выполнение последующих действий после оплаты
-            await handle_post_payment_actions(bot, user_id)
-            logging.info(f"Постоплатные действия выполнены для пользователя {user_id}.")
+            await handle_post_payment_actions(bot, chat_id)
+            logging.info(f"Постоплатные действия выполнены для пользователя {chat_id}.")
 
     except json.JSONDecodeError as e:
         logger.error(f"Ошибка декодирования JSON: {e}, данные: {message}")

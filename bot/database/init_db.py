@@ -64,7 +64,7 @@ async def init_db(database_path: str):
             "payment_method_id" TEXT,
             "created_at" TEXT,
             "updated_at" TEXT,
-            "data_json" TEXT
+            "payment_json" TEXT
         );''')
 
         # Создаем или изменяем таблицу notifications
