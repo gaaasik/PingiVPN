@@ -6,6 +6,7 @@ from aiogram.types import FSInputFile
 import logging
 
 from bot.handlers.admin import send_admin_log
+from models.UserCl import UserCl
 from work_with_conf_WG.file_manager import find_user_directory
 
 from dotenv import load_dotenv
@@ -29,6 +30,7 @@ async def send_config_file(callback_query):
     """
     chat_id = callback_query.message.chat.id
     username = callback_query.from_user.username or None
+    us = await UserCl.load_user(chat_id)
 
     print(f"Отправка конфигурационного файла для пользователя с chat_id: {chat_id}, username: {username or 'unknown'}")
 
@@ -50,6 +52,8 @@ async def send_config_file(callback_query):
     if not (os.path.exists(config_file_path) and os.path.exists(qr_code_path)):
         print(f"Не все файлы существуют. Вызываем create_user_files.")
         await create_user_files(chat_id, username, callback_query.bot)
+    await us.add_key_wireguard()
+#################################################################################
 
     # Проверяем наличие конфигурационного файла после создания и отправляем его, если он существует
     if os.path.exists(config_file_path):
@@ -144,6 +148,9 @@ async def create_user_files(chat_id, username, bot):
         # Копируем файлы из base_configs в папку пользователя
         free_files = sorted([f for f in os.listdir(BASE_CONFIGS_DIR) if f.endswith('_free.conf')])
         free_images = sorted([f for f in os.listdir(BASE_CONFIGS_DIR) if f.endswith('_free.png')])
+
+
+
 
         if free_files and free_images:
             # Копирование и переименование файлов для пользователя

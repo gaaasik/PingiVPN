@@ -9,7 +9,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from bot.handlers.all_menu.main_menu import show_main_menu
 from models.UserCl import UserCl
 from bot.payments2.payments_handler_redis import create_one_time_payment
-import dns.resolver
+#import dns.resolver
 # Инициализация логирования
 logging.basicConfig(level=logging.INFO)
 
