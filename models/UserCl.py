@@ -1,7 +1,8 @@
+import logging
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 
 import aiofiles
 import aiosqlite
@@ -200,13 +201,14 @@ class UserCl:
     async def add_server_json(self, server_params: dict):
         """Добавление нового сервера в JSON формате"""
         # Преобразуем параметры в объект Server_cl и добавляем его в список servers
-        new_server = ServerCl(server_params, self)
-        self.servers.append(new_server)
+        if server_params:
+            new_server = ServerCl(server_params, self)
+            self.servers.append(new_server)
 
-        # Обновляем поле value_key (список серверов) и count_key в базе данных
-        await self._update_servers_in_db()
+            # Обновляем поле value_key (список серверов) и count_key в базе данных
+            await self._update_servers_in_db()
 
-        await self.count_key._update_count_key()
+            await self.count_key._update_count_key()
 
     async def check_subscription_channel(self, channel_username="@pingi_hub"):
         """
@@ -231,7 +233,7 @@ class UserCl:
             await self.is_subscribed_on_channel.set(0)
             return False
 
-    async def add_key_vless(self, free_day=8):
+    async def add_key_vless(self, free_day=7):
         """Создает сервер VLESS с фиксированными параметрами, используя первый доступный URL и добавляет его в список серверов пользователя."""
         # Количество бесплатных дней
         current_date = datetime.now()
@@ -248,12 +250,68 @@ class UserCl:
             return False
 
         # Параметры нового сервера VLESS
-        server_params = self._generate_server_params(current_date, url_vless, free_day)
+        server_params = self._generate_server_params_vless(current_date, url_vless, free_day)
 
         # Создание нового сервера и обновление базы данных
         await self.add_server_json(server_params)
         print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
         return True
+
+
+
+    async def add_key_wireguard(self, free_day=7):
+
+        if not await self.count_key.get():
+            config_file_path = await self.check_fild_PINGI()
+            if config_file_path:
+                server_params = await self._generate_server_params_wireguard(config_file_path, free_day)
+                await self.add_server_json(server_params)
+
+            # Создание нового сервера и обновление базы данных
+            print(f"Сервер WireGuard добавлен для пользователя с chat_id {self.chat_id}")
+
+
+    async def check_fild_PINGI(self) -> Union[str, bool]:
+        user_login = await self.user_login.get()
+        chat_id = self.chat_id
+
+        # Проверяем переменную окружения CONFIGS_DIR
+        CONFIGS_DIR = os.getenv('CONFIGS_DIR')
+        if not CONFIGS_DIR:
+            raise ValueError("CONFIGS_DIR не задана в переменных окружения.")
+
+        # Определяем путь для директории зарегистрированных пользователей
+        REGISTERED_USERS_DIR = os.path.join(CONFIGS_DIR, 'registered_user')
+        if not os.path.exists(REGISTERED_USERS_DIR):
+            os.makedirs(REGISTERED_USERS_DIR)
+            print(f"Создана директория для зарегистрированных пользователей: {REGISTERED_USERS_DIR}")
+
+        # Определяем директорию пользователя
+        folder_name = f"{chat_id}_{user_login}" if user_login else f"{chat_id}"
+        user_dir = os.path.join(REGISTERED_USERS_DIR, folder_name)
+        if not os.path.exists(user_dir):
+            os.makedirs(user_dir)
+            print(f"Создана новая папка для пользователя: {user_dir}")
+
+        # Проверяем наличие файлов конфигурации и QR-кода
+        config_file_path = os.path.join(user_dir, "PingiVPN.conf")
+        qr_code_path = os.path.join(user_dir, "PingiVPN.png")
+
+        missing_files = []
+        if not os.path.exists(config_file_path):
+            missing_files.append("PingiVPN.conf")
+        if not os.path.exists(qr_code_path):
+            missing_files.append("PingiVPN.png")
+
+        if missing_files:
+            print(f"Отсутствуют файлы: {', '.join(missing_files)} в папке {user_dir}.")
+            return False
+
+        print(f"Все необходимые файлы присутствуют в {user_dir}.")
+        return config_file_path
+
+
+
 
     async def _get_first_available_url(self, new_path, used_path):
         """Получает первый доступный URL из файла, перемещает его в использованные и возвращает URL."""
@@ -281,7 +339,9 @@ class UserCl:
             print(f"Ошибка при работе с файлами URL: {e}")
             return None
 
-    def _generate_server_params(self, current_date, url_vless, free_day):
+
+
+    def _generate_server_params_vless(self, current_date, url_vless, free_day):
         """Генерирует параметры нового сервера VLESS, извлекая информацию из URL."""
 
         # Извлечение uuid, server_ip и name_key из URL
@@ -297,25 +357,166 @@ class UserCl:
         country_server = country_match.group(1) if country_match else "Unknown"
 
         return {
-            "name_protocol": "vless",
-            "email_key": email_key,
-            "uuid_id": uuid_id,
-            "name_server": f"VLESS Server {server_ip}",
-            "name_key": f"{name_key}",
             "country_server": country_server,
-            "server_ip": server_ip,
-            "enable": True,
-            "vpn_usage_start_date": current_date.strftime("%d.%m.%Y %H:%M:%S"),
-            "traffic_up": 0,
-            "traffic_down": 0,
-            "has_paid_key": 0,
-            "status_key": "free_key",
-            "is_notification": False,
-            "date_payment_key": "",
             "date_creation_key": current_date.strftime("%d.%m.%Y %H:%M:%S"),
             "date_key_off": (current_date + timedelta(days=free_day)).strftime("%d.%m.%Y %H:%M:%S"),
-            "url_vless": url_vless
+            "date_payment_key": "0",
+            "email_key": email_key,
+            "enable": True,
+            "has_paid_key": 0,
+            "name_key": f"{name_key}",
+            "name_protocol": "vless",
+            "name_server": f"VLESS Server {server_ip}",
+            "server_ip": server_ip,
+            "status_key": "free_key",
+            "traffic_down": 0,
+            "traffic_up": 0,
+            "url_vless": url_vless,
+            "user_ip": "0",
+            "uuid_id": uuid_id,
+            "vpn_usage_start_date": current_date.strftime("%d.%m.%Y %H:%M:%S")
         }
+
+
+
+    async def _generate_server_params_wireguard(self, config_file_path: str, free_day: int):
+        """Генерирует параметры нового сервера WireGuard, извлекая информацию из конфигурационного файла."""
+        current_date = datetime.now()
+        logging.info(f"Начало работы функции _generate_server_params_wireguard. Путь к файлу: {config_file_path}")
+
+        try:
+            # Преобразуем путь в объект Path для удобной работы
+            config_file_path = Path(config_file_path)
+            logging.debug(f"Обработанный путь к конфигурационному файлу: {config_file_path}")
+
+            # Проверяем, существует ли файл
+            if not config_file_path.exists():
+                logging.error(f"Файл конфигурации не найден: {config_file_path}")
+                raise FileNotFoundError(f"Файл конфигурации не найден: {config_file_path}")
+
+            # Читаем содержимое конфигурационного файла
+            logging.info(f"Открываем файл: {config_file_path}")
+            with config_file_path.open('r', encoding='utf-8') as file:
+                lines = file.readlines()
+
+            logging.debug(f"Файл прочитан. Количество строк: {len(lines)}")
+
+            # Инициализируем переменные для данных
+            private_key = None
+            address = None
+            endpoint = None
+
+            # Парсим файл построчно
+            for line in lines:
+                line = line.strip()
+                logging.debug(f"Обработка строки: {line}")
+
+                if line.startswith("PrivateKey"):
+                    private_key = line.split("=")[1].strip()
+                    logging.info(f"Найден PrivateKey: {private_key}")
+                elif line.startswith("Address"):
+                    address = line.split("=")[1].strip()
+                    logging.info(f"Найден Address: {address}")
+                elif line.startswith("Endpoint"):
+                    endpoint = line.split("=")[1].strip()
+                    logging.info(f"Найден Endpoint: {endpoint}")
+
+            # Извлекаем server_ip из Endpoint
+            server_ip = endpoint.split(":")[0] if endpoint else None
+            user_ip = address.split("/")[0] if address else None
+
+            logging.debug(f"Извлечён server_ip: {server_ip}, user_ip: {user_ip}")
+
+            # Проверяем, что все необходимые данные извлечены
+            if not all([private_key, address, server_ip]):
+                logging.error("Некоторые данные из конфигурационного файла отсутствуют или некорректны.")
+                raise ValueError("Некоторые данные из конфигурационного файла отсутствуют или некорректны.")
+
+
+            country_server = await self.get_country_by_server_ip(server_ip)
+
+            # Генерируем JSON с параметрами сервера
+            name_key = f"WireGuard-{await self.count_key.get() + 1}"  # Например, уникальное имя ключа
+            logging.info("Генерация параметров сервера WireGuard завершена.")
+            return {
+                "country_server": country_server,
+                "date_creation_key": current_date.strftime("%d.%m.%Y %H:%M:%S"),
+                "date_key_off": (current_date + timedelta(days=free_day)).strftime("%d.%m.%Y %H:%M:%S"),
+                "date_payment_key": "0",
+                "email_key": private_key,
+                "enable": True,
+                "has_paid_key": 0,
+                "name_key": name_key,
+                "name_protocol": "wireguard",
+                "name_server": f"WireGuard Server {server_ip}",
+                "server_ip": server_ip,
+                "status_key": "free_key",
+                "traffic_down": 0,
+                "traffic_up": 0,
+                "url_vless": "0",
+                "user_ip": user_ip,
+                "uuid_id": "0",
+                "vpn_usage_start_date": current_date.strftime("%d.%m.%Y %H:%M:%S")
+            }
+
+        except FileNotFoundError as e:
+            logging.error(f"Файл не найден: {e}")
+            raise
+        except ValueError as e:
+            logging.error(f"Ошибка обработки данных: {e}")
+            raise
+        except Exception as e:
+            logging.exception(f"Непредвиденная ошибка: {e}")
+            raise
+
+    async def get_country_by_server_ip(self, server_ip: str) -> str:
+        """
+        Возвращает страну сервера по IP из файла country_server_path.
+
+        :param server_ip: IP-адрес сервера.
+        :param country_server_path: Путь к файлу country_server.txt.
+        :return: Страна сервера или "Unknown", если IP или файл не найден.
+        """
+        try:
+            # Определяем путь к файлу country_server
+            project_root = Path(__file__).resolve().parent
+            country_server_path = project_root / "country_server.txt"
+            logging.debug(f"Путь к файлу country_server: {country_server_path}")
+
+            # Проверяем, существует ли файл country_server.txt
+            if not country_server_path.exists():
+                logging.error(f"Файл country_server.txt не найден: {country_server_path}")
+                raise FileNotFoundError(f"Файл country_server.txt не найден: {country_server_path}")
+
+            # Читаем информацию о серверах из JSON файла
+            logging.info(f"Открываем файл country_server.txt: {country_server_path}")
+
+
+
+            # Загружаем данные из файла
+            with country_server_path.open("r", encoding="utf-8") as file:
+                server_data = json.load(file)
+                logging.debug(f"Содержимое файла country_server.txt: {server_data}")
+
+                # Ищем сервер по IP
+                servers = server_data.get("servers", [])
+                for server in servers:
+                    if server.get("address") == server_ip:
+                        country = server.get("country", "Unknown")
+                        logging.info(f"Найдено совпадение для IP {server_ip}. Страна: {country}")
+                        return country
+
+            # Если IP не найден
+            logging.warning(f"IP-адрес {server_ip} не найден в файле {country_server_path}.")
+            return "Unknown"
+
+        except json.JSONDecodeError:
+            logging.error(f"Ошибка декодирования JSON в файле {country_server_path}.")
+            return "Unknown"
+        except Exception as e:
+            logging.error(f"Неожиданная ошибка при обработке файла {country_server_path}: {e}")
+            return "Unknown"
+
 
     async def _load_user_data(self):
         async with aiosqlite.connect(database_path_local) as db:

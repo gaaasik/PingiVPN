@@ -4,6 +4,13 @@ from datetime import datetime
 
 import aioredis
 import paramiko
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.UserCl import UserCl  # Только для аннотаций типов
+
+
 #from fastapi import requests
 
 
@@ -11,7 +18,7 @@ class Field:
     def __init__(self, name, value, server: 'ServerCl'):
         self._name = name  # Приватное название поля
         self._value = value  # Приватное значение поля
-        self._server = server  # Ссылка на объект Server_cl
+        self._server: ServerCl = server  # Ссылка на объект Server_cl
 
 
     # Публичный метод для получения значения
@@ -55,6 +62,9 @@ class Field:
         # Проверка, что метод вызывается только для поля 'country_server'
         if self._name != "country_server":
             raise AttributeError("Метод get_country доступен только для поля 'country_server'.")
+        if self._value == "Unknown":
+            self._value = await self._server.user.get_country_by_server_ip(await self._server.server_ip.get())
+
 
         # Словарь переводов стран
         COUNTRY_TRANSLATIONS = {
@@ -65,7 +75,8 @@ class Field:
             "Russia": "🇷🇺 Россия",
             "China": "🇨🇳 Китай",
             "Japan": "🇯🇵 Япония",
-            "Poland": "🇵🇱 Польша"
+            "Poland": "🇵🇱 Польша",
+            "Unknown": "🇳🇱 Нидерланды"
             # Добавьте другие страны, если нужно
         }
 
@@ -102,27 +113,28 @@ class Field:
 
 
 class ServerCl:
-    def __init__(self, server_data: dict, user):
-        self.enable = Field('enable', server_data.get("enable", None), self)
+    def __init__(self, server_data: dict, user: "UserCl"):
+
 
         # Инициализация всех полей, переданных в JSON
+        self.country_server = Field('country_server', server_data.get("country_server", ""), self)
+        self.date_creation_key = Field('date_creation_key', server_data.get("date_creation_key", ""), self)
+        self.date_key_off = Field('date_key_off', server_data.get("date_key_off", ""), self)
+        self.date_payment_key = Field('date_payment_key', server_data.get("date_payment_key", ""), self)
+        self.email_key = Field('email_key', server_data.get("email_key", ""), self)
+        self.enable = Field('enable', server_data.get("enable", None), self)
+        self.has_paid_key = Field('has_paid_key', server_data.get("has_paid_key", 1), self)
+        self.name_key = Field('name_key', server_data.get("name_key", ""), self)
         self.name_protocol = Field('name_protocol', server_data.get("name_protocol", ""), self)
         self.name_server = Field('name_server', server_data.get("name_server", ""), self)
-        self.name_key = Field('name_key', server_data.get("name_key", ""), self)
-        self.uuid_id = Field('uuid_id', server_data.get("uuid_id", ""), self)
-        self.email_key = Field('email_key', server_data.get("email_key", ""), self)
-        self.country_server = Field('country_server', server_data.get("country_server", ""), self)
         self.server_ip = Field('server_ip', server_data.get("server_ip", ""), self)
-        self.user_ip = Field('user_ip', server_data.get("user_ip", ""), self)
-        self.vpn_usage_start_date = Field('vpn_usage_start_date', server_data.get("vpn_usage_start_date", ""), self)
-        self.traffic_up = Field('traffic_up', server_data.get("traffic_up", 0), self)
-        self.traffic_down = Field('traffic_down', server_data.get("traffic_down", 0), self)
-        self.has_paid_key = Field('has_paid_key', server_data.get("has_paid_key", 1), self)
         self.status_key = Field('status_key', server_data.get("status_key", 'new_user'), self)
-        self.date_payment_key = Field('date_payment_key', server_data.get("date_payment_key", ""), self)
-        self.date_key_off = Field('date_key_off', server_data.get("date_key_off", ""), self)
-        self.date_creation_key = Field('date_creation_key', server_data.get("date_creation_key", ""), self)
+        self.traffic_down = Field('traffic_down', server_data.get("traffic_down", 0), self)
+        self.traffic_up = Field('traffic_up', server_data.get("traffic_up", 0), self)
         self.url_vless = Field('url_vless', server_data.get("url_vless", ""), self)
+        self.user_ip = Field('user_ip', server_data.get("user_ip", ""), self)
+        self.uuid_id = Field('uuid_id', server_data.get("uuid_id", ""), self)
+        self.vpn_usage_start_date = Field('vpn_usage_start_date', server_data.get("vpn_usage_start_date", ""), self)
         self.user = user  # Ссылка на объект User для обновления данных в базе
 
     async def update_in_db(self):
@@ -132,24 +144,25 @@ class ServerCl:
     async def to_dict(self):
         """Преобразуем объект сервера в JSON."""
         return {
-            "name_protocol": await self.name_protocol.get(),
-            "email_key": await self.email_key.get(),
-            "name_key": await self.name_key.get(),
-            "uuid_id": await self.uuid_id.get(),
-            "name_server": await self.name_server.get(),
+
             "country_server": await self.country_server.get(),
-            "server_ip": await self.server_ip.get(),
-            "user_ip": await self.user_ip.get(),
-            "enable": await self.enable.get(),
-            "vpn_usage_start_date": await self.vpn_usage_start_date.get(),
-            "traffic_up": await self.traffic_up.get(),
-            "traffic_down": await self.traffic_down.get(),
-            "has_paid_key": await self.has_paid_key.get(),
-            "status_key": await self.status_key.get(),
-            "date_payment_key": await self.date_payment_key.get(),
-            "date_key_off": await self.date_key_off.get(),
             "date_creation_key": await self.date_creation_key.get(),
-            "url_vless": await self.url_vless.get()
+            "date_key_off": await self.date_key_off.get(),
+            "date_payment_key": await self.date_payment_key.get(),
+            "email_key": await self.email_key.get(),
+            "enable": await self.enable.get(),
+            "has_paid_key": await self.has_paid_key.get(),
+            "name_key": await self.name_key.get(),
+            "name_protocol": await self.name_protocol.get(),
+            "name_server": await self.name_server.get(),
+            "server_ip": await self.server_ip.get(),
+            "status_key": await self.status_key.get(),
+            "traffic_down": await self.traffic_down.get(),
+            "traffic_up": await self.traffic_up.get(),
+            "url_vless": await self.url_vless.get(),
+            "user_ip": await self.user_ip.get(),
+            "uuid_id": await self.uuid_id.get(),
+            "vpn_usage_start_date": await self.vpn_usage_start_date.get()
         }
 
 

@@ -114,3 +114,5 @@ async def cmd_start(message: types.Message):
     sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard(), parse_mode="Markdown")
 
     await register_message_type(chat_id, sent_message.message_id, "start", bot)
+
+
