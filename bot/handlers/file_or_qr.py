@@ -2,8 +2,9 @@
 import os
 
 from aiogram import Router
-from aiogram.types import CallbackQuery, InlineKeyboardMarkup
+from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from dotenv import load_dotenv
+
 
 from bot.handlers.cleanup import store_important_message
 from bot.keyboards.inline import get_detailed_instruction_button, get_file_button, \
@@ -29,7 +30,7 @@ async def handle_get_file(callback_query: CallbackQuery):
         "Загрузите конфигурацию в приложение WireGuard 📂",
         reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [get_detailed_instruction_button()],
-            [get_qr_code_button()]
+            [get_qr_code_button()], [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
         ])
     )
 
@@ -50,7 +51,8 @@ async def handle_get_qr_code(callback_query: CallbackQuery):
         "Откройте QR-код на другом устройстве и отсканируйте его в приложении 📱",
         reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [get_detailed_instruction_button()],
-            [get_file_button()]
+            [get_file_button()],
+            [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
         ])
     )
 

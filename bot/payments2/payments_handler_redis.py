@@ -189,7 +189,7 @@ async def process_payment_message(message: str, bot: Bot):
             logging.info(f"Статус ключа для сервера пользователя {chat_id} установлен на 'active'.")
 
             # Получаем текущую дату
-            current_date = datetime.now()
+            current_date = datetime.strptime(datetime.now().strftime("%d.%m.%Y %H:%M:%S"), "%d.%m.%Y %H:%M:%S")
             logging.info(f"Текущая дата: {current_date}")
 
             # Получаем дату окончания ключа из базы
@@ -210,9 +210,12 @@ async def process_payment_message(message: str, bot: Bot):
             logging.info(f"Новая дата окончания ключа: {new_expiry_date_str}")
 
             # Сохраняем новую дату окончания и обновляем статус платного ключа
+            await server.date_payment_key.set(str(current_date))
             await server.date_key_off.set(new_expiry_date_str)
             logging.info(f"Дата окончания ключа обновлена для сервера пользователя {chat_id}.")
-            await server.has_paid_key.set(1)
+            # Увеличиваем значение has_paid_key на 1
+            current_value = int(await server.has_paid_key.get())
+            await server.has_paid_key.set(current_value + 1)
             logging.info(f"Статус платного ключа установлен на 1 для сервера пользователя {chat_id}.")
 
             # Выполнение последующих действий после оплаты
