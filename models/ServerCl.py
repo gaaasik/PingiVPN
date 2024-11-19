@@ -62,8 +62,11 @@ class Field:
         # Проверка, что метод вызывается только для поля 'country_server'
         if self._name != "country_server":
             raise AttributeError("Метод get_country доступен только для поля 'country_server'.")
+
+        #проверяем, если страна неизвестна, смотри ее в списке серверов country_server
         if self._value == "Unknown":
-            self._value = await self._server.user.get_country_by_server_ip(await self._server.server_ip.get())
+            country = await self._server.user.get_country_by_server_ip(await self._server.server_ip.get())
+            await self._server.country_server.set(country)
 
 
         # Словарь переводов стран
@@ -84,6 +87,7 @@ class Field:
         country = self._value
         return COUNTRY_TRANSLATIONS.get(country, "Неизвестная страна")
 
+
     async def set_enable(self, enable_value: bool):
         """Обновляет значение enable и добавляет задачу на отправку в Redis."""
         if self._name != "enable":
@@ -94,16 +98,28 @@ class Field:
         await self._set(enable_value)
 
         # Получаем uuid из объекта сервера
+        name_protocol = await self._server.name_protocol.get()
         uuid_value = await self._server.uuid_id.get()
         server_ip = await self._server.server_ip.get()
-        # Формируем данные для отправки
-        task_data = {
-            "server_ip": server_ip,
-            "id": uuid_value,
-            "enable": enable_value
-        }
+        user_ip = await self._server.user_ip.get()
+        if name_protocol == "wireguard":
+            # Формируем данные для отправки
+            task_data = {
+                "name_protocol": name_protocol,
+                "server_ip": server_ip,
+                "user_ip": user_ip,
+                "enable": enable_value
+            }
+        else:
+            # Формируем данные для отправки
+            task_data = {
+                "name_protocol": name_protocol,
+                "server_ip": server_ip,
+                "id": uuid_value,
+                "enable": enable_value
+            }
 
-        # Подключаемся к Redis и добавляем задачу в очередь
+        # Подключаемся к Redis и добавляем задачу в очередьs
         redis = aioredis.from_url("redis://localhost:6379", db=1)
         try:
             await redis.rpush("send_3x_ui", json.dumps(task_data))

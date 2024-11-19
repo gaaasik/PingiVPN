@@ -41,7 +41,6 @@ class Field:
                     if result and result[0]:
                         # Загружаем JSON данных серверов из поля value_key
                         servers_data = json.loads(result[0])
-                        print("test test servers data",servers_data)
                         # Подсчитываем количество серверов
                         new_value = len(servers_data) if isinstance(servers_data, list) else 0
                     else:

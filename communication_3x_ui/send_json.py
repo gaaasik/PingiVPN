@@ -114,7 +114,8 @@ async def process_task_queue():
                             await asyncio.sleep(RETRY_INTERVAL_SHORT)
 
                     else:
-                        # Если сервер недоступен, увеличиваем интервал проверки
+                        # Если сервер недост
+                        # упен, увеличиваем интервал проверки
                         if retries < MAX_RETRIES:
                             retries += 1
                             logger.warning(
