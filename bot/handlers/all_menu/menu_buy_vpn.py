@@ -2,6 +2,7 @@
 from aiogram import Router
 from aiogram.types import CallbackQuery
 
+from bot.handlers.all_menu.main_menu import get_user_status_text
 from models.UserCl import UserCl
 
 # Инициализация роутера
@@ -76,7 +77,7 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
             active_end_date = await us.servers[0].date_key_off.get_date()  # Обрезаем до 'ГГГГ-ММ-ДД'
             text = (
                 f"Ваш ключ: {key_name}\n"
-                f"Cтатус: *активен*\n"
+                f"Cтатус: {await get_user_status_text(us)}\n"
                 f"Ключ активен до: *{active_end_date}*\n\n"
                 "При оплате вы продлите срок активного ключа еще на *30 дней*"
             )

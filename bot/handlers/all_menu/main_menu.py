@@ -90,7 +90,15 @@ async def get_user_status_text(us):
             return "*Ключ заблокирован*"
 
         elif status_key == "active":
-            return f"Ключ активен до *{end_date_str}* (осталось {remaining_days} дней)"
+            expiration_text = ""
+            if remaining_days > 2:
+                expiration_text = f"Ключ активен до *{end_date_str}* (осталось {remaining_days} дней)"
+            elif remaining_days >= 0 and remaining_days < 3:
+                expiration_text = f"Ключ активен до *{end_date_str}* (осталось {remaining_days} дней)"
+            elif remaining_days < 0:
+                expiration_text = f"*Требуется оплата*"
+            return expiration_text
+
 
         else:
             logger.warning(f"Неизвестный статус ключа: {status_key}")
@@ -151,6 +159,7 @@ async def handle_main_menu(event: types.Message | types.CallbackQuery):
 
     # Отображение главного меню
     await show_main_menu(chat_id, bot)
+
 
 # Обработчик для кнопки "Супер!"
 @router.callback_query(lambda c: c.data == "super")
