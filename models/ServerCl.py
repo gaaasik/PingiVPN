@@ -4,6 +4,13 @@ from datetime import datetime
 
 import aioredis
 import paramiko
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.UserCl import UserCl  # Только для аннотаций типов
+
+
 #from fastapi import requests
 
 
@@ -11,7 +18,7 @@ class Field:
     def __init__(self, name, value, server: 'ServerCl'):
         self._name = name  # Приватное название поля
         self._value = value  # Приватное значение поля
-        self._server = server  # Ссылка на объект Server_cl
+        self._server: ServerCl = server  # Ссылка на объект Server_cl
 
 
     # Публичный метод для получения значения
@@ -55,6 +62,9 @@ class Field:
         # Проверка, что метод вызывается только для поля 'country_server'
         if self._name != "country_server":
             raise AttributeError("Метод get_country доступен только для поля 'country_server'.")
+        if self._value == "Unknown":
+            self._value = await self._server.user.get_country_by_server_ip(await self._server.server_ip.get())
+
 
         # Словарь переводов стран
         COUNTRY_TRANSLATIONS = {
@@ -65,7 +75,8 @@ class Field:
             "Russia": "🇷🇺 Россия",
             "China": "🇨🇳 Китай",
             "Japan": "🇯🇵 Япония",
-            "Poland": "🇵🇱 Польша"
+            "Poland": "🇵🇱 Польша",
+            "Unknown": "🇳🇱 Нидерланды"
             # Добавьте другие страны, если нужно
         }
 
@@ -102,7 +113,7 @@ class Field:
 
 
 class ServerCl:
-    def __init__(self, server_data: dict, user):
+    def __init__(self, server_data: dict, user: "UserCl"):
 
 
         # Инициализация всех полей, переданных в JSON

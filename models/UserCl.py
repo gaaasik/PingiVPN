@@ -432,20 +432,8 @@ class UserCl:
                 logging.error("Некоторые данные из конфигурационного файла отсутствуют или некорректны.")
                 raise ValueError("Некоторые данные из конфигурационного файла отсутствуют или некорректны.")
 
-            # Определяем путь к файлу country_server
-            project_root = Path(__file__).resolve().parent
-            country_server_path = project_root / "country_server.txt"
-            logging.debug(f"Путь к файлу country_server: {country_server_path}")
 
-            # Проверяем, существует ли файл country_server.txt
-            if not country_server_path.exists():
-                logging.error(f"Файл country_server.txt не найден: {country_server_path}")
-                raise FileNotFoundError(f"Файл country_server.txt не найден: {country_server_path}")
-
-            # Читаем информацию о серверах из JSON файла
-            logging.info(f"Открываем файл country_server.txt: {country_server_path}")
-            country_server = await self._get_country_by_server_ip(server_ip, country_server_path)
-
+            country_server = await self.get_country_by_server_ip(server_ip)
 
             # Генерируем JSON с параметрами сервера
             name_key = f"WireGuard-{await self.count_key.get() + 1}"  # Например, уникальное имя ключа
@@ -481,7 +469,7 @@ class UserCl:
             logging.exception(f"Непредвиденная ошибка: {e}")
             raise
 
-    async def _get_country_by_server_ip(self, server_ip: str, country_server_path: Path) -> str:
+    async def get_country_by_server_ip(self, server_ip: str) -> str:
         """
         Возвращает страну сервера по IP из файла country_server_path.
 
@@ -490,10 +478,20 @@ class UserCl:
         :return: Страна сервера или "Unknown", если IP или файл не найден.
         """
         try:
-            # Проверяем существование файла
+            # Определяем путь к файлу country_server
+            project_root = Path(__file__).resolve().parent
+            country_server_path = project_root / "country_server.txt"
+            logging.debug(f"Путь к файлу country_server: {country_server_path}")
+
+            # Проверяем, существует ли файл country_server.txt
             if not country_server_path.exists():
-                logging.warning(f"Файл {country_server_path} не найден.")
-                return "Unknown"
+                logging.error(f"Файл country_server.txt не найден: {country_server_path}")
+                raise FileNotFoundError(f"Файл country_server.txt не найден: {country_server_path}")
+
+            # Читаем информацию о серверах из JSON файла
+            logging.info(f"Открываем файл country_server.txt: {country_server_path}")
+
+
 
             # Загружаем данные из файла
             with country_server_path.open("r", encoding="utf-8") as file:
