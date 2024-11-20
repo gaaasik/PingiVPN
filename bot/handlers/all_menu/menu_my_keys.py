@@ -41,7 +41,7 @@ async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
     """
     count_key = await us.count_key.get()
     await us.servers[0].name_protocol.get()
-    if count_key == 0:
+    if count_key == 0 or not us.servers:
         # Если у пользователя нет ключей
         text = (
             "<b>У вас нет ключей для оплаты.</b>\n"
