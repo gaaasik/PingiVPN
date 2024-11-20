@@ -160,9 +160,11 @@ async def periodic_task_24_hour(bot: Bot):
 async def notify_users_about_protocol_change(bot: Bot):
     all_chat_id = await UserCl.get_all_users()
     for chat_id in all_chat_id:
+
         await send_initial_update_notification(chat_id, bot)
-        await asyncio.sleep(1)  # Можно добавить задержку между уведомлениями для снижения нагрузки
-        await send_choice_notification(chat_id, bot)
+        await asyncio.sleep(3)  # Можно добавить задержку между уведомлениями для снижения нагрузки
+
+        #await send_choice_notification(chat_id, bot)
 
 
 async def main():
@@ -233,10 +235,11 @@ async def main():
 
     #уведомление о переходе на vless
 
-    #await notify_users_about_protocol_change(bot)
+    await notify_users_about_protocol_change(bot)
     # Запуск бота
     try:
         await dp.start_polling(bot)
+
     except Exception as e:
         logging.exception(f"Произошла ошибка: {e}")
     except KeyboardInterrupt:

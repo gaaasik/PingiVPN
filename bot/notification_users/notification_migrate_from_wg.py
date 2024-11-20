@@ -14,31 +14,59 @@ from bot.payments2.payments_handler_redis import db_path
 
 logger = logging.getLogger(__name__)
 router = Router()
+
+
 # Основное уведомление с reply-клавиатурой
 async def send_initial_update_notification(chat_id: int, bot: Bot):
     """
-    Отправляет первое уведомление об обновлении с reply-клавиатурой.
+    Отправляет уведомление для одного пользователя о новом меню.
     """
     try:
-        # Формируем текст для основного уведомления
-        text = (
-            "🚨 *У нас обновление!* 🚨\n\n"
-            "Теперь доступен новый протокол *VLESS* с улучшенными характеристиками скорости и защиты.\n\n"
-            "⚙️ *Высокая скорость*\n"
-            "🛡️ *Защита и анонимность*\n"
-            "📈 *Стабильность*\n"
-            "📲 Переходите на новый протокол для максимального удобства и надежности!"
-        )
+        # Подключаемся к базе данных
+        async with aiosqlite.connect(db_path) as db:
+            # Проверяем, было ли уведомление отправлено
+            async with db.execute(
+                    "SELECT notification_data FROM notifications WHERE chat_id = ?", (chat_id,)
+            ) as cursor:
+                row = await cursor.fetchone()
 
-        # Отправляем сообщение с reply-клавиатурой
-        await bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_keyboard_main_menu, parse_mode="Markdown")
+            # Обрабатываем JSON из базы данных
+            if row:
+                try:
+                    notification_data = json.loads(row[0]) if row[0] else {}
+                except json.JSONDecodeError:
+                    logger.warning(f"Некорректные данные JSON для пользователя {chat_id}, сбрасываем на пустой объект.")
+                    notification_data = {}
 
-        # Логируем это уведомление
-        await log_notification(chat_id, "transition_to_vless", "sent")
-        logger.info(f"Основное уведомление об обновлении отправлено пользователю {chat_id}")
+                # Проверяем наличие уведомления "update_menu"
+                if "update_menu" in notification_data:
+                    logger.info(f"Пользователь {chat_id} уже уведомлён. Пропускаем.")
+                    return
+            else:
+                notification_data = {}
+
+            # Текст уведомления
+            text = (
+                "Привет!\n"
+                "У нас вышло новое меню \n"
+                "Если у вас возникнут ошибки или не работает подключение напишите нам @pingi_help\n"
+                "Будем рады помочь!"
+            )
+
+            # Отправляем сообщение с reply-клавиатурой
+            await bot.send_message(
+                chat_id=chat_id,
+                text=text,
+                reply_markup=reply_keyboard_main_menu,
+
+            )
+
+            # Логируем это уведомление
+            await log_notification(chat_id, "update_menu", "sent")
+            logger.info(f"Уведомление отправлено пользователю {chat_id}")
 
     except Exception as e:
-        logger.error(f"Ошибка при отправке основного уведомления: {e}")
+        logger.error(f"Ошибка при отправке уведомления пользователю {chat_id}: {e}")
 
 
 # Второе уведомление с inline-кнопками
@@ -69,30 +97,62 @@ async def send_choice_notification(chat_id: int, bot: Bot):
     except Exception as e:
         logger.error(f"Ошибка при отправке уведомления с выбором: {e}")
 
-
 # Функция для записи нового уведомления в JSON-структуру
 async def log_notification(chat_id: int, notification_type: str, status: str = "sent"):
-    async with aiosqlite.connect(db_path) as db:
-        # Получаем текущие данные для chat_id
-        async with db.execute("SELECT notification_data FROM notifications WHERE chat_id = ?", (chat_id,)) as cursor:
-            result = await cursor.fetchone()
-            notification_data = json.loads(result[0]) if result else {}
+    """
+    Логирует отправку уведомления в JSON-структуру таблицы notifications.
+    """
+    try:
+        async with aiosqlite.connect(db_path) as db:
+            # Логируем начало работы с пользователем
+            logger.info(f"Начинаем обработку уведомления для пользователя {chat_id}. Тип: {notification_type}, Статус: {status}")
 
-        # Обновляем JSON с новым уведомлением
-        notification_data[notification_type] = {
-            "status": status,
-            "sent_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        }
+            # Получаем текущие данные для chat_id
+            async with db.execute(
+                "SELECT notification_data FROM notifications WHERE chat_id = ?", (chat_id,)
+            ) as cursor:
+                result = await cursor.fetchone()
+                logger.info(f"Результат запроса из базы для {chat_id}: {result}")
 
-        # Записываем обновленное значение JSON обратно в базу
-        if result:
-            await db.execute("UPDATE notifications SET notification_data = ? WHERE chat_id = ?",
-                             (json.dumps(notification_data), chat_id))
-        else:
-            await db.execute("INSERT INTO notifications (chat_id, notification_data) VALUES (?, ?)",
-                             (chat_id, json.dumps(notification_data)))
+            # Обрабатываем JSON из базы данных
+            if result:
+                try:
+                    notification_data = json.loads(result[0]) if result[0] else {}
+                    logger.info(f"Успешно загружен JSON для пользователя {chat_id}: {notification_data}")
+                except json.JSONDecodeError:
+                    logger.warning(f"Некорректные данные JSON для пользователя {chat_id}. Заменяем на пустой объект.")
+                    notification_data = {}
+            else:
+                notification_data = {}
+                logger.info(f"Для пользователя {chat_id} записи не найдено. Инициализируем новый JSON.")
 
-        await db.commit()
+            # Обновляем JSON с новым уведомлением
+            notification_data[notification_type] = {
+                "status": status,
+                "sent_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }
+            logger.info(f"Обновлён JSON для пользователя {chat_id}: {notification_data}")
+
+            # Записываем обновленное значение JSON обратно в базу
+            if result:
+                await db.execute(
+                    "UPDATE notifications SET notification_data = ? WHERE chat_id = ?",
+                    (json.dumps(notification_data), chat_id),
+                )
+                logger.info(f"Обновлена запись в базе для пользователя {chat_id}.")
+            else:
+                await db.execute(
+                    "INSERT INTO notifications (chat_id, notification_data) VALUES (?, ?)",
+                    (chat_id, json.dumps(notification_data)),
+                )
+                logger.info(f"Создана новая запись в базе для пользователя {chat_id}.")
+
+            await db.commit()
+            logger.info(f"Успешно завершена обработка уведомления для пользователя {chat_id}.")
+
+    except Exception as e:
+        logger.error(f"Ошибка при логировании уведомления для пользователя {chat_id}: {e}")
+
 
 async def increment_stay_on_wg_click(chat_id: int):
     """Функция увеличивает счетчик нажатий на 'Остаться на WireGuard' для пользователя."""
@@ -120,12 +180,17 @@ async def increment_stay_on_wg_click(chat_id: int):
                              (chat_id, json.dumps(notification_data)))
 
         await db.commit()
+
+
 async def get_stay_on_wg_count():
     """Получает общее количество пользователей, которые нажали 'Остаться на WireGuard'."""
     async with aiosqlite.connect(db_path) as db:
         async with db.execute("SELECT notification_data FROM notifications") as cursor:
             results = await cursor.fetchall()
-            return sum(1 for row in results if json.loads(row[0]).get("stay_on_wg_clicked", {}).get("status") == "clicked")
+            return sum(
+                1 for row in results if json.loads(row[0]).get("stay_on_wg_clicked", {}).get("status") == "clicked")
+
+
 # Обработчик для inline-кнопок выбора
 @router.callback_query(lambda c: c.data in ["stay_on_wg"])
 async def handle_choice_callback(callback_query: types.CallbackQuery):
@@ -149,5 +214,6 @@ async def handle_choice_callback(callback_query: types.CallbackQuery):
     )
 
     # Отправляем предупреждение и вторую inline-клавиатуру
-    await bot.send_message(chat_id=chat_id, text=warning_text, reply_markup=second_choice_keyboard, parse_mode="Markdown")
+    await bot.send_message(chat_id=chat_id, text=warning_text, reply_markup=second_choice_keyboard,
+                           parse_mode="Markdown")
     await callback_query.answer()
