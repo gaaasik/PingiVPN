@@ -51,6 +51,7 @@ async def run_listening_redis_for_duration(bot: Bot):
         # Запускаем задачу прослушивания
         listen_task = asyncio.create_task(listen_to_redis_queue(bot))
 
+
     except asyncio.CancelledError:
         logging.info("Задача прослушивания была отменена.")
         await send_admin_log(bot, "Warning - очредь редис заверешиоа работу")
@@ -121,6 +122,7 @@ async def listen_to_redis_queue(bot: Bot):
                 await process_payment_message(json.dumps(task), bot)
             else:
                 pass
+            await asyncio.sleep(3)    #logging.info("Очередь Redis пуста, ждем следующую задачу")
                 #logging.info("Очередь Redis пуста, ждем следующую задачу")
 
             await asyncio.sleep(3)
