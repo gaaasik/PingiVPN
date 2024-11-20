@@ -158,13 +158,25 @@ async def periodic_task_24_hour(bot: Bot):
 
 
 async def notify_users_about_protocol_change(bot: Bot):
+    errors = {}
     all_chat_id = await UserCl.get_all_users()
-    for chat_id in all_chat_id:
+    # Размер батча (количество пользователей в одном чанке)
+    batch_size = 50
 
-        await send_initial_update_notification(chat_id, bot)
-        await asyncio.sleep(3)  # Можно добавить задержку между уведомлениями для снижения нагрузки
+    # Функция для разделения списка пользователей на чанки
+    def chunk_list(lst, size):
+        for i in range(0, len(lst), size):
+            yield lst[i:i + size]
 
-        #await send_choice_notification(chat_id, bot)
+    # Обрабатываем чанки пользователей
+    for chunk in chunk_list(all_chat_id, batch_size):
+        # Отправляем уведомления всем пользователям в текущем чанке одновременно
+        await asyncio.gather(*[send_initial_update_notification(chat_id, bot, errors) for chat_id in chunk])
+
+    # Логируем количество ошибок после обработки батча
+    await send_admin_log(bot, f"При уведомлении возникло {len(errors)} ошибок на текущий момент.")
+
+
 
 
 async def main():

@@ -15,18 +15,18 @@ from bot.payments2.payments_handler_redis import db_path
 logger = logging.getLogger(__name__)
 router = Router()
 
-
 # Основное уведомление с reply-клавиатурой
-async def send_initial_update_notification(chat_id: int, bot: Bot):
+async def send_initial_update_notification(chat_id: int, bot: Bot, errors: dict):
     """
     Отправляет уведомление для одного пользователя о новом меню.
+    Если сообщение не отправлено, ошибка записывается в JSON и добавляется в отчёт.
     """
     try:
         # Подключаемся к базе данных
         async with aiosqlite.connect(db_path) as db:
             # Проверяем, было ли уведомление отправлено
             async with db.execute(
-                    "SELECT notification_data FROM notifications WHERE chat_id = ?", (chat_id,)
+                "SELECT notification_data FROM notifications WHERE chat_id = ?", (chat_id,)
             ) as cursor:
                 row = await cursor.fetchone()
 
@@ -47,10 +47,10 @@ async def send_initial_update_notification(chat_id: int, bot: Bot):
 
             # Текст уведомления
             text = (
-                "Привет!\n"
-                "У нас вышло новое меню \n"
-                "Если у вас возникнут ошибки или не работает подключение напишите нам @pingi_help\n"
-                "Будем рады помочь!"
+                "Привет! 🐧\n"
+                "🚀 Мы обновили меню для вашего удобства.\n\n"
+                "Если что-то не работает или появились вопросы, обращайтесь: @pingi_help.\n"
+                "💡 Мы на связи, чтобы решить любые проблемы!"
             )
 
             # Отправляем сообщение с reply-клавиатурой
@@ -58,7 +58,6 @@ async def send_initial_update_notification(chat_id: int, bot: Bot):
                 chat_id=chat_id,
                 text=text,
                 reply_markup=reply_keyboard_main_menu,
-
             )
 
             # Логируем это уведомление
@@ -66,7 +65,51 @@ async def send_initial_update_notification(chat_id: int, bot: Bot):
             logger.info(f"Уведомление отправлено пользователю {chat_id}")
 
     except Exception as e:
-        logger.error(f"Ошибка при отправке уведомления пользователю {chat_id}: {e}")
+        # Обработка ошибок
+        error_message = str(e)
+        logger.error(f"Ошибка при отправке уведомления пользователю {chat_id}: {error_message}")
+
+        # Сохраняем ошибку в notification_data
+        try:
+            async with aiosqlite.connect(db_path) as db:
+                async with db.execute(
+                    "SELECT notification_data FROM notifications WHERE chat_id = ?", (chat_id,)
+                ) as cursor:
+                    row = await cursor.fetchone()
+
+                if row:
+                    try:
+                        notification_data = json.loads(row[0]) if row[0] else {}
+                    except json.JSONDecodeError:
+                        notification_data = {}
+
+                # Обновляем статус ошибки в JSON
+                notification_data["update_menu"] = {
+                    "status": "error",
+                    "error": error_message,
+                    "attempted_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                }
+
+                # Обновляем или создаём запись в базе
+                if row:
+                    await db.execute(
+                        "UPDATE notifications SET notification_data = ? WHERE chat_id = ?",
+                        (json.dumps(notification_data), chat_id),
+                    )
+                else:
+                    await db.execute(
+                        "INSERT INTO notifications (chat_id, notification_data) VALUES (?, ?)",
+                        (chat_id, json.dumps(notification_data)),
+                    )
+
+                await db.commit()
+
+        except Exception as db_error:
+            logger.error(f"Ошибка при записи ошибки для пользователя {chat_id}: {db_error}")
+
+        # Добавляем в отчёт для администратора
+        errors[chat_id] = error_message
+
 
 
 # Второе уведомление с inline-кнопками
