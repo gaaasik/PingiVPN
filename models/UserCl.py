@@ -448,7 +448,7 @@ class UserCl:
                 "has_paid_key": 0,
                 "name_key": name_key,
                 "name_protocol": "wireguard",
-                "name_server": f"WireGuard Server {server_ip}",
+                "name_server": f"WireGuard Server PingiVPN",
                 "server_ip": server_ip,
                 "status_key": "free_key",
                 "traffic_down": 0,

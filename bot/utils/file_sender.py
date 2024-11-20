@@ -30,7 +30,7 @@ async def send_config_file(callback_query):
     """
     chat_id = callback_query.message.chat.id
     username = callback_query.from_user.username or None
-    us = await UserCl.load_user(chat_id)
+
 
     print(f"Отправка конфигурационного файла для пользователя с chat_id: {chat_id}, username: {username or 'unknown'}")
 
@@ -52,7 +52,7 @@ async def send_config_file(callback_query):
     if not (os.path.exists(config_file_path) and os.path.exists(qr_code_path)):
         print(f"Не все файлы существуют. Вызываем create_user_files.")
         await create_user_files(chat_id, username, callback_query.bot)
-    await us.add_key_wireguard()
+
 #################################################################################
 
     # Проверяем наличие конфигурационного файла после создания и отправляем его, если он существует
@@ -115,6 +115,7 @@ async def send_qr_code(callback_query):
         print(f"Не все файлы существуют. Вызываем create_user_files.")
         await create_user_files(chat_id, username, callback_query.bot)
 
+
     # Проверяем наличие QR-кода после создания и отправляем его, если он существует
     if os.path.exists(qr_code_path):
         print(f"Файл {qr_code_path} найден. Отправляем QR-код пользователю.")
@@ -128,7 +129,7 @@ async def create_user_files(chat_id, username, bot):
     try:
         # Ищем папку пользователя, которая содержит chat_id в своем имени
         user_dir = find_user_directory(chat_id)  #=============#
-
+        us = await UserCl.load_user(chat_id)
         if not user_dir:  #=============#
             # Если папка не найдена, создаем новую
             folder_name = f"{chat_id}_{username}" if username else f"{chat_id}"
@@ -163,6 +164,7 @@ async def create_user_files(chat_id, username, bot):
             conf_files_count, png_files_count = count_files_in_directory()
             await send_admin_log(bot, f" Созданы файлы для {chat_id} {username}. осталось {conf_files_count} файлов и \n"
                                       f"{png_files_count} картинок")
+            await us.add_key_wireguard()
         else:
             # Если нет доступных файлов, используем резервные файлы
             if os.path.exists(GENERAL_CONFIG_FILE) and os.path.exists(GENERAL_IMAGE_FILE):
@@ -179,6 +181,7 @@ async def create_user_files(chat_id, username, bot):
                     f"Пользователю {chat_id} были отправлены общие конфигурационные файлы."
                 )
                 await bot.send_message(admin_chat_id, warning_message)
+                await us.add_key_wireguard()
             else:
                 raise Exception("Резервные конфигурационные файлы также не найдены!")
 
