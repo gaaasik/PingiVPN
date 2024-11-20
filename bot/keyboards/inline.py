@@ -5,46 +5,39 @@ from bot.handlers.admin import ADMIN_CHAT_IDS
 
 # Создаем инлайн-кнопки для выбора устройства
 # Создаем инлайн-кнопки для выбора устройства
-def device_choice_keyboard():
-    """Клавиатура для выбора устройства"""
 
-    # Создаем кнопки
-    buttons = [
-        [
-            InlineKeyboardButton(text="Android", callback_data="device_android"),
-            InlineKeyboardButton(text="iPhone", callback_data="device_iphone")
-        ],
-        [
-            InlineKeyboardButton(text="Mac", callback_data="device_mac"),
-            InlineKeyboardButton(text="Linux", callback_data="device_linux")
-        ],
-        [
-            InlineKeyboardButton(text="Windows", callback_data="device_windows")
-        ],
-    ]
-
-    # Передаем список кнопок в InlineKeyboardMarkup
-    keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
-    return keyboard
 
 
 # Клавиатура для скачивания приложения и подтверждения скачивания
-def download_app_keyboard(download_link):
-    buttons = [
-        [InlineKeyboardButton(text="Открыть магазин приложений", url=download_link)],  # Ведет на ссылку для скачивания
-        [InlineKeyboardButton(text="Я скачал ✅", callback_data="app_downloaded")]
-    ]
-    keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)  # Передаем список кнопок в конструктор
-    return keyboard
+def download_app_keyboard(device: str) -> InlineKeyboardMarkup:
+    # Определяем ссылку для скачивания в зависимости от устройства
+    if device.lower() == 'android':
+        download_link = "https://play.google.com/store/apps/details?id=com.hiddify"
+        instruction_link = "https://telegra.ph/Instrukciya-dlya-Android-01-01"
+    elif device.lower() == 'iphone':
+        download_link = "https://apps.apple.com/us/app/streisand/id6450534064"
+        instruction_link = "https://telegra.ph/Podklyuchenie-PingiVPN-na-iPhone-11-01"
+    elif device.lower() == 'mac':
+        download_link = "https://apps.apple.com/us/app/foxray/id6448898396"
+        instruction_link = "https://telegra.ph/Instrukciya-dlya-Mac-01-01"
+    elif device.lower() == 'linux':
+        download_link = "https://github.com/MatsuriDayo/nekoray/"
+        instruction_link = "https://telegra.ph/Instrukciya-dlya-Linux-01-01"
+    elif device.lower() == 'windows':
+        download_link = "https://apps.microsoft.com/detail/9pdfnl3qv2s5?hl=ru-ru&gl=RU"
+        instruction_link = "https://telegra.ph/Podklyuchenie-PingiVPN-na-windows-11-01"
+    else:
+        download_link = "#"
+        instruction_link = "#"
 
-
-# Кнопка для перехода на канал и кнопка для проверки подписки
-def subscribe_keyboard():
+    # Создаем клавиатуру с кнопками
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="Перейти на канал", url="https://t.me/pingi_hub")],
-        [InlineKeyboardButton(text="Я подписался", callback_data="check_subscription")]
+        [InlineKeyboardButton(text="🛒 Открыть магазин приложений", url=download_link)],  # Ведет на ссылку для скачивания
+        [InlineKeyboardButton(text="📷 Инструкция с картинками", url=instruction_link)],  # Ссылка на статью в Telegraph
+        [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
     ])
     return keyboard
+
 
 
 # Функция для кнопки "Получить файл"
@@ -72,6 +65,7 @@ def config_or_qr_keyboard():
         [get_detailed_instruction_button()]
     ]
     return InlineKeyboardMarkup(inline_keyboard=buttons)
+
 
 #def keyborad_get_email(){}
 
@@ -118,3 +112,16 @@ def account_info_keyboard():
         ]
     ]
     return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def main_menu_inline_keyboard():
+    # Создание клавиатуры с кнопками
+    buttons = [
+        [InlineKeyboardButton(text="🛒 Оплатить VPN", callback_data="buy_vpn")],
+        [InlineKeyboardButton(text="🔑 Мои ключи", callback_data="my_keys"), InlineKeyboardButton(text="❓ Помощь", callback_data="help")],
+        [InlineKeyboardButton(text="📨 Пригласить", callback_data="share"), InlineKeyboardButton(text="ℹ️ Всё о PingiVPN", callback_data="about_pingi")],
+        [InlineKeyboardButton(text="🔌 Подключить VPN", callback_data="connect_vpn")]
+    ]
+    # Создаем клавиатуру с кнопками
+    keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
+    return keyboard

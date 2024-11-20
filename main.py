@@ -1,8 +1,4 @@
-#2:28
-
 import asyncio
-
-
 import logging
 import os
 from datetime import datetime, timedelta
@@ -11,19 +7,25 @@ from aiogram import Bot
 from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
+from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
+    menu_share, menu_connect_vpn, menu_payment, menu_about_pingi
+from bot.notification_users.notification_migrate_from_wg import send_initial_update_notification, \
+    send_choice_notification, get_stay_on_wg_count
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
-from bot.database.db import add_user  #, check_24_hour_db
-from bot.handlers import start, status, support, share, start_to_connect, instructions, \
-    device_choice, app_downloaded, file_or_qr, subscription, speedtest, user_help_request, feedback
-from bot.payments2 import payments_handler_redis
+from bot.handlers import start, support, \
+    user_help_request, feedback, app_downloaded,file_or_qr
+from bot.notification_users import notification_migrate_from_wg
 from bot.utils.cache import cache_media
-from bot.utils.check_status import check_db  #, notify_users_with_free_status
+#from bot.utils.check_status import check_db  #, notify_users_with_free_status
 from bot.utils.logger import setup_logger
-from bot.database.db import init_db, database_path_local
+from bot.database.db import database_path_local  #,  init_db
+from bot.database.init_db import init_db
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
+from communication_3x_ui.send_json import process_task_queue
 from flask_app.all_utils_flask_db import initialize_db
+from models.UserCl import UserCl
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
@@ -47,7 +49,13 @@ async def periodic_task(bot: Bot):
     # Ждем 10 секунд после старта бота
     await asyncio.sleep(10800)
     while True:
-        await send_admin_log(bot, "Пинг бота - прошло 3 час работы бота.")
+        count_stay_on_wg = await get_stay_on_wg_count()
+        report_text = (
+            f"📊 *Ежедневный отчет*\n\n"
+            f"{count_stay_on_wg} пользователей нажали 'Остаться на WireGuard' сегодня.\n"
+            "Рекомендуем поддержать их в переходе на VLESS."
+        )
+        await send_admin_log(bot, report_text)
 
         # Пример асинхронного вызова
         # await notify_users_with_free_status(bot)
@@ -136,7 +144,7 @@ async def periodic_task_24_hour(bot: Bot):
             await send_admin_log(bot, "Пинг бота - началось обновление базы данных в 3:00.")
 
             # Выполнение проверки базы данных
-            await check_db(bot)
+            #await check_db(bot)
 
             # Уведомление об успешном завершении
             await send_admin_log(bot, "Обновление базы данных прошло успешно.")
@@ -147,6 +155,14 @@ async def periodic_task_24_hour(bot: Bot):
             await send_admin_log(bot, f"Обновление базы данных завершилось с ошибкой: {e}")
 
         # Мы не ждем фиксированное количество времени, а снова пересчитываем время до следующего 3:00
+
+
+async def notify_users_about_protocol_change(bot: Bot):
+    all_chat_id = await UserCl.get_all_users()
+    for chat_id in all_chat_id:
+        await send_initial_update_notification(chat_id, bot)
+        await asyncio.sleep(1)  # Можно добавить задержку между уведомлениями для снижения нагрузки
+        await send_choice_notification(chat_id, bot)
 
 
 async def main():
@@ -175,45 +191,63 @@ async def main():
         print("Файл базы данных не найден!")
         return
     print(f"Путь к базе данных: {db_path}")
-    # Инициализация бота и диспетчера
 
     # Инициализация базы данных SQLite
     await init_db(db_path)
+    #result = await add_user_db(111224422, "test_user")
+
+    # await asyncio.gather(
+    #     periodic_task(bot),  # Периодическая задача
+    #     listen_to_redis_queue(bot),  # Прослушивание очереди Redis
+    #     process_task_queue(),  # Обработка задач из Redis
+    # )
+
     # Запускаем асинхронную задачу для периодической отправки сообщений админу
     asyncio.create_task(periodic_task(bot))
     #asyncio.create_task(periodic_task_24_hour(bot))
     asyncio.create_task(listen_to_redis_queue(bot))  # 1 час
     asyncio.create_task(periodic_backup_task(bot))
+    asyncio.create_task(process_task_queue())
     # Промежуточное ПО для предотвращения спама
     dp.message.middleware(ThrottlingMiddleware(rate_limit=1))
 
     # Регистрация хэндлеров
     dp.include_router(start.router)
-    dp.include_router(speedtest.router)
-    dp.include_router(status.router)
+
     dp.include_router(support.router)
-    #dp.include_router(admin.router)
-    dp.include_router(share.router)
-    dp.include_router(start_to_connect.router)
-    dp.include_router(instructions.router)
-    dp.include_router(device_choice.router)
+    dp.include_router(menu_about_pingi.router)
+    dp.include_router(user_help_request.router)
+    dp.include_router(menu_payment.router)
+    dp.include_router(feedback.router)
+    dp.include_router(main_menu.router)
+    dp.include_router(menu_buy_vpn.router)
+    dp.include_router(menu_share.router)
+    dp.include_router(menu_help.router)
+    dp.include_router(menu_device.router)
+    dp.include_router(menu_connect_vpn.router)
+    dp.include_router(menu_my_keys.router)
+    dp.include_router(notification_migrate_from_wg.router)
+
     dp.include_router(app_downloaded.router)
     dp.include_router(file_or_qr.router)
-    dp.include_router(subscription.router)
-    dp.include_router(user_help_request.router)
-    dp.include_router(payments_handler_redis.router)
-    dp.include_router(feedback.router)
-    #dp.include_router(payment.router)
 
+    #уведомление о переходе на vless
+
+    #await notify_users_about_protocol_change(bot)
     # Запуск бота
     try:
         await dp.start_polling(bot)
     except Exception as e:
         logging.exception(f"Произошла ошибка: {e}")
+    except KeyboardInterrupt:
+        print("Работа прервана пользователем")
     finally:
         await send_admin_log(bot, "Бот завершил работу и пошел отдыхать")
         await bot.session.close()
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Завершение работы...")

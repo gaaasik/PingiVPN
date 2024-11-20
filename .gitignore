@@ -4,7 +4,11 @@
 # Игнорирование виртуальных окружений
 venv/
 .venv/
+
 configs/registered_user/*
+
+configs/registered_user/
+
 # Игнорирование файлов окружения
 *.env
 vpn_bot.db
