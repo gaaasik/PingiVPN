@@ -1,6 +1,8 @@
 from aiogram import Router, types
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
+from bot.handlers.admin import send_admin_log
+
 router = Router()
 # Текст сообщения "Все о Pingi VPN"
 about_pingi_text = (
@@ -91,6 +93,8 @@ async def handle_about_pricing(callback_query: CallbackQuery):
 
 @router.callback_query(lambda c: c.data == "about_story")
 async def handle_about_story(callback_query: CallbackQuery):
+    # Логируем количество ошибок после обработки батча
+    await send_admin_log(callback_query.bot, f"{callback_query.from_user.id} Начал читать историю про пингвина")
     await callback_query.message.edit_text(story_text, reply_markup=back_main_keyboard(), parse_mode="Markdown")
     await callback_query.answer()
 

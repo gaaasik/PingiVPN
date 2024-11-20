@@ -247,7 +247,7 @@ async def main():
 
     #уведомление о переходе на vless
 
-    await notify_users_about_protocol_change(bot)
+    #await notify_users_about_protocol_change(bot)
     # Запуск бота
     try:
         await dp.start_polling(bot)
