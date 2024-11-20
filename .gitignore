@@ -9,7 +9,7 @@ configs/registered_user/*
 *.env
 vpn_bot.db
 logs/bot.log
-
+PingiVPN/
 # Игнорируем файлы настроек IDE
 .idea/
 
