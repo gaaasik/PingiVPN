@@ -115,4 +115,3 @@ async def cmd_start(message: types.Message):
 
     await register_message_type(chat_id, sent_message.message_id, "start", bot)
 
-
