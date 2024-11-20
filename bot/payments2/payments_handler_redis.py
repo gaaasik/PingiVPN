@@ -122,13 +122,7 @@ async def listen_to_redis_queue(bot: Bot):
                 await process_payment_message(json.dumps(task), bot)
             else:
                 pass
-                #logging.info("Очередь Redis пуста, ждем следующую задачу")
-
-<<<<<<< HEAD
-            await asyncio.sleep(100)
-=======
-            await asyncio.sleep(1)
->>>>>>> 442d7d48ef49cb0326356436be1e1650d1ac9c6a
+            await asyncio.sleep(3)    #logging.info("Очередь Redis пуста, ждем следующую задачу")
 
         except redis.exceptions.ConnectionError as e:
             logging.error(f"Ошибка подключения к Redis: {e}")

@@ -79,7 +79,7 @@ def get_user_directory(chat_id, user_login):
 async def cmd_start(message: types.Message):
     bot = message.bot
     chat_id = message.chat.id
-<<<<<<< HEAD
+
     username = message.from_user.username or None  # Используем None, если username отсутствует
 
     # Ищем директорию, которая содержит chat_id в названии
@@ -144,11 +144,10 @@ async def cmd_start(message: types.Message):
         )
 
     # Сохраняем в базе данных реферальную информацию (если есть)
-=======
+
     user = await bot.get_chat(chat_id)
     user_name_full = f"{user.first_name} {user.last_name or ''}".strip()
     user_login = message.from_user.username or None
->>>>>>> 442d7d48ef49cb0326356436be1e1650d1ac9c6a
     args = message.text.split()[1] if len(message.text.split()) > 1 else None
     referral_old_chat_id = int(args) if args else None
 
