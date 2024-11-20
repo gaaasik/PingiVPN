@@ -242,6 +242,7 @@ async def run_listening_redis_for_duration(bot: Bot):
     try:
         # Запускаем задачу прослушивания
         listen_task = asyncio.create_task(listen_to_redis_queue(bot))
+	
 
     except asyncio.CancelledError:
         logging.info("Задача прослушивания была отменена.")
@@ -316,7 +317,7 @@ async def listen_to_redis_queue(bot: Bot):
                 a = 1
                 #logging.info("Очередь Redis пуста, ждем следующую задачу")
 
-            await asyncio.sleep(4)
+            await asyncio.sleep(100)
 
         except redis.exceptions.ConnectionError as e:
             logging.error(f"Ошибка подключения к Redis: {e}")

@@ -41,7 +41,8 @@ def webhook():
             "amount": amount,
             "currency": currency,
             "status": event_type,
-            "payment_method_id": payment_method_id
+            "payment_method_id": payment_method_id,
+            "payload_json": payload
         }
 
         # Отправляем информацию о платеже в Redis-очередь

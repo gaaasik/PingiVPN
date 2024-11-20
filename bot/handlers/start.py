@@ -57,8 +57,8 @@ async def cmd_start(message: types.Message):
     await send_cached_photo(message)
 
     sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard())
-    await store_important_message(message.bot, message.chat.id, sent_message.message_id, sent_message,"start")
-    await register_message_type(message.chat.id,sent_message.message_id,"start",message.bot)
+
+
     # Получаем данные пользователя из базы данных (включая устройство)
     user = await get_user_by_telegram_id(message.from_user.id)
     # Уведомляем администратора о новом пользователе
