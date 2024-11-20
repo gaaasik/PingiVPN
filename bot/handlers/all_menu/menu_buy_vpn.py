@@ -31,6 +31,16 @@ def get_add_key_keyboard():
 async def handle_buy_vpn(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
     us = await UserCl.load_user(chat_id)
+    # Проверка на администратора
+    if int(chat_id) != 456717505:
+        # Отправка сообщения для неадминистратора
+        await callback_query.message.answer(
+            f"Оплата скоро будет доступна, если у вас проблемы с подключением напишите нам @pingi_help"
+
+        )
+        await callback_query.answer()
+        return  # Завершаем выполнение функции
+
 
     # Получаем количество ключей и статус
     count_key = await us.count_key.get()
@@ -48,7 +58,7 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
     else:
         # Получаем статус первого ключа
         status_key = await us.servers[0].status_key.get()
-        key_name = await us.servers[0].email_key.get()
+        key_name = await us.servers[0].name_key.get()
 
         if status_key == "free_key":
             # Пробный период ключа

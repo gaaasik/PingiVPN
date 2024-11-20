@@ -59,7 +59,7 @@ async def handle_share(event: Message | CallbackQuery, bot: Bot):
 @router.callback_query(F.data == "show_referral_link")
 async def show_referral_link(callback_query: CallbackQuery, bot: Bot):
     chat_id = callback_query.from_user.id
-    name_bot = "GASIK_VPN_BOT"
+    name_bot = "PingiVPN_bot"
     # Формируем реферальную ссылку
     referral_link = f"https://t.me/{name_bot}?start={chat_id}"
 
