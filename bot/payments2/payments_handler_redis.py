@@ -123,7 +123,7 @@ async def listen_to_redis_queue(bot: Bot):
                 pass
                 #logging.info("Очередь Redis пуста, ждем следующую задачу")
 
-            await asyncio.sleep(1)
+            await asyncio.sleep(3)
 
         except redis.exceptions.ConnectionError as e:
             logging.error(f"Ошибка подключения к Redis: {e}")
