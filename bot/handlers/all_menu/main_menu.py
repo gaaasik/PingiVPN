@@ -18,6 +18,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+
 # Функция для получения корректного склонения для дней
 def get_days_text(days):
     if 11 <= days % 100 <= 14:

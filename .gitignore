@@ -4,9 +4,9 @@
 # Игнорирование виртуальных окружений
 venv/
 .venv/
-flask_app/.idea/
+fastapi_app/fastapi_env/
 configs/registered_user/*
-flask_app/fastapi_env/
+fastapi_app/.idea/
 configs/registered_user/
 
 # Игнорирование файлов окружения
