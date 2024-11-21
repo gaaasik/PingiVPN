@@ -2,7 +2,7 @@ import asyncio
 import json
 import logging
 from datetime import datetime
-
+import uvicorn
 import aioredis
 import aiosqlite
 import pytz
@@ -28,9 +28,8 @@ logger = logging.getLogger(__name__)
 redis_client = None
 
 
-# Асинхронная инициализация Redis
-@app.before_first_request
 async def init_redis():
+    """Асинхронная инициализация Redis."""
     global redis_client
     redis_client = await aioredis.from_url("redis://localhost:6379", decode_responses=True)
     logger.info("Redis успешно инициализирован.")
@@ -147,8 +146,10 @@ def home():
     return "Hello, this is Flask application!", 200
 
 
+# Асинхронный запуск Flask через Uvicorn
 if __name__ == "__main__":
-    import uvicorn
+
+    asyncio.run(init_redis())  # Инициализация Redis
     uvicorn.run(app, host='0.0.0.0', port=5000)
 
 
