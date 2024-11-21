@@ -1,17 +1,17 @@
 import asyncio
 import json
 import logging
+from contextlib import asynccontextmanager
 from datetime import datetime
-import uvicorn
-import aioredis
+
+import redis.asyncio as redis
 import aiosqlite
 import pytz
-from flask import Flask, jsonify, request
-from flask_app.all_utils_flask_db import initialize_db  # , update_payment_status
-from models.UserCl import database_path_local
+from fastapi import FastAPI, HTTPException, Request
+from pydantic import BaseModel
 
-# Создание приложения Flask
-app = Flask(__name__)
+from config_flask_redis import DATABASE_PATH
+
 
 # Настройка логирования
 logging.basicConfig(
@@ -24,23 +24,46 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Redis-клиент
-redis_client = None
+# Глобальная переменная Redis-клиента
+redis_client: redis.Redis = None
 
 
-async def init_redis():
-    """Асинхронная инициализация Redis."""
+class PaymentData(BaseModel):
+    user_id: int
+    payment_id: str
+    amount: str
+    currency: str
+    status: str
+    payment_method_id: str
+    payload_json: dict
+
+
+
+# Lifespan через asynccontextmanager
+@asynccontextmanager
+async def app_lifespan(app: FastAPI):
     global redis_client
-    redis_client = await aioredis.from_url("redis://localhost:6379", decode_responses=True)
+    logger.info("Инициализация приложения...")
+
+    # Инициализация Redis
+    redis_client = redis.Redis(host="localhost", port=6379, decode_responses=True)
     logger.info("Redis успешно инициализирован.")
 
+    yield  # Здесь FastAPI выполняет действия приложения
 
-# Сохранение некорректного payload в таблицу payments
-async def save_invalid_payment_to_db(payment_json):
+    # Закрытие Redis при завершении
+    await redis_client.close()
+    logger.info("Соединение с Redis закрыто.")
+    logger.info("Приложение остановлено.")
+# Создаем приложение FastAPI с lifespan
+app = FastAPI(lifespan=app_lifespan)
+
+# Сохранение некорректного payload в БД
+async def save_invalid_payment_to_db(payment_json: dict):
     moscow_tz = pytz.timezone("Europe/Moscow")
     created_at = datetime.now(moscow_tz).strftime("%Y-%m-%d %H:%M:%S")
 
-    async with aiosqlite.connect(database_path_local) as db:
+    async with aiosqlite.connect(DATABASE_PATH) as db:
         await db.execute("""
             INSERT INTO payments (user_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at, payment_json)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -48,16 +71,15 @@ async def save_invalid_payment_to_db(payment_json):
         await db.commit()
 
 
-# Функция для записи платежей в базу данных
-async def save_payment_to_db(user_id, payment_id, amount, currency, status, payment_method_id, payment_json):
+# Сохранение платежей в БД
+async def save_payment_to_db(payment_data: PaymentData):
     try:
         moscow_tz = pytz.timezone("Europe/Moscow")
         created_at = datetime.now(moscow_tz).strftime("%Y-%m-%d %H:%M:%S")
-        updated_at = created_at
 
-        async with aiosqlite.connect(database_path_local) as db:
-            # Проверка наличия записи по payment_id
-            async with db.execute("SELECT id FROM payments WHERE payment_id = ?", (payment_id,)) as cursor:
+        async with aiosqlite.connect(DATABASE_PATH) as db:
+            # Проверка существующей записи
+            async with db.execute("SELECT id FROM payments WHERE payment_id = ?", (payment_data.payment_id,)) as cursor:
                 existing_payment = await cursor.fetchone()
 
             if existing_payment:
@@ -65,15 +87,24 @@ async def save_payment_to_db(user_id, payment_id, amount, currency, status, paym
                     UPDATE payments
                     SET status = ?, updated_at = ?, payment_json = ?
                     WHERE payment_id = ?
-                """, (status, updated_at, json.dumps(payment_json), payment_id))
-                logger.info(f"Обновлена запись о платеже с payment_id={payment_id}")
+                """, (payment_data.status, created_at, json.dumps(payment_data.payload_json), payment_data.payment_id))
+                logger.info(f"Обновлена запись о платеже с payment_id={payment_data.payment_id}")
             else:
                 await db.execute("""
                     INSERT INTO payments (chat_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at, payment_json)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, (user_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at,
-                      json.dumps(payment_json)))
-                logger.info(f"Добавлена новая запись о платеже с payment_id={payment_id}")
+                """, (
+                    payment_data.user_id,
+                    payment_data.payment_id,
+                    payment_data.amount,
+                    payment_data.currency,
+                    payment_data.status,
+                    payment_data.payment_method_id,
+                    created_at,
+                    created_at,
+                    json.dumps(payment_data.payload_json)
+                ))
+                logger.info(f"Добавлена новая запись о платеже с payment_id={payment_data.payment_id}")
 
             await db.commit()
 
@@ -82,33 +113,32 @@ async def save_payment_to_db(user_id, payment_id, amount, currency, status, paym
 
 
 # Вебхук для обработки платежей
-@app.route('/webhook', methods=['POST'])
-async def webhook():
+@app.post("/webhook")
+async def webhook(request: Request):
     logger.info("Получен webhook - начало обработки")
-
     try:
-        # Получаем данные из вебхука
-        payload = request.json
-        if not payload or 'event' not in payload:
+        # Получение JSON из запроса
+        payload = await request.json()
+        if not payload or "event" not in payload:
             logger.error("Некорректный payload: отсутствует поле 'event'")
-            return jsonify({"status": "error", "message": "Missing or invalid payload"}), 400
+            raise HTTPException(status_code=400, detail="Missing or invalid payload")
 
-        # Извлекаем информацию из payload
-        event_type = payload.get('event')
-        payment_info = payload.get('object', {})
-        payment_id = payment_info.get('id', 'Нет ID')
-        amount = payment_info.get('amount', {}).get('value', 'Нет суммы')
-        currency = payment_info.get('amount', {}).get('currency', 'Нет валюты')
-        user_id = payment_info.get('metadata', {}).get('user_id', None)
-        payment_method_id = payment_info.get('payment_method', {}).get('id', '0')
+        # Извлечение данных
+        event_type = payload.get("event")
+        payment_info = payload.get("object", {})
+        payment_id = payment_info.get("id", "Нет ID")
+        amount = payment_info.get("amount", {}).get("value", "Нет суммы")
+        currency = payment_info.get("amount", {}).get("currency", "Нет валюты")
+        user_id = payment_info.get("metadata", {}).get("user_id")
+        payment_method_id = payment_info.get("payment_method", {}).get("id", "0")
 
         if not user_id:
             logger.error("Отсутствует user_id в метаданных платежа")
-            return jsonify({"status": "error", "message": "Missing user_id"}), 400
+            raise HTTPException(status_code=400, detail="Missing user_id")
 
         logger.info(f"Получено событие: {event_type}, ID платежа: {payment_id}, сумма: {amount} {currency}, пользователь: {user_id}")
 
-        # Формируем сообщение для Redis
+        # Формируем сообщение
         message = {
             "user_id": user_id,
             "payment_id": payment_id,
@@ -119,180 +149,34 @@ async def webhook():
             "payload_json": payload
         }
 
-        # Отправляем сообщение в Redis
-        await redis_client.lpush('payment_notifications', json.dumps(message))
+        # Отправляем в Redis
+        await redis_client.lpush("payment_notifications", json.dumps(message))
         logger.info(f"Платёж {payment_id} добавлен в очередь Redis")
 
-        # Сохраняем данные о платеже в базу
-        await save_payment_to_db(
+        # Сохраняем в БД
+        payment_data = PaymentData(
             user_id=user_id,
             payment_id=payment_id,
             amount=amount,
             currency=currency,
             status=event_type,
             payment_method_id=payment_method_id,
-            payment_json=payment_info
+            payload_json=payload
         )
+        await save_payment_to_db(payment_data)
 
-        return jsonify({"status": "ok"}), 200
+        return {"status": "ok"}
 
     except Exception as e:
         logger.error(f"Ошибка обработки вебхука: {e}")
-        return jsonify({"status": "error", "message": "Internal server error"}), 500
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 
-@app.route('/', methods=['GET'])
-def home():
-    return "Hello, this is Flask application!", 200
+@app.get("/")
+async def home():
+    return {"message": "Hello, this is FastAPI application!"}
 
 
-# Асинхронный запуск Flask через Uvicorn
 if __name__ == "__main__":
-
-    asyncio.run(init_redis())  # Инициализация Redis
-    uvicorn.run(app, host='0.0.0.0', port=5000)
-
-
-# import asyncio
-# import json
-# import logging
-# from datetime import datetime
-#
-# import aioredis
-# import aiosqlite
-# import pytz
-# import redis
-# from flask import Flask, jsonify, request
-# from flask_app.all_utils_flask_db import initialize_db  #, update_payment_status
-# from models.UserCl import database_path_local
-#
-# app = Flask(__name__)
-#
-# # Настройка логирования
-# logging.basicConfig(
-#     level=logging.INFO,
-#     format='%(asctime)s - %(levelname)s - %(message)s',
-#     handlers=[
-#         logging.FileHandler("payments.log"),
-#         logging.StreamHandler()
-#     ]
-# )
-# logger = logging.getLogger(__name__)
-#
-# redis_client = aioredis.Redis(host='localhost', port=6379)
-#
-#
-# # Сохраняем некорректный payload в таблицу payments
-# async def save_invalid_payment_to_db(payment_json):
-#     moscow_tz = pytz.timezone("Europe/Moscow")
-#     created_at = datetime.now(moscow_tz).strftime("%Y-%m-%d %H:%M:%S")
-#
-#     async with aiosqlite.connect(database_path_local) as db:
-#         await db.execute("""
-#             INSERT INTO payments (user_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at, payment_json)
-#             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-#         """, (None, None, None, None, "invalid", None, created_at, created_at, json.dumps(payment_json)))
-#         await db.commit()
-#
-#
-# # Функция для записи платежей в базу данных
-# async def save_payment_to_db(user_id, payment_id, amount, currency, status, payment_method_id, payment_json):
-#     try:
-#         # Московское время
-#         moscow_tz = pytz.timezone("Europe/Moscow")
-#         created_at = datetime.now(moscow_tz).strftime("%Y-%m-%d %H:%M:%S")
-#         updated_at = created_at
-#
-#         async with aiosqlite.connect(database_path_local) as db:
-#             # Проверяем наличие записи по payment_id
-#             async with db.execute("SELECT id FROM payments WHERE payment_id = ?", (payment_id,)) as cursor:
-#                 existing_payment = await cursor.fetchone()
-#
-#             if existing_payment:
-#                 # Если запись существует, обновляем её
-#                 await db.execute("""
-#                     UPDATE payments
-#                     SET status = ?, updated_at = ?, payment_json = ?
-#                     WHERE payment_id = ?
-#                 """, (status, updated_at, json.dumps(payment_json), payment_id))
-#                 logger.info(f"Обновлена запись о платеже с payment_id={payment_id}")
-#             else:
-#                 # Если записи нет, добавляем новую
-#                 await db.execute("""
-#                     INSERT INTO payments (chat_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at, payment_json)
-#                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-#                 """, (user_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at,
-#                       json.dumps(payment_json)))
-#                 logger.info(f"Добавлена новая запись о платеже с payment_id={payment_id}")
-#
-#             await db.commit()
-#
-#     except Exception as e:
-#         logger.error(f"Ошибка записи платежа в базу данных: {e}")
-#
-# # Вебхук для обработки платежей
-# @app.route('/webhook', methods=['POST'])
-# async def webhook():
-#     logger.info("Получен webhook - начало обработки")
-#
-#     try:
-#         # Получаем данные из вебхука
-#         payload = request.json
-#         if not payload or 'event' not in payload:
-#             logger.error("Некорректный payload: отсутствует поле 'event'")
-#             return jsonify({"status": "error", "message": "Missing or invalid payload"}), 400
-#
-#         # Извлекаем информацию из payload
-#         event_type = payload.get('event')
-#         payment_info = payload.get('object', {})
-#         payment_id = payment_info.get('id', 'Нет ID')
-#         amount = payment_info.get('amount', {}).get('value', 'Нет суммы')
-#         currency = payment_info.get('amount', {}).get('currency', 'Нет валюты')
-#         user_id = payment_info.get('metadata', {}).get('user_id', None)
-#         payment_method_id = payment_info.get('payment_method', {}).get('id', '0')
-#
-#         if not user_id:
-#             logger.error("Отсутствует user_id в метаданных платежа")
-#             return jsonify({"status": "error", "message": "Missing user_id"}), 400
-#
-#         logger.info(f"Получено событие: {event_type}, ID платежа: {payment_id}, сумма: {amount} {currency}, пользователь: {user_id}")
-#
-#         # Формируем сообщение для Redis
-#         message = {
-#             "user_id": user_id,
-#             "payment_id": payment_id,
-#             "amount": amount,
-#             "currency": currency,
-#             "status": event_type,
-#             "payment_method_id": payment_method_id,
-#             "payload_json": payload
-#         }
-#
-#         # Отправляем сообщение в Redis
-#         await redis_client.lpush('payment_notifications', json.dumps(message))
-#         logger.info(f"Платёж {payment_id} добавлен в очередь Redis")
-#
-#         # Сохраняем данные о платеже в базу
-#         await save_payment_to_db(
-#             user_id=user_id,
-#             payment_id=payment_id,
-#             amount=amount,
-#             currency=currency,
-#             status=event_type,
-#             payment_method_id=payment_method_id,
-#             payment_json=payment_info
-#         )
-#
-#         return jsonify({"status": "ok"}), 200
-#
-#     except Exception as e:
-#         logger.error(f"Ошибка обработки вебхука: {e}")
-#         return jsonify({"status": "error", "message": "Internal server error"}), 500
-#
-# @app.route('/', methods=['GET'])
-# def home():
-#     return "Hello, this is Flask application!", 200
-#
-#
-# if __name__ == "__main__":
-#     app.run(host='0.0.0.0', port=5000)
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=5000)
