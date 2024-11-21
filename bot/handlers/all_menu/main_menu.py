@@ -6,7 +6,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQu
 from bot.handlers.cleanup import delete_unimportant_messages, store_message, messages_for_db, register_message_type
 import os
 
-from flask_app.all_utils_flask_db import logger
+#from fastapi_app.all_utils_flask_db import logger
 from models.UserCl import UserCl
 from bot.keyboards.inline import main_menu_inline_keyboard
 
