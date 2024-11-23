@@ -13,7 +13,7 @@ from aiogram import Router, types, Bot
 from models.UserCl import UserCl
 from bot.handlers.cleanup import delete_important_message
 from bot.payments2.if_user_sucsess_pay import handle_post_payment_actions
-from flask_app.all_utils_flask_db import logger
+#from fastapi_app.all_utils_flask_db import logger
 from bot.handlers.admin import send_admin_log
 from bot.database.db import  update_payment_status, update_user_subscription_db
 
@@ -125,7 +125,7 @@ async def listen_to_redis_queue(bot: Bot):
             await asyncio.sleep(3)    #logging.info("Очередь Redis пуста, ждем следующую задачу")
                 #logging.info("Очередь Redis пуста, ждем следующую задачу")
 
-            await asyncio.sleep(3)
+
 
         except redis.exceptions.ConnectionError as e:
             logging.error(f"Ошибка подключения к Redis: {e}")
@@ -225,6 +225,6 @@ async def process_payment_message(message: str, bot: Bot):
             logging.info(f"Постоплатные действия выполнены для пользователя {chat_id}.")
 
     except json.JSONDecodeError as e:
-        logger.error(f"Ошибка декодирования JSON: {e}, данные: {message}")
+        logging.info(f"Ошибка декодирования JSON: {e}, данные: {message}")
     except Exception as e:
-        logger.error(f"Ошибка при обработке сообщения о платеже: {e}")
+        logging.info(f"Ошибка при обработке сообщения о платеже: {e}")

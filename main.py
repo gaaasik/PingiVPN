@@ -24,7 +24,7 @@ from bot.database.init_db import init_db
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from communication_3x_ui.send_json import process_task_queue
-from flask_app.all_utils_flask_db import initialize_db
+#from fastapi_app.all_utils_flask_db import initialize_db
 from models.UserCl import UserCl
 
 # Загружаем переменные окружения из файла .env
@@ -188,7 +188,7 @@ async def main():
         logging.exception(f"Неверное логирование: Ошибка при отправке запуске очереди Redis: {e}")
 
     await on_startup()
-    await initialize_db()
+    #await initialize_db()
 
     # Пример использования:
     #add_column_to_payments("new_column_name")

@@ -3,7 +3,7 @@ import logging
 from aiogram import Bot
 
 # Список администраторов
-ADMIN_CHAT_IDS = [456717505]#,1388513042,7032840268]  # Укажи ID администраторов
+ADMIN_CHAT_IDS = [456717505,1388513042,7032840268]  # Укажи ID администраторов
 
 
 async def send_admin_log(bot: Bot, message: str):

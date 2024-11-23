@@ -94,7 +94,7 @@ async def cmd_start(message: types.Message):
     if not user:
         logging.info("Регистрация нового пользователя.")
         await UserCl.add_user_to_database(chat_id, user_name_full, user_login, referral_old_chat_id)
-        await send_admin_log(bot, f"Добавлен новый пользователь: ID чата: {chat_id} с рефералом {referral_old_chat_id}")
+        await send_admin_log(bot, f"Добавлен новый пользователь @{user_login}: ID чата: {chat_id} с рефералом {referral_old_chat_id}")
     else:
         await user.user_name_full.set(user_name_full)
 
