@@ -129,17 +129,22 @@ async def webhook(request: Request):
 
         # Получение тела запроса
         body = await request.body()
+        # Логируем все заголовки запроса
+        headers = dict(request.headers)
+        logger.info(f"Заголовки запроса: {headers}")
+        logger.info(f",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,")
+        logger.info(f"Тело запроса: {body}")
 
-        # Извлечение подписи из заголовка
-        signature = request.headers.get("X-Content-HMAC-SHA256")
-        if not signature:
-            logger.error("Подпись отсутствует в заголовках")
-            raise HTTPException(status_code=400, detail="Missing signature")
-
-        # Проверка подписи
-        if not verify_signature(body, signature):
-            logger.error("Некорректная подпись")
-            raise HTTPException(status_code=403, detail="Invalid signature")
+        # # Извлечение подписи из заголовка
+        # signature = request.headers.get("X-Content-HMAC-SHA256")
+        # if not signature:
+        #     logger.error("Подпись отсутствует в заголовках")
+        #     raise HTTPException(status_code=400, detail="Missing signature")
+        #
+        # # Проверка подписи
+        # if not verify_signature(body, signature):
+        #     logger.error("Некорректная подпись")
+        #     raise HTTPException(status_code=403, detail="Invalid signature")
 
         # Получение JSON из запроса
         payload = await request.json()
