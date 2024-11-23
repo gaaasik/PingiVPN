@@ -2,6 +2,7 @@
 from aiogram import Router
 from aiogram.types import CallbackQuery
 
+from bot.handlers.admin import ADMIN_CHAT_IDS
 from bot.handlers.all_menu.main_menu import get_user_status_text
 from models.UserCl import UserCl
 
@@ -32,7 +33,7 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
     us = await UserCl.load_user(chat_id)
     # Проверка на администратора
-    if int(chat_id) != 456717505:
+    if int(chat_id) in ADMIN_CHAT_IDS:
         # Отправка сообщения для неадминистратора
         await callback_query.message.answer(
             f"Оплата скоро будет доступна, если у вас проблемы с подключением напишите нам @pingi_help"

@@ -157,7 +157,7 @@ async def process_payment_message(message: str, bot: Bot):
             await send_admin_log(bot, f"Некорректное сообщение о платеже: {data}")
             logging.error("Сообщение не содержит всех необходимых данных.")
             return
-
+        #сохраняем уже в fastapi
         # await save_payment_to_db(
         #     chat_id=chat_id,
         #     payment_id=payment_id,
@@ -169,11 +169,12 @@ async def process_payment_message(message: str, bot: Bot):
         # )
         # logging.info("Платеж сохранён в базе данных.")
 
-        await send_admin_log(bot, f"Пойман платеж от {chat_id}, c статусом {status}")
+
 
         ###############################################
         # Формирование сообщения в зависимости от статуса платежа
         if status == 'payment.succeeded':
+            await send_admin_log(bot, f"Пойман Успешный платеж от {chat_id}, c статусом {status}")
             logging.info(f"Платеж успешно завершён для пользователя {chat_id}. Загружаем данные пользователя...")
             us = await UserCl.load_user(chat_id)
 
@@ -223,7 +224,8 @@ async def process_payment_message(message: str, bot: Bot):
             # Выполнение последующих действий после оплаты
             await handle_post_payment_actions(bot, chat_id)
             logging.info(f"Постоплатные действия выполнены для пользователя {chat_id}.")
-
+        else:
+            await send_admin_log(bot, f"Незавершенный латеж от {chat_id}, c статусом {status}")
     except json.JSONDecodeError as e:
         logging.info(f"Ошибка декодирования JSON: {e}, данные: {message}")
     except Exception as e:

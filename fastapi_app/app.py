@@ -131,9 +131,9 @@ async def webhook(request: Request):
         body = await request.body()
         # Логируем все заголовки запроса
         headers = dict(request.headers)
-        logger.info(f"Заголовки запроса: {headers}")
-        logger.info(f",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,")
-        logger.info(f"Тело запроса: {body}")
+        # logger.info(f"Заголовки запроса: {headers}")
+        # logger.info(f",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,")
+        # logger.info(f"Тело запроса: {body}")
 
         # # Извлечение подписи из заголовка
         # signature = request.headers.get("X-Content-HMAC-SHA256")
