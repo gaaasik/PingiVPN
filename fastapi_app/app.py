@@ -9,7 +9,9 @@ import aiosqlite
 import pytz
 from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
-
+import hmac
+import hashlib
+import base64
 from config_flask_redis import DATABASE_PATH
 
 
@@ -37,7 +39,14 @@ class PaymentData(BaseModel):
     payment_method_id: str
     payload_json: dict
 
+SECRET_KEY = "ваш_секретный_ключ_юкассы"
 
+def verify_signature(body: bytes, signature: str) -> bool:
+    """Проверка подписи вебхука"""
+    expected_signature = base64.b64encode(
+        hmac.new(SECRET_KEY.encode(), body, hashlib.sha256).digest()
+    ).decode()
+    return hmac.compare_digest(expected_signature, signature)
 
 # Lifespan через asynccontextmanager
 @asynccontextmanager
@@ -117,8 +126,24 @@ async def save_payment_to_db(payment_data: PaymentData):
 async def webhook(request: Request):
     logger.info("Получен webhook - начало обработки")
     try:
+
+        # Получение тела запроса
+        body = await request.body()
+
+        # Извлечение подписи из заголовка
+        signature = request.headers.get("X-Content-HMAC-SHA256")
+        if not signature:
+            logger.error("Подпись отсутствует в заголовках")
+            raise HTTPException(status_code=400, detail="Missing signature")
+
+        # Проверка подписи
+        if not verify_signature(body, signature):
+            logger.error("Некорректная подпись")
+            raise HTTPException(status_code=403, detail="Invalid signature")
+
         # Получение JSON из запроса
         payload = await request.json()
+
         if not payload or "event" not in payload:
             logger.error("Некорректный payload: отсутствует поле 'event'")
             raise HTTPException(status_code=400, detail="Missing or invalid payload")
