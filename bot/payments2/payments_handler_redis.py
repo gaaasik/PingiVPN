@@ -29,20 +29,20 @@ REDIS_QUEUE = 'payment_notifications'
 # Инициализация Redis клиента
 redis_client = redis.Redis(host='217.25.91.109', port=6379, db=0)
 router = Router()
-async def save_payment_to_db(chat_id, payment_id, amount, currency, status, payment_method_id, payment_json):
-    # Определяем московский часовой пояс
-    moscow_tz = pytz.timezone("Europe/Moscow")
-
-    # Время создания и обновления записи в московском времени
-    created_at = datetime.now(moscow_tz).strftime("%Y-%m-%d %H:%M:%S")
-    updated_at = created_at
-
-    async with aiosqlite.connect(db_path) as db:
-        await db.execute("""
-            INSERT INTO payments (chat_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at, payment_json)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (chat_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at, json.dumps(payment_json)))
-        await db.commit()
+# async def save_payment_to_db(chat_id, payment_id, amount, currency, status, payment_method_id, payment_json):
+#     # Определяем московский часовой пояс
+#     moscow_tz = pytz.timezone("Europe/Moscow")
+#
+#     # Время создания и обновления записи в московском времени
+#     created_at = datetime.now(moscow_tz).strftime("%Y-%m-%d %H:%M:%S")
+#     updated_at = created_at
+#
+#     async with aiosqlite.connect(db_path) as db:
+#         await db.execute("""
+#             INSERT INTO payments (chat_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at, payment_json)
+#             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+#         """, (chat_id, payment_id, amount, currency, status, payment_method_id, created_at, updated_at, json.dumps(payment_json)))
+#         await db.commit()
 
 async def run_listening_redis_for_duration(bot: Bot):
     """Запускает прослушивание Redis на определенный промежуток времени."""
@@ -158,16 +158,16 @@ async def process_payment_message(message: str, bot: Bot):
             logging.error("Сообщение не содержит всех необходимых данных.")
             return
 
-        await save_payment_to_db(
-            chat_id=chat_id,
-            payment_id=payment_id,
-            amount=amount,
-            currency=currency,
-            status=status,
-            payment_method_id=payment_id,
-            payment_json=payment_json
-        )
-        logging.info("Платеж сохранён в базе данных.")
+        # await save_payment_to_db(
+        #     chat_id=chat_id,
+        #     payment_id=payment_id,
+        #     amount=amount,
+        #     currency=currency,
+        #     status=status,
+        #     payment_method_id=payment_id,
+        #     payment_json=payment_json
+        # )
+        # logging.info("Платеж сохранён в базе данных.")
 
         await send_admin_log(bot, f"Пойман платеж от {chat_id}, c статусом {status}")
 
