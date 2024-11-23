@@ -213,7 +213,7 @@ async def process_payment_message(message: str, bot: Bot):
             logging.info(f"Новая дата окончания ключа: {new_expiry_date_str}")
 
             # Сохраняем новую дату окончания и обновляем статус платного ключа
-            await server.date_payment_key.set(str(current_date))
+            await server.date_payment_key.set(str(current_date.strftime("%d.%m.%Y %H:%M:%S")))
             await server.date_key_off.set(new_expiry_date_str)
             logging.info(f"Дата окончания ключа обновлена для сервера пользователя {chat_id}.")
             # Увеличиваем значение has_paid_key на 1
