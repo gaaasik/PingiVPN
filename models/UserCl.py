@@ -435,7 +435,7 @@ class UserCl:
             country_server = await self.get_country_by_server_ip(server_ip)
 
             # Генерируем JSON с параметрами сервера
-            name_key = f"WireGuard-{await self.count_key.get() + 1}"  # Например, уникальное имя ключа
+            name_key = f"WireGuard PingiVPN"  # Например, уникальное имя ключа
             logging.info("Генерация параметров сервера WireGuard завершена.")
             return {
                 "country_server": country_server,
