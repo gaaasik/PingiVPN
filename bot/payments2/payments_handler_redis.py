@@ -203,10 +203,10 @@ async def process_payment_message(message: str, bot: Bot):
             date_key_off = datetime.strptime(date_key_off, "%d.%m.%Y %H:%M:%S")
             if date_key_off < current_date:
                 logging.info("Ключ истёк. Устанавливаем новую дату на 30 дней от текущей.")
-                new_expiry_date = current_date + timedelta(days=30)
+                new_expiry_date = current_date + timedelta(days=31)
             else:
                 logging.info("Ключ активен. Добавляем 30 дней к текущей дате окончания.")
-                new_expiry_date = date_key_off + timedelta(days=30)
+                new_expiry_date = date_key_off + timedelta(days=31)
 
             # Преобразуем новую дату обратно в строку
             new_expiry_date_str = new_expiry_date.strftime("%d.%m.%Y %H:%M:%S")

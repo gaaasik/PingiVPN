@@ -90,7 +90,7 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
                 f"Ваш ключ: {key_name}\n"
                 f"Cтатус: {await get_user_status_text(us)}\n"
                 f"Ключ активен до: *{active_end_date}*\n\n"
-                "При оплате вы продлите срок активного ключа еще на *30 дней*"
+                "При оплате вы получите доступ на *30 дней* "
             )
             keyboard = get_payment_keyboard()
 
