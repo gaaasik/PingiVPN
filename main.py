@@ -228,7 +228,7 @@ async def main():
     asyncio.create_task(process_task_queue())
 
     # **Добавляем запуск функции отправки уведомлений**
-    asyncio.create_task(process_notifications_request_payment(bot))  # Запуск уведомлений request_payment
+    #asyncio.create_task(process_notifications_request_payment(bot))  # Запуск уведомлений request_payment
 
     # Промежуточное ПО для предотвращения спама
     dp.message.middleware(ThrottlingMiddleware(rate_limit=1))
