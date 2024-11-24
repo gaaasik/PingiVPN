@@ -123,13 +123,14 @@ async def show_main_menu(chat_id: int, bot: Bot):
 
     user_name_full = await us.user_name_full.get()
     days_since_registration_text = await get_count_days_since_registration(us)
-
     # Получаем статус пользователя
     status_text = await get_user_status_text(us)
 
+    user_name = await us.user_login.get()
+
     # Формирование текста главного меню
     text = (
-        f"Привет {user_name_full}! 🕶\n\n"
+        f"{user_name}Привет {user_name_full}! 🕶\n\n"
         "PingiVPN - быстрый и безопасный доступ к свободному интернету без ограничений\n\n"
         "📱 Доступ к любым социальным сетям\n"
         "🛡 Анонимность\n"

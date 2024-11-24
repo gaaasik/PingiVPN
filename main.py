@@ -11,6 +11,7 @@ from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_
     menu_share, menu_connect_vpn, menu_payment, menu_about_pingi
 from bot.notification_users.notification_migrate_from_wg import send_initial_update_notification, \
     send_choice_notification, get_stay_on_wg_count
+from bot.notification_users.request_payment import process_notifications_request_payment
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
 from bot.handlers import start, support, \
@@ -46,9 +47,12 @@ async def on_startup():
 
 # Функция, которая выполняется каждые 10 секунд
 async def periodic_task(bot: Bot):
+
     # Ждем 10 секунд после старта бота
-    await asyncio.sleep(10800)
+    await asyncio.sleep(86400)
     while True:
+        #await notify_users_about_protocol_change(bot)
+
         count_stay_on_wg = await get_stay_on_wg_count()
         report_text = (
             f"📊 *Ежедневный отчет*\n\n"
@@ -59,7 +63,7 @@ async def periodic_task(bot: Bot):
 
         # Пример асинхронного вызова
         # await notify_users_with_free_status(bot)
-        await asyncio.sleep(10800)
+        await asyncio.sleep(86400)
 
 
 async def send_backup_db_to_admin(bot: Bot):
@@ -222,6 +226,10 @@ async def main():
     asyncio.create_task(listen_to_redis_queue(bot))  # 1 час
     asyncio.create_task(periodic_backup_task(bot))
     asyncio.create_task(process_task_queue())
+
+    # **Добавляем запуск функции отправки уведомлений**
+    asyncio.create_task(process_notifications_request_payment(bot))  # Запуск уведомлений request_payment
+
     # Промежуточное ПО для предотвращения спама
     dp.message.middleware(ThrottlingMiddleware(rate_limit=1))
 

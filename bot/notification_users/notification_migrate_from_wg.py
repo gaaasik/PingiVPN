@@ -148,33 +148,33 @@ async def log_notification(chat_id: int, notification_type: str, status: str = "
     try:
         async with aiosqlite.connect(db_path) as db:
             # Логируем начало работы с пользователем
-            logger.info(f"Начинаем обработку уведомления для пользователя {chat_id}. Тип: {notification_type}, Статус: {status}")
+            #logger.info(f"Начинаем обработку уведомления для пользователя {chat_id}. Тип: {notification_type}, Статус: {status}")
 
             # Получаем текущие данные для chat_id
             async with db.execute(
                 "SELECT notification_data FROM notifications WHERE chat_id = ?", (chat_id,)
             ) as cursor:
                 result = await cursor.fetchone()
-                logger.info(f"Результат запроса из базы для {chat_id}: {result}")
+                #logger.info(f"Результат запроса из базы для {chat_id}: {result}")
 
             # Обрабатываем JSON из базы данных
             if result:
                 try:
                     notification_data = json.loads(result[0]) if result[0] else {}
-                    logger.info(f"Успешно загружен JSON для пользователя {chat_id}: {notification_data}")
+                    #logger.info(f"Успешно загружен JSON для пользователя {chat_id}: {notification_data}")
                 except json.JSONDecodeError:
                     logger.warning(f"Некорректные данные JSON для пользователя {chat_id}. Заменяем на пустой объект.")
                     notification_data = {}
             else:
                 notification_data = {}
-                logger.info(f"Для пользователя {chat_id} записи не найдено. Инициализируем новый JSON.")
+                #logger.info(f"Для пользователя {chat_id} записи не найдено. Инициализируем новый JSON.")
 
             # Обновляем JSON с новым уведомлением
             notification_data[notification_type] = {
                 "status": status,
                 "sent_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
-            logger.info(f"Обновлён JSON для пользователя {chat_id}: {notification_data}")
+            #logger.info(f"Обновлён JSON для пользователя {chat_id}: {notification_data}")
 
             # Записываем обновленное значение JSON обратно в базу
             if result:
@@ -182,16 +182,16 @@ async def log_notification(chat_id: int, notification_type: str, status: str = "
                     "UPDATE notifications SET notification_data = ? WHERE chat_id = ?",
                     (json.dumps(notification_data), chat_id),
                 )
-                logger.info(f"Обновлена запись в базе для пользователя {chat_id}.")
+                #logger.info(f"Обновлена запись в базе для пользователя {chat_id}.")
             else:
                 await db.execute(
                     "INSERT INTO notifications (chat_id, notification_data) VALUES (?, ?)",
                     (chat_id, json.dumps(notification_data)),
                 )
-                logger.info(f"Создана новая запись в базе для пользователя {chat_id}.")
+                #logger.info(f"Создана новая запись в базе для пользователя {chat_id}.")
 
             await db.commit()
-            logger.info(f"Успешно завершена обработка уведомления для пользователя {chat_id}.")
+            #logger.info(f"Успешно завершена обработка уведомления для пользователя {chat_id}.")
 
     except Exception as e:
         logger.error(f"Ошибка при логировании уведомления для пользователя {chat_id}: {e}")
