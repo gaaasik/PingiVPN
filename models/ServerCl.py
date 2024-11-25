@@ -103,7 +103,7 @@ class Field:
         server_ip = await self._server.server_ip.get()
         user_ip = await self._server.user_ip.get()
         if name_protocol == "wireguard":
-            # Формируем данные для отправки
+            # Формируем данные для отправки wireguard
             task_data = {
                 "name_protocol": name_protocol,
                 "server_ip": server_ip,
@@ -111,7 +111,7 @@ class Field:
                 "enable": enable_value
             }
         else:
-            # Формируем данные для отправки
+            # Формируем данные для отправки vless
             task_data = {
                 "name_protocol": name_protocol,
                 "server_ip": server_ip,
