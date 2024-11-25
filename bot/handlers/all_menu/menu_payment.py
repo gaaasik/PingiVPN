@@ -6,6 +6,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
+from bot.handlers.admin import send_admin_log
 from bot.handlers.all_menu.main_menu import show_main_menu
 from models.UserCl import UserCl
 from bot.payments2.payments_handler_redis import create_one_time_payment
@@ -111,7 +112,7 @@ async def handle_payment_request(callback_query: types.CallbackQuery, state: FSM
         else:
             user_login = await us.user_login.get()
             await send_payment_link(chat_id, bot, user_login, user_email, state)
-
+        await send_admin_log(callback_query.bot, f"Пользователь {chat_id} нажал ВТОРУЮ кнопку оплатить")
     except Exception as e:
         logging.error(f"Ошибка в обработчике handle_payment_request: {e}")
         await bot.send_message(chat_id, "Произошла ошибка при обработке запроса. Пожалуйста, попробуйте позже.")
@@ -133,6 +134,7 @@ async def handle_email_input(message: types.Message, state: FSMContext):
             await us.email.set(email)
             user_login = await us.user_login.get()
             await send_payment_link(chat_id, bot, user_login, email, state)
+            await send_admin_log(bot, f"Пользователь {chat_id} получил ссылку на оплату, ждем оплаты, подтверждения или отмены")
         except Exception as e:
             logging.error(f"Ошибка при сохранении email: {e}")
             await bot.send_message(chat_id, "Произошла ошибка при сохранении email. Пожалуйста, попробуйте позже.")

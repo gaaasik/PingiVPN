@@ -11,6 +11,7 @@ from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_
     menu_share, menu_connect_vpn, menu_payment, menu_about_pingi
 from bot.notification_users.notification_migrate_from_wg import send_initial_update_notification, \
     send_choice_notification, get_stay_on_wg_count
+from bot.notification_users.request_payment import process_notifications_request_payment
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
 from bot.handlers import start, support, \
@@ -24,7 +25,7 @@ from bot.database.init_db import init_db
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from communication_3x_ui.send_json import process_task_queue
-from flask_app.all_utils_flask_db import initialize_db
+#from fastapi_app.all_utils_flask_db import initialize_db
 from models.UserCl import UserCl
 
 # Загружаем переменные окружения из файла .env
@@ -46,9 +47,12 @@ async def on_startup():
 
 # Функция, которая выполняется каждые 10 секунд
 async def periodic_task(bot: Bot):
+
     # Ждем 10 секунд после старта бота
-    await asyncio.sleep(10800)
+    await asyncio.sleep(86400)
     while True:
+        #await notify_users_about_protocol_change(bot)
+
         count_stay_on_wg = await get_stay_on_wg_count()
         report_text = (
             f"📊 *Ежедневный отчет*\n\n"
@@ -59,7 +63,7 @@ async def periodic_task(bot: Bot):
 
         # Пример асинхронного вызова
         # await notify_users_with_free_status(bot)
-        await asyncio.sleep(10800)
+        await asyncio.sleep(86400)
 
 
 async def send_backup_db_to_admin(bot: Bot):
@@ -158,11 +162,25 @@ async def periodic_task_24_hour(bot: Bot):
 
 
 async def notify_users_about_protocol_change(bot: Bot):
+    errors = {}
     all_chat_id = await UserCl.get_all_users()
-    for chat_id in all_chat_id:
-        await send_initial_update_notification(chat_id, bot)
-        await asyncio.sleep(1)  # Можно добавить задержку между уведомлениями для снижения нагрузки
-        await send_choice_notification(chat_id, bot)
+    # Размер батча (количество пользователей в одном чанке)
+    batch_size = 50
+
+    # Функция для разделения списка пользователей на чанки
+    def chunk_list(lst, size):
+        for i in range(0, len(lst), size):
+            yield lst[i:i + size]
+
+    # Обрабатываем чанки пользователей
+    for chunk in chunk_list(all_chat_id, batch_size):
+        # Отправляем уведомления всем пользователям в текущем чанке одновременно
+        await asyncio.gather(*[send_initial_update_notification(chat_id, bot, errors) for chat_id in chunk])
+
+    # Логируем количество ошибок после обработки батча
+    await send_admin_log(bot, f"При уведомлении возникло {len(errors)} ошибок на текущий момент.")
+
+
 
 
 async def main():
@@ -174,7 +192,7 @@ async def main():
         logging.exception(f"Неверное логирование: Ошибка при отправке запуске очереди Redis: {e}")
 
     await on_startup()
-    await initialize_db()
+    #await initialize_db()
 
     # Пример использования:
     #add_column_to_payments("new_column_name")
@@ -208,6 +226,10 @@ async def main():
     asyncio.create_task(listen_to_redis_queue(bot))  # 1 час
     asyncio.create_task(periodic_backup_task(bot))
     asyncio.create_task(process_task_queue())
+
+    # **Добавляем запуск функции отправки уведомлений**
+    #asyncio.create_task(process_notifications_request_payment(bot))  # Запуск уведомлений request_payment
+
     # Промежуточное ПО для предотвращения спама
     dp.message.middleware(ThrottlingMiddleware(rate_limit=1))
 
@@ -237,6 +259,7 @@ async def main():
     # Запуск бота
     try:
         await dp.start_polling(bot)
+
     except Exception as e:
         logging.exception(f"Произошла ошибка: {e}")
     except KeyboardInterrupt:

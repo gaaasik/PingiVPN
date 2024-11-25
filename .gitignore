@@ -1,15 +1,19 @@
 /VPN_BOT.zip
 /tests
-/configs/base_configs
+/configs/base_configs/*
 # Игнорирование виртуальных окружений
 venv/
 .venv/
+fastapi_app/fastapi_env/
+configs/registered_user/*
+fastapi_app/.idea/
 configs/registered_user/
+
 # Игнорирование файлов окружения
 *.env
 vpn_bot.db
 logs/bot.log
-
+PingiVPN/
 # Игнорируем файлы настроек IDE
 .idea/
 

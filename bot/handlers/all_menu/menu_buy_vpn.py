@@ -2,6 +2,7 @@
 from aiogram import Router
 from aiogram.types import CallbackQuery
 
+from bot.handlers.admin import ADMIN_CHAT_IDS, send_admin_log
 from bot.handlers.all_menu.main_menu import get_user_status_text
 from models.UserCl import UserCl
 
@@ -31,6 +32,16 @@ def get_add_key_keyboard():
 async def handle_buy_vpn(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
     us = await UserCl.load_user(chat_id)
+    # # Проверка на администратора
+    # if not (int(chat_id) in ADMIN_CHAT_IDS):
+    #     # Отправка сообщения для неадминистратора
+    #     await callback_query.message.answer(
+    #         f"Оплата скоро будет доступна, если у вас проблемы с подключением напишите нам @pingi_help"
+    #
+    #     )
+    #     await callback_query.answer()
+    #     return  # Завершаем выполнение функции
+
 
     # Получаем количество ключей и статус
     count_key = await us.count_key.get()
@@ -48,7 +59,7 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
     else:
         # Получаем статус первого ключа
         status_key = await us.servers[0].status_key.get()
-        key_name = await us.servers[0].email_key.get()
+        key_name = await us.servers[0].name_key.get()
 
         if status_key == "free_key":
             # Пробный период ключа
@@ -79,10 +90,11 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
                 f"Ваш ключ: {key_name}\n"
                 f"Cтатус: {await get_user_status_text(us)}\n"
                 f"Ключ активен до: *{active_end_date}*\n\n"
-                "При оплате вы продлите срок активного ключа еще на *30 дней*"
+                "При оплате вы получите доступ на *30 дней* "
             )
             keyboard = get_payment_keyboard()
 
     # Отправка сообщения с соответствующей клавиатурой
     await callback_query.message.answer(text, reply_markup=keyboard,parse_mode="Markdown")
+    await send_admin_log(callback_query.bot, f"Пользователь {chat_id} нажал первую кнопку оплатить")
     await callback_query.answer()

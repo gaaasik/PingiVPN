@@ -52,7 +52,12 @@
     },
     {
       "name": "Server 12000",
-      "address": "",
+      "address": "88.218.169.80",
+      "country": "Netherlands"
+    },
+    {
+      "name": "Server 13000",
+      "address": "194.87.49.144",
       "country": "Netherlands"
     }
   ]

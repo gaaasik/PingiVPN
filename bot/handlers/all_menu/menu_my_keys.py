@@ -41,7 +41,8 @@ async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
     """
     count_key = await us.count_key.get()
     await us.servers[0].name_protocol.get()
-    if count_key == 0:
+
+    if count_key == 0 or not us.servers:
         # Если у пользователя нет ключей
         text = (
             "<b>У вас нет ключей для оплаты.</b>\n"
@@ -51,9 +52,9 @@ async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
 
     else:
         # Получаем данные ключа
-        name_key = await us.servers[0].name_key.get()
+        key_name = await us.servers[0].name_key.get()
         country_flag = await us.servers[0].country_server.get_country()
-        traffic_limit = "200 Gb в/мес"
+        traffic_limit = "200 Gb / в мес"
         vless_url = await us.servers[0].url_vless.get()
 
         # Определяем статус и срок действия ключа
@@ -118,9 +119,7 @@ async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
 async def handle_my_keys(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
     us = await UserCl.load_user(chat_id)
-    ###############################Толян тестирует отключение пользователя##############################################################
-    await us.servers[0].enable.set_enable(False)
-    #############################################################################################
+
 
 
     try:
