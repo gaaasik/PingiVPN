@@ -36,12 +36,12 @@ async def process_notifications_request_payment(bot):
     2. Делит список на батчи.
     3. Отправляет уведомления пользователям и логирует их статус.
     """
-    await asyncio.sleep(100)
+    await asyncio.sleep(1)
     logging.info("Начинаем процесс обработки уведомлений о запросе оплаты.")
 
     users_to_notify, users_skipped = await find_users_for_notification()
     # Ограничиваем список до первых 1100 пользователей
-    users_to_notify = users_to_notify[:200]
+    users_to_notify = users_to_notify[:500]
 
     logging.info(f"Найдено {len(users_to_notify)} пользователей для уведомлений.")
     logging.info(f"Пропущено {len(users_skipped)} пользователей из-за отсутствия данных.")
@@ -120,7 +120,7 @@ async def find_users_for_notification():
 
 
 
-async def send_notification_to_user(bot, chat_id, errors, notification_type="request_payment"):
+async def send_notification_to_user(bot, chat_id, errors, notification_type="request_payment2"):
     """
     Отправляет уведомление пользователю и логирует результат через log_notification.
     """
