@@ -6,11 +6,10 @@ from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardBut
 from dotenv import load_dotenv
 
 
-from bot.handlers.cleanup import store_important_message
+
 from bot.keyboards.inline import get_detailed_instruction_button, get_file_button, \
     get_qr_code_button
 from bot.utils.file_sender import send_config_file, send_qr_code, send_instruction_video
-from bot.utils.subscription_check import check_subscription_channel
 
 router = Router()
 load_dotenv()
