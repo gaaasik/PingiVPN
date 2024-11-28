@@ -3,6 +3,7 @@ from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMar
 
 from bot.handlers.all_menu.main_menu import get_user_status_text
 from bot.handlers.all_menu.menu_buy_vpn import get_add_key_keyboard
+
 from models.UserCl import UserCl
 import logging
 
@@ -119,8 +120,6 @@ async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
 async def handle_my_keys(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
     us = await UserCl.load_user(chat_id)
-
-
 
     try:
         # Генерируем текст и клавиатуру для ответа

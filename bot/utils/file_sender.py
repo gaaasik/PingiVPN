@@ -251,7 +251,7 @@ def count_files_in_directory():
 
         # Выводим содержимое директории для проверки
         files_in_directory = os.listdir(directory)
-        print(f"Содержимое директории {directory}: {files_in_directory}")
+        #print(f"Содержимое директории {directory}: {files_in_directory}")
 
         # Считаем файлы с нужными расширениями
         conf_files = len([f for f in files_in_directory if f.endswith('_free.conf')])

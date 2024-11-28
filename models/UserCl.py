@@ -88,7 +88,7 @@ class Field:
         if self.name == "count_key":
             return await self._update_count_key()
         if self.name == "is_subscribed_on_channel":
-            return await self.user.check_subscription_channel
+            return await self.user.check_subscription_channel()
         return self.value
 
 

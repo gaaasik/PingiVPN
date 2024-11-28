@@ -8,10 +8,11 @@ from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
-    menu_share, menu_connect_vpn, menu_payment, menu_about_pingi
+    menu_share, menu_connect_vpn, menu_payment, menu_about_pingi, menu_subscriptoin_check
 from bot.notification_users.notification_migrate_from_wg import send_initial_update_notification, \
     send_choice_notification, get_stay_on_wg_count
 from bot.notification_users.request_payment import process_notifications_request_payment
+
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
 from bot.handlers import start, support, \
@@ -28,6 +29,11 @@ from communication_3x_ui.send_json import process_task_queue
 #from fastapi_app.all_utils_flask_db import initialize_db
 from models.UserCl import UserCl
 
+from bot.notifications.NotificationManagerCL import NotificationManager
+from bot.notifications.UnsubscribedNotificationCL import  UnsubscribedNotification
+from bot.notifications.PaymentReminderCL import PaymentReminder
+from bot.notifications.TrialEndingNotificationCL import TrialEndingNotification
+from bot.notifications.NotificationSchedulerCL import NotificationScheduler
 # Загружаем переменные окружения из файла .env
 load_dotenv()
 
@@ -182,60 +188,52 @@ async def notify_users_about_protocol_change(bot: Bot):
 
 
 
-
 async def main():
+    """Главная функция запуска"""
     try:
         await send_admin_log(bot, "Бот запустился")
-        # Настраиваем логирование
         setup_logger("logs/bot.log")
     except Exception as e:
-        logging.exception(f"Неверное логирование: Ошибка при отправке запуске очереди Redis: {e}")
+        logging.exception(f"Ошибка при настройке логирования: {e}")
 
     await on_startup()
-    #await initialize_db()
 
-    # Пример использования:
-    #add_column_to_payments("new_column_name")
-
-    # Читаем токен бота из переменной окружения
     if not BOT_TOKEN:
-        print("Ошибка: Токен не найден в .env файле!")
+        print("Ошибка: токен бота не найден в .env файле!")
         return
-    print(f"Токен успешно загружен: {BOT_TOKEN}")
 
-    # Указываем путь к базе данных
-    db_path = Path(os.getenv('database_path_local'))
-    if not db_path.exists():
-        print("Файл базы данных не найден!")
+    db_path = os.getenv('database_path_local')
+    if not db_path or not Path(db_path).exists():
+        print(f"Ошибка: файл базы данных {db_path} не найден!")
         return
     print(f"Путь к базе данных: {db_path}")
 
-    # Инициализация базы данных SQLite
     await init_db(db_path)
-    #result = await add_user_db(111224422, "test_user")
 
-    # await asyncio.gather(
-    #     periodic_task(bot),  # Периодическая задача
-    #     listen_to_redis_queue(bot),  # Прослушивание очереди Redis
-    #     process_task_queue(),  # Обработка задач из Redis
-    # )
-
-    # Запускаем асинхронную задачу для периодической отправки сообщений админу
     asyncio.create_task(periodic_task(bot))
-    #asyncio.create_task(periodic_task_24_hour(bot))
-    asyncio.create_task(listen_to_redis_queue(bot))  # 1 час
+    asyncio.create_task(listen_to_redis_queue(bot))
     asyncio.create_task(periodic_backup_task(bot))
     asyncio.create_task(process_task_queue())
 
-    # **Добавляем запуск функции отправки уведомлений**
-    #asyncio.create_task(process_notifications_request_payment(bot))  # Запуск уведомлений request_payment
+    # Инициализация менеджера уведомлений
+    notification_manager = NotificationManager()
 
-    # Промежуточное ПО для предотвращения спама
+    # Регистрация уведомлений
+    notification_manager.register_notification(
+        UnsubscribedNotification(channel_username="pingi_hub")
+    )
+
+    # Инициализация планировщика уведомлений
+    notification_scheduler = NotificationScheduler(notification_manager)
+
+    # Настройка расписания уведомлений
+    notification_scheduler.add_to_schedule("12:00", "UnsubscribedNotification")
+
+    # Запуск уведомлений по расписанию
+    asyncio.create_task(notification_scheduler.start(bot))
+
     dp.message.middleware(ThrottlingMiddleware(rate_limit=1))
-
-    # Регистрация хэндлеров
     dp.include_router(start.router)
-
     dp.include_router(support.router)
     dp.include_router(menu_about_pingi.router)
     dp.include_router(user_help_request.router)
@@ -249,17 +247,14 @@ async def main():
     dp.include_router(menu_connect_vpn.router)
     dp.include_router(menu_my_keys.router)
     dp.include_router(notification_migrate_from_wg.router)
-
     dp.include_router(app_downloaded.router)
     dp.include_router(file_or_qr.router)
 
-    #уведомление о переходе на vless
+    dp.include_router(menu_subscriptoin_check.router)
 
-    #await notify_users_about_protocol_change(bot)
-    # Запуск бота
     try:
+        pass
         await dp.start_polling(bot)
-
     except Exception as e:
         logging.exception(f"Произошла ошибка: {e}")
     except KeyboardInterrupt:
