@@ -49,7 +49,7 @@ async def handle_subscription_check(callback: types.CallbackQuery):
         await callback.answer()
         return
 
-    is_subscribed = await user.check_subscription_channel(channel_username=f"@{PINGI_CHANNEL}")
+    is_subscribed = await user.is_subscribed_on_channel.get()
 
     if is_subscribed:
         # Если пользователь подписан

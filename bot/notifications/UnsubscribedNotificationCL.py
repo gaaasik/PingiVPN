@@ -57,7 +57,7 @@ class UnsubscribedNotification(NotificationBase):
                     return None
 
                 # Проверяем подписку
-                if await user.check_subscription_channel(channel_username=f"@{self.channel_username}"):
+                if await user.is_subscribed_on_channel.get():
                     print(f"Пользователь {chat_id} подписан. Статус обновлен в базе.")
                     return None
                 else:

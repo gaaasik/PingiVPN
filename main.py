@@ -227,7 +227,7 @@ async def main():
     notification_scheduler = NotificationScheduler(notification_manager)
 
     # Настройка расписания уведомлений
-    notification_scheduler.add_to_schedule("21:45", "UnsubscribedNotification")
+    notification_scheduler.add_to_schedule("12:00", "UnsubscribedNotification")
 
     # Запуск уведомлений по расписанию
     asyncio.create_task(notification_scheduler.start(bot))
