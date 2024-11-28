@@ -98,14 +98,17 @@ class Field:
         await self._set(enable_value)
 
         # Получаем uuid из объекта сервера
+        chat_id = self.user.chat_id
         name_protocol = await self._server.name_protocol.get()
         uuid_value = await self._server.uuid_id.get()
         server_ip = await self._server.server_ip.get()
         user_ip = await self._server.user_ip.get()
+        print("______________________________chat_id_____________ (set_enable) = ", chat_id)
         if name_protocol == "wireguard":
             # Формируем данные для отправки wireguard
             task_data = {
                 "name_protocol": name_protocol,
+                "chat_id": chat_id,
                 "server_ip": server_ip,
                 "user_ip": user_ip,
                 "enable": enable_value
@@ -114,6 +117,7 @@ class Field:
             # Формируем данные для отправки vless
             task_data = {
                 "name_protocol": name_protocol,
+                "chat_id": chat_id,
                 "server_ip": server_ip,
                 "id": uuid_value,
                 "enable": enable_value
