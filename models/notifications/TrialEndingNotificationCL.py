@@ -9,7 +9,7 @@ import logging
 import json
 import aiosqlite
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from ..handlers.admin import send_admin_log
+from bot.handlers.admin import send_admin_log
 
 
 class TrialEndingNotification(NotificationBase):

@@ -44,18 +44,17 @@ class NotificationBase(ABC):
         async def send_message(user_id):
             """Асинхронная функция для отправки сообщения одному пользователю."""
             try:
-                if user_id in ADMIN_CHAT_IDS:
-                    # Отправляем сообщение
-                    await bot.send_message(
-                        chat_id=user_id,
-                        text=message_template,
-                        reply_markup=keyboard,
-                        parse_mode="HTML"
-                    )
-                    self.success_count += 1  # Увеличиваем счетчик успешных отправок
-                    await self.after_send_success(user_id)  # Обработка после успешной отправки
-                else:
-                    print(f"должны отправить уведомление {user_id}")
+
+                # Отправляем сообщение
+                await bot.send_message(
+                    chat_id=user_id,
+                    text=message_template,
+                    reply_markup=keyboard,
+                    parse_mode="HTML"
+                )
+                self.success_count += 1  # Увеличиваем счетчик успешных отправок
+                await self.after_send_success(user_id)  # Обработка после успешной отправки
+
             except Exception as e:
                 self.error_count += 1  # Увеличиваем счетчик ошибок
                 await self.handle_send_error(user_id, e)  # Обработка ошибок отправки
