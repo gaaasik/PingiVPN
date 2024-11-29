@@ -8,6 +8,7 @@ from typing import List
 import logging
 import json
 import aiosqlite
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from ..handlers.admin import send_admin_log
 
 
@@ -85,6 +86,18 @@ class UnsubscribedNotification(NotificationBase):
             "Это поможет нам поддерживать сервис\n"
             "и радовать вас новыми функциями. 🚀"
         )
+
+    def get_keyboard(self) -> InlineKeyboardMarkup:
+        """
+        Возвращает клавиатуру с кнопками для подписки.
+        """
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text="📢 Перейти на канал", url=f"https://t.me/{self.channel_username}")],
+                [InlineKeyboardButton(text="✅ Я подписался", callback_data="i_am_subscribed")]
+            ]
+        )
+        return keyboard
 
     async def after_send_success(self, user_id: int):
         """

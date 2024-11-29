@@ -167,24 +167,24 @@ async def periodic_task_24_hour(bot: Bot):
         # Мы не ждем фиксированное количество времени, а снова пересчитываем время до следующего 3:00
 
 
-async def notify_users_about_protocol_change(bot: Bot):
-    errors = {}
-    all_chat_id = await UserCl.get_all_users()
-    # Размер батча (количество пользователей в одном чанке)
-    batch_size = 50
-
-    # Функция для разделения списка пользователей на чанки
-    def chunk_list(lst, size):
-        for i in range(0, len(lst), size):
-            yield lst[i:i + size]
-
-    # Обрабатываем чанки пользователей
-    for chunk in chunk_list(all_chat_id, batch_size):
-        # Отправляем уведомления всем пользователям в текущем чанке одновременно
-        await asyncio.gather(*[send_initial_update_notification(chat_id, bot, errors) for chat_id in chunk])
-
-    # Логируем количество ошибок после обработки батча
-    await send_admin_log(bot, f"При уведомлении возникло {len(errors)} ошибок на текущий момент.")
+# async def notify_users_about_protocol_change(bot: Bot):
+#     errors = {}
+#     all_chat_id = await UserCl.get_all_users()
+#     # Размер батча (количество пользователей в одном чанке)
+#     batch_size = 50
+#
+#     # Функция для разделения списка пользователей на чанки
+#     def chunk_list(lst, size):
+#         for i in range(0, len(lst), size):
+#             yield lst[i:i + size]
+#
+#     # Обрабатываем чанки пользователей
+#     for chunk in chunk_list(all_chat_id, batch_size):
+#         # Отправляем уведомления всем пользователям в текущем чанке одновременно
+#         await asyncio.gather(*[send_initial_update_notification(chat_id, bot, errors) for chat_id in chunk])
+#
+#     # Логируем количество ошибок после обработки батча
+#     await send_admin_log(bot, f"При уведомлении возникло {len(errors)} ошибок на текущий момент.")
 
 
 
@@ -214,7 +214,6 @@ async def main():
     asyncio.create_task(listen_to_redis_queue(bot))
     asyncio.create_task(periodic_backup_task(bot))
     asyncio.create_task(process_task_queue())
-
     # Инициализация менеджера уведомлений
     notification_manager = NotificationManager()
 
@@ -222,12 +221,16 @@ async def main():
     notification_manager.register_notification(
         UnsubscribedNotification(channel_username="pingi_hub")
     )
+    notification_manager.register_notification(
+        TrialEndingNotification()
+    )
 
     # Инициализация планировщика уведомлений
     notification_scheduler = NotificationScheduler(notification_manager)
 
     # Настройка расписания уведомлений
     notification_scheduler.add_to_schedule("12:00", "UnsubscribedNotification")
+    notification_scheduler.add_to_schedule("13:00", "TrialEndingNotification")
 
     # Запуск уведомлений по расписанию
     asyncio.create_task(notification_scheduler.start(bot))

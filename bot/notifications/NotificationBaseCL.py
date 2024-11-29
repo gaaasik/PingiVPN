@@ -1,8 +1,7 @@
 import asyncio
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Optional
 from bot.handlers.admin import ADMIN_CHAT_IDS, send_admin_log
-from bot.handlers.all_menu.menu_subscriptoin_check import subscribe_keyboard_if_us_action
 
 
 class NotificationBase(ABC):
@@ -22,6 +21,11 @@ class NotificationBase(ABC):
         """Получение текста уведомления"""
         pass
 
+    @abstractmethod
+    def get_keyboard(self) -> Optional[object]:
+        """Получение клавиатуры для уведомления"""
+        pass
+
     def split_into_batches(self, users: List[int]) -> List[List[int]]:
         """
         Делит список пользователей на батчи заданного размера.
@@ -35,15 +39,23 @@ class NotificationBase(ABC):
         Реальная асинхронная отправка сообщений нескольким пользователям одновременно.
         """
         message_template = self.get_message_template()
+        keyboard = self.get_keyboard()
 
         async def send_message(user_id):
             """Асинхронная функция для отправки сообщения одному пользователю."""
             try:
-                # Отправляем реальное сообщение
-                await bot.send_message(chat_id=user_id, text=message_template, reply_markup=subscribe_keyboard_if_us_action(), parse_mode="HTML")
-
-                self.success_count += 1  # Увеличиваем счетчик успешных отправок
-                await self.after_send_success(user_id)  # Обработка после успешной отправки
+                if user_id in ADMIN_CHAT_IDS:
+                    # Отправляем сообщение
+                    await bot.send_message(
+                        chat_id=user_id,
+                        text=message_template,
+                        reply_markup=keyboard,
+                        parse_mode="HTML"
+                    )
+                    self.success_count += 1  # Увеличиваем счетчик успешных отправок
+                    await self.after_send_success(user_id)  # Обработка после успешной отправки
+                else:
+                    print(f"должны отправить уведомление {user_id}")
             except Exception as e:
                 self.error_count += 1  # Увеличиваем счетчик ошибок
                 await self.handle_send_error(user_id, e)  # Обработка ошибок отправки
@@ -88,4 +100,3 @@ class NotificationBase(ABC):
                 print(f"Ошибка при отправке сводного отчета: {e}")
         else:
             print("Нет пользователей для уведомления. Отправка сводки отменена.")
-
