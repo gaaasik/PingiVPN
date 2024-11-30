@@ -71,7 +71,7 @@ class ReferralCl:
 
         # Отправляем уведомление пригласившему пользователю
         try:
-            await bot.send_message(referral_old_chat_id, referral_message)
+            #await bot.send_message(referral_old_chat_id, referral_message)
             logging.info(f"Сообщение отправлено рефереру {referral_old_chat_id}.")
         except Exception as e:
             logging.error(f"Ошибка при отправке сообщения рефереру {referral_old_chat_id}: {e}")

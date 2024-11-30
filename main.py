@@ -24,6 +24,7 @@ from bot.database.init_db import init_db
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from communication_3x_ui.send_json import process_task_queue
+from models.UserCl import UserCl
 from models.daily_task_class.DailyTaskManager import DailyTaskManager
 #from fastapi_app.all_utils_flask_db import initialize_db
 
@@ -46,6 +47,7 @@ async def on_startup():
     image_path = os.path.join(PATH_TO_IMAGES, "Hello.png")
     print('закешировали приветственное фото')
     await cache_media(image_path, video_path)
+
 
 async def schedule_daily_tasks(bot):
     """
@@ -180,7 +182,8 @@ async def main():
     asyncio.create_task(process_task_queue())
     # Инициализация менеджера уведомлений
     notification_manager = NotificationManager()
-
+    user = await UserCl.load_user(1021956655)
+    await user.servers[0].date_key_off.set("23.02.2025 09:34:23")
     # Регистрация уведомлений
     notification_manager.register_notification(
         UnsubscribedNotification(channel_username="pingi_hub")
