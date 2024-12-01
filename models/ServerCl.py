@@ -1,14 +1,19 @@
 import os
 import json
 from datetime import datetime
+from pathlib import Path
 
 import aioredis
 import paramiko
 
 from typing import TYPE_CHECKING
 
+from dotenv import load_dotenv
+
 if TYPE_CHECKING:
     from models.UserCl import UserCl  # Только для аннотаций типов
+
+load_dotenv()
 
 
 #from fastapi import requests
@@ -88,6 +93,11 @@ class Field:
         return COUNTRY_TRANSLATIONS.get(country, "Неизвестная страна")
 
     async def set_enable(self, enable_value: bool):
+        REDIS_HOST = os.getenv('ip_redis_server')
+        REDIS_PASSWORD = os.getenv('password_redis')
+        REDIS_PORT = os.getenv('port_redis')
+
+
         """Обновляет значение enable и добавляет задачу на отправку в Redis."""
         if self._name != "enable":
             raise AttributeError("Метод set_enable можно вызывать только для поля 'enable'.")
@@ -97,12 +107,12 @@ class Field:
         await self._set(enable_value)
 
         # Получаем данные объекта
-        chat_id = self.user.chat_id
+        chat_id = self._server.user.chat_id
         name_protocol = await self._server.name_protocol.get()
         uuid_value = await self._server.uuid_id.get()
         server_ip = await self._server.server_ip.get()
         user_ip = await self._server.user_ip.get()
-        print("______________________________chat_id_____________ (set_enable) = ", chat_id)
+
 
         # Формируем задачу в зависимости от протокола
         if name_protocol == "wireguard":
@@ -115,7 +125,7 @@ class Field:
                 "enable": enable_value
             }
             # Имя очереди для WireGuard
-            queue_name = "tasks_wireguard"
+            queue_name = "queue_task"
         else:
             # Формируем данные для отправки VLESS
             task_data = {
@@ -126,18 +136,24 @@ class Field:
                 "enable": enable_value
             }
             # Имя очереди для VLESS
-            queue_name = "tasks_vless"
+            queue_name = "queue_task"
 
         # Подключаемся к Redis и добавляем задачу в очередь
-        redis = aioredis.from_url("redis://localhost:6379")  # Замените на URL вашего Redis
+        redis = None
         try:
+            redis = aioredis.from_url(
+                f"redis://{REDIS_HOST}:{REDIS_PORT}",
+                password=REDIS_PASSWORD,  # Указание пароля для Redis
+                decode_responses=True
+            )
             # Добавляем задачу в соответствующую очередь
             await redis.rpush(queue_name, json.dumps(task_data))
             print(f"Задача добавлена в очередь {queue_name}: {task_data}")
         except Exception as e:
             print(f"Ошибка при добавлении задачи в очередь {queue_name}: {e}")
         finally:
-            await redis.close()
+            if redis:
+                await redis.close()
 
 
 class ServerCl:

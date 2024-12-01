@@ -1,3 +1,111 @@
+import os
+
+import aioredis
+import asyncio
+import json
+import logging
+
+from dotenv import load_dotenv
+
+# Настройка логирования
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler("main_server_task_processor.log"),
+        logging.StreamHandler()
+    ]
+)
+
+load_dotenv()
+
+# Настройки Redis
+REDIS_HOST = os.getenv('ip_redis_server')  # Укажите IP-адрес Redis
+REDIS_PORT = os.getenv('port_redis')
+REDIS_PASSWORD = os.getenv('password_redis')  # Если требуется, добавьте пароль
+NAME_RESULT_QUEUE = "queue_result_task"
+
+# Асинхронная обработка задачи
+async def process_task(task):
+    try:
+        print("Получили задачу из очереди queue_result_task№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№")
+        task_data = json.loads(task)
+        logging.info(f"Получена задача для обработки: {task_data}")
+
+        # Пример обработки задачи
+        if task_data.get("status") == "success":
+            logging.info(f"Задача успешно выполнена: {task_data}")
+            # Здесь можно добавить обработку успешных задач
+        elif task_data.get("status") == "error":
+            logging.error(f"Ошибка при выполнении задачи: {task_data}")
+            # Здесь можно добавить обработку ошибок
+        else:
+            logging.warning(f"Неизвестный статус задачи: {task_data}")
+
+    except json.JSONDecodeError as e:
+        logging.error(f"Ошибка декодирования задачи: {e}")
+    except Exception as e:
+        logging.error(f"Ошибка обработки задачи: {e}")
+
+# Асинхронный цикл обработки очереди
+async def process_queue_results_task():
+    logging.info("Запуск обработки очереди...")
+
+    redis = None  # Инициализация переменной Redis для безопасного закрытия соединения
+
+    try:
+        # Устанавливаем соединение с Redis
+        redis = await aioredis.from_url(
+            f"redis://{REDIS_HOST}:{REDIS_PORT}",
+            password=REDIS_PASSWORD,
+            decode_responses=True
+        )
+        while True:
+            try:
+                logging.info("Ожидание задачи из Redis...")
+                task = await redis.blpop(NAME_RESULT_QUEUE, timeout=10)  # Тайм-аут 10 секунд
+
+                if task:
+                    _, task_data = task
+                    await process_task(task_data)
+                else:
+                    logging.info("Тайм-аут ожидания задачи. Продолжаем.")
+            except asyncio.CancelledError:
+                # Корректная обработка отмены задачи
+                logging.info("Обработка очереди отменена. Завершаем работу.")
+                break
+            except aioredis.ConnectionError as e:
+                logging.error(f"Ошибка подключения к Redis: {e}")
+                await asyncio.sleep(5)  # Переподключение через 5 секунд
+    except GeneratorExit:
+        # Обработка GeneratorExit для корректного завершения
+        logging.info("GeneratorExit: Завершение корутины.")
+    except Exception as e:
+        logging.error(f"Непредвиденная ошибка в процессе обработки очереди: {e}")
+    finally:
+        # Гарантированное закрытие соединения Redis
+        logging.info(f"Текущие задачи: {asyncio.all_tasks()}")
+        if redis:
+            await redis.close()
+            logging.info("Соединение с Redis закрыто.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # import asyncio
 # import aiohttp
 # import aioredis

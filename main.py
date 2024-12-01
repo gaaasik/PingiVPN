@@ -23,8 +23,9 @@ from bot.database.db import database_path_local  #,  init_db
 from bot.database.init_db import init_db
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
-from communication_3x_ui.send_json import process_task_queue
-# from communication_3x_ui.send_json import process_task_queue
+from communication_with_servers.queue_results_task import process_queue_results_task
+#from communication_with_servers.send_json import process_task_queue
+# from communication_with_servers.send_json import process_task_queue
 #from fastapi_app.all_utils_flask_db import initialize_db
 from models.UserCl import UserCl
 from models.daily_task_class.DailyTaskManager import DailyTaskManager
@@ -44,6 +45,9 @@ video_path = os.getenv("video_path")
 REGISTERED_USERS_DIR = os.getenv('REGISTERED_USERS_DIR')
 
 
+
+
+
 async def on_startup():
     """Кэширование изображений при старте"""
     image_path = os.path.join(PATH_TO_IMAGES, "Hello.png")
@@ -55,8 +59,8 @@ async def schedule_daily_tasks(bot):
     """
     Планировщик для запуска ежедневных задач в 10 утра.
     """
-    manager = DailyTaskManager(bot)
-    await manager.execute_daily_tasks()
+    #manager = DailyTaskManager(bot)
+    #await manager.execute_daily_tasks()
     while True:
         now = datetime.now()
         target_time = now.replace(hour=10, minute=0, second=0, microsecond=0)
@@ -74,7 +78,8 @@ async def schedule_daily_tasks(bot):
 
         # Выполняем задачи
         try:
-            await manager.execute_daily_tasks()
+            pass
+            #await manager.execute_daily_tasks()
         except Exception as e:
             print(f"Ошибка при выполнении ежедневных задач: {e}")
 
@@ -181,14 +186,15 @@ async def main():
     asyncio.create_task(schedule_daily_tasks(bot))
     asyncio.create_task(listen_to_redis_queue(bot))
     asyncio.create_task(periodic_backup_task(bot))
-    asyncio.create_task(process_task_queue())
+    asyncio.create_task(process_queue_results_task())
     #asyncio.create_task(process_task_queue())
+
 
     # Инициализация менеджера уведомлений
     notification_manager = NotificationManager()
-    user = await UserCl.load_user(1021956655)
-    await user.servers[0].date_key_off.set("23.02.2025 09:34:23")
-    # Регистрация уведомлений
+    #user = await UserCl.load_user(1021956655)
+    #await user.servers[0].date_key_off.set("23.02.2025 09:34:23")
+    ## Регистрация уведомлений
     notification_manager.register_notification(
         UnsubscribedNotification(channel_username="pingi_hub")
     )
