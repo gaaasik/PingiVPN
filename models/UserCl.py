@@ -197,6 +197,92 @@ class UserCl:
             print(f"Ошибка при получении всех пользователей: {e}")
         return user_ids
 
+    @classmethod
+    async def count_users_by_date(cls, date: datetime) -> int:
+        """
+        Подсчитывает количество пользователей, зарегистрированных в указанную дату.
+        """
+        try:
+            async with aiosqlite.connect(database_path_local) as db:
+                # SQL-запрос для подсчета пользователей по дате
+                query = """
+                SELECT COUNT(*) FROM users 
+                WHERE DATE(substr(registration_date, 7, 4) || '-' || substr(registration_date, 4, 2) || '-' || substr(registration_date, 1, 2)) = ?
+                """
+
+                # Преобразуем дату в формат YYYY-MM-DD
+                date_str = date.strftime("%Y-%m-%d")
+
+                # Логируем дату и запрос
+                logging.info(f"Выполняется подсчет пользователей за дату: {date_str}")
+                logging.info(f"SQL-запрос: {query}")
+
+                # Выполняем запрос
+                async with db.execute(query, (date_str,)) as cursor:
+                    result = await cursor.fetchone()
+                    count = result[0] if result else 0
+
+                    # Логируем результат
+                    logging.info(f"Найдено пользователей за {date_str}: {count}")
+                    return count
+        except Exception as e:
+            # Логируем ошибку
+            logging.error(f"Ошибка при подсчете пользователей за дату {date}: {e}")
+            return 0
+
+    @classmethod
+    async def count_paid_users_by_date(cls, date: datetime) -> int:
+        """
+        Подсчитывает количество пользователей, которые оплатили подписку за указанную дату.
+        """
+        try:
+            async with aiosqlite.connect(database_path_local) as db:
+                query = """
+                SELECT COUNT(DISTINCT chat_id) 
+                FROM payments 
+                WHERE status = 'payment.succeeded' 
+                AND DATE(created_at) = DATE(?)
+                """
+                date_str = date.strftime("%Y-%m-%d")
+                async with db.execute(query, (date_str,)) as cursor:
+                    result = await cursor.fetchone()
+                    return result[0] if result else 0
+        except Exception as e:
+            logging.error(f"Ошибка при подсчете оплаченных пользователей за дату {date}: {e}")
+            return 0
+
+    @classmethod
+    async def count_total_paid_users(cls, start_date: datetime) -> int:
+        """
+        Подсчитывает общее количество успешных оплат, начиная с определенной даты.
+        """
+        try:
+            async with aiosqlite.connect(database_path_local) as db:
+                query = """
+                SELECT COUNT(DISTINCT chat_id) 
+                FROM payments 
+                WHERE status = 'payment.succeeded' 
+                AND DATE(created_at) >= DATE(?)
+                """
+                start_date_str = start_date.strftime("%Y-%m-%d")
+                async with db.execute(query, (start_date_str,)) as cursor:
+                    result = await cursor.fetchone()
+                    return result[0] if result else 0
+        except Exception as e:
+            logging.error(f"Ошибка при подсчете всех оплаченных пользователей с {start_date}: {e}")
+            return 0
+
+    @staticmethod
+    async def user_exists(chat_id: int) -> bool:
+        """
+        Проверяет, существует ли пользователь с указанным chat_id.
+        """
+        try:
+            user = await UserCl.load_user(chat_id)
+            return user is not None
+        except Exception as e:
+            logging.error(f"Ошибка при проверке существования пользователя {chat_id}: {e}")
+            return False
     async def add_server_json(self, server_params: dict):
         """Добавление нового сервера в JSON формате"""
         # Преобразуем параметры в объект Server_cl и добавляем его в список servers

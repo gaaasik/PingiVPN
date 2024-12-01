@@ -3,6 +3,7 @@ from aiogram import Router, types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 
 from bot.handlers.admin import send_admin_log
+from bot.keyboards.inline import main_menu_inline_button
 from models.UserCl import UserCl
 router = Router()
 
@@ -54,7 +55,7 @@ async def handle_subscription_check(callback: types.CallbackQuery):
     if is_subscribed:
         # Если пользователь подписан
         await callback.message.answer(
-            "Спасибо, что вы с нами! 🎉 В канале мы будем держать вас в курсе важных новостей."
+            "Спасибо, что вы с нами! 🎉 В канале мы будем держать вас в курсе важных новостей.",reply_markup =main_menu_inline_button()
         )
         await send_admin_log(callback.bot, f"Пользователь {chat_id} подписался и нажал 'я подписался'.")
     else:

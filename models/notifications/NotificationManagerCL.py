@@ -1,7 +1,7 @@
 import asyncio
 from datetime import datetime
 from typing import List, Dict
-from bot.notifications.NotificationBaseCL import NotificationBase
+from models.notifications.NotificationBaseCL import NotificationBase
 
 class NotificationManager:
     def __init__(self):

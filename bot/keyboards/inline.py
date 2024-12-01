@@ -37,7 +37,14 @@ def download_app_keyboard(device: str) -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
     ])
     return keyboard
-
+def main_menu_inline_button():
+    """
+    Возвращает inline-клавиатуру с кнопкой "🏠 Главное меню".
+    """
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
+    ])
+    return keyboard
 
 
 # Функция для кнопки "Получить файл"

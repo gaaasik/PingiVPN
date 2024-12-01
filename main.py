@@ -9,9 +9,7 @@ from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
     menu_share, menu_connect_vpn, menu_payment, menu_about_pingi, menu_subscriptoin_check
-from bot.notification_users.notification_migrate_from_wg import send_initial_update_notification, \
-    send_choice_notification, get_stay_on_wg_count
-from bot.notification_users.request_payment import process_notifications_request_payment
+from bot.notification_users.notification_migrate_from_wg import get_stay_on_wg_count
 
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
@@ -25,15 +23,17 @@ from bot.database.db import database_path_local  #,  init_db
 from bot.database.init_db import init_db
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
+from communication_3x_ui.send_json import process_task_queue
 # from communication_3x_ui.send_json import process_task_queue
 #from fastapi_app.all_utils_flask_db import initialize_db
 from models.UserCl import UserCl
+from models.daily_task_class.DailyTaskManager import DailyTaskManager
+#from fastapi_app.all_utils_flask_db import initialize_db
 
-from bot.notifications.NotificationManagerCL import NotificationManager
-from bot.notifications.UnsubscribedNotificationCL import  UnsubscribedNotification
-from bot.notifications.PaymentReminderCL import PaymentReminder
-from bot.notifications.TrialEndingNotificationCL import TrialEndingNotification
-from bot.notifications.NotificationSchedulerCL import NotificationScheduler
+from models.notifications.NotificationManagerCL import NotificationManager
+from models.notifications.UnsubscribedNotificationCL import  UnsubscribedNotification
+from models.notifications.TrialEndingNotificationCL import TrialEndingNotification
+from models.notifications.NotificationSchedulerCL import NotificationScheduler
 # Загружаем переменные окружения из файла .env
 load_dotenv()
 
@@ -51,25 +51,32 @@ async def on_startup():
     await cache_media(image_path, video_path)
 
 
-# Функция, которая выполняется каждые 10 секунд
-async def periodic_task(bot: Bot):
-
-    # Ждем 10 секунд после старта бота
-    await asyncio.sleep(86400)
+async def schedule_daily_tasks(bot):
+    """
+    Планировщик для запуска ежедневных задач в 10 утра.
+    """
+    manager = DailyTaskManager(bot)
+    await manager.execute_daily_tasks()
     while True:
-        #await notify_users_about_protocol_change(bot)
+        now = datetime.now()
+        target_time = now.replace(hour=10, minute=0, second=0, microsecond=0)
 
-        count_stay_on_wg = await get_stay_on_wg_count()
-        report_text = (
-            f"📊 *Ежедневный отчет*\n\n"
-            f"{count_stay_on_wg} пользователей нажали 'Остаться на WireGuard' сегодня.\n"
-            "Рекомендуем поддержать их в переходе на VLESS."
-        )
-        await send_admin_log(bot, report_text)
+        # Если текущее время уже позже 10 утра, планируем на следующий день
+        if now > target_time:
+            target_time += timedelta(days=1)
 
-        # Пример асинхронного вызова
-        # await notify_users_with_free_status(bot)
-        await asyncio.sleep(86400)
+        # Рассчитываем, сколько времени осталось до запуска
+        wait_time = (target_time - now).total_seconds()
+        print(f"Следующая задача будет выполнена через {wait_time} секунд")
+
+        # Ожидаем до целевого времени
+        await asyncio.sleep(wait_time)
+
+        # Выполняем задачи
+        try:
+            await manager.execute_daily_tasks()
+        except Exception as e:
+            print(f"Ошибка при выполнении ежедневных задач: {e}")
 
 
 async def send_backup_db_to_admin(bot: Bot):
@@ -125,66 +132,26 @@ async def periodic_backup_task(bot: Bot):
             await send_admin_log(bot, f"Ошибка при отправке бекапа базы данных: {e}")
 
 
-async def periodic_task_24_hour(bot: Bot):
-    # Ждем 1 секунду после старта бота (как у тебя)
-    await asyncio.sleep(1)
-
-    while True:
-        # Текущее время
-        now = datetime.now()
-
-        # Время следующего 3:00 ночи
-        next_3am = datetime.combine(now.date(), datetime.min.time()) + timedelta(hours=15, minutes=7)
-
-        # Если сейчас уже после 3:00 ночи, то следующий запуск будет завтра в 3:00
-        if now > next_3am:
-            next_3am += timedelta(days=1)
-
-        # Рассчитываем, сколько времени осталось до следующего 3:00
-        time_to_sleep = (next_3am - now).total_seconds()
-
-        # Спим до следующего 3:00
-        print(f"Следующее выполнение в {next_3am}, ждем {time_to_sleep} секунд.")
-        await asyncio.sleep(time_to_sleep)
-
-        # Когда просыпаемся, выполняем задачу
-        print("Сработала функция в 3:00 ночи")
-        try:
-            # Сообщаем администратору о начале обновления
-            await send_admin_log(bot, "Пинг бота - началось обновление базы данных в 3:00.")
-
-            # Выполнение проверки базы данных
-            #await check_db(bot)
-
-            # Уведомление об успешном завершении
-            await send_admin_log(bot, "Обновление базы данных прошло успешно.")
-
-        except Exception as e:
-            # Логирование ошибки и отправка уведомления администратору
-            logging.error(f"Ошибка при выполнении обновления базы данных: {e}")
-            await send_admin_log(bot, f"Обновление базы данных завершилось с ошибкой: {e}")
-
-        # Мы не ждем фиксированное количество времени, а снова пересчитываем время до следующего 3:00
 
 
-async def notify_users_about_protocol_change(bot: Bot):
-    errors = {}
-    all_chat_id = await UserCl.get_all_users()
-    # Размер батча (количество пользователей в одном чанке)
-    batch_size = 50
-
-    # Функция для разделения списка пользователей на чанки
-    def chunk_list(lst, size):
-        for i in range(0, len(lst), size):
-            yield lst[i:i + size]
-
-    # Обрабатываем чанки пользователей
-    for chunk in chunk_list(all_chat_id, batch_size):
-        # Отправляем уведомления всем пользователям в текущем чанке одновременно
-        await asyncio.gather(*[send_initial_update_notification(chat_id, bot, errors) for chat_id in chunk])
-
-    # Логируем количество ошибок после обработки батча
-    await send_admin_log(bot, f"При уведомлении возникло {len(errors)} ошибок на текущий момент.")
+# async def notify_users_about_protocol_change(bot: Bot):
+#     errors = {}
+#     all_chat_id = await UserCl.get_all_users()
+#     # Размер батча (количество пользователей в одном чанке)
+#     batch_size = 50
+#
+#     # Функция для разделения списка пользователей на чанки
+#     def chunk_list(lst, size):
+#         for i in range(0, len(lst), size):
+#             yield lst[i:i + size]
+#
+#     # Обрабатываем чанки пользователей
+#     for chunk in chunk_list(all_chat_id, batch_size):
+#         # Отправляем уведомления всем пользователям в текущем чанке одновременно
+#         await asyncio.gather(*[send_initial_update_notification(chat_id, bot, errors) for chat_id in chunk])
+#
+#     # Логируем количество ошибок после обработки батча
+#     await send_admin_log(bot, f"При уведомлении возникло {len(errors)} ошибок на текущий момент.")
 
 
 
@@ -210,17 +177,23 @@ async def main():
 
     await init_db(db_path)
 
-    asyncio.create_task(periodic_task(bot))
+    # Запуск ежедневных задач
+    asyncio.create_task(schedule_daily_tasks(bot))
     asyncio.create_task(listen_to_redis_queue(bot))
     asyncio.create_task(periodic_backup_task(bot))
+    asyncio.create_task(process_task_queue())
     #asyncio.create_task(process_task_queue())
 
     # Инициализация менеджера уведомлений
     notification_manager = NotificationManager()
-
+    user = await UserCl.load_user(1021956655)
+    await user.servers[0].date_key_off.set("23.02.2025 09:34:23")
     # Регистрация уведомлений
     notification_manager.register_notification(
         UnsubscribedNotification(channel_username="pingi_hub")
+    )
+    notification_manager.register_notification(
+        TrialEndingNotification()
     )
 
     # Инициализация планировщика уведомлений
@@ -228,6 +201,7 @@ async def main():
 
     # Настройка расписания уведомлений
     notification_scheduler.add_to_schedule("12:00", "UnsubscribedNotification")
+    notification_scheduler.add_to_schedule("13:00", "TrialEndingNotification")
 
     # Запуск уведомлений по расписанию
     asyncio.create_task(notification_scheduler.start(bot))
