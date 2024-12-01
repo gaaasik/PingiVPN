@@ -25,7 +25,7 @@ from bot.database.db import database_path_local  #,  init_db
 from bot.database.init_db import init_db
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
-from communication_3x_ui.send_json import process_task_queue
+# from communication_3x_ui.send_json import process_task_queue
 #from fastapi_app.all_utils_flask_db import initialize_db
 from models.UserCl import UserCl
 
@@ -213,7 +213,7 @@ async def main():
     asyncio.create_task(periodic_task(bot))
     asyncio.create_task(listen_to_redis_queue(bot))
     asyncio.create_task(periodic_backup_task(bot))
-    asyncio.create_task(process_task_queue())
+    #asyncio.create_task(process_task_queue())
 
     # Инициализация менеджера уведомлений
     notification_manager = NotificationManager()

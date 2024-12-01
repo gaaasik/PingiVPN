@@ -87,7 +87,6 @@ class Field:
         country = self._value
         return COUNTRY_TRANSLATIONS.get(country, "Неизвестная страна")
 
-
     async def set_enable(self, enable_value: bool):
         """Обновляет значение enable и добавляет задачу на отправку в Redis."""
         if self._name != "enable":
@@ -97,15 +96,17 @@ class Field:
         # Обновляем значение в объекте и в базе данных
         await self._set(enable_value)
 
-        # Получаем uuid из объекта сервера
+        # Получаем данные объекта
         chat_id = self.user.chat_id
         name_protocol = await self._server.name_protocol.get()
         uuid_value = await self._server.uuid_id.get()
         server_ip = await self._server.server_ip.get()
         user_ip = await self._server.user_ip.get()
         print("______________________________chat_id_____________ (set_enable) = ", chat_id)
+
+        # Формируем задачу в зависимости от протокола
         if name_protocol == "wireguard":
-            # Формируем данные для отправки wireguard
+            # Формируем данные для отправки WireGuard
             task_data = {
                 "name_protocol": name_protocol,
                 "chat_id": chat_id,
@@ -113,8 +114,10 @@ class Field:
                 "user_ip": user_ip,
                 "enable": enable_value
             }
+            # Имя очереди для WireGuard
+            queue_name = "tasks_wireguard"
         else:
-            # Формируем данные для отправки vless
+            # Формируем данные для отправки VLESS
             task_data = {
                 "name_protocol": name_protocol,
                 "chat_id": chat_id,
@@ -122,12 +125,17 @@ class Field:
                 "id": uuid_value,
                 "enable": enable_value
             }
+            # Имя очереди для VLESS
+            queue_name = "tasks_vless"
 
-        # Подключаемся к Redis и добавляем задачу в очередьs
-        redis = aioredis.from_url("redis://localhost:6379", db=1)
+        # Подключаемся к Redis и добавляем задачу в очередь
+        redis = aioredis.from_url("redis://localhost:6379")  # Замените на URL вашего Redis
         try:
-            await redis.rpush("send_3x_ui", json.dumps(task_data))
-            print(f"Задача на отправку JSON для UUID {uuid_value} добавлена в очередь.")
+            # Добавляем задачу в соответствующую очередь
+            await redis.rpush(queue_name, json.dumps(task_data))
+            print(f"Задача добавлена в очередь {queue_name}: {task_data}")
+        except Exception as e:
+            print(f"Ошибка при добавлении задачи в очередь {queue_name}: {e}")
         finally:
             await redis.close()
 

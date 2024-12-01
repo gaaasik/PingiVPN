@@ -121,6 +121,12 @@ async def handle_my_keys(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
     us = await UserCl.load_user(chat_id)
 
+##########################################################################
+    if chat_id == 13885130421:
+        print("tolsemenov SET_ENABLE")
+        us.servers[0].enable.set(False)
+
+###########################################################################
     try:
         # Генерируем текст и клавиатуру для ответа
         text, keyboard = await generate_key_status_text(us)
