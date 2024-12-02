@@ -164,6 +164,7 @@ class ServerCl:
         self.country_server = Field('country_server', server_data.get("country_server", ""), self)
         self.date_creation_key = Field('date_creation_key', server_data.get("date_creation_key", ""), self)
         self.date_key_off = Field('date_key_off', server_data.get("date_key_off", ""), self)
+        self.date_latest_handshake = Field('date_latest_handshake', server_data.get("date_latest_handshake", ""), self)
         self.date_payment_key = Field('date_payment_key', server_data.get("date_payment_key", ""), self)
         self.email_key = Field('email_key', server_data.get("email_key", ""), self)
         self.enable = Field('enable', server_data.get("enable", None), self)
@@ -191,6 +192,7 @@ class ServerCl:
 
             "country_server": await self.country_server.get(),
             "date_creation_key": await self.date_creation_key.get(),
+            "date_latest_handshake": await self.date_latest_handshake.get(),
             "date_key_off": await self.date_key_off.get(),
             "date_payment_key": await self.date_payment_key.get(),
             "email_key": await self.email_key.get(),

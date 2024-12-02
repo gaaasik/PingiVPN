@@ -528,6 +528,7 @@ class UserCl:
                 "date_creation_key": current_date.strftime("%d.%m.%Y %H:%M:%S"),
                 "date_key_off": (current_date + timedelta(days=free_day)).strftime("%d.%m.%Y %H:%M:%S"),
                 "date_payment_key": "0",
+                "date_latest_handshake": "0",
                 "email_key": private_key,
                 "enable": True,
                 "has_paid_key": 0,
