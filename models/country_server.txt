@@ -64,6 +64,11 @@
       "name": "Server_14000",
       "address": "89.23.119.110",
       "country": "Netherlands"
+    },
+    {
+      "name": "Server_15000",
+      "address": "85.92.108.52",
+      "country": "Netherlands"
     }
   ]
 }

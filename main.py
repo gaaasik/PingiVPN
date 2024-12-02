@@ -186,7 +186,7 @@ async def main():
     asyncio.create_task(schedule_daily_tasks(bot))
     asyncio.create_task(listen_to_redis_queue(bot))
     asyncio.create_task(periodic_backup_task(bot))
-    #asyncio.create_task(process_queue_results_task())
+    asyncio.create_task(process_queue_results_task())
     #asyncio.create_task(process_task_queue())
 
 
