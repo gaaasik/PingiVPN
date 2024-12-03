@@ -1,13 +1,9 @@
 import os
-
-#import aioredis
 import asyncio
 import json
 import logging
-
-import redis
+import redis.asyncio as redis
 from dotenv import load_dotenv
-
 from models.UserCl import UserCl
 
 # Настройка логирования
@@ -23,13 +19,16 @@ logging.basicConfig(
 load_dotenv()
 
 # Настройки Redis
-REDIS_HOST = os.getenv('ip_redis_server')  # Укажите IP-адрес Redis
-REDIS_PORT = os.getenv('port_redis')
-REDIS_PASSWORD = os.getenv('password_redis')  # Если требуется, добавьте пароль
+REDIS_HOST = os.getenv('ip_redis_server')  # IP-адрес Redis
+REDIS_PORT = int(os.getenv('port_redis'))  # Порт Redis
+REDIS_PASSWORD = os.getenv('password_redis')  # Пароль Redis (если требуется)
 NAME_RESULT_QUEUE = "queue_result_task"
+
+# Инициализация асинхронного клиента Redis
 redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD, decode_responses=True)
-# Асинхронная обработка задачи
+
 async def process_task(task):
+    """Обработка задачи."""
     try:
         logging.info("Начало обработки задачи.")
         task_data = json.loads(task)
@@ -48,19 +47,15 @@ async def process_task(task):
     finally:
         logging.info("Завершение обработки задачи.")
 
-# Асинхронный цикл обработки очереди
-
 async def process_queue_results_task():
-    """Прослушивание очереди Redis для обработки сообщений о платежах."""
+    """Асинхронное прослушивание очереди Redis."""
     logging.info("Начало прослушивания очереди tasks")
     while True:
         try:
-            #logging.info("Попытка извлечь задачу из очереди Redis")
-            task_data = await asyncio.to_thread(redis_client.lpop, NAME_RESULT_QUEUE)
-
+            # Получаем задачу из очереди
+            task_data = await redis_client.lpop(NAME_RESULT_QUEUE)
             if task_data:
                 logging.info(f"Извлечена задача из Redis: {task_data}")
-
                 try:
                     task = json.loads(task_data)
                     logging.info(f"Задача после парсинга JSON: {task}")
@@ -68,28 +63,21 @@ async def process_queue_results_task():
                     logging.error(f"Ошибка декодирования JSON: {e}, данные: {task_data}")
                     continue
 
-                # Передаем всю задачу в функцию process_payment_message, включая все данные
+                # Обрабатываем задачу
                 await process_updata_traffic(json.dumps(task))
             else:
-                pass
-            await asyncio.sleep(3)    #logging.info("Очередь Redis пуста, ждем следующую задачу")
-                #logging.info("Очередь Redis пуста, ждем следующую задачу")
-
-
-
-        except redis.exceptions.ConnectionError as e:
+                await asyncio.sleep(3)  # Пауза перед следующим запросом
+        except redis.ConnectionError as e:
             logging.error(f"Ошибка подключения к Redis: {e}")
             await asyncio.sleep(5)
         except Exception as e:
             logging.error(f"Ошибка при обработке сообщения из Redis: {e}")
             await asyncio.sleep(5)
 
-#обновление базы данных при успешной оплате
-# обноление базы данных при успешной оплате
 async def process_updata_traffic(json_task):
-    """Обработка сообщения из Redis с информацией о платеже."""
+    """Обработка сообщения из Redis с информацией о трафике."""
     try:
-        logging.info(f"Начинаем обработку сообщения: process_updata_traffic")
+        logging.info("Начинаем обработку сообщения: process_updata_traffic")
         data = json.loads(json_task)
         logging.info(f"Распарсенные данные сообщения: {data}")
 
@@ -101,7 +89,9 @@ async def process_updata_traffic(json_task):
         transfer_sent = data.get('transfer_sent')
         latest_handshake = data.get('latest_handshake')
 
-
+        if not all([chat_id, user_ip]):
+            logging.error(f"Отсутствуют обязательные параметры в JSON: {data}")
+            return  # Прерываем выполнение функции, если параметры отсутствуют
 
         print("Данные с queue_result_task")
         print("status = ", status)
@@ -112,14 +102,27 @@ async def process_updata_traffic(json_task):
         print("chat_id = ", chat_id)
 
         us = await UserCl.load_user(chat_id)
-        await us.servers[0].date_latest_handshake.set(latest_handshake)
-        await us.servers[0].traffic_up.set(transfer_received)
-        await us.servers[0].traffic_down.set(transfer_sent)
+
+        # Обновляем значения в базе данных только если они не равны "no_parameter"
+        if latest_handshake != "no_parameter":
+            await us.servers[0].date_latest_handshake.set(latest_handshake)
+        else:
+            logging.info("latest_handshake имеет значение 'no_parameter', пропускаем обновление.")
+
+        if transfer_received != "no_parameter":
+            await us.servers[0].traffic_up.set(transfer_received)
+        else:
+            logging.info("transfer_received имеет значение 'no_parameter', пропускаем обновление.")
+
+        if transfer_sent != "no_parameter":
+            await us.servers[0].traffic_down.set(transfer_sent)
+        else:
+            logging.info("transfer_sent имеет значение 'no_parameter', пропускаем обновление.")
 
     except json.JSONDecodeError as e:
         logging.info(f"Ошибка декодирования JSON: {e}, данные: {json_task}")
     except Exception as e:
-        logging.info(f"Ошибка при обработке сообщения о платеже: {e}")
+        logging.info(f"Ошибка при обработке сообщения о трафике: {e}")
 
 # async def process_queue_results_task():
 #     logging.info("Запуск обработки очереди...")
