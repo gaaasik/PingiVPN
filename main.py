@@ -24,6 +24,7 @@ from bot.database.init_db import init_db
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from communication_with_servers.queue_results_task import process_queue_results_task
+from models.ServerCl import load_server_data
 #from communication_with_servers.send_json import process_task_queue
 # from communication_with_servers.send_json import process_task_queue
 #from fastapi_app.all_utils_flask_db import initialize_db
@@ -246,6 +247,7 @@ async def main():
 
 if __name__ == "__main__":
     try:
+        load_server_data()
         asyncio.run(main())
     except KeyboardInterrupt:
         print("Завершение работы...")

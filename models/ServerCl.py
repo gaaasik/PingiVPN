@@ -3,9 +3,10 @@ import json
 from datetime import datetime
 from pathlib import Path
 
+
 import aioredis
 import paramiko
-
+import logging
 from typing import TYPE_CHECKING
 
 from dotenv import load_dotenv
@@ -14,11 +15,32 @@ if TYPE_CHECKING:
     from models.UserCl import UserCl  # Только для аннотаций типов
 
 load_dotenv()
+#Определяем путь к файлу(глобально)
+project_root = Path(__file__).resolve().parent
+country_server_path = project_root / "country_server.txt"
+
+# Глобальная переменная для хранения данных серверов
+country_server_data = None
+# Загружаем данные один раз
+
+
+def load_server_data():
+    global country_server_data
+    try:
+        if not country_server_path.exists():
+            raise FileNotFoundError(f"Файл {country_server_path} не найден.")
+        with open(country_server_path, mode="r", encoding="utf-8") as file:
+            country_server_data = json.load(file)
+            logging.info("Данные серверов успешно загружены.")
+    except Exception as e:
+        logging.error(f"Ошибка при загрузке данных серверов: {e}")
+        raise
+
+
+
 
 
 #from fastapi import requests
-
-
 class Field:
     def __init__(self, name, value, server: 'ServerCl'):
         self._name = name  # Приватное название поля
@@ -92,17 +114,21 @@ class Field:
         country = self._value
         return COUNTRY_TRANSLATIONS.get(country, "Неизвестная страна")
 
+
+
+
+
+    # Использование данных в функциях
     async def set_enable(self, enable_value: bool):
-        REDIS_HOST = os.getenv('ip_redis_server')
-        REDIS_PASSWORD = os.getenv('password_redis')
-        REDIS_PORT = os.getenv('port_redis')
+        """Обновляет значение enable и отправляет задачу в Redis."""
+        global country_server_data
 
-
-        """Обновляет значение enable и добавляет задачу на отправку в Redis."""
         if self._name != "enable":
             raise AttributeError("Метод set_enable можно вызывать только для поля 'enable'.")
 
-        print("Сработал set_enable ____________________________________________________")
+        if country_server_data is None:
+            raise RuntimeError("Данные серверов не загружены. Проверьте вызов load_server_data().")
+
         # Обновляем значение в объекте и в базе данных
         await self._set(enable_value)
 
@@ -113,47 +139,42 @@ class Field:
         server_ip = await self._server.server_ip.get()
         user_ip = await self._server.user_ip.get()
 
+        # Получаем имя сервера
+        server_name = self.__get_server_name_by_ip(country_server_data, server_ip)
 
-        # Формируем задачу в зависимости от протокола
-        if name_protocol == "wireguard":
-            # Формируем данные для отправки WireGuard
-            task_data = {
-                "name_protocol": name_protocol,
-                "chat_id": chat_id,
-                "server_ip": server_ip,
-                "user_ip": user_ip,
-                "enable": enable_value
-            }
-            # Имя очереди для WireGuard
-            queue_name = "queue_task"
-        else:
-            # Формируем данные для отправки VLESS
-            task_data = {
-                "name_protocol": name_protocol,
-                "chat_id": chat_id,
-                "server_ip": server_ip,
-                "id": uuid_value,
-                "enable": enable_value
-            }
-            # Имя очереди для VLESS
-            queue_name = "queue_task"
+        # Формируем задачу
+        task_data = {
+            "name_protocol": name_protocol,
+            "chat_id": chat_id,
+            "server_ip": server_ip,
+            "user_ip": user_ip,
+            "enable": enable_value,
+        }
+        queue_name = f"queue_task_{server_name}"
+        logging.info(f"Формируется очередь: {queue_name}")
 
-        # Подключаемся к Redis и добавляем задачу в очередь
-        redis = None
         try:
-            redis = aioredis.from_url(
-                f"redis://{REDIS_HOST}:{REDIS_PORT}",
-                password=REDIS_PASSWORD,  # Указание пароля для Redis
+            redis = await aioredis.from_url(
+                f"redis://{os.getenv('ip_redis_server')}:{os.getenv('port_redis')}",
+                password=os.getenv('password_redis'),
                 decode_responses=True
             )
-            # Добавляем задачу в соответствующую очередь
             await redis.rpush(queue_name, json.dumps(task_data))
-            print(f"Задача добавлена в очередь {queue_name}: {task_data}")
+            logging.info(f"Задача добавлена в очередь {queue_name}: {task_data}")
         except Exception as e:
-            print(f"Ошибка при добавлении задачи в очередь {queue_name}: {e}")
+            logging.error(f"Ошибка при добавлении задачи в очередь {queue_name}: {e}")
         finally:
             if redis:
                 await redis.close()
+
+    def __get_server_name_by_ip(self, server_data: dict, ip_address: str) -> str:
+        """Получает имя сервера по его IP."""
+        for server in server_data.get("servers", []):
+            if server.get("address") == ip_address:
+                return server.get("name", "Unknown_Server")
+        return "Unknown_Server"
+
+
 
 
 class ServerCl:
