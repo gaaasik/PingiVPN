@@ -227,7 +227,7 @@ async def process_payment_message(message: str, bot: Bot):
             await handle_post_payment_actions(bot, chat_id)
             logging.info(f"Постоплатные действия выполнены для пользователя {chat_id}.")
         else:
-            await send_admin_log(bot, f"Незавершенный платеж от {chat_id}, @{user_name} c статусом {status}")
+            await send_admin_log(bot, f"👺👺Незавершенный платеж от {chat_id}, @{user_name}")
     except json.JSONDecodeError as e:
         logging.info(f"Ошибка декодирования JSON: {e}, данные: {message}")
     except Exception as e:

@@ -3,6 +3,8 @@ from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardBut
 from bot.database.db import add_user_question  # Импорт функции добавления вопроса в базу данных
 from aiogram import Router, types, Bot, F
 from aiogram.filters import Command
+
+from bot.handlers.admin import send_admin_log
 from bot.handlers.all_menu.main_menu import show_main_menu
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
@@ -55,11 +57,8 @@ async def process_user_question(message: types.Message, state: FSMContext):
 
     # Отправляем пользователю подтверждение
     confirmation_message = await message.answer(f"Ваш вопрос записан \n\n {message.text} \n\n Ожидайте ответа!")
+    await send_admin_log(message.bot,f"❓❓❓Пользователь задал вопрос: @{username} (ID чата: {message.chat.id}) \n Задал вопрос: {message.text}")
 
-    await message.bot.send_message(
-        chat_id=456717505,  # ID админа для уведомления
-        text=f"Пользователь задал вопрос: @{username} (ID чата: {message.chat.id}) \n Задал вопрос: {message.text}"
-    )
     # Завершаем состояние ожидания вопроса
     await state.clear()
     await show_main_menu(message.chat.id, message.bot)

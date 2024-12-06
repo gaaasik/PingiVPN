@@ -80,6 +80,9 @@ class NotificationBase(ABC):
         """
         Запуск уведомления
         """
+        # Сбрасываем счётчики перед выполнением
+        self.success_count = 0
+        self.error_count = 0
         self.target_users = await self.fetch_target_users()
 
         # Разделяем пользователей на батчи и отправляем уведомления
