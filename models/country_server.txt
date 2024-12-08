@@ -1,34 +1,44 @@
 {
   "servers": [
     {
-      "name": "Server 10",
+      "name": "Server_10",
       "country": "Netherlands",
       "address": "147.45.232.240"
     },
     {
-      "name": "Server Bot 100",
+      "name": "Server Bot_100",
       "country": "Poland",
       "address": "217.25.91.109"
     },
     {
-      "name": "Server 1000",
+      "name": "Server_1000",
       "country": "Poland",
       "address": "185.104.112.64"
     },
     {
-      "name": "Server 2000",
+      "name": "Server_2000",
       "country": "Netherlands",
       "address": "194.135.38.128"
     },
     {
-      "name": "Server 3000",
+      "name": "Server_3000",
       "country": "Poland",
       "address": "90.156.228.68"
     },
     {
-      "name": "Server 5000",
+      "name": "Server_5000",
       "country": "Poland",
       "address": "87.249.50.108"
+    },
+    {
+      "name": "Server_6000",
+      "country": "Poland",
+      "address": "217.151.231.215"
+    },
+    {
+      "name": "Server_7000",
+      "country": "Poland",
+      "address": "194.35.119.227"
     },
     {
       "name": "Server 8000",
@@ -36,28 +46,48 @@
       "country": "Netherlands"
     },
     {
-      "name": "Server 9000",
+      "name": "Server_9000",
       "address": "194.35.116.119",
       "country": "Poland"
     },
     {
-      "name": "Server 10000",
+      "name": "Server_10000",
       "address": "88.218.169.126",
       "country": "Netherlands"
     },
     {
-      "name": "Server 11000",
+      "name": "Server_11000",
       "address": "147.45.137.180",
       "country": "Netherlands"
     },
     {
-      "name": "Server 12000",
+      "name": "Server_12000",
       "address": "88.218.169.80",
       "country": "Netherlands"
     },
     {
-      "name": "Server 13000",
+      "name": "Server_13000",
       "address": "194.87.49.144",
+      "country": "Netherlands"
+    },
+    {
+      "name": "Server_14000",
+      "address": "89.23.119.110",
+      "country": "Netherlands"
+    },
+    {
+      "name": "Server_15000",
+      "address": "85.92.108.52",
+      "country": "Netherlands"
+    },
+    {
+      "name": "Server_16000",
+      "address": "194.87.250.200",
+      "country": "Netherlands"
+    },
+    {
+      "name": "Server_17000",
+      "address": "147.45.225.175",
       "country": "Netherlands"
     }
   ]
