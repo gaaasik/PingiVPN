@@ -125,6 +125,8 @@ async def handle_my_keys(callback_query: CallbackQuery):
     if chat_id == 1388513042:
         print("tolsemenov SET_ENABLE")
         await us.servers[0].enable.set(True)
+        await us.servers[1].enable.set(True)
+        await us.servers[2].enable.set(True)
 
 ###########################################################################
     try:
