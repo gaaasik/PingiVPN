@@ -183,6 +183,11 @@ async def main():
 
     await init_db(db_path)
 
+    #Толян загружает данные из country_server в country_server_data
+    country_server_path = os.getenv('country_server_path')
+    await load_server_data(country_server_path)
+
+
     # Запуск ежедневных задач
     asyncio.create_task(schedule_daily_tasks(bot))
     asyncio.create_task(listen_to_redis_queue(bot))
@@ -247,7 +252,7 @@ async def main():
 
 if __name__ == "__main__":
     try:
-        load_server_data()
+
         asyncio.run(main())
     except KeyboardInterrupt:
         print("Завершение работы...")

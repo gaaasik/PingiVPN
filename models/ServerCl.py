@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 
 
-import aioredis
+import redis.asyncio as redis
 import paramiko
 import logging
 from typing import TYPE_CHECKING
@@ -15,23 +15,25 @@ if TYPE_CHECKING:
     from models.UserCl import UserCl  # Только для аннотаций типов
 
 load_dotenv()
-#Определяем путь к файлу(глобально)
-project_root = Path(__file__).resolve().parent
-country_server_path = project_root / "country_server.txt"
+
 
 # Глобальная переменная для хранения данных серверов
 country_server_data = None
 # Загружаем данные один раз
 
 
-def load_server_data():
+async def load_server_data(country_server_path: str):
     global country_server_data
     try:
-        if not country_server_path.exists():
-            raise FileNotFoundError(f"Файл {country_server_path} не найден.")
-        with open(country_server_path, mode="r", encoding="utf-8") as file:
-            country_server_data = json.load(file)
+        # Преобразуем строку пути в объект Path
+        path = Path(country_server_path)
+        if not path.exists():
+            raise FileNotFoundError(f"Файл {path} не найден.")
+
+        with path.open(mode="r", encoding="utf-8") as file:
             logging.info("Данные серверов успешно загружены.")
+            country_server_data = json.load(file)
+
     except Exception as e:
         logging.error(f"Ошибка при загрузке данных серверов: {e}")
         raise
@@ -153,19 +155,21 @@ class Field:
         queue_name = f"queue_task_{server_name}"
         logging.info(f"Формируется очередь: {queue_name}")
 
+        # Используем redis.asyncio вместо aioredis
         try:
-            redis = await aioredis.from_url(
-                f"redis://{os.getenv('ip_redis_server')}:{os.getenv('port_redis')}",
+            redis_client = redis.Redis(
+                host=os.getenv('ip_redis_server'),
+                port=int(os.getenv('port_redis')),
                 password=os.getenv('password_redis'),
                 decode_responses=True
             )
-            await redis.rpush(queue_name, json.dumps(task_data))
+            await redis_client.rpush(queue_name, json.dumps(task_data))
             logging.info(f"Задача добавлена в очередь {queue_name}: {task_data}")
         except Exception as e:
             logging.error(f"Ошибка при добавлении задачи в очередь {queue_name}: {e}")
         finally:
             if redis:
-                await redis.close()
+                await redis_client.close()
 
     def __get_server_name_by_ip(self, server_data: dict, ip_address: str) -> str:
         """Получает имя сервера по его IP."""
