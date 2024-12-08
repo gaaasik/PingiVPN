@@ -41,7 +41,6 @@ class Field:
                     if result and result[0]:
                         # Загружаем JSON данных серверов из поля value_key
                         servers_data = json.loads(result[0])
-                        #print("test test servers data",servers_data)
                         # Подсчитываем количество серверов
                         new_value = len(servers_data) if isinstance(servers_data, list) else 0
                     else:
@@ -522,13 +521,14 @@ class UserCl:
             country_server = await self.get_country_by_server_ip(server_ip)
 
             # Генерируем JSON с параметрами сервера
-            name_key = f"WireGuard-{await self.count_key.get() + 1}"  # Например, уникальное имя ключа
+            name_key = f"WireGuard PingiVPN"  # Например, уникальное имя ключа
             logging.info("Генерация параметров сервера WireGuard завершена.")
             return {
                 "country_server": country_server,
                 "date_creation_key": current_date.strftime("%d.%m.%Y %H:%M:%S"),
                 "date_key_off": (current_date + timedelta(days=free_day)).strftime("%d.%m.%Y %H:%M:%S"),
                 "date_payment_key": "0",
+                "date_latest_handshake": "0",
                 "email_key": private_key,
                 "enable": True,
                 "has_paid_key": 0,
