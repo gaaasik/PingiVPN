@@ -68,6 +68,7 @@ class NotificationBase(ABC):
         Может быть переопределено в дочерних классах.
         """
         pass
+    
 
     async def handle_send_error(self, user_id: int, error: Exception):
         """

@@ -31,6 +31,16 @@
       "address": "87.249.50.108"
     },
     {
+      "name": "Server_6000",
+      "country": "Poland",
+      "address": "217.151.231.215"
+    },
+    {
+      "name": "Server_7000",
+      "country": "Poland",
+      "address": "194.35.119.227"
+    },
+    {
       "name": "Server 8000",
       "address": "92.51.46.66",
       "country": "Netherlands"
@@ -68,6 +78,16 @@
     {
       "name": "Server_15000",
       "address": "85.92.108.52",
+      "country": "Netherlands"
+    },
+    {
+      "name": "Server_16000",
+      "address": "194.87.250.200",
+      "country": "Netherlands"
+    },
+    {
+      "name": "Server_17000",
+      "address": "147.45.225.175",
       "country": "Netherlands"
     },
     {
