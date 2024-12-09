@@ -176,7 +176,7 @@ async def process_payment_message(message: str, bot: Bot):
         # Формирование сообщения в зависимости от статуса платежа
         if status == 'payment.succeeded':
 
-            await send_admin_log(bot, f"Пойман Успешный платеж от {chat_id}, @{user_name} c статусом {status}")
+            #await send_admin_log(bot, f"Пойман Успешный платеж от {chat_id}, @{user_name} c статусом {status}")
             logging.info(f"Платеж успешно завершён для пользователя {chat_id}. Загружаем данные пользователя...")
 
 

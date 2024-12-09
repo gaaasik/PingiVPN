@@ -1,37 +1,49 @@
-from .NotificationBaseCL import NotificationBase
-from typing import List
-
 class PaymentReminder(NotificationBase):
-    def __init__(self, batch_size: int = 50):
-        super().__init__(batch_size)
+    async def filter_users_with_unpaid_access(self, batch: List[int]) -> List[int]:
+        blocked_users = []
+
+        async def check_user(chat_id: int):
+            try:
+                user = await UserCl.load_user(chat_id)
+                if not user or not user.servers:
+                    return None
+
+                for server in user.servers:
+                    date_key_off = await server.date_key_off.get()
+                    has_paid_key = await server.has_paid_key.get()
+
+                    if await is_trial_ended(date_key_off) and has_paid_key == 0:
+                        return chat_id
+            except Exception as e:
+                print(f"Ошибка при обработке пользователя {chat_id}: {e}")
+                return None
+
+        results = await asyncio.gather(*(check_user(chat_id) for chat_id in batch))
+        blocked_users = [chat_id for chat_id in results if chat_id is not None]
+        return blocked_users
 
     async def fetch_target_users(self) -> List[int]:
         """
-        Получение пользователей с неоплаченными счетами.
+        Получение пользователей, у которых завершён пробный период и требуется оплата.
         """
-        query = "SELECT chat_id FROM users WHERE has_pending_payment = 1"
-        # Здесь будет логика для выполнения SQL-запроса
-        return await self._mock_fetch_users()
-
-    async def _mock_fetch_users(self) -> List[int]:
-        """
-        Мок данных для тестирования.
-        """
-        return [11111111, 22222222, 33333333]
+        all_users = await UserCl.get_all_users()
+        blocked_users = []
+        for batch in self.split_into_batches(all_users):
+            blocked_users.extend(await self.filter_users_with_unpaid_access(batch))
+        return blocked_users
 
     def get_message_template(self) -> str:
-        """
-        Шаблон сообщения для напоминания об оплате.
-        """
         return (
-            "💳 У вас есть неоплаченный счет. "
-            "Пожалуйста, завершите оплату, чтобы продолжить использование наших услуг."
+            "❌ <b>Ваш доступ заблокирован</b>.\n\n"
+            "Пробный период завершён. Для продолжения использования VPN, пожалуйста, оформите подписку:\n\n"
+            "💳 <b>Оплатите доступ</b> и наслаждайтесь безопасным соединением без ограничений."
         )
 
-    async def after_send_success(self, user_id: int):
-        """
-        Обновление статуса пользователя после успешной отправки уведомления.
-        """
-        query = "UPDATE users SET notified_about_payment = 1 WHERE chat_id = ?"
-        # Здесь добавляем логику обновления базы данных
-        pass
+    def get_keyboard(self) -> InlineKeyboardMarkup:
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text="💳 Оплатить доступ", callback_data="buy_vpn")],
+                [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
+            ]
+        )
+        return keyboard

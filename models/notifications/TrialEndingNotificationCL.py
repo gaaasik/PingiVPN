@@ -10,6 +10,7 @@ import json
 import aiosqlite
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from bot.handlers.admin import send_admin_log
+from .utils.dates import is_trial_ending_soon
 
 
 class TrialEndingNotification(NotificationBase):
@@ -43,34 +44,24 @@ class TrialEndingNotification(NotificationBase):
             return []
 
     async def filter_users_with_expired_trials(self, batch: List[int]) -> List[int]:
-        """
-        Фильтруем пользователей, чей пробный период завершён.
-        """
         expiring_users = []
 
         async def check_user(chat_id: int):
             try:
                 user = await UserCl.load_user(chat_id)
                 if not user or not user.servers:
-                    print(f"Пользователь {chat_id} не имеет серверов. Пропускаем.")
                     return None
 
                 for server in user.servers:
                     date_key_off = await server.date_key_off.get()
                     has_paid_key = await server.has_paid_key.get()
 
-                    # Преобразуем дату окончания в объект datetime
-                    trial_end_date = datetime.strptime(date_key_off, "%d.%m.%Y %H:%M:%S")
-
-                    # Проверяем, если пробный период завершён (на 1 день меньше текущей даты)
-                    if (trial_end_date + timedelta(days=1)).date() < datetime.now().date() and has_paid_key == 0:
-                        print(f"Пользователь {chat_id} должен быть уведомлён.")
+                    if await is_trial_ending_soon(date_key_off, days_until_end=2) and has_paid_key == 0:
                         return chat_id
             except Exception as e:
                 print(f"Ошибка при обработке пользователя {chat_id}: {e}")
                 return None
 
-        # Асинхронная проверка всех пользователей в батче
         results = await asyncio.gather(*(check_user(chat_id) for chat_id in batch))
         expiring_users = [chat_id for chat_id in results if chat_id is not None]
         return expiring_users
