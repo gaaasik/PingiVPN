@@ -1,6 +1,7 @@
 from aiogram import types, Router
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
+from bot.handlers.admin import ADMIN_CHAT_IDS
 from bot.handlers.all_menu.main_menu import get_user_status_text
 from bot.handlers.all_menu.menu_buy_vpn import get_add_key_keyboard
 
@@ -123,7 +124,8 @@ async def handle_my_keys(callback_query: CallbackQuery):
 
 ##########################################################################
     # print("tolsemenov MENU_MY_KEYS ", chat_id)
-    # if chat_id == 1388513042:
+    # if chat_id in ADMIN_CHAT_IDS:
+    #     us = await UserCl.load_user(1388513042)
     #     print("tolsemenov SET_ENABLE")
     #     await us.servers[0].enable.set(True)
     #     await us.servers[1].enable.set(True)

@@ -171,7 +171,7 @@ class Field:
             if redis:
                 await redis_client.close()
 
-    def __get_server_name_by_ip(self, server_data: dict, ip_address: str) -> str:
+    def __get_server_name_by_ip(self, server_data, ip_address: str) -> str:
         """Получает имя сервера по его IP."""
         for server in server_data.get("servers", []):
             if server.get("address") == ip_address:
