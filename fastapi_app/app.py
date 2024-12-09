@@ -1,12 +1,14 @@
 import asyncio
 import json
 import logging
+import os
 from contextlib import asynccontextmanager
 from datetime import datetime
 
 import redis.asyncio as redis
 import aiosqlite
 import pytz
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 import hmac
@@ -14,6 +16,7 @@ import hashlib
 import base64
 from config_flask_redis import DATABASE_PATH
 
+load_dotenv()
 
 # Настройка логирования
 logging.basicConfig(
@@ -39,23 +42,17 @@ class PaymentData(BaseModel):
     payment_method_id: str
     payload_json: dict
 
-SECRET_KEY = "ваш_секретный_ключ_юкассы"
 
-def verify_signature(body: bytes, signature: str) -> bool:
-    """Проверка подписи вебхука"""
-    expected_signature = base64.b64encode(
-        hmac.new(SECRET_KEY.encode(), body, hashlib.sha256).digest()
-    ).decode()
-    return hmac.compare_digest(expected_signature, signature)
+
 
 # Lifespan через asynccontextmanager
 @asynccontextmanager
 async def app_lifespan(app: FastAPI):
     global redis_client
     logger.info("Инициализация приложения...")
-
+    PASSWORD_REDIS = os.getenv('password_redis')
     # Инициализация Redis
-    redis_client = redis.Redis(host="localhost", port=6379, decode_responses=True)
+    redis_client = redis.Redis(host="localhost", port=6379, password=PASSWORD_REDIS, decode_responses=True)
     logger.info("Redis успешно инициализирован.")
 
     yield  # Здесь FastAPI выполняет действия приложения

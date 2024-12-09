@@ -53,7 +53,7 @@ async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
 
     else:
         # Получаем данные ключа
-        key_name = await us.servers[0].name_key.get()
+        name_key = await us.servers[0].name_key.get()
         country_flag = await us.servers[0].country_server.get_country()
         traffic_limit = "200 Gb / в мес"
         vless_url = await us.servers[0].url_vless.get()
@@ -94,7 +94,7 @@ async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
             # Формируем текст сообщения в формате HTML
             text = (
                 f"🔐 <b>Ваш VPN-ключ:</b>\n\n"
-                f"- <b>Имя ключа</b>: {key_name}\n"
+                f"- <b>Имя ключа</b>: {name_key}\n"
                 f"- <b>Страна сервера</b>: {country_flag}\n"
                 f"- <b>Статус</b>: <b>{status_text}</b>\n"
                 #f"- <b>Действителен до</b>: <b>{expiration_text}</b>\n\n"
@@ -105,7 +105,7 @@ async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
             # Формируем текст сообщения в формате HTML
             text = (
                 f"🔐 <b>Ваш VPN-ключ:</b>\n\n"
-                f"- <b>Имя ключа</b>: {key_name}\n"
+                f"- <b>Имя ключа</b>: {name_key}\n"
                 f"- <b>Страна сервера</b>: {country_flag}\n"
                 f"- <b>Статус</b>: {status_text}\n"
                 #f"- <b>Действителен до</b>: <b>{expiration_text}</b>\n\n"
@@ -121,6 +121,15 @@ async def handle_my_keys(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
     us = await UserCl.load_user(chat_id)
 
+##########################################################################
+    # print("tolsemenov MENU_MY_KEYS ", chat_id)
+    # if chat_id == 1388513042:
+    #     print("tolsemenov SET_ENABLE")
+    #     await us.servers[0].enable.set(True)
+    #     await us.servers[1].enable.set(True)
+    #     await us.servers[2].enable.set(True)
+
+###########################################################################
     try:
         # Генерируем текст и клавиатуру для ответа
         text, keyboard = await generate_key_status_text(us)

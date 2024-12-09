@@ -25,9 +25,11 @@ db_path = os.getenv('database_path_local')
 Configuration.account_id = os.getenv('SHOPID')
 Configuration.secret_key = os.getenv('API_KEY')
 REDIS_QUEUE = 'payment_notifications'
+PASSWORD_REDIS = os.getenv('password_redis')
+
 
 # Инициализация Redis клиента
-redis_client = redis.Redis(host='217.25.91.109', port=6379, db=0)
+redis_client = redis.Redis(host='217.25.91.109', port=6379, password=PASSWORD_REDIS, db=0)
 router = Router()
 # async def save_payment_to_db(chat_id, payment_id, amount, currency, status, payment_method_id, payment_json):
 #     # Определяем московский часовой пояс

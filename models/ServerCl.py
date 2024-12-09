@@ -1,19 +1,48 @@
 import os
 import json
 from datetime import datetime
+from pathlib import Path
 
-import aioredis
+
+import redis.asyncio as redis
 import paramiko
-
+import logging
 from typing import TYPE_CHECKING
+
+from dotenv import load_dotenv
 
 if TYPE_CHECKING:
     from models.UserCl import UserCl  # Только для аннотаций типов
 
+load_dotenv()
+
+
+# Глобальная переменная для хранения данных серверов
+country_server_data = None
+# Загружаем данные один раз
+
+
+async def load_server_data(country_server_path: str):
+    global country_server_data
+    try:
+        # Преобразуем строку пути в объект Path
+        path = Path(country_server_path)
+        if not path.exists():
+            raise FileNotFoundError(f"Файл {path} не найден.")
+
+        with path.open(mode="r", encoding="utf-8") as file:
+            logging.info("Данные серверов успешно загружены.")
+            country_server_data = json.load(file)
+
+    except Exception as e:
+        logging.error(f"Ошибка при загрузке данных серверов: {e}")
+        raise
+
+
+
+
 
 #from fastapi import requests
-
-
 class Field:
     def __init__(self, name, value, server: 'ServerCl'):
         self._name = name  # Приватное название поля
@@ -62,8 +91,11 @@ class Field:
         # Проверка, что метод вызывается только для поля 'country_server'
         if self._name != "country_server":
             raise AttributeError("Метод get_country доступен только для поля 'country_server'.")
+
+        #проверяем, если страна неизвестна, смотри ее в списке серверов country_server
         if self._value == "Unknown":
-            self._value = await self._server.user.get_country_by_server_ip(await self._server.server_ip.get())
+            country = await self._server.user.get_country_by_server_ip(await self._server.server_ip.get())
+            await self._server.country_server.set(country)
 
 
         # Словарь переводов стран
@@ -84,32 +116,69 @@ class Field:
         country = self._value
         return COUNTRY_TRANSLATIONS.get(country, "Неизвестная страна")
 
+
+
+
+
+    # Использование данных в функциях
     async def set_enable(self, enable_value: bool):
-        """Обновляет значение enable и добавляет задачу на отправку в Redis."""
+        """Обновляет значение enable и отправляет задачу в Redis."""
+        global country_server_data
+
         if self._name != "enable":
             raise AttributeError("Метод set_enable можно вызывать только для поля 'enable'.")
 
-        print("Сработал set_enable ____________________________________________________")
+        if country_server_data is None:
+            raise RuntimeError("Данные серверов не загружены. Проверьте вызов load_server_data().")
+
         # Обновляем значение в объекте и в базе данных
         await self._set(enable_value)
 
-        # Получаем uuid из объекта сервера
+        # Получаем данные объекта
+        chat_id = self._server.user.chat_id
+        name_protocol = await self._server.name_protocol.get()
         uuid_value = await self._server.uuid_id.get()
         server_ip = await self._server.server_ip.get()
-        # Формируем данные для отправки
-        task_data = {
-            "server_ip": server_ip,
-            "id": uuid_value,
-            "enable": enable_value
-        }
+        user_ip = await self._server.user_ip.get()
 
-        # Подключаемся к Redis и добавляем задачу в очередь
-        redis = aioredis.from_url("redis://localhost:6379", db=1)
+        # Получаем имя сервера
+        server_name = self.__get_server_name_by_ip(country_server_data, server_ip)
+
+        # Формируем задачу
+        task_data = {
+            "name_protocol": name_protocol,
+            "chat_id": chat_id,
+            "server_ip": server_ip,
+            "user_ip": user_ip,
+            "enable": enable_value,
+        }
+        queue_name = f"queue_task_{server_name}"
+        logging.info(f"Формируется очередь: {queue_name}")
+
+        # Используем redis.asyncio вместо aioredis
         try:
-            await redis.rpush("send_3x_ui", json.dumps(task_data))
-            print(f"Задача на отправку JSON для UUID {uuid_value} добавлена в очередь.")
+            redis_client = redis.Redis(
+                host=os.getenv('ip_redis_server'),
+                port=int(os.getenv('port_redis')),
+                password=os.getenv('password_redis'),
+                decode_responses=True
+            )
+            await redis_client.rpush(queue_name, json.dumps(task_data))
+            logging.info(f"Задача добавлена в очередь {queue_name}: {task_data}")
+        except Exception as e:
+            logging.error(f"Ошибка при добавлении задачи в очередь {queue_name}: {e}")
         finally:
-            await redis.close()
+            if redis:
+                await redis_client.close()
+
+    def __get_server_name_by_ip(self, server_data: dict, ip_address: str) -> str:
+        """Получает имя сервера по его IP."""
+        for server in server_data.get("servers", []):
+            if server.get("address") == ip_address:
+                return server.get("name", "Unknown_Server")
+        return "Unknown_Server"
+
+
 
 
 class ServerCl:
@@ -120,6 +189,7 @@ class ServerCl:
         self.country_server = Field('country_server', server_data.get("country_server", ""), self)
         self.date_creation_key = Field('date_creation_key', server_data.get("date_creation_key", ""), self)
         self.date_key_off = Field('date_key_off', server_data.get("date_key_off", ""), self)
+        self.date_latest_handshake = Field('date_latest_handshake', server_data.get("date_latest_handshake", ""), self)
         self.date_payment_key = Field('date_payment_key', server_data.get("date_payment_key", ""), self)
         self.email_key = Field('email_key', server_data.get("email_key", ""), self)
         self.enable = Field('enable', server_data.get("enable", None), self)
@@ -147,6 +217,7 @@ class ServerCl:
 
             "country_server": await self.country_server.get(),
             "date_creation_key": await self.date_creation_key.get(),
+            "date_latest_handshake": await self.date_latest_handshake.get(),
             "date_key_off": await self.date_key_off.get(),
             "date_payment_key": await self.date_payment_key.get(),
             "email_key": await self.email_key.get(),
