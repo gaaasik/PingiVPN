@@ -1,5 +1,10 @@
 import asyncio
+import json
+import logging
+import os
 from typing import List
+
+import aiosqlite
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from models.UserCl import UserCl
 from models.notifications.NotificationBaseCL import NotificationBase
@@ -27,7 +32,8 @@ class PaymentReminder(NotificationBase):
                     ip = await server.server_ip.get()
 
                     # Проверяем, завершился ли пробный период и не оплачена ли подписка
-                    if await is_trial_ended(date_key_off) and has_paid_key == 0 and ip == "90.156.228.68" :
+                    if await is_trial_ended(date_key_off) and has_paid_key == 0 and ip == "90.156.228.68" and chat_id in ADMIN_CHAT_IDS:
+                        await server.enable.set(False)
                         return chat_id
             except Exception as e:
                 print(f"Ошибка при обработке пользователя {chat_id}: {e}")
@@ -84,21 +90,46 @@ class PaymentReminder(NotificationBase):
         """
         Действия после успешной отправки уведомления:
         1. Смена статуса пользователя, если пробный период истёк.
-        2. Обновление логов.
+        2. Запись логов об отправке уведомления в базу данных.
         """
+        today = datetime.now().strftime("%m_%d")  # Формат мм_дд
+        notification_type = f"notification_{today}"
+
         try:
-            if user_id in ADMIN_CHAT_IDS:
+            # Загрузка пользователя
+            user = await UserCl.load_user(user_id)
 
-                user = await UserCl.load_user(user_id)
-                for server in user.servers:
+            if not user:
+                logging.error(f"Пользователь {user_id} не найден для обновления статуса.")
+                return
 
-                    date_key_off = await server.date_key_off.get()
+            # # Обновляем статус сервера, если пробный период истёк
+            # for server in user.servers:
+            #     date_key_off = await server.date_key_off.get()
+            #     if datetime.strptime(date_key_off, "%d.%m.%Y %H:%M:%S") < datetime.now():
+            #         await server.enable.set(False)  # Блокируем доступ
 
-                    # Если дата окончания истекла, блокируем доступ
-                    if datetime.datetime.strptime(date_key_off, "%d.%m.%Y %H:%M:%S") < datetime.datetime.now():
-                        await server.enable.set(False)
+            # Логируем уведомление в базу данных
+            async with aiosqlite.connect(os.getenv('database_path_local')) as db:
+                # Читаем текущие данные логов
+                query = "SELECT notification_data FROM notifications WHERE chat_id = ?"
+                async with db.execute(query, (user_id,)) as cursor:
+                    row = await cursor.fetchone()
+                    notification_data = json.loads(row[0]) if row and row[0] else {}
 
-                print(f"Уведомление успешно отправлено пользователю {user_id}.")
+                # Обновляем данные логов
+                notification_data[notification_type] = {
+                    "sent_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "status": "sent",
+                    "message_type": "payment_reminder"
+                }
+
+                # Обновляем запись в базе данных
+                update_query = "UPDATE notifications SET notification_data = ? WHERE chat_id = ?"
+                await db.execute(update_query, (json.dumps(notification_data), user_id))
+                await db.commit()
+
+            logging.info(f"Уведомление успешно отправлено и логировано для пользователя {user_id}.")
 
         except Exception as e:
-            print(f"Ошибка при обновлении статуса пользователя {user_id}: {e}")
+            logging.error(f"Ошибка при обработке пользователя {user_id} в after_send_success: {e}")
