@@ -34,7 +34,7 @@ class NotificationBase(ABC):
         """
         pass
 
-    async def split_into_batches(self, users: List[int]) -> List[List[int]]:
+    def split_into_batches(self, users: List[int]) -> List[List[int]]:
         """
         Делит список пользователей на батчи заданного размера.
         """
