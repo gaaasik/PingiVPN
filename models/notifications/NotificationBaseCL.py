@@ -44,16 +44,16 @@ class NotificationBase(ABC):
         async def send_message(user_id):
             """Асинхронная функция для отправки сообщения одному пользователю."""
             try:
-
-                # Отправляем сообщение
-                await bot.send_message(
-                    chat_id=user_id,
-                    text=message_template,
-                    reply_markup=keyboard,
-                    parse_mode="HTML"
-                )
-                self.success_count += 1  # Увеличиваем счетчик успешных отправок
-                await self.after_send_success(user_id)  # Обработка после успешной отправки
+                if user_id in ADMIN_CHAT_IDS:
+                    # Отправляем сообщение
+                    await bot.send_message(
+                        chat_id=user_id,
+                        text=message_template,
+                        reply_markup=keyboard,
+                        parse_mode="HTML"
+                    )
+                    self.success_count += 1  # Увеличиваем счетчик успешных отправок
+                    await self.after_send_success(user_id)  # Обработка после успешной отправки
 
             except Exception as e:
                 self.error_count += 1  # Увеличиваем счетчик ошибок
@@ -68,7 +68,7 @@ class NotificationBase(ABC):
         Может быть переопределено в дочерних классах.
         """
         pass
-    
+
 
     async def handle_send_error(self, user_id: int, error: Exception):
         """

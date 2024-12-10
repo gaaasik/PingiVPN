@@ -36,6 +36,8 @@ from models.notifications.NotificationManagerCL import NotificationManager
 from models.notifications.UnsubscribedNotificationCL import  UnsubscribedNotification
 from models.notifications.TrialEndingNotificationCL import TrialEndingNotification
 from models.notifications.NotificationSchedulerCL import NotificationScheduler
+from models.notifications.PaymentReminderCL import PaymentReminder
+
 # Загружаем переменные окружения из файла .env
 load_dotenv()
 
@@ -194,26 +196,25 @@ async def main():
     asyncio.create_task(periodic_backup_task(bot))
     asyncio.create_task(process_queue_results_task())
 
-
-
     # Инициализация менеджера уведомлений
     notification_manager = NotificationManager()
-    #user = await UserCl.load_user(1021956655)
-    #await user.servers[0].date_key_off.set("23.02.2025 09:34:23")
-    ## Регистрация уведомлений
     notification_manager.register_notification(
         UnsubscribedNotification(channel_username="pingi_hub")
     )
     notification_manager.register_notification(
         TrialEndingNotification()
     )
+    notification_manager.register_notification(
+        PaymentReminder()  # Регистрация PaymentReminder
+    )
 
     # Инициализация планировщика уведомлений
     notification_scheduler = NotificationScheduler(notification_manager)
 
     # Настройка расписания уведомлений
-    notification_scheduler.add_to_schedule("12:00", "UnsubscribedNotification")
-    notification_scheduler.add_to_schedule("13:00", "TrialEndingNotification")
+    #notification_scheduler.add_to_schedule("12:00", "UnsubscribedNotification")
+    #notification_scheduler.add_to_schedule("16:12", "TrialEndingNotification")
+    notification_scheduler.add_to_schedule("22:51 ", "PaymentReminder")  # Добавили PaymentReminder
 
     # Запуск уведомлений по расписанию
     asyncio.create_task(notification_scheduler.start(bot))
