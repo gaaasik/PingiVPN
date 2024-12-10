@@ -47,14 +47,15 @@ async def handle_post_payment_actions(bot: Bot, chat_id: int):
 
 
         logging.info(f"Сообщение пользователю {chat_id} об успешной оплате отправлено.")
- ############################################*TEST##########################################
 
+        #Включение пользователя на сервере WG
         user = await UserCl.load_user(chat_id)
         if not user or not user.servers:
             return None
         for server in user.servers:
             await server.enable.set(True)
-############################################*TEST############################################
+
+
     except Exception as e:
         logging.error(f"Ошибка при отправке сообщения пользователю {chat_id}: {e}")
 

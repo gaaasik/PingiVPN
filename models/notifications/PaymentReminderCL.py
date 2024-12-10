@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import os
+from datetime import datetime
 from typing import List
 
 import aiosqlite
@@ -11,8 +12,7 @@ from models.notifications.NotificationBaseCL import NotificationBase
 from models.notifications.utils.dates import is_trial_ended
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS  # Функция отправки сообщения админу
 from bot_instance import bot  # Инстанс бота для отправки сообщений
-import datetime
-SEREVERS_IP = ["87.249.50.108","217.151.231.215","194.35.119.227","92.51.46.66"]
+SEREVERS_IP = ["87.249.50.108","217.151.231.215","194.35.119.227","90.156.228.68"]
 class PaymentReminder(NotificationBase):
     async def filter_users_with_unpaid_access(self, batch: List[int]) -> List[int]:
         """
