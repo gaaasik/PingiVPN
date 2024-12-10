@@ -26,7 +26,15 @@ class NotificationBase(ABC):
         """Получение клавиатуры для уведомления"""
         pass
 
-    def split_into_batches(self, users: List[int]) -> List[List[int]]:
+    @abstractmethod
+    def after_send_success(self, user_id: int):
+        """
+        Действия после успешной отправки уведомления пользователю.
+        Может быть переопределено в дочерних классах.
+        """
+        pass
+
+    async def split_into_batches(self, users: List[int]) -> List[List[int]]:
         """
         Делит список пользователей на батчи заданного размера.
         """
@@ -45,6 +53,7 @@ class NotificationBase(ABC):
             """Асинхронная функция для отправки сообщения одному пользователю."""
             try:
                 if user_id in ADMIN_CHAT_IDS:
+                    await self.after_send_success(user_id)
                     # Отправляем сообщение
                     await bot.send_message(
                         chat_id=user_id,
@@ -53,7 +62,7 @@ class NotificationBase(ABC):
                         parse_mode="HTML"
                     )
                     self.success_count += 1  # Увеличиваем счетчик успешных отправок
-                    await self.after_send_success(user_id)  # Обработка после успешной отправки
+                      # Обработка после успешной отправки
 
             except Exception as e:
                 self.error_count += 1  # Увеличиваем счетчик ошибок
@@ -62,12 +71,7 @@ class NotificationBase(ABC):
         # Параллельная отправка сообщений пользователям в батче
         await asyncio.gather(*[send_message(user_id) for user_id in batch])
 
-    async def after_send_success(self, user_id: int):
-        """
-        Действия после успешной отправки уведомления пользователю.
-        Может быть переопределено в дочерних классах.
-        """
-        pass
+
 
 
     async def handle_send_error(self, user_id: int, error: Exception):

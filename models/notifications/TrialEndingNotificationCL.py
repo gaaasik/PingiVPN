@@ -99,27 +99,44 @@ class TrialEndingNotification(NotificationBase):
 
     async def after_send_success(self, user_id: int):
         """
-        Обновление статуса пользователя после успешной отправки уведомления.
+        Действия после успешной отправки уведомления:
+        1. Смена статуса пользователя, если пробный период истёк.
+        2. Запись логов об отправке уведомления в базу данных.
         """
         today = datetime.now().strftime("%m_%d")  # Формат мм_дд
-        notification_type = f"request_payment_{today}"
+        notification_type = f"notification_{today}"
 
-        query = "SELECT notification_data FROM notifications WHERE chat_id = ?"
         try:
+            # Загрузка пользователя
+            user = await UserCl.load_user(user_id)
+
+            if not user:
+                logging.error(f"Пользователь {user_id} не найден для обновления статуса.")
+                return
+
+
+
+            # Логируем уведомление в базу данных
             async with aiosqlite.connect(os.getenv('database_path_local')) as db:
+                # Читаем текущие данные логов
+                query = "SELECT notification_data FROM notifications WHERE chat_id = ?"
                 async with db.execute(query, (user_id,)) as cursor:
                     row = await cursor.fetchone()
                     notification_data = json.loads(row[0]) if row and row[0] else {}
 
-                # Обновляем JSON-данные
+                # Обновляем данные логов
                 notification_data[notification_type] = {
                     "sent_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                    "status": "sent"
+                    "status": "sent",
+                    "message_type": "payment_reminder"
                 }
 
-                # Записываем обратно в базу
+                # Обновляем запись в базе данных
                 update_query = "UPDATE notifications SET notification_data = ? WHERE chat_id = ?"
                 await db.execute(update_query, (json.dumps(notification_data), user_id))
                 await db.commit()
+
+            logging.info(f"Уведомление успешно отправлено и логировано для пользователя {user_id}.")
+
         except Exception as e:
-            logging.error(f"Ошибка при обновлении notification_data для пользователя {user_id}: {e}")
+            logging.error(f"Ошибка при обработке пользователя {user_id} в after_send_success: {e}")

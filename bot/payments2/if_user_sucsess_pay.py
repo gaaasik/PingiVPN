@@ -47,6 +47,7 @@ async def handle_post_payment_actions(bot: Bot, chat_id: int):
 
 
         logging.info(f"Сообщение пользователю {chat_id} об успешной оплате отправлено.")
+
     except Exception as e:
         logging.error(f"Ошибка при отправке сообщения пользователю {chat_id}: {e}")
 
