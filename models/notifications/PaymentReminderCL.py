@@ -12,7 +12,7 @@ from models.notifications.utils.dates import is_trial_ended
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS  # Функция отправки сообщения админу
 from bot_instance import bot  # Инстанс бота для отправки сообщений
 import datetime
-
+SEREVERS_IP = ["87.249.50.108","217.151.231.215","194.35.119.227","92.51.46.66"]
 class PaymentReminder(NotificationBase):
     async def filter_users_with_unpaid_access(self, batch: List[int]) -> List[int]:
         """
@@ -32,8 +32,9 @@ class PaymentReminder(NotificationBase):
                     server_ip = await server.server_ip.get()
 
                     # Проверяем, завершился ли пробный период и не оплачена ли подписка
-                    if await is_trial_ended(date_key_off) and has_paid_key == 0 and server_ip == "90.156.228.68":
+                    if await is_trial_ended(date_key_off) and has_paid_key == 0 and server_ip in SEREVERS_IP:
                         await server.enable.set(False)
+
                         print(f"Должны выключить {chat_id}")
                         return chat_id
             except Exception as e:
