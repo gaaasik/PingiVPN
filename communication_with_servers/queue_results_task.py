@@ -95,7 +95,7 @@ async def process_updata_traffic(json_task):
         latest_handshake = data.get('latest_handshake')
 
 
-        await send_admin_log(bot,f"Пользователь {chat_id} изменил состояние на {enable}, status={status}")
+        await send_admin_log(bot,f"😈Пользователь {chat_id} изменил состояние на {enable}, status={status}")
 
         if not all([chat_id, user_ip]):
             logging.error(f"Отсутствуют обязательные параметры в JSON: {data}")

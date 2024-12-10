@@ -55,12 +55,12 @@ class NotificationBase(ABC):
                 if user_id in ADMIN_CHAT_IDS:
                     await self.after_send_success(user_id)
                     # Отправляем сообщение
-                    await bot.send_message(
-                        chat_id=user_id,
-                        text=message_template,
-                        reply_markup=keyboard,
-                        parse_mode="HTML"
-                    )
+                    # await bot.send_message(
+                    #     chat_id=user_id,
+                    #     text=message_template,
+                    #     reply_markup=keyboard,
+                    #     parse_mode="HTML"
+                    # )
                     self.success_count += 1  # Увеличиваем счетчик успешных отправок
                       # Обработка после успешной отправки
 

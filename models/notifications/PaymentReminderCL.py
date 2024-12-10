@@ -29,11 +29,12 @@ class PaymentReminder(NotificationBase):
                 for server in user.servers:
                     date_key_off = await server.date_key_off.get()
                     has_paid_key = await server.has_paid_key.get()
-                    ip = await server.server_ip.get()
+                    server_ip = await server.server_ip.get()
 
                     # Проверяем, завершился ли пробный период и не оплачена ли подписка
-                    if await is_trial_ended(date_key_off) and has_paid_key == 0 and ip == "90.156.228.68" and chat_id in ADMIN_CHAT_IDS:
+                    if await is_trial_ended(date_key_off) and has_paid_key == 0 and server_ip == "90.156.228.68":
                         await server.enable.set(False)
+                        print(f"Должны выключить {chat_id}")
                         return chat_id
             except Exception as e:
                 print(f"Ошибка при обработке пользователя {chat_id}: {e}")
