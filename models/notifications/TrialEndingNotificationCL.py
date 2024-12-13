@@ -19,32 +19,82 @@ class TrialEndingNotification(NotificationBase):
 
     async def fetch_target_users(self) -> List[int]:
         """
-        Получение пользователей, чей пробный период завершён.
+        Получение пользователей, у которых пробный период заканчивается через 1-2 дня.
         """
-        print("Начинается выборка пользователей для уведомления...")
         try:
             all_users = await UserCl.get_all_users()
-            print(f"Всего пользователей: {len(all_users)}")
+            expiring_users = []
 
-            # Фильтруем пользователей
-            filtered_users = []
+            # Разделяем пользователей на батчи и фильтруем
             for batch in self.split_into_batches(all_users):
-                filtered_users.extend(await self.filter_users_with_expired_trials(batch))
+                expiring_users.extend(await self.filter_users_with_expired_trials(batch))
 
-            # Логируем результат
-            if filtered_users:
+            # Логируем количество пользователей
+            if expiring_users:
                 await send_admin_log(bot,
-                                     f"Нужно уведомить {len(filtered_users)} пользователей о завершении пробного периода.")
+                                     f"🔔 {len(expiring_users)} пользователей нуждаются в уведомлении о завершении пробного периода.")
             else:
-                await send_admin_log(bot, "Нет пользователей для уведомления о завершении пробного периода.")
+                await send_admin_log(bot, "🔔 Нет пользователей для уведомления о завершении пробного периода.")
 
-            return filtered_users
+            return expiring_users
         except Exception as e:
             logging.error(f"Ошибка при выборке пользователей: {e}")
             return []
 
+    async def is_trial_ending_soon(date_key_off: str, days_until_end: int = 2) -> bool:
+        """
+        Проверяет, заканчивается ли пробный период сегодня или через указанное количество дней.
+        Если пробный период уже истёк, возвращает False.
+
+        :param date_key_off: Строка с датой окончания в формате "%d.%m.%Y %H:%M:%S".
+        :param days_until_end: Количество дней до окончания периода (по умолчанию 2).
+        :return: True, если пробный период заканчивается сегодня или через days_until_end дней.
+        """
+        try:
+            trial_end_date = datetime.strptime(date_key_off, "%d.%m.%Y %H:%M:%S")
+            today = datetime.now()
+
+            # Если пробный период уже истёк
+            if trial_end_date.date() < today.date():
+                return False
+
+            # Если пробный период заканчивается сегодня или через days_until_end дней
+            return today.date() <= trial_end_date.date() <= (today + timedelta(days=days_until_end)).date()
+        except Exception as e:
+            logging.error(f"Ошибка при проверке окончания пробного периода: {e}")
+            return False
+
     async def filter_users_with_expired_trials(self, batch: List[int]) -> List[int]:
+        """
+        Фильтрует пользователей, у которых пробный период заканчивается через 1-2 дня,
+        и проверяет, что уведомление `payment_reminder` ещё не отправлялось.
+        """
         expiring_users = []
+
+        async def has_payment_reminder_been_sent(user_id: int) -> bool:
+            """
+            Проверяет, было ли отправлено любое уведомление типа `payment_reminder`.
+
+            :param user_id: ID пользователя.
+            :return: True, если уведомление уже было отправлено, иначе False.
+            """
+            try:
+                async with aiosqlite.connect(os.getenv('database_path_local')) as db:
+                    query = "SELECT notification_data FROM notifications WHERE chat_id = ?"
+                    async with db.execute(query, (user_id,)) as cursor:
+                        row = await cursor.fetchone()
+                        if row and row[0]:
+                            notification_data = json.loads(row[0])
+                            # Проверяем наличие `payment_reminder` среди уведомлений
+                            for notification_key, notification_value in notification_data.items():
+                                if notification_value.get(
+                                        "message_type") == "payment_reminder" and notification_value.get(
+                                    "status") == "sent":
+                                    return True
+                return False
+            except Exception as e:
+                logging.error(f"Ошибка при проверке уведомления `payment_reminder` для пользователя {user_id}: {e}")
+                return False
 
         async def check_user(chat_id: int):
             try:
@@ -56,12 +106,23 @@ class TrialEndingNotification(NotificationBase):
                     date_key_off = await server.date_key_off.get()
                     has_paid_key = await server.has_paid_key.get()
 
-                    if await is_trial_ending_soon(date_key_off, days_until_end=2) and has_paid_key == 0:
+                    # Проверяем, заканчивается ли пробный период
+                    if (
+                            await is_trial_ending_soon(date_key_off, days_until_end=2)  # Пробный период заканчивается
+                            and has_paid_key == 0  # Подписка не оплачена
+                            and not await has_payment_reminder_been_sent(chat_id)  # Уведомление не отправлялось
+                    ):
                         return chat_id
+                return None
             except Exception as e:
-                print(f"Ошибка при обработке пользователя {chat_id}: {e}")
+                logging.error(f"Ошибка при обработке пользователя {chat_id}: {e}")
                 return None
 
+        results = await asyncio.gather(*(check_user(chat_id) for chat_id in batch))
+        expiring_users = [chat_id for chat_id in results if chat_id is not None]
+        return expiring_users
+
+        # Параллельная проверка всех пользователей в батче
         results = await asyncio.gather(*(check_user(chat_id) for chat_id in batch))
         expiring_users = [chat_id for chat_id in results if chat_id is not None]
         return expiring_users
@@ -71,9 +132,9 @@ class TrialEndingNotification(NotificationBase):
         Шаблон сообщения для уведомления о завершении пробного периода.
         """
         return (
-            "⏳ <b>Сегодня вечером ваш доступ будет заблокирован!</b> 🐧\n\n"
+            "⏳ <b>Осталось совсем чуть чуть!</b> 🐧\n\n"
             "🔐 <b>Продлите доступ к VPN прямо сейчас!</b>\n\n"
-            "🥶 <b>Ваш пробный период завершён.</b> Чтобы продолжить пользоваться нашим надёжным VPN:\n"
+            "🥶 <b>Ваш пробный период скоро завершится.</b> Чтобы продолжить пользоваться нашим надёжным VPN:\n"
             "💳 Оформите подписку и наслаждайтесь безопасным и быстрым соединением.\n\n"
             "🎯 <b>Почему стоит остаться с нами?</b>\n"
             "✅ Высокая скорость\n"
