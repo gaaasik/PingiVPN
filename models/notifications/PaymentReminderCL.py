@@ -2,7 +2,7 @@ import asyncio
 import json
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List
 
 import aiosqlite
@@ -20,6 +20,60 @@ class PaymentReminder(NotificationBase):
         """
         blocked_users = []
 
+        # async def has_payment_reminder_been_sent_by_type_and_date(user_id: int, message_type: str, date: str) -> bool:
+        #     """
+        #     Проверяет, было ли отправлено уведомление определённого типа для пользователя на указанную дату.
+        #
+        #     :param user_id: ID пользователя.
+        #     :param message_type: Тип уведомления (например, "payment_reminder").
+        #     :param date: Дата в формате "YYYY-MM-DD".
+        #     :return: True, если уведомление уже было отправлено, иначе False.
+        #     """
+        #     try:
+        #         async with aiosqlite.connect(os.getenv('database_path_local')) as db:
+        #             query = "SELECT notification_data FROM notifications WHERE chat_id = ?"
+        #             async with db.execute(query, (user_id,)) as cursor:
+        #                 row = await cursor.fetchone()
+        #                 if row and row[0]:
+        #                     notification_data = json.loads(row[0])
+        #                     for notification_key, notification_value in notification_data.items():
+        #                         # Проверяем по `message_type` и дате
+        #                         if (
+        #                                 notification_value.get("message_type") == message_type and
+        #                                 notification_value.get("status") == "sent" and
+        #                                 notification_value.get("sent_at", "").startswith(date)
+        #                         ):
+        #                             return True
+        #         return False
+        #     except Exception as e:
+        #         logging.error(
+        #             f"Ошибка при проверке уведомления типа {message_type} для пользователя {user_id} на дату {date}: {e}")
+        #         return False
+        async def has_payment_reminder_been_sent(user_id: int) -> bool:
+            """
+            Проверяет, было ли отправлено любое уведомление типа `payment_reminder`.
+
+            :param user_id: ID пользователя.
+            :return: True, если уведомление уже было отправлено, иначе False.
+            """
+            try:
+                async with aiosqlite.connect(os.getenv('database_path_local')) as db:
+                    query = "SELECT notification_data FROM notifications WHERE chat_id = ?"
+                    async with db.execute(query, (user_id,)) as cursor:
+                        row = await cursor.fetchone()
+                        if row and row[0]:
+                            notification_data = json.loads(row[0])
+                            # Проверяем наличие `payment_reminder` среди уведомлений
+                            for notification_key, notification_value in notification_data.items():
+                                if notification_value.get(
+                                        "message_type") == "payment_reminder" and notification_value.get(
+                                        "status") == "sent":
+                                    return True
+                return False
+            except Exception as e:
+                logging.error(f"Ошибка при проверке уведомления `payment_reminder` для пользователя {user_id}: {e}")
+                return False
+
         async def check_user(chat_id: int):
             try:
                 user = await UserCl.load_user(chat_id)
@@ -31,12 +85,15 @@ class PaymentReminder(NotificationBase):
                     has_paid_key = await server.has_paid_key.get()
                     server_ip = await server.server_ip.get()
 
-                    # Проверяем, завершился ли пробный период и не оплачена ли подписка
+                    # Проверяем, завершился ли пробный период, подписка не оплачена и уведомление не отправлялось
                     if await is_trial_ended(date_key_off) and has_paid_key == 0 and server_ip in SEREVERS_IP:
-                        await server.enable.set(False)
-
-                        print(f"Должны выключить {chat_id}")
-                        return chat_id
+                        if await has_payment_reminder_been_sent(chat_id):
+                            # Уведомление уже отправлялось: не блокируем, но возвращаем для повторного уведомления
+                            return chat_id
+                        else:
+                            # Блокируем доступ, если уведомление не отправлялось
+                            await server.enable.set(False)
+                            return chat_id
             except Exception as e:
                 print(f"Ошибка при обработке пользователя {chat_id}: {e}")
                 return None
