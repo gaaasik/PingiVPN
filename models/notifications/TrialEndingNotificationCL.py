@@ -29,18 +29,17 @@ async def filter_users_with_expired_trials(batch: List[int]) -> List[int]:
             for server in user.servers:
                 date_key_off = await server.date_key_off.get()
                 has_paid_key = await server.has_paid_key.get()
-                is_enabled = await server.enable.get()  # Получаем статус сервера
-                print(is_enabled)
-                # Пропускаем пользователя, если сервер уже отключён
+                is_enabled = await server.enable.get()
+
+                # Пропускаем, если сервер уже отключен
                 if not is_enabled:
                     logging.info(f"Пользователь {chat_id} пропущен: server.enable=False")
                     return None
 
                 # Проверяем, заканчивается ли пробный период
                 if (
-                        await is_trial_ending_soon(date_key_off, days_until_end=2)  # Пробный период заканчивается
-                        and has_paid_key == 0  # Подписка не оплачена
-                        and await is_enabled  # is enable = true
+                    await is_trial_ending_soon(date_key_off, days_until_end=2)
+                    and has_paid_key == 0
                 ):
                     return chat_id
             return None
