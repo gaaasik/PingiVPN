@@ -40,7 +40,7 @@ async def filter_users_with_expired_trials(batch: List[int]) -> List[int]:
                 if (
                         await is_trial_ending_soon(date_key_off, days_until_end=2)  # Пробный период заканчивается
                         and has_paid_key == 0  # Подписка не оплачена
-                        and not await is_enabled  # Уведомление не отправлялось
+                        and await is_enabled  # is enable = true
                 ):
                     return chat_id
             return None
