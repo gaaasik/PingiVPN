@@ -14,7 +14,6 @@ from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS  # Функция 
 from bot_instance import bot  # Инстанс бота для отправки сообщений
 SEREVERS_IP = ["87.249.50.108","217.151.231.215","194.35.119.227","90.156.228.68","92.51.46.66","194.35.116.119","88.218.169.126","147.45.137.180","88.218.169.80","194.87.49.144"]
 
-
 async def filter_users_with_unpaid_access(batch: List[int]) -> List[int]:
     """
     Фильтрует пользователей, чей пробный период завершился и подписка не оплачена.
@@ -32,18 +31,42 @@ async def filter_users_with_unpaid_access(batch: List[int]) -> List[int]:
                 has_paid_key = await server.has_paid_key.get()
                 server_ip = await server.server_ip.get()
                 is_enabled = await server.enable.get()
-                # Проверяем, завершился ли пробный период, подписка не оплачена а статус работы true
-                if await is_trial_ended(date_key_off) and has_paid_key == 0 and server_ip in SEREVERS_IP and is_enabled:
-                    # Блокируем доступ
-                    #await server.enable.set(False)
-                    return chat_id
+                # Логируем параметры для отладки
+                logging.info(
+                    f"Проверка пользователя {chat_id}: date_key_off={date_key_off}, has_paid_key={has_paid_key}, "
+                    f"server_ip={server_ip}, is_enabled={is_enabled}"
+                )
+                # Проверяем, завершился ли пробный период
+                if not await is_trial_ended(date_key_off):
+                    logging.info(f"Пользователь {chat_id} пропущен: пробный период не завершился.")
+                    continue
+
+                # Проверяем, оплачена ли подписка
+                if has_paid_key != 0:
+                    logging.info(f"Пользователь {chat_id} пропущен: подписка оплачена.")
+                    continue
+
+                # Проверяем, входит ли IP сервера в список разрешённых
+                if server_ip not in SEREVERS_IP:
+                    logging.info(f"Пользователь {chat_id} пропущен: server_ip={server_ip} не в списке разрешённых IP.")
+                    continue
+
+                # Проверяем, включён ли сервер
+                if not is_enabled:
+                    logging.info(f"Пользователь {chat_id} пропущен: сервер отключён.")
+                    continue
+
+                # Если все условия выполнены
+                logging.info(f"Пользователь {chat_id} добавлен в список для блокировки.")
+                await server.enable.set(False)
+                return chat_id
         except Exception as e:
-            print(f"Ошибка при обработке пользователя {chat_id}: {e}")
+            logging.error(f"Ошибка при обработке пользователя {chat_id}: {e}")
             return None
+
 
     results = await asyncio.gather(*(check_user(chat_id) for chat_id in batch))
     blocked_users = [chat_id for chat_id in results if chat_id is not None]
-    print(blocked_users)
     return blocked_users
 
 
