@@ -13,6 +13,47 @@ from bot.handlers.admin import send_admin_log
 from .utils.dates import is_trial_ending_soon
 
 
+async def filter_users_with_expired_trials(batch: List[int]) -> List[int]:
+    """
+    Фильтрует пользователей, у которых пробный период заканчивается через 1-2 дня,
+    и проверяет, что уведомление `payment_reminder` ещё не отправлялось.
+    """
+    expiring_users = []
+
+    async def check_user(chat_id: int):
+        try:
+            user = await UserCl.load_user(chat_id)
+            if not user or not user.servers:
+                return None
+
+            for server in user.servers:
+                date_key_off = await server.date_key_off.get()
+                has_paid_key = await server.has_paid_key.get()
+                is_enabled = await server.enable.get()  # Получаем статус сервера
+                print(is_enabled)
+                # Пропускаем пользователя, если сервер уже отключён
+                if not is_enabled:
+                    logging.info(f"Пользователь {chat_id} пропущен: server.enable=False")
+                    return None
+
+                # Проверяем, заканчивается ли пробный период
+                if (
+                        await is_trial_ending_soon(date_key_off, days_until_end=2)  # Пробный период заканчивается
+                        and has_paid_key == 0  # Подписка не оплачена
+                        and not await is_enabled  # Уведомление не отправлялось
+                ):
+                    return chat_id
+            return None
+        except Exception as e:
+            logging.error(f"Ошибка при обработке пользователя {chat_id}: {e}")
+            return None
+
+    # Параллельная проверка всех пользователей в батче
+    results = await asyncio.gather(*(check_user(chat_id) for chat_id in batch))
+    expiring_users = [chat_id for chat_id in results if chat_id is not None]
+    return expiring_users
+
+
 class TrialEndingNotification(NotificationBase):
     def __init__(self, batch_size: int = 50):
         super().__init__(batch_size)
@@ -27,12 +68,12 @@ class TrialEndingNotification(NotificationBase):
 
             # Разделяем пользователей на батчи и фильтруем
             for batch in self.split_into_batches(all_users):
-                expiring_users.extend(await self.filter_users_with_expired_trials(batch))
+                expiring_users.extend(await filter_users_with_expired_trials(batch))
 
             # Логируем количество пользователей
             if expiring_users:
                 await send_admin_log(bot,
-                                     f"🔔 {len(expiring_users)} пользователей нуждаются в уведомлении о завершении пробного периода.")
+                                     f"🔔 {len(expiring_users)} пользователей нуждаются в уведомлении о завершении пробного периода.\n всего пользователей {len(all_users)}")
             else:
                 await send_admin_log(bot, "🔔 Нет пользователей для уведомления о завершении пробного периода.")
 
@@ -63,69 +104,6 @@ class TrialEndingNotification(NotificationBase):
         except Exception as e:
             logging.error(f"Ошибка при проверке окончания пробного периода: {e}")
             return False
-
-    async def filter_users_with_expired_trials(self, batch: List[int]) -> List[int]:
-        """
-        Фильтрует пользователей, у которых пробный период заканчивается через 1-2 дня,
-        и проверяет, что уведомление `payment_reminder` ещё не отправлялось.
-        """
-        expiring_users = []
-
-        async def has_payment_reminder_been_sent(user_id: int) -> bool:
-            """
-            Проверяет, было ли отправлено любое уведомление типа `payment_reminder`.
-
-            :param user_id: ID пользователя.
-            :return: True, если уведомление уже было отправлено, иначе False.
-            """
-            try:
-                async with aiosqlite.connect(os.getenv('database_path_local')) as db:
-                    query = "SELECT notification_data FROM notifications WHERE chat_id = ?"
-                    async with db.execute(query, (user_id,)) as cursor:
-                        row = await cursor.fetchone()
-                        if row and row[0]:
-                            notification_data = json.loads(row[0])
-                            # Проверяем наличие `payment_reminder` среди уведомлений
-                            for notification_key, notification_value in notification_data.items():
-                                if notification_value.get(
-                                        "message_type") == "payment_reminder" and notification_value.get(
-                                    "status") == "sent":
-                                    return True
-                return False
-            except Exception as e:
-                logging.error(f"Ошибка при проверке уведомления `payment_reminder` для пользователя {user_id}: {e}")
-                return False
-
-        async def check_user(chat_id: int):
-            try:
-                user = await UserCl.load_user(chat_id)
-                if not user or not user.servers:
-                    return None
-
-                for server in user.servers:
-                    date_key_off = await server.date_key_off.get()
-                    has_paid_key = await server.has_paid_key.get()
-
-                    # Проверяем, заканчивается ли пробный период
-                    if (
-                            await is_trial_ending_soon(date_key_off, days_until_end=2)  # Пробный период заканчивается
-                            and has_paid_key == 0  # Подписка не оплачена
-                            and not await has_payment_reminder_been_sent(chat_id)  # Уведомление не отправлялось
-                    ):
-                        return chat_id
-                return None
-            except Exception as e:
-                logging.error(f"Ошибка при обработке пользователя {chat_id}: {e}")
-                return None
-
-        results = await asyncio.gather(*(check_user(chat_id) for chat_id in batch))
-        expiring_users = [chat_id for chat_id in results if chat_id is not None]
-        return expiring_users
-
-        # Параллельная проверка всех пользователей в батче
-        results = await asyncio.gather(*(check_user(chat_id) for chat_id in batch))
-        expiring_users = [chat_id for chat_id in results if chat_id is not None]
-        return expiring_users
 
     def get_message_template(self) -> str:
         """
