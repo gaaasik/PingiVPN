@@ -172,7 +172,7 @@ async def process_payment_message(message: str, bot: Bot):
         # logging.info("Платеж сохранён в базе данных.")
 
         us = await UserCl.load_user(chat_id)
-        user_name = us.user_login.get()
+        user_name = await us.user_login.get()
 
         ###############################################
         # Формирование сообщения в зависимости от статуса платежа
