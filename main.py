@@ -227,7 +227,11 @@ async def main():
     notification_scheduler.add_to_schedule("12:00", "UnsubscribedNotification")
     notification_scheduler.add_to_schedule("14:00", "TrialEndingNotification")
     notification_scheduler.add_to_schedule("15:00", "PaymentReminder")  # Добавили PaymentReminder
-
+    us= await UserCl.load_user(763159433)
+    await us.servers[0].date_key_off.set("15.12.2024 11:26:19")
+    await us.servers[0].enable.set(True)
+    await us.servers[0].has_paid_key.set(1)
+    logging.info(f"внесли изменения в бд для {763159433}")
     # Запуск уведомлений по расписанию
     asyncio.create_task(notification_scheduler.start(bot))
 
