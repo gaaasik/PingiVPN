@@ -226,7 +226,7 @@ async def main():
     # Настройка расписания уведомлений
     notification_scheduler.add_to_schedule("12:00", "UnsubscribedNotification")
     notification_scheduler.add_to_schedule("13:00", "TrialEndingNotification")
-    notification_scheduler.add_to_schedule("14:00", "PaymentReminder")  # Добавили PaymentReminder
+    notification_scheduler.add_to_schedule("14:20", "PaymentReminder")  # Добавили PaymentReminder
     #пропущенный пользователь
 
     # us= await UserCl.load_user(763159433)
