@@ -52,9 +52,9 @@ async def filter_users_with_unpaid_access(batch: List[int]) -> List[int]:
                     continue
 
                 # Проверяем, включён ли сервер
-                if not is_enabled:
-                    logging.info(f"Пользователь {chat_id} пропущен: сервер отключён.")
-                    continue
+                # if not is_enabled:
+                #     logging.info(f"Пользователь {chat_id} пропущен: сервер отключён.")
+                #     continue
 
                 # Если все условия выполнены
                 logging.info(f"Пользователь {chat_id} добавлен в список для блокировки.")
