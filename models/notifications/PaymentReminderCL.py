@@ -12,7 +12,7 @@ from models.notifications.NotificationBaseCL import NotificationBase
 from models.notifications.utils.dates import is_trial_ended
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS  # Функция отправки сообщения админу
 from bot_instance import bot  # Инстанс бота для отправки сообщений
-SEREVERS_IP = ["87.249.50.108","217.151.231.215","194.35.119.227","90.156.228.68","92.51.46.66","194.35.116.119","88.218.169.126","147.45.137.180","88.218.169.80","194.87.49.144"]
+SEREVERS_IP = ["185.104.112.64","194.135.38.128","90.156.228.68","87.249.50.108","217.151.231.215","194.35.119.227","92.51.46.66","194.35.116.119","88.218.169.126","147.45.137.180","88.218.169.80","194.87.49.144","85.92.108.52","194.87.250.200","147.45.225.175","185.201.28.16"]
 
 async def filter_users_with_unpaid_access(batch: List[int]) -> List[int]:
     """
