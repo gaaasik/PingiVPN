@@ -225,8 +225,8 @@ async def main():
 
     # Настройка расписания уведомлений
     notification_scheduler.add_to_schedule("12:00", "UnsubscribedNotification")
-    notification_scheduler.add_to_schedule("13:00", "TrialEndingNotification")
-    notification_scheduler.add_to_schedule("14:00", "PaymentReminder")  # Добавили PaymentReminder
+    notification_scheduler.add_to_schedule("14:00", "TrialEndingNotification")
+    notification_scheduler.add_to_schedule("15:00", "PaymentReminder")  # Добавили PaymentReminder
 
     # Запуск уведомлений по расписанию
     asyncio.create_task(notification_scheduler.start(bot))
