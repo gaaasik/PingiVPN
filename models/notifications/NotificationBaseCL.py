@@ -59,6 +59,9 @@ class NotificationBase(ABC):
                     reply_markup=keyboard,
                     parse_mode="HTML"
                 )
+                self.success_count += 1  # Увеличиваем счетчик успешных отправок
+                  # Обработка после успешной отправки
+                await self.after_send_success(user_id)
 
             # #Для тестов
             #     if user_id in ADMIN_CHAT_IDS:
