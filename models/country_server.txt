@@ -97,7 +97,7 @@
     },
     {
       "name": "Server_19000",
-      "address": "185.201.28.16",
+      "address": "147.45.142.205",
       "country": "Netherlands"
     },
     {

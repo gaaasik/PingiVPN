@@ -17,16 +17,15 @@ help_text_message = (
 # Клавиатура с вариантами вопросов
 def help_options_keyboard():
     buttons = [
-        # [
-        #     InlineKeyboardButton(text="🚀 Как подключиться к VPN?", callback_data="help_connect_vpn"),
-        # ],
-        # [
-        #     InlineKeyboardButton(text="🛠️ Что делать, если VPN не работает?", callback_data="help_vpn_not_working"),
-        # ],
         [
-            InlineKeyboardButton(text="💬 Задать вопрос", callback_data="help_ask_question"),
+            InlineKeyboardButton(
+                text="💬 Задать вопрос",
+                url="https://t.me/pingi_help"  # Ссылка на чат с админами
+            ),
         ],
-        [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
+        [
+            InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")
+        ]
     ]
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 

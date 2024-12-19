@@ -68,7 +68,7 @@ class DailyTaskManager:
 
         return conf_files  # Примерное значение для тестирования
 
-    async def update_referrals(self):
+    async def  update_referrals(self):
         """
         Обновление данных рефералов и начисление бонусных дней.
         """

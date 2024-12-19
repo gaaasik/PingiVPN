@@ -10,7 +10,91 @@ import json
 import aiosqlite
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from bot.handlers.admin import send_admin_log
-from .utils.dates import is_trial_ending_soon
+from .PaymentReminderCL import SEREVERS_IP
+
+
+async def filter_users_with_expired_trials(batch: List[int]) -> List[int]:
+    """
+    Фильтрует пользователей, у которых пробный период заканчивается через 1-2 дня,
+    и проверяет, что уведомление `payment_reminder` ещё не отправлялось.
+    """
+    expiring_users = []
+
+    async def check_user(chat_id: int):
+        try:
+            user = await UserCl.load_user(chat_id)
+            if not user or not user.servers:
+                logging.info(f"Пользователь {chat_id} пропущен: отсутствуют данные пользователя или серверы.")
+                return None
+
+            for server in user.servers:
+                date_key_off = await server.date_key_off.get()
+                has_paid_key = await server.has_paid_key.get()
+                is_enabled = await server.enable.get()
+                server_ip = await server.server_ip.get()
+                # Логируем параметры пользователя
+                logging.info(
+                    f"Пользователь {chat_id}: date_key_off={date_key_off}, has_paid_key={has_paid_key}, is_enabled={is_enabled}"
+                )
+                # # Пропускаем, если IP сервера не входит в список
+                # if server_ip not in SEREVERS_IP:
+                #     logging.info(f"Пользователь {chat_id} пропущен: server_ip={server_ip} не в списке разрешённых IP.")
+                #     return None
+                # Пропускаем, если сервер уже отключен
+                if not is_enabled:
+                    logging.info(f"Пользователь {chat_id} пропущен: server.enable=False.")
+                    return None
+                # Проверяем, заканчивается ли пробный период
+                if (
+                        await is_trial_ending_soon(date_key_off)
+                        and has_paid_key == 0
+                ):
+                    logging.info(f"Пользователь {chat_id} добавлен в список для уведомления.")
+                    return chat_id
+
+
+
+
+
+
+
+            logging.info(f"Пользователь {chat_id} пропущен: условия уведомления не выполнены.")
+            return None
+        except Exception as e:
+            logging.error(f"Ошибка при обработке пользователя {chat_id}: {e}")
+            return None
+
+    # Параллельная проверка всех пользователей в батче
+    results = await asyncio.gather(*(check_user(chat_id) for chat_id in batch))
+    expiring_users = [chat_id for chat_id in results if chat_id is not None]
+    return expiring_users
+async def is_trial_ending_soon(date_key_off: str) -> bool:
+    """
+    Проверяет, подходит ли дата окончания пробного периода для отправки уведомления.
+    Уведомление отправляется, если дата окончания в пределах от сегодняшнего дня до трех дней вперед.
+
+    :param date_key_off: Строка с датой окончания в формате "%d.%m.%Y %H:%M:%S".
+    :return: True, если нужно отправить уведомление, иначе False.
+    """
+    try:
+        today = datetime.now().date()  # Текущая дата
+        trial_end_date = datetime.strptime(date_key_off, "%d.%m.%Y %H:%M:%S").date()
+
+        # Проверяем, находится ли дата окончания в пределах от сегодня до +3 дней
+        if today <= trial_end_date <= (today + timedelta(days=3)):
+            logging.info(
+                f"Дата окончания {trial_end_date} в пределах от {today} до {today + timedelta(days=3)}. Уведомление требуется."
+            )
+            return True
+        else:
+            logging.info(
+                f"Дата окончания {trial_end_date} вне диапазона от {today} до {today + timedelta(days=3)}. Уведомление не требуется."
+            )
+            return False
+    except Exception as e:
+        logging.error(f"Ошибка в is_trial_ending_soon: {e}")
+        return False
+
 
 
 class TrialEndingNotification(NotificationBase):
@@ -27,105 +111,39 @@ class TrialEndingNotification(NotificationBase):
 
             # Разделяем пользователей на батчи и фильтруем
             for batch in self.split_into_batches(all_users):
-                expiring_users.extend(await self.filter_users_with_expired_trials(batch))
+                expiring_users.extend(await filter_users_with_expired_trials(batch))
 
-            # Логируем количество пользователей
-            if expiring_users:
-                await send_admin_log(bot,
-                                     f"🔔 {len(expiring_users)} пользователей нуждаются в уведомлении о завершении пробного периода.")
-            else:
-                await send_admin_log(bot, "🔔 Нет пользователей для уведомления о завершении пробного периода.")
+            async def fetch_target_users(self) -> List[int]:
+                """
+                Получение пользователей, у которых пробный период заканчивается через 1-2 дня.
+                """
+                try:
+                    all_users = await UserCl.get_all_users()
+                    expiring_users = []
+
+                    # Разделяем пользователей на батчи и фильтруем
+                    for batch in self.split_into_batches(all_users):
+                        expiring_users.extend(await filter_users_with_expired_trials(batch))
+
+                    # Логируем количество пользователей
+                    if expiring_users:
+                        safe_message = (
+                            f"\ud83d\udd14 {len(expiring_users)} пользователей нуждаются в уведомлении о завершении пробного периода.\n всего пользователей {len(all_users)}"
+                        ).encode('utf-8', 'replace').decode('utf-8')
+                        await send_admin_log(bot, safe_message)
+                    else:
+                        safe_message = "\ud83d\udd14 Нет пользователей для уведомления о завершении пробного периода."
+                        await send_admin_log(bot, safe_message.encode('utf-8', 'replace').decode('utf-8'))
+
+                    return expiring_users
+                except Exception as e:
+                    logging.error(f"Ошибка при выборке пользователей: {e}")
+                    return []
 
             return expiring_users
         except Exception as e:
             logging.error(f"Ошибка при выборке пользователей: {e}")
             return []
-
-    async def is_trial_ending_soon(date_key_off: str, days_until_end: int = 2) -> bool:
-        """
-        Проверяет, заканчивается ли пробный период сегодня или через указанное количество дней.
-        Если пробный период уже истёк, возвращает False.
-
-        :param date_key_off: Строка с датой окончания в формате "%d.%m.%Y %H:%M:%S".
-        :param days_until_end: Количество дней до окончания периода (по умолчанию 2).
-        :return: True, если пробный период заканчивается сегодня или через days_until_end дней.
-        """
-        try:
-            trial_end_date = datetime.strptime(date_key_off, "%d.%m.%Y %H:%M:%S")
-            today = datetime.now()
-
-            # Если пробный период уже истёк
-            if trial_end_date.date() < today.date():
-                return False
-
-            # Если пробный период заканчивается сегодня или через days_until_end дней
-            return today.date() <= trial_end_date.date() <= (today + timedelta(days=days_until_end)).date()
-        except Exception as e:
-            logging.error(f"Ошибка при проверке окончания пробного периода: {e}")
-            return False
-
-    async def filter_users_with_expired_trials(self, batch: List[int]) -> List[int]:
-        """
-        Фильтрует пользователей, у которых пробный период заканчивается через 1-2 дня,
-        и проверяет, что уведомление `payment_reminder` ещё не отправлялось.
-        """
-        expiring_users = []
-
-        async def has_payment_reminder_been_sent(user_id: int) -> bool:
-            """
-            Проверяет, было ли отправлено любое уведомление типа `payment_reminder`.
-
-            :param user_id: ID пользователя.
-            :return: True, если уведомление уже было отправлено, иначе False.
-            """
-            try:
-                async with aiosqlite.connect(os.getenv('database_path_local')) as db:
-                    query = "SELECT notification_data FROM notifications WHERE chat_id = ?"
-                    async with db.execute(query, (user_id,)) as cursor:
-                        row = await cursor.fetchone()
-                        if row and row[0]:
-                            notification_data = json.loads(row[0])
-                            # Проверяем наличие `payment_reminder` среди уведомлений
-                            for notification_key, notification_value in notification_data.items():
-                                if notification_value.get(
-                                        "message_type") == "payment_reminder" and notification_value.get(
-                                    "status") == "sent":
-                                    return True
-                return False
-            except Exception as e:
-                logging.error(f"Ошибка при проверке уведомления `payment_reminder` для пользователя {user_id}: {e}")
-                return False
-
-        async def check_user(chat_id: int):
-            try:
-                user = await UserCl.load_user(chat_id)
-                if not user or not user.servers:
-                    return None
-
-                for server in user.servers:
-                    date_key_off = await server.date_key_off.get()
-                    has_paid_key = await server.has_paid_key.get()
-
-                    # Проверяем, заканчивается ли пробный период
-                    if (
-                            await is_trial_ending_soon(date_key_off, days_until_end=2)  # Пробный период заканчивается
-                            and has_paid_key == 0  # Подписка не оплачена
-                            and not await has_payment_reminder_been_sent(chat_id)  # Уведомление не отправлялось
-                    ):
-                        return chat_id
-                return None
-            except Exception as e:
-                logging.error(f"Ошибка при обработке пользователя {chat_id}: {e}")
-                return None
-
-        results = await asyncio.gather(*(check_user(chat_id) for chat_id in batch))
-        expiring_users = [chat_id for chat_id in results if chat_id is not None]
-        return expiring_users
-
-        # Параллельная проверка всех пользователей в батче
-        results = await asyncio.gather(*(check_user(chat_id) for chat_id in batch))
-        expiring_users = [chat_id for chat_id in results if chat_id is not None]
-        return expiring_users
 
     def get_message_template(self) -> str:
         """
@@ -133,7 +151,7 @@ class TrialEndingNotification(NotificationBase):
         """
         return (
             "⏳ <b>Осталось совсем чуть чуть!</b> 🐧\n\n"
-            "🔐 <b>Продлите доступ к VPN прямо сейчас!</b>\n\n"
+            "🔒 <b>Продлите доступ к VPN прямо сейчас!</b>\n\n"
             "🥶 <b>Ваш пробный период скоро завершится.</b> Чтобы продолжить пользоваться нашим надёжным VPN:\n"
             "💳 Оформите подписку и наслаждайтесь безопасным и быстрым соединением.\n\n"
             "🎯 <b>Почему стоит остаться с нами?</b>\n"
@@ -151,9 +169,9 @@ class TrialEndingNotification(NotificationBase):
         """
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
-                [InlineKeyboardButton(text="💳 Оплатить ключ", callback_data="buy_vpn")],
-                [InlineKeyboardButton(text="🔗 Поделиться c другом", callback_data="show_referral_link")],
-                [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
+                [InlineKeyboardButton(text="\ud83d\udcb3 Оплатить ключ", callback_data="buy_vpn")],
+                [InlineKeyboardButton(text="\ud83d\udd17 Поделиться c другом", callback_data="show_referral_link")],
+                [InlineKeyboardButton(text="\ud83c\udfe0 Главное меню", callback_data="main_menu")]
             ]
         )
         return keyboard
@@ -161,38 +179,30 @@ class TrialEndingNotification(NotificationBase):
     async def after_send_success(self, user_id: int):
         """
         Действия после успешной отправки уведомления:
-        1. Смена статуса пользователя, если пробный период истёк.
-        2. Запись логов об отправке уведомления в базу данных.
+        Запись логов об отправке уведомления в базу данных.
         """
         today = datetime.now().strftime("%m_%d")  # Формат мм_дд
         notification_type = f"notification_{today}"
 
         try:
-            # Загрузка пользователя
             user = await UserCl.load_user(user_id)
 
             if not user:
                 logging.error(f"Пользователь {user_id} не найден для обновления статуса.")
                 return
 
-
-
-            # Логируем уведомление в базу данных
             async with aiosqlite.connect(os.getenv('database_path_local')) as db:
-                # Читаем текущие данные логов
                 query = "SELECT notification_data FROM notifications WHERE chat_id = ?"
                 async with db.execute(query, (user_id,)) as cursor:
                     row = await cursor.fetchone()
                     notification_data = json.loads(row[0]) if row and row[0] else {}
 
-                # Обновляем данные логов
                 notification_data[notification_type] = {
                     "sent_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "status": "sent",
-                    "message_type": "payment_reminder"
+                    "message_type": "trial_ending"
                 }
 
-                # Обновляем запись в базе данных
                 update_query = "UPDATE notifications SET notification_data = ? WHERE chat_id = ?"
                 await db.execute(update_query, (json.dumps(notification_data), user_id))
                 await db.commit()
