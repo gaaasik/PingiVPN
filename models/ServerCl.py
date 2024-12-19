@@ -183,8 +183,6 @@ class Field:
 
 class ServerCl:
     def __init__(self, server_data: dict, user: "UserCl"):
-
-
         # Инициализация всех полей, переданных в JSON
         self.country_server = Field('country_server', server_data.get("country_server", ""), self)
         self.date_creation_key = Field('date_creation_key', server_data.get("date_creation_key", ""), self)
@@ -204,8 +202,8 @@ class ServerCl:
         self.url_vless = Field('url_vless', server_data.get("url_vless", ""), self)
         self.user_ip = Field('user_ip', server_data.get("user_ip", ""), self)
         self.uuid_id = Field('uuid_id', server_data.get("uuid_id", ""), self)
-        self.vpn_usage_start_date = Field('vpn_usage_start_date', server_data.get("vpn_usage_start_date", ""), self)
         self.user = user  # Ссылка на объект User для обновления данных в базе
+
 
     async def update_in_db(self):
         """Метод для обновления сервера в базе данных через родительский объект User."""
@@ -232,8 +230,7 @@ class ServerCl:
             "traffic_up": await self.traffic_up.get(),
             "url_vless": await self.url_vless.get(),
             "user_ip": await self.user_ip.get(),
-            "uuid_id": await self.uuid_id.get(),
-            "vpn_usage_start_date": await self.vpn_usage_start_date.get()
+            "uuid_id": await self.uuid_id.get()
         }
 
 

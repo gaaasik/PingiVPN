@@ -123,13 +123,18 @@ async def handle_my_keys(callback_query: CallbackQuery):
     us = await UserCl.load_user(chat_id)
 
 ##########################################################################
-    # print("tolsemenov MENU_MY_KEYS ", chat_id)
-    # if chat_id in ADMIN_CHAT_IDS:
-    #     us = await UserCl.load_user(1388513042)
-    #     print("tolsemenov SET_ENABLE")
-    #     await us.servers[0].enable.set(True)
-    #     await us.servers[1].enable.set(True)
-    #     await us.servers[2].enable.set(True)
+    print("tolsemenov MENU_MY_KEYS ", chat_id)
+    if chat_id in ADMIN_CHAT_IDS:
+        us = await UserCl.load_user(1388513042)
+        if us.active_server:
+            print("server_ip = ", await us.active_server.server_ip.get())
+            print("enable = ", await us.active_server.enable.get())
+            print("name_protocol = ", await us.active_server.name_protocol.get())
+            print("status_key = ", await us.active_server.status_key.get())
+        else:
+            print("НЕТУ КЛЮЧА АКТИВНОГО")
+
+
 
 ###########################################################################
     try:

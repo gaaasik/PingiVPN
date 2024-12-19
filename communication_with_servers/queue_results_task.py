@@ -90,6 +90,7 @@ async def process_updata_traffic(json_task):
         chat_id = data.get('chat_id')
         user_ip = data.get('user_ip')
         enable = data.get('enable')
+        disabled = data.get('disabled')
         transfer_received = data.get('transfer_received')
         transfer_sent = data.get('transfer_sent')
         latest_handshake = data.get('latest_handshake')
@@ -108,6 +109,8 @@ async def process_updata_traffic(json_task):
         print("transfer_sent = ", transfer_sent)
         print("latest_handshake = ", latest_handshake)
         print("chat_id = ", chat_id)
+        print("disabled = ", disabled)
+        print("enable = ", enable)
 
         us = await UserCl.load_user(chat_id)
 

@@ -1,4 +1,5 @@
 # bot/handlers/menu_device.py
+import logging
 
 from aiogram import Router, types
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
@@ -106,23 +107,27 @@ async def handle_device_choice(callback_query: CallbackQuery):
     device = callback_query.data.split('_')[1]
     await us.device.set(device)
 
-    # Отправляем сообщение с ссылкой на приложение WireGuard
-    await callback_query.message.answer(
-        "Скачайте официальное приложение WireGuard на ваше устройство.",
-        reply_markup=wireguard_keyboard(device),
-        parse_mode="Markdown"
-    )
-    await callback_query.answer()
+    ##########################################       VLESS          ######################################################
 
-    ################################################
+    # Проверяем наличие серверов
+    if not us.servers:
+        # Если серверов нет, добавляем новый сервер VLESS
+        await us.add_key_vless()
 
-    #восстановить при переходе на vless
+    # Поиск сервера с протоколом VLESS
+    url_vless = None
+    for server in us.servers:
+        if await server.name_protocol.get() == "vless":
+            url_vless = await server.url_vless.get()
+            break
+
+    # Если URL не найден, возвращаем ошибку
+    if not url_vless:
+        await callback_query.message.answer("Ошибка: Не удалось найти сервер с поддержкой VLESS.")
+        await callback_query.answer()
+        return
 
 
-    # #НАДО ПОМЕНЯТЬ
-
-
-    #
     # # Логика для проверки протокола VLESS
     # check_protocol_vless = False
     # for server in us.servers:
@@ -139,19 +144,33 @@ async def handle_device_choice(callback_query: CallbackQuery):
     # else:
     #     await us.add_key_vless()
     #     url_vless = await us.servers[0].url_vless.get()
-    # #############################################
-    # try:
-    #     text = get_instruction_text_for_device(device, url_vless)
-    #     message = await callback_query.message.answer(
-    #         text,
-    #         parse_mode="HTML",
-    #         disable_web_page_preview=True,
-    #         reply_markup=download_app_keyboard(device)  # Передаём `device` в `download_app_keyboard`
-    #     )
-         #await callback_query.answer()
+    #############################################
+    try:
+        text = get_instruction_text_for_device(device, url_vless)
+        message = await callback_query.message.answer(
+            text,
+            parse_mode="HTML", #ЭТО ОБЯЗАТЕЛЬНО ИНАЧЕ ОШИБКА
+            disable_web_page_preview=True,
+            reply_markup=download_app_keyboard(device)  # Передаём `device` в `download_app_keyboard`
+        )
+        await callback_query.answer()
 
-    # except IndexError:
-    #     print("Список серверов пуст или указан индекс вне диапазона.")
-    #     return None
-    # Возвращаем None, если списка серверов нет или он пуст
+    except IndexError as e:
+        logging.error(f"Ошибка при обработке устройства: {e}")
+        await callback_query.message.answer("Произошла ошибка при обработке вашего запроса. Попробуйте позже.")
+        await callback_query.answer()
+
+
+
+    #############################################       WIREGUARD     #######################################################
+
+    # # Отправляем сообщение с ссылкой на приложение WireGuard
+    # await callback_query.message.answer(
+    #     "Скачайте официальное приложение WireGuard на ваше устройство.",
+    #     reply_markup=wireguard_keyboard(device),
+    #     parse_mode="Markdown"
+    # )
+    # await callback_query.answer()
+
+
 
