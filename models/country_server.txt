@@ -6,7 +6,7 @@
       "address": "147.45.232.240"
     },
     {
-      "name": "Server Bot_100",
+      "name": "Server_Bot_100",
       "country": "Poland",
       "address": "217.25.91.109"
     },
