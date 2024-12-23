@@ -123,7 +123,7 @@ async def handle_device_choice(callback_query: CallbackQuery):
 
     try:
         if us.active_server:
-            ##########################################       VLESS          ######################################################
+            ##########################################          VLESS          ######################################################
             if await us.active_server.name_protocol.get() == "vless":
                 url_vless = await us.active_server.url_vless.get()
                 text = get_instruction_text_for_device(device, url_vless)
