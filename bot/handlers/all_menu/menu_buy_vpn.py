@@ -58,43 +58,47 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
 
     else:
         # Получаем статус первого ключа
-        status_key = await us.servers[0].status_key.get()
-        key_name = await us.servers[0].name_key.get()
+        if us.active_server:
+            status_key = await us.active_server.status_key.get()
+            key_name = await us.active_server.name_key.get()
+            date_key_off = await us.active_server.date_key_off.get_date()
+            enabled = await us.active_server.enable.get()
+            has_paid_key = await us.active_server.has_paid_key.get()
+            if enabled == True and has_paid_key == 0:
+                # Пробный период ключа
+                if date_key_off < 0:
+                    date_key_off = 0
+                 # Обрезаем до 'ГГГГ-ММ-ДД'
+                text = (
+                    f"Ваш ключ: {key_name}\n"
+                    f"Его статус: *пробный период*\n"
+                    f"Пробный период ключа до *{date_key_off}*\n\n"
+                    "Стоимость подписки на *30* дней: *199₽*"
+                )
+                keyboard = get_payment_keyboard()
 
-        if status_key == "free_key":
-            # Пробный период ключа
-            trial_end_date = await us.servers[0].date_key_off.get_date()  # Обрезаем до 'ГГГГ-ММ-ДД'
-            text = (
-                f"Ваш ключ: {key_name}\n"
-                f"Его статус: *пробный период*\n"
-                f"Пробный период ключа до *{trial_end_date}*\n\n"
-                "Стоимость подписки на *30* дней: *199₽*"
-            )
-            keyboard = get_payment_keyboard()
+            elif enabled == False:
+                # Ключ заблокирован
+                text = (
+                    f"Ваш ключ: {key_name}\n"
+                    "Его статус: *заблокирован*\n\n"
+                    "Чтобы ключ активировался, оплатите его.\n"
+                    "При оплате он будет активен в течение 30 дней.\n\n"
+                    "Стоимость подписки на *30* дней: *199₽*"
+                )
+                keyboard = get_payment_keyboard()
 
-        elif status_key == "blocked":
-            # Ключ заблокирован
-            text = (
-                f"Ваш ключ: {key_name}\n"
-                "Его статус: *заблокирован*\n\n"
-                "Чтобы ключ активировался, оплатите его.\n"
-                "При оплате он будет активен в течение 30 дней.\n\n"
-                "Стоимость подписки на *30* дней: *199₽*"
-            )
-            keyboard = get_payment_keyboard()
-
-        elif status_key == "active":
-            # Ключ активен
-            active_end_date = await us.servers[0].date_key_off.get_date()  # Обрезаем до 'ГГГГ-ММ-ДД'
-            text = (
-                f"Ваш ключ: {key_name}\n"
-                f"Cтатус: {await get_user_status_text(us)}\n"
-                f"Ключ активен до: *{active_end_date}*\n\n"
-                "При оплате вы получите доступ на *30 дней* "
-            )
-            keyboard = get_payment_keyboard()
+            elif enabled == True and has_paid_key > 0:
+                # Ключ активен
+                text = (
+                    f"Ваш ключ: {key_name}\n"
+                    f"Cтатус: {await get_user_status_text(us)}\n"
+                    f"Ключ активен до: *{date_key_off}*\n\n"
+                    "При оплате вы получите доступ на *30 дней* "
+                )
+                keyboard = get_payment_keyboard()
 
     # Отправка сообщения с соответствующей клавиатурой
-    await callback_query.message.answer(text, reply_markup=keyboard,parse_mode="Markdown")
+    await callback_query.message.answer(text, reply_markup=keyboard, parse_mode="HTML")
     await send_admin_log(callback_query.bot, f"Пользователь {chat_id} нажал первую кнопку оплатить")
     await callback_query.answer()

@@ -38,7 +38,7 @@ def get_instruction_text_for_device(device: str, vpn_link: str) -> str:
         instruction_text = (
             f"📱 <b>Инструкция для Android:</b>\n\n"
             f"1️⃣ Нажмите на ваш ключ <b>VLESS</b> (скопируйте его).\n"
-            f"2️⃣ Откройте приложение <a href='https://play.google.com/store/apps/details?id=com.hiddify'><b>Hiddify</b> (Play Market)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
+            f"2️⃣ Откройте приложение <a href='https://play.google.com/store/apps/details?id=com.v2ray.ang'><b>Hiddify</b> (Play Market)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
             f"3️⃣ Нажмите круглую кнопку для подключения — и наслаждайтесь быстрой связью! 🌐\n\n"
             f"<b>Ваш ключ:</b>\n<pre>{vpn_link}</pre>"
         )
@@ -47,7 +47,7 @@ def get_instruction_text_for_device(device: str, vpn_link: str) -> str:
         instruction_text = (
             f"📱 <b>Инструкция для iPhone:</b>\n\n"
             f"1️⃣ Нажмите на ваш ключ <b>VLESS</b> (скопируйте его).\n"
-            f"2️⃣ Откройте приложение <a href='https://apps.apple.com/us/app/streisand/id6450534064'><b>Streisand</b> (App Store)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
+            f"2️⃣ Откройте приложение <a href='https://apps.apple.com/ru/app/streisand/id6450534064'><b>Streisand</b> (App Store)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
             f"3️⃣ Подключитесь и наслаждайтесь стабильной работой! 🚀\n\n"
             f"<b>Ваш ключ:</b>\n<pre>{vpn_link}</pre>"
         )
@@ -107,53 +107,47 @@ async def handle_device_choice(callback_query: CallbackQuery):
     device = callback_query.data.split('_')[1]
     await us.device.set(device)
 
-    ##########################################       VLESS          ######################################################
+
 
     # Проверяем наличие серверов
     if not us.servers:
         # Если серверов нет, добавляем новый сервер VLESS
-        await us.add_key_vless()
-
-    # Поиск сервера с протоколом VLESS
-    url_vless = None
-    for server in us.servers:
-        if await server.name_protocol.get() == "vless":
-            url_vless = await server.url_vless.get()
-            break
-
-    # Если URL не найден, возвращаем ошибку
-    if not url_vless:
-        await callback_query.message.answer("Ошибка: Не удалось найти сервер с поддержкой VLESS.")
-        await callback_query.answer()
-        return
+        if not await us.add_key_vless():
+            await callback_query.message.answer(
+                "🥲К сожалению, cейчас все сервера полностью заполенны. Сейчас мы добавляем места, повторите попытку подключения через 30 минут😉.",
+                parse_mode="Markdown"
+            )
+            logging.error(f"Пользователь добавляется, а свободных ключей нету")
+            return
 
 
-    # # Логика для проверки протокола VLESS
-    # check_protocol_vless = False
-    # for server in us.servers:
-    #     if await server.name_protocol.get() == "vless":
-    #         check_protocol_vless = True
-    #         break
-    #
-    # # Если VLESS протокол найден, используем соответствующий URL
-    # if check_protocol_vless:
-    #     for server in us.servers:
-    #         if await server.name_protocol.get() == "vless":
-    #             url_vless = await server.url_vless.get()
-    #             break
-    # else:
-    #     await us.add_key_vless()
-    #     url_vless = await us.servers[0].url_vless.get()
-    #############################################
     try:
-        text = get_instruction_text_for_device(device, url_vless)
-        message = await callback_query.message.answer(
-            text,
-            parse_mode="HTML", #ЭТО ОБЯЗАТЕЛЬНО ИНАЧЕ ОШИБКА
-            disable_web_page_preview=True,
-            reply_markup=download_app_keyboard(device)  # Передаём `device` в `download_app_keyboard`
-        )
-        await callback_query.answer()
+        if us.active_server:
+            ##########################################       VLESS          ######################################################
+            if await us.active_server.name_protocol.get() == "vless":
+                url_vless = await us.active_server.url_vless.get()
+                text = get_instruction_text_for_device(device, url_vless)
+                await callback_query.message.answer(
+                    text,
+                    parse_mode="HTML",  # ЭТО ОБЯЗАТЕЛЬНО ИНАЧЕ ОШИБКА
+                    disable_web_page_preview=True,
+                    reply_markup=download_app_keyboard(device)  # Передаём `device` в `download_app_keyboard`
+                )
+                await callback_query.answer()
+                return
+
+
+            #############################################       WIREGUARD     #######################################################
+            if await us.active_server.name_protocol.get() == "wireguard":
+                # Отправляем сообщение с ссылкой на приложение WireGuard
+                await callback_query.message.answer(
+                    "Скачайте официальное приложение WireGuard на ваше устройство.",
+                    reply_markup=wireguard_keyboard(device),
+                    parse_mode="Markdown"
+                )
+                await callback_query.answer()
+                return
+
 
     except IndexError as e:
         logging.error(f"Ошибка при обработке устройства: {e}")
@@ -162,15 +156,7 @@ async def handle_device_choice(callback_query: CallbackQuery):
 
 
 
-    #############################################       WIREGUARD     #######################################################
 
-    # # Отправляем сообщение с ссылкой на приложение WireGuard
-    # await callback_query.message.answer(
-    #     "Скачайте официальное приложение WireGuard на ваше устройство.",
-    #     reply_markup=wireguard_keyboard(device),
-    #     parse_mode="Markdown"
-    # )
-    # await callback_query.answer()
 
 
 

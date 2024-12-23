@@ -106,7 +106,7 @@ class UserCl:
         self.days_since_registration = Field('days_since_registration', 0, self)
         self.email = Field('email', "", self)
         self.servers: list[ServerCl]  # Явное указание типа поля servers  # Поле для хранения списка серверов (список объектов Server_cl)
-        self.active_server: ServerCl
+        self.active_server: ServerCl = None
         self.count_key = Field('count_key', 0, self)  # Поле для хранения количества серверов
 
     @classmethod
@@ -357,9 +357,16 @@ class UserCl:
         # Параметры нового сервера VLESS
         server_params = await self._generate_server_params_vless(current_date, url_vless, free_day)
 
+        #Если был активный ключ мы его блокируем
+        if self.active_server:
+            await self.active_server.status_key.set("blocked")
+
         # Создание нового сервера и обновление базы данных
         await self.add_server_json(server_params)
         print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
+
+        #Теперь новый active_server
+        await self.choosing_working_server()
         return True
 
 
@@ -374,6 +381,7 @@ class UserCl:
 
             # Создание нового сервера и обновление базы данных
             print(f"Сервер WireGuard добавлен для пользователя с hat_id {self.chat_id}")
+        await self.choosing_working_server()
 
 
     async def change_activ_key(self, new_active_protocol):
@@ -488,7 +496,7 @@ class UserCl:
             "has_paid_key": 0,
             "name_key": f"{name_key}",
             "name_protocol": "vless",
-            "name_server": f"{name_server} {server_ip}",
+            "name_server": f"{server_ip}, {name_server} ",
             "server_ip": server_ip,
             "status_key": "active",
             "traffic_down": 0,
