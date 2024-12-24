@@ -60,93 +60,6 @@ async def drop_table(database_path: str, table_name: str):
             print(f"Ошибка при удалении таблицы {table_name}: {e}")
 
 
-# async def init_db(database_path: str):
-#     if not os.path.exists(database_path_local):
-#         print(f"Файл базы данных не найден по пути: {database_path_local}")
-#     db_directory = os.path.dirname(database_path)
-#     if db_directory and not os.path.exists(db_directory):
-#         os.makedirs(db_directory)
-#
-#     conn = await aiosqlite.connect(database_path)
-#
-#     # Добавляем новые столбцы, если они не существуют
-#     await add_device_column(conn)
-#     await add_is_subscribed_column(conn)
-#     await add_vpn_usage_start_date_column(conn)
-#     await add_traffic_used_column(conn)
-#     await add_columns_to_users_sub(conn)
-#     #await calculate_days_and_update_status(conn)
-#     await add_is_notification_column(conn)
-#     #await get_users_with_days_since_registration()
-#     await add_feedback_status_column(conn)
-#     await add_ip_columns(conn)
-#     await add_days_after_pay(conn)
-#     await add_columns_in_db(conn, "date_payment_subscription")
-#     await add_columns_in_db(conn, "date_expire_free_trial")
-#     await add_columns_in_db(conn, "email")
-#
-#     # Создание таблицы users с новыми полями
-#     await conn.execute('''
-#                CREATE TABLE IF NOT EXISTS users (
-#                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-#                    chat_id INTEGER UNIQUE,
-#                    user_name TEXT,
-#                    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-#                    referrer_id INTEGER,  -- Поле для хранения ID пригласившего пользователя
-#                    device TEXT,  -- Поле для устройства
-#                    is_subscribed BOOLEAN DEFAULT 0,  -- Поле для отслеживания подписки
-#                    date_payment_subscription TIMESTAMP,  -- Дата начала использования VPN
-#                    traffic_used INTEGER DEFAULT 0,  -- Потраченный трафик (в мегабайтах)
-#                    has_paid_subscription INTEGER NOT NULL DEFAULT 0,  -- Новое поле для оплаты подписки
-#                    subscription_status TEXT DEFAULT 'new_user',  -- Новое поле для статуса подписки
-#                    days_since_registration INTEGER DEFAULT 0,  -- Новое поле для количества дней с момента регистрации
-#                    FOREIGN KEY(referrer_id) REFERENCES users(id)
-#                )
-#            ''')
-#
-#     # Создание остальных таблиц
-#     await conn.execute('''
-#         CREATE TABLE IF NOT EXISTS connections (
-#             id INTEGER PRIMARY KEY AUTOINCREMENT,
-#             user_id INTEGER,
-#             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-#             FOREIGN KEY(user_id) REFERENCES users(id)
-#         )
-#     ''')
-#
-#     await conn.execute('''
-#         CREATE TABLE IF NOT EXISTS configurations (
-#             id INTEGER PRIMARY KEY AUTOINCREMENT,
-#             file_name TEXT UNIQUE NOT NULL,
-#             status TEXT DEFAULT 'free'
-#         )
-#     ''')
-#
-#     await conn.execute('''
-#         CREATE TABLE IF NOT EXISTS user_questions (
-#             id INTEGER PRIMARY KEY AUTOINCREMENT,
-#             chat_id INTEGER NOT NULL,
-#             user_id INTEGER NOT NULL,
-#             question_text TEXT NOT NULL,
-#             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-#         )
-#     ''')
-#
-#     await conn.execute('''
-#         CREATE TABLE IF NOT EXISTS referrals (
-#             id INTEGER PRIMARY KEY AUTOINCREMENT,
-#             referrer_id INTEGER NOT NULL,
-#             referred_id INTEGER NOT NULL,
-#             timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-#             FOREIGN KEY(referrer_id) REFERENCES users(id),
-#             FOREIGN KEY(referred_id) REFERENCES users(id)
-#         )
-#     ''')
-#
-#     await conn.commit()
-#     return conn
-
-
 async def get_user_by_telegram_id(chat_id: int):
     async with aiosqlite.connect(database_path_local) as conn:
         cursor = await conn.execute('SELECT * FROM users WHERE chat_id = ?', (chat_id,))
@@ -159,17 +72,6 @@ async def get_all_users():
         async with conn.execute('SELECT * FROM users') as cursor:
             users = await cursor.fetchall()
     return users
-
-
-# async def get_user_registration_date_and_username(user_id: int):
-#     async with aiosqlite.connect(database_path_local) as conn:
-#         async with conn.execute('SELECT registration_date, user_name FROM users WHERE chat_id = ?',
-#                                 (user_id,)) as cursor:
-#             user = await cursor.fetchone()
-#             if user:
-#                 registration_date, user_name = user
-#                 return registration_date, user_name
-#     return None
 
 
 async def add_user_question(chat_id: int, user_id: int, question_text: str):
@@ -628,42 +530,6 @@ async def get_days_since_registration_db(chat_id: int) -> int:
         return -1
 
 
-
-#is_subscribed, date_payment_subscription,has_paid_subscription,subscription_status,days_after_pay
-# async def check_24_hour_db(bot: Bot):
-#     """
-#     Функция проверяет записи в базе данных и обновляет статус подписки пользователей,
-#     если прошло 24 часа с момента последнего платежа.
-#     """
-#     async with aiosqlite.connect(database_path_local) as database:
-#
-#         # Получаем текущую дату и время
-#         current_time = datetime.now()
-#
-#         # Получаем все записи из базы данных для проверки
-#         async with database.execute(
-#                 "SELECT user_id, date_payment_subscription, is_subscribed, has_paid_subscription, subscription_status,days_after_pay FROM users") as cursor:
-#             rows = await cursor.fetchall()
-#
-#             row: object
-#             for row in rows:
-#                 user_id, date_payment_subscription, is_subscribed, has_paid_subscription,subscription_status, days_after_pay = row
-#
-#              нужно записать в поле days_after_pay -  (date now - date_payment_subscription)
-#                 если days_after_pay = 1 то..
-#            # has_paid_subscription - проверяем days_after_pay - 1
-#
-#             # нужно уменшить количетсво дней - 1 days_after_pay
-#             # is_subscribed - проверить подписку - отправить сообщение если не подписан
-#             # если количество дней days_after_pay=1 - нужно отправить сообщение пользователю о том что подписка завтра закончитсяи изменить статус на waiting_pending
-#             #     если 0 отправлем сообщение оплатите подписку - и меняем has_paid_subscription=0 ,subscription_status = expired
-
-
-# еслм days_after_pay = 1 (time_left_after_payment)то отправляем предупреждающее сообщение пользователю об окончании подписки
-
-
-# # Сохраняем изменения в базе данных
-# await database.commit()
 
 # Функция сохранения email в базу данных
 async def save_user_email_to_db(user_id: int, email: str):

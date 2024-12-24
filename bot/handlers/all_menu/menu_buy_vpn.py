@@ -65,15 +65,12 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
             enabled = await us.active_server.enable.get()
             has_paid_key = await us.active_server.has_paid_key.get()
             if enabled == True and has_paid_key == 0:
-                # Пробный период ключа
-                if date_key_off < 0:
-                    date_key_off = 0
                  # Обрезаем до 'ГГГГ-ММ-ДД'
                 text = (
                     f"Ваш ключ: {key_name}\n"
-                    f"Его статус: *пробный период*\n"
-                    f"Пробный период ключа до *{date_key_off}*\n\n"
-                    "Стоимость подписки на *30* дней: *199₽*"
+                    f"Его статус: <b>пробный период</b>\n"
+                    f"Пробный период ключа до <b>{date_key_off}</b>\n\n"
+                    "Стоимость подписки на <b>30</b> дней: <b>199₽</b>"
                 )
                 keyboard = get_payment_keyboard()
 
@@ -81,10 +78,10 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
                 # Ключ заблокирован
                 text = (
                     f"Ваш ключ: {key_name}\n"
-                    "Его статус: *заблокирован*\n\n"
+                    "Его статус: <b>заблокирован</b>\n\n"
                     "Чтобы ключ активировался, оплатите его.\n"
                     "При оплате он будет активен в течение 30 дней.\n\n"
-                    "Стоимость подписки на *30* дней: *199₽*"
+                    "Стоимость подписки на <b>30</b> дней: <b>199₽</b>"
                 )
                 keyboard = get_payment_keyboard()
 
@@ -93,7 +90,7 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
                 text = (
                     f"Ваш ключ: {key_name}\n"
                     f"Cтатус: {await get_user_status_text(us)}\n"
-                    f"Ключ активен до: *{date_key_off}*\n\n"
+                    f"Ключ активен до: <b>{date_key_off}</b>\n\n"
                     "При оплате вы получите доступ на *30 дней* "
                 )
                 keyboard = get_payment_keyboard()

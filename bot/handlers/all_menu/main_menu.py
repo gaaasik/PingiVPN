@@ -90,16 +90,15 @@ async def get_user_status_text(us):
             return f"Пробный период до {end_date_str} (осталось {remaining_days} дней)"
 
         elif enabled == False or remaining_days < 0:
-            return ("Ключ заблокирован")
+            return ("Ключ заблокирован, требуется оплата")
 
         elif (enabled == True) and (has_paid_key > 0):
             expiration_text = ""
-            if remaining_days > 2:
-                expiration_text = f"Ключ активен до *{end_date_str}* (осталось {remaining_days} дней)"
-            elif remaining_days >= 0 and remaining_days < 3:
-                expiration_text = f"Ключ активен до *{end_date_str}* (осталось {remaining_days} дней)"
-            elif remaining_days < 0:
+            if remaining_days < 0:
                 expiration_text = f"Требуется оплата"
+            else:
+                expiration_text = f"Ключ активен до *{end_date_str}* (осталось {remaining_days} дней)"
+
             return expiration_text
 
 

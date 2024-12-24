@@ -1,18 +1,15 @@
 import asyncio
-import json
 import logging
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
 
-import aiosqlite
 from aiogram import Bot
 from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
     menu_share, menu_connect_vpn, menu_payment, menu_about_pingi, menu_subscriptoin_check
-from bot.notification_users.notification_migrate_from_wg import get_stay_on_wg_count
 
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
@@ -27,11 +24,10 @@ from bot.database.init_db import init_db
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from communication_with_servers.queue_results_task import process_queue_results_task
-from models.ServerCl import load_server_data
+from models.country_server_data import load_server_data
 #from communication_with_servers.send_json import process_task_queue
 # from communication_with_servers.send_json import process_task_queue
 #from fastapi_app.all_utils_flask_db import initialize_db
-from models.UserCl import UserCl
 from models.daily_task_class.DailyTaskManager import DailyTaskManager
 #from fastapi_app.all_utils_flask_db import initialize_db
 
@@ -144,27 +140,6 @@ async def periodic_backup_task(bot: Bot):
 
 
 
-# async def notify_users_about_protocol_change(bot: Bot):
-#     errors = {}
-#     all_chat_id = await UserCl.get_all_users()
-#     # Размер батча (количество пользователей в одном чанке)
-#     batch_size = 50
-#
-#     # Функция для разделения списка пользователей на чанки
-#     def chunk_list(lst, size):
-#         for i in range(0, len(lst), size):
-#             yield lst[i:i + size]
-#
-#     # Обрабатываем чанки пользователей
-#     for chunk in chunk_list(all_chat_id, batch_size):
-#         # Отправляем уведомления всем пользователям в текущем чанке одновременно
-#         await asyncio.gather(*[send_initial_update_notification(chat_id, bot, errors) for chat_id in chunk])
-#
-#     # Логируем количество ошибок после обработки батча
-#     await send_admin_log(bot, f"При уведомлении возникло {len(errors)} ошибок на текущий момент.")
-
-
-
 async def main():
     """Главная функция запуска"""
     try:
@@ -190,6 +165,7 @@ async def main():
     #Толян загружает данные из country_server в country_server_data
     country_server_path = os.getenv('country_server_path')
     await load_server_data(country_server_path)
+
 
     async def run_test():
         # Создаём экземпляр PaymentReminder
@@ -231,10 +207,7 @@ async def main():
 
     # us= await UserCl.load_user(763159433)
 
-    # await us.servers[0].date_key_off.set("15.12.2024 11:26:19")
-    # await us.servers[0].enable.set(True)
-    # await us.servers[0].has_paid_key.set(1)
-    # logging.info(f"внесли изменения в бд для {763159433}")
+
     # Запуск уведомлений по расписанию
     asyncio.create_task(notification_scheduler.start(bot))
 
