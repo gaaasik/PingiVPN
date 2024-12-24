@@ -174,5 +174,5 @@ async def handle_super_button(callback_query: CallbackQuery):
     await callback_query.answer()  # Закрываем уведомление о нажатии кнопки
 
     # Задержка в 2 секунды перед отправкой главного меню
-    await asyncio.sleep(2)
+    await asyncio.sleep(1)
     await show_main_menu(chat_id, bot)
