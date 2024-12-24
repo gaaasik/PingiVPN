@@ -8,8 +8,10 @@ import aiofiles
 import aiosqlite
 import json
 from dotenv import load_dotenv
-from models.ServerCl import ServerCl
+from models.ServerCl import ServerCl, country_server_data
 import re
+import logging
+
 
 # Загрузка переменных окружения из файла .env
 load_dotenv()
@@ -104,6 +106,7 @@ class UserCl:
         self.days_since_registration = Field('days_since_registration', 0, self)
         self.email = Field('email', "", self)
         self.servers: list[ServerCl]  # Явное указание типа поля servers  # Поле для хранения списка серверов (список объектов Server_cl)
+        self.active_server: ServerCl = None
         self.count_key = Field('count_key', 0, self)  # Поле для хранения количества серверов
 
     @classmethod
@@ -123,6 +126,8 @@ class UserCl:
             return None
 
         await self._load_servers()  # Загружаем сервера
+        await self.choosing_working_server()
+
         return self
 
     @classmethod
@@ -283,6 +288,21 @@ class UserCl:
         except Exception as e:
             logging.error(f"Ошибка при проверке существования пользователя {chat_id}: {e}")
             return False
+
+    async def choosing_working_server(self):
+        """Выбирает активный сервер из списка серверов пользователя."""
+        if await self.count_key.get() <= 0:
+            self.active_server = None
+            return
+        for sample in self.servers:
+            if await sample.status_key.get() == "active":  # Используем await
+                self.active_server = sample  # Присваиваем сервер, а не его статус
+                return  # Завершаем поиск, как только нашли активный сервер
+        self.active_server = None  # Если активный сервер не найден
+
+
+
+
     async def add_server_json(self, server_params: dict):
         """Добавление нового сервера в JSON формате"""
         # Преобразуем параметры в объект Server_cl и добавляем его в список servers
@@ -335,11 +355,18 @@ class UserCl:
             return False
 
         # Параметры нового сервера VLESS
-        server_params = self._generate_server_params_vless(current_date, url_vless, free_day)
+        server_params = await self._generate_server_params_vless(current_date, url_vless, free_day)
+
+        #Если был активный ключ мы его блокируем
+        if self.active_server:
+            await self.active_server.status_key.set("blocked")
 
         # Создание нового сервера и обновление базы данных
         await self.add_server_json(server_params)
         print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
+
+        #Теперь новый active_server
+        await self.choosing_working_server()
         return True
 
 
@@ -347,16 +374,25 @@ class UserCl:
     async def add_key_wireguard(self, free_day=7):
 
         if not await self.count_key.get():
-            config_file_path = await self.check_fild_PINGI()
+            config_file_path = await self.check_file_PINGI()
             if config_file_path:
                 server_params = await self._generate_server_params_wireguard(config_file_path, free_day)
                 await self.add_server_json(server_params)
 
             # Создание нового сервера и обновление базы данных
-            print(f"Сервер WireGuard добавлен для пользователя с chat_id {self.chat_id}")
+            print(f"Сервер WireGuard добавлен для пользователя с hat_id {self.chat_id}")
+        await self.choosing_working_server()
 
 
-    async def check_fild_PINGI(self) -> Union[str, bool]:
+    async def change_activ_key(self, new_active_protocol):
+        if await self.count_key.get() <= 1:
+            print()
+        if new_active_protocol == "wireguard":
+            pass
+
+
+
+    async def check_file_PINGI(self) -> Union[str, bool]:
         user_login = await self.user_login.get()
         chat_id = self.chat_id
 
@@ -425,8 +461,14 @@ class UserCl:
             return None
 
 
+    async def _get_server_name_by_ip(self, server_data, ip_address: str) -> str:
+        """Получает имя сервера по его IP."""
+        for server in server_data.get("servers", []):
+            if server.get("address") == ip_address:
+                return server.get("name", "Unknown_Server")
+        return "Unknown_Server"
 
-    def _generate_server_params_vless(self, current_date, url_vless, free_day):
+    async def _generate_server_params_vless(self, current_date, url_vless, free_day):
         """Генерирует параметры нового сервера VLESS, извлекая информацию из URL."""
 
         # Извлечение uuid, server_ip и name_key из URL
@@ -435,31 +477,32 @@ class UserCl:
         name_key_match = re.search(r'#([^ ]+)', url_vless)
         country_match = re.search(r'_([A-Za-z]+)$', url_vless)
 
+
         uuid_id = uuid_match.group(1) if uuid_match else ""
         server_ip = server_ip_match.group(1) if server_ip_match else ""
         email_key = name_key_match.group(1).replace("Vless-", "") if name_key_match else ""
         name_key = name_key_match.group(1).replace("Vless-", "").rpartition('_')[0] if name_key_match else ""
         country_server = country_match.group(1) if country_match else "Unknown"
+        name_server = self._get_server_name_by_ip(country_server_data, server_ip)
 
         return {
             "country_server": country_server,
             "date_creation_key": current_date.strftime("%d.%m.%Y %H:%M:%S"),
             "date_key_off": (current_date + timedelta(days=free_day)).strftime("%d.%m.%Y %H:%M:%S"),
             "date_payment_key": "0",
+            "date_latest_handshake": "0",
             "email_key": email_key,
             "enable": True,
             "has_paid_key": 0,
             "name_key": f"{name_key}",
             "name_protocol": "vless",
-            "name_server": f"VLESS Server {server_ip}",
+            "name_server": f"{server_ip}, {name_server} ",
             "server_ip": server_ip,
-            "status_key": "free_key",
+            "status_key": "active",
             "traffic_down": 0,
             "traffic_up": 0,
             "url_vless": url_vless,
-            "user_ip": "0",
             "uuid_id": uuid_id,
-            "vpn_usage_start_date": current_date.strftime("%d.%m.%Y %H:%M:%S")
         }
 
 
@@ -509,6 +552,7 @@ class UserCl:
             # Извлекаем server_ip из Endpoint
             server_ip = endpoint.split(":")[0] if endpoint else None
             user_ip = address.split("/")[0] if address else None
+            name_server = self._get_server_name_by_ip(country_server_data, server_ip)
 
             logging.debug(f"Извлечён server_ip: {server_ip}, user_ip: {user_ip}")
 
@@ -534,15 +578,13 @@ class UserCl:
                 "has_paid_key": 0,
                 "name_key": "WireGuard Server PingiVPN",
                 "name_protocol": "wireguard",
-                "name_server": f"WireGuard Server {server_ip}",
+                "name_server": f"W{name_server} {server_ip}",
                 "server_ip": server_ip,
-                "status_key": "free_key",
+                "status_key": "active",
                 "traffic_down": 0,
                 "traffic_up": 0,
-                "url_vless": "0",
                 "user_ip": user_ip,
                 "uuid_id": "0",
-                "vpn_usage_start_date": current_date.strftime("%d.%m.%Y %H:%M:%S")
             }
 
         except FileNotFoundError as e:

@@ -24,3 +24,5 @@ __pycache__/
 # Игнорируем архивы и логи
 *.zip
 logs/*.log
+configs/url_vless_new
+configs/url_vless_user

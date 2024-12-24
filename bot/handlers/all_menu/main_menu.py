@@ -65,10 +65,12 @@ async def get_user_status_text(us):
             return f"Нажмите *Подключить VPN*\n"
 
         # Проверяем статус первого ключа
-        status_key = await us.servers[0].status_key.get()
+        status_key = await us.active_server.status_key.get()
+        enabled = await us.active_server.enable.get()
+        has_paid_key = await us.active_server.has_paid_key.get()
         logger.info(f"Статус первого ключа: {status_key}")
 
-        end_date_str = await us.servers[0].date_key_off.get_date()
+        end_date_str = await us.active_server.date_key_off.get_date()
         logger.info(f"Дата окончания ключа: {end_date_str}")
 
         # Парсим строку даты в объект datetime для расчётов
@@ -84,20 +86,20 @@ async def get_user_status_text(us):
         logger.info(f"Сегодня: {today.strftime('%d.%m.%Y')}, осталось {remaining_days} дней до окончания ключа.")
 
         # Формируем текст статуса в зависимости от статуса ключа
-        if status_key == "free_key":
-            return f"Пробный период до *{end_date_str}* (осталось {remaining_days} дней)"
+        if (enabled == True) and (has_paid_key == 0) and remaining_days > 0:
+            return f"Пробный период до {end_date_str} (осталось {remaining_days} дней)"
 
-        elif status_key == "blocked":
-            return "*Ключ заблокирован*"
+        elif enabled == False or remaining_days < 0:
+            return ("Ключ заблокирован")
 
-        elif status_key == "active":
+        elif (enabled == True) and (has_paid_key > 0):
             expiration_text = ""
             if remaining_days > 2:
                 expiration_text = f"Ключ активен до *{end_date_str}* (осталось {remaining_days} дней)"
             elif remaining_days >= 0 and remaining_days < 3:
                 expiration_text = f"Ключ активен до *{end_date_str}* (осталось {remaining_days} дней)"
             elif remaining_days < 0:
-                expiration_text = f"*Требуется оплата*"
+                expiration_text = f"Требуется оплата"
             return expiration_text
 
 
@@ -137,7 +139,7 @@ async def show_main_menu(chat_id: int, bot: Bot):
         "📶 Устойчивость к блокировкам\n"
         "🚀 Высокая скорость\n"
         "💻 Поддержка любых устройств\n\n"
-        f"🔑 Статус: {status_text}\n\n"
+        f"🔑 Статус: *{status_text}*\n\n"
         f"{days_since_registration_text}\n"
     )
 

@@ -26,6 +26,14 @@ class NotificationBase(ABC):
         """Получение клавиатуры для уведомления"""
         pass
 
+    @abstractmethod
+    def after_send_success(self, user_id: int):
+        """
+        Действия после успешной отправки уведомления пользователю.
+        Может быть переопределено в дочерних классах.
+        """
+        pass
+
     def split_into_batches(self, users: List[int]) -> List[List[int]]:
         """
         Делит список пользователей на батчи заданного размера.
@@ -44,8 +52,6 @@ class NotificationBase(ABC):
         async def send_message(user_id):
             """Асинхронная функция для отправки сообщения одному пользователю."""
             try:
-
-                # Отправляем сообщение
                 await bot.send_message(
                     chat_id=user_id,
                     text=message_template,
@@ -53,7 +59,23 @@ class NotificationBase(ABC):
                     parse_mode="HTML"
                 )
                 self.success_count += 1  # Увеличиваем счетчик успешных отправок
-                await self.after_send_success(user_id)  # Обработка после успешной отправки
+                  # Обработка после успешной отправки
+                await self.after_send_success(user_id)
+
+            # #Для тестов
+            #     if user_id in ADMIN_CHAT_IDS:
+            #         await bot.send_message(
+            #             chat_id=user_id,
+            #             text=message_template,
+            #             reply_markup=keyboard,
+            #             parse_mode="HTML"
+            #         )
+            #     else:
+            #         logging.info(f"Пользователю {user_id} отправлено сообщение.")
+            #
+            #     self.success_count += 1  # Увеличиваем счетчик успешных отправок
+            #       # Обработка после успешной отправки
+            #     await self.after_send_success(user_id)
 
             except Exception as e:
                 self.error_count += 1  # Увеличиваем счетчик ошибок
@@ -62,13 +84,8 @@ class NotificationBase(ABC):
         # Параллельная отправка сообщений пользователям в батче
         await asyncio.gather(*[send_message(user_id) for user_id in batch])
 
-    async def after_send_success(self, user_id: int):
-        """
-        Действия после успешной отправки уведомления пользователю.
-        Может быть переопределено в дочерних классах.
-        """
-        pass
-    
+
+
 
     async def handle_send_error(self, user_id: int, error: Exception):
         """

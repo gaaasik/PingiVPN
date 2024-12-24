@@ -6,7 +6,7 @@
       "address": "147.45.232.240"
     },
     {
-      "name": "Server Bot_100",
+      "name": "Server_Bot_100",
       "country": "Poland",
       "address": "217.25.91.109"
     },
@@ -91,8 +91,28 @@
       "country": "Netherlands"
     },
     {
+      "name": "Server_18000",
+      "address": "185.201.28.16",
+      "country": "Netherlands"
+    },
+    {
+      "name": "Server_19000",
+      "address": "147.45.142.205",
+      "country": "Netherlands"
+    },
+    {
+      "name": "Server_4000",
+      "address": "194.87.220.216",
+      "country": "Netherlands"
+    },
+    {
       "name": "Server_tol_test",
       "address": "147.45.242.155",
+      "country": "Netherlands"
+    },
+    {
+      "name": "Server_tol_test",
+      "address": "194.87.208.18",
       "country": "Netherlands"
     }
   ]

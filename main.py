@@ -1,8 +1,11 @@
 import asyncio
+import json
 import logging
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
+
+import aiosqlite
 from aiogram import Bot
 from aiogram.types import FSInputFile
 from dotenv import load_dotenv
@@ -36,6 +39,8 @@ from models.notifications.NotificationManagerCL import NotificationManager
 from models.notifications.UnsubscribedNotificationCL import  UnsubscribedNotification
 from models.notifications.TrialEndingNotificationCL import TrialEndingNotification
 from models.notifications.NotificationSchedulerCL import NotificationScheduler
+from models.notifications.PaymentReminderCL import PaymentReminder
+
 # Загружаем переменные окружения из файла .env
 load_dotenv()
 
@@ -60,7 +65,7 @@ async def schedule_daily_tasks(bot):
     """
     Планировщик для запуска ежедневных задач в 10 утра.
     """
-    #manager = DailyTaskManager(bot)
+    manager = DailyTaskManager(bot)
     #await manager.execute_daily_tasks()
     while True:
         now = datetime.now()
@@ -95,7 +100,6 @@ async def send_backup_db_to_admin(bot: Bot):
     from datetime import datetime
     current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     caption = f"Резервная копия базы данных за {current_date}"
-
     try:
         # Открываем файл базы данных
         backup_file = FSInputFile(database_path_local)
@@ -187,25 +191,33 @@ async def main():
     country_server_path = os.getenv('country_server_path')
     await load_server_data(country_server_path)
 
+    async def run_test():
+        # Создаём экземпляр PaymentReminder
+        reminder = PaymentReminder()
 
+        # Вызываем метод
+        blocked_users = await reminder.fetch_target_users()
+
+        # Выводим результаты
+        print(f"Заблокированные пользователи: {len(blocked_users)}")
+
+    #await run_test()
     # Запуск ежедневных задач
     asyncio.create_task(schedule_daily_tasks(bot))
     asyncio.create_task(listen_to_redis_queue(bot))
     asyncio.create_task(periodic_backup_task(bot))
     asyncio.create_task(process_queue_results_task())
 
-
-
     # Инициализация менеджера уведомлений
     notification_manager = NotificationManager()
-    #user = await UserCl.load_user(1021956655)
-    #await user.servers[0].date_key_off.set("23.02.2025 09:34:23")
-    ## Регистрация уведомлений
     notification_manager.register_notification(
         UnsubscribedNotification(channel_username="pingi_hub")
     )
     notification_manager.register_notification(
         TrialEndingNotification()
+    )
+    notification_manager.register_notification(
+        PaymentReminder()  # Регистрация PaymentReminder
     )
 
     # Инициализация планировщика уведомлений
@@ -214,7 +226,15 @@ async def main():
     # Настройка расписания уведомлений
     notification_scheduler.add_to_schedule("12:00", "UnsubscribedNotification")
     notification_scheduler.add_to_schedule("13:00", "TrialEndingNotification")
+    notification_scheduler.add_to_schedule("14:02", "PaymentReminder")  # Добавили PaymentReminder
+    #пропущенный пользователь
 
+    # us= await UserCl.load_user(763159433)
+
+    # await us.servers[0].date_key_off.set("15.12.2024 11:26:19")
+    # await us.servers[0].enable.set(True)
+    # await us.servers[0].has_paid_key.set(1)
+    # logging.info(f"внесли изменения в бд для {763159433}")
     # Запуск уведомлений по расписанию
     asyncio.create_task(notification_scheduler.start(bot))
 

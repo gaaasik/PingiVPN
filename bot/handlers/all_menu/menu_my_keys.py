@@ -42,9 +42,11 @@ async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
     Генерирует текст сообщения о состоянии ключа пользователя и возвращает его вместе с клавиатурой.
     """
     count_key = await us.count_key.get()
-    await us.servers[0].name_protocol.get()
+    active_server = us.active_server
 
-    if count_key == 0 or not us.servers:
+
+
+    if count_key == 0 or not active_server:
         # Если у пользователя нет ключей
         text = (
             "<b>У вас нет ключей для оплаты.</b>\n"
@@ -54,43 +56,16 @@ async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
 
     else:
         # Получаем данные ключа
-        name_key = await us.servers[0].name_key.get()
-        country_flag = await us.servers[0].country_server.get_country()
+        name_key = await us.active_server.name_key.get()
+        country_flag = await us.active_server.country_server.get_country()
         traffic_limit = "200 Gb / в мес"
-        vless_url = await us.servers[0].url_vless.get()
+        vless_url = await us.active_server.url_vless.get()
 
         # Определяем статус и срок действия ключа
         status_text = await get_user_status_text(us)
         keyboard = get_payment_keyboard()
 
-        # if status_key == "free_key":
-        #     status_text = "пробный период"
-        #     expiration_text = f" {await us.servers[0].date_key_off.get_date()}"
-        #     keyboard = get_payment_keyboard()
-        #
-        # elif status_key == "blocked":
-        #     status_text = "заблокирован"
-        #     expiration_text = "Для активации ключа требуется оплата."
-        #     keyboard = get_payment_keyboard()
-        #
-        # elif status_key == "active":
-        #     status_text = "Активен"
-        #     expiration_date= await us.servers[0].date_key_off.get_date()
-        #     if expiration_date >2:
-        #         expiration_text = f"{expiration_date}"
-        #     elif expiration_date > 0 and expiration_date <3:
-        #         expiration_text = f"Осталось {expiration_date} день *требуется оплата*"
-        #     elif expiration_date<0:
-        #         expiration_text = "Требуется оплата"
-        #
-        #     keyboard = get_payment_keyboard()
-        #
-        #
-        # else:
-        #     status_text = "неизвестен"
-        #     expiration_text = "Статус ключа не определен. Обратитесь в поддержку."
-        #     keyboard = get_add_key_keyboard()
-        name_protocol = await us.servers[0].name_protocol.get()
+        name_protocol = await us.active_server.name_protocol.get()
         if name_protocol == "wireguard":
             # Формируем текст сообщения в формате HTML
             text = (
@@ -122,14 +97,19 @@ async def handle_my_keys(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
     us = await UserCl.load_user(chat_id)
 
-##########################################################################
+#####################################TEST#####################################
     # print("tolsemenov MENU_MY_KEYS ", chat_id)
     # if chat_id in ADMIN_CHAT_IDS:
     #     us = await UserCl.load_user(1388513042)
-    #     print("tolsemenov SET_ENABLE")
-    #     await us.servers[0].enable.set(True)
-    #     await us.servers[1].enable.set(True)
-    #     await us.servers[2].enable.set(True)
+    #     if us.active_server:
+    #         print("server_ip = ", await us.active_server.server_ip.get())
+    #         print("enable = ", await us.active_server.enable.get())
+    #         print("name_protocol = ", await us.active_server.name_protocol.get())
+    #         print("status_key = ", await us.active_server.status_key.get())
+    #     else:
+    #         print("НЕТУ КЛЮЧА АКТИВНОГО")
+
+
 
 ###########################################################################
     try:

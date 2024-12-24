@@ -9,7 +9,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from bot.handlers.admin import ADMIN_CHAT_IDS
 from bot.handlers.all_menu.main_menu import show_main_menu
 from bot.handlers.cleanup import message_types_mapping, delete_message_with_type, store_message
-
+from models.UserCl import UserCl
 
 
 # Обработка действий после успешной оплаты
@@ -47,6 +47,15 @@ async def handle_post_payment_actions(bot: Bot, chat_id: int):
 
 
         logging.info(f"Сообщение пользователю {chat_id} об успешной оплате отправлено.")
+
+        #Включение пользователя на сервере WG
+        user = await UserCl.load_user(chat_id)
+        if not user or not user.servers:
+            return None
+        for server in user.servers:
+            await server.enable.set(True)
+
+
     except Exception as e:
         logging.error(f"Ошибка при отправке сообщения пользователю {chat_id}: {e}")
 
