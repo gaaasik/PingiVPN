@@ -116,17 +116,17 @@ async def process_updata_traffic(json_task):
 
         # Обновляем значения в базе данных только если они не равны "no_parameter"
         if latest_handshake != "no_parameter":
-            await us.servers[0].date_latest_handshake.set(latest_handshake)
+            await us.active_server.date_latest_handshake.set(latest_handshake)
         else:
             logging.info("latest_handshake имеет значение 'no_parameter', пропускаем обновление.")
 
         if transfer_received != "no_parameter":
-            await us.servers[0].traffic_up.set(transfer_received)
+            await us.active_server.traffic_up.set(transfer_received)
         else:
             logging.info("transfer_received имеет значение 'no_parameter', пропускаем обновление.")
 
         if transfer_sent != "no_parameter":
-            await us.servers[0].traffic_down.set(transfer_sent)
+            await us.active_server.traffic_down.set(transfer_sent)
         else:
             logging.info("transfer_sent имеет значение 'no_parameter', пропускаем обновление.")
 

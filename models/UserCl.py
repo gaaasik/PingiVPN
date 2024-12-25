@@ -1,4 +1,3 @@
-import logging
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -8,7 +7,12 @@ import aiofiles
 import aiosqlite
 import json
 from dotenv import load_dotenv
-from models.ServerCl import ServerCl, country_server_data
+
+from bot.handlers.admin import send_admin_log
+from bot_instance import bot
+from models.country_server_data import get_country_server_data
+
+from models.ServerCl import ServerCl
 import re
 import logging
 
@@ -136,7 +140,6 @@ class UserCl:
         """Добавляет нового пользователя в базу данных"""
         self = cls(chat_id)
         # Проверка подписки пользователя на канал
-        from bot_instance import bot
         try:
             async with aiosqlite.connect(database_path_local) as db:
                 # Проверка существования пользователя в таблице users
@@ -295,8 +298,9 @@ class UserCl:
             self.active_server = None
             return
         for sample in self.servers:
-            if await sample.status_key.get() == "active":  # Используем await
+            if await sample.status_key.get() == "active" or await sample.status_key.get() == "free_key":  # Используем await
                 self.active_server = sample  # Присваиваем сервер, а не его статус
+                await self.active_server.status_key.set("active")
                 return  # Завершаем поиск, как только нашли активный сервер
         self.active_server = None  # Если активный сервер не найден
 
@@ -339,6 +343,7 @@ class UserCl:
             return False
 
     async def add_key_vless(self, free_day=7):
+
         """Создает сервер VLESS с фиксированными параметрами, используя первый доступный URL и добавляет его в список серверов пользователя."""
         # Количество бесплатных дней
         current_date = datetime.now()
@@ -453,6 +458,8 @@ class UserCl:
             async with aiofiles.open(used_path, "a") as file:
                 await file.write(url_vless + "\n")
 
+            #сообщение админу
+            await send_admin_log(bot,f"Добавлен пользователь {self.chat_id}, {self.user_name_full}. Осталось {len(remaining_urls)} ключей vless ")
             print(f"Осталось {len(remaining_urls)} доступных URL для VLESS.")
             return url_vless
 
@@ -463,12 +470,14 @@ class UserCl:
 
     async def _get_server_name_by_ip(self, server_data, ip_address: str) -> str:
         """Получает имя сервера по его IP."""
+        print("server_data",server_data)
         for server in server_data.get("servers", []):
             if server.get("address") == ip_address:
                 return server.get("name", "Unknown_Server")
         return "Unknown_Server"
 
     async def _generate_server_params_vless(self, current_date, url_vless, free_day):
+        country_server_data = await get_country_server_data()
         """Генерирует параметры нового сервера VLESS, извлекая информацию из URL."""
 
         # Извлечение uuid, server_ip и name_key из URL
@@ -483,7 +492,7 @@ class UserCl:
         email_key = name_key_match.group(1).replace("Vless-", "") if name_key_match else ""
         name_key = name_key_match.group(1).replace("Vless-", "").rpartition('_')[0] if name_key_match else ""
         country_server = country_match.group(1) if country_match else "Unknown"
-        name_server = self._get_server_name_by_ip(country_server_data, server_ip)
+        name_server = await self._get_server_name_by_ip(country_server_data, server_ip)
 
         return {
             "country_server": country_server,
@@ -496,7 +505,7 @@ class UserCl:
             "has_paid_key": 0,
             "name_key": f"{name_key}",
             "name_protocol": "vless",
-            "name_server": f"{server_ip}, {name_server} ",
+            "name_server": f"{name_server}",
             "server_ip": server_ip,
             "status_key": "active",
             "traffic_down": 0,
@@ -508,11 +517,13 @@ class UserCl:
 
 
     async def _generate_server_params_wireguard(self, config_file_path: str, free_day: int):
+
         """Генерирует параметры нового сервера WireGuard, извлекая информацию из конфигурационного файла."""
         current_date = datetime.now()
         logging.info(f"Начало работы функции _generate_server_params_wireguard. Путь к файлу: {config_file_path}")
 
         try:
+            country_server_data = await get_country_server_data()
             # Преобразуем путь в объект Path для удобной работы
             config_file_path = Path(config_file_path)
             logging.debug(f"Обработанный путь к конфигурационному файлу: {config_file_path}")
@@ -578,7 +589,7 @@ class UserCl:
                 "has_paid_key": 0,
                 "name_key": "WireGuard Server PingiVPN",
                 "name_protocol": "wireguard",
-                "name_server": f"W{name_server} {server_ip}",
+                "name_server": f"{server_ip}",
                 "server_ip": server_ip,
                 "status_key": "active",
                 "traffic_down": 0,

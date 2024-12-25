@@ -91,23 +91,17 @@ async def handle_device_choice(callback_query: CallbackQuery):
     bot = callback_query.bot
     us = await UserCl.load_user(chat_id)
 
-    # Удаляем неважные сообщения
-    await delete_unimportant_messages(callback_query.message.chat.id, callback_query.bot)
-
     if not await us.check_subscription_channel():
         await callback_query.message.answer(
             f"VPN работает *без рекламы*. Чтобы начать пользоваться — *подпишитесь* на канал *Pingi Hub*",
             reply_markup=subscribe_keyboard(),
             parse_mode="Markdown"
-
         )
         await callback_query.answer()
         return
 
     device = callback_query.data.split('_')[1]
     await us.device.set(device)
-
-
 
     # Проверяем наличие серверов
     if not us.servers:
@@ -117,7 +111,7 @@ async def handle_device_choice(callback_query: CallbackQuery):
                 "🥲К сожалению, cейчас все сервера полностью заполенны. Сейчас мы добавляем места, повторите попытку подключения через 30 минут😉.",
                 parse_mode="Markdown"
             )
-            logging.error(f"Пользователь добавляется, а свободных ключей нету")
+            logging.error(f"Пользователь добавляется, а свободных ключей нету chat_id{chat_id}, {await us.user_name_full.get()}")
             return
 
 
@@ -147,6 +141,8 @@ async def handle_device_choice(callback_query: CallbackQuery):
                 )
                 await callback_query.answer()
                 return
+        else:
+            logging.error(f"У пользователя есть ")
 
 
     except IndexError as e:
