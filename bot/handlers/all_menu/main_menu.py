@@ -97,7 +97,7 @@ async def get_user_status_text(us):
             if remaining_days < 0:
                 expiration_text = f"Требуется оплата"
             else:
-                expiration_text = f"Ключ активен до *{end_date_str}* (осталось {remaining_days} дней)"
+                expiration_text = f"Ключ активен до {end_date_str} (осталось {remaining_days} дней)"
 
             return expiration_text
 

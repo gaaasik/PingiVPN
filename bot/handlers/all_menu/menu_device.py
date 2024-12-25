@@ -18,7 +18,13 @@ WIREGUARD_LINKS = {
     "mac": "https://apps.apple.com/us/app/wireguard/id1451685025",
     "linux": "https://www.wireguard.com/install/"
 }
-
+VLESS_LINKS = {
+    "android": "https://play.google.com/store/apps/details?id=com.v2ray.ang",
+    "iphone": "https://apps.apple.com/ru/app/streisand/id6450534064",
+    "windows": "https://apps.microsoft.com/detail/9pdfnl3qv2s5?hl=ru-ru&gl=RU",
+    "mac": "https://apps.apple.com/us/app/foxray/id6448898396",
+    "linux": "https://github.com/MatsuriDayo/nekoray/"
+}
 
 # Клавиатура для WireGuard
 def wireguard_keyboard(device):
@@ -32,13 +38,18 @@ def wireguard_keyboard(device):
 
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
+
+
 def get_instruction_text_for_device(device: str, vpn_link: str) -> str:
+    # Получаем ссылку на приложение для устройства из VLESS_LINKS
+    app_link = VLESS_LINKS.get(device.lower())
+
     # Общий текст инструкций, уникальный для каждого устройства
     if device.lower() == "android":
         instruction_text = (
             f"📱 <b>Инструкция для Android:</b>\n\n"
             f"1️⃣ Нажмите на ваш ключ <b>VLESS</b> (скопируйте его).\n"
-            f"2️⃣ Откройте приложение <a href='https://play.google.com/store/apps/details?id=com.v2ray.ang'><b>Hiddify</b> (Play Market)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
+            f"2️⃣ Откройте приложение <a href='{app_link}'><b>V2Ray</b> (Play Market)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
             f"3️⃣ Нажмите круглую кнопку для подключения — и наслаждайтесь быстрой связью! 🌐\n\n"
             f"<b>Ваш ключ:</b>\n<pre>{vpn_link}</pre>"
         )
@@ -47,7 +58,7 @@ def get_instruction_text_for_device(device: str, vpn_link: str) -> str:
         instruction_text = (
             f"📱 <b>Инструкция для iPhone:</b>\n\n"
             f"1️⃣ Нажмите на ваш ключ <b>VLESS</b> (скопируйте его).\n"
-            f"2️⃣ Откройте приложение <a href='https://apps.apple.com/ru/app/streisand/id6450534064'><b>Streisand</b> (App Store)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
+            f"2️⃣ Откройте приложение <a href='{app_link}'><b>Streisand</b> (App Store)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
             f"3️⃣ Подключитесь и наслаждайтесь стабильной работой! 🚀\n\n"
             f"<b>Ваш ключ:</b>\n<pre>{vpn_link}</pre>"
         )
@@ -56,7 +67,7 @@ def get_instruction_text_for_device(device: str, vpn_link: str) -> str:
         instruction_text = (
             f"💻 <b>Инструкция для Mac:</b>\n\n"
             f"1️⃣ Нажмите на ваш ключ <b>VLESS</b> (скопируйте его).\n"
-            f"2️⃣ Откройте приложение <a href='https://apps.apple.com/us/app/foxray/id6448898396'><b>Foxray</b> (App Store)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
+            f"2️⃣ Откройте приложение <a href='{app_link}'><b>Foxray</b> (App Store)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
             f"3️⃣ Подключитесь и наслаждайтесь стабильной работой! 🚀\n\n"
             f"<b>Ваш ключ:</b>\n<pre>{vpn_link}</pre>"
         )
@@ -65,7 +76,7 @@ def get_instruction_text_for_device(device: str, vpn_link: str) -> str:
         instruction_text = (
             f"🐧 <b>Инструкция для Linux:</b>\n\n"
             f"1️⃣ Нажмите на ваш ключ <b>VLESS</b> (скопируйте его).\n"
-            f"2️⃣ Откройте приложение <a href='https://github.com/MatsuriDayo/nekoray/'><b>Nekoray</b> (GitHub)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
+            f"2️⃣ Откройте приложение <a href='{app_link}'><b>Nekoray</b> (GitHub)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
             f"3️⃣ Подключитесь и наслаждайтесь стабильной работой! 🚀\n\n"
             f"<b>Ваш ключ:</b>\n<pre>{vpn_link}</pre>"
         )
@@ -74,7 +85,7 @@ def get_instruction_text_for_device(device: str, vpn_link: str) -> str:
         instruction_text = (
             f"💻 <b>Инструкция для Windows:</b>\n\n"
             f"1️⃣ Нажмите на ваш ключ <b>VLESS</b> (скопируйте его).\n"
-            f"2️⃣ Откройте приложение <a href='https://apps.microsoft.com/detail/9pdfnl3qv2s5?hl=ru-ru&gl=RU'><b>Hiddify</b> (Microsoft Store)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
+            f"2️⃣ Откройте приложение <a href='{app_link}'><b>Hiddify</b> (Microsoft Store)</a> и выберите ➕ «Импорт из буфера обмена».\n\n"
             f"3️⃣ Подключитесь и наслаждайтесь стабильной работой! 🚀\n\n"
             f"<b>Ваш ключ:</b>\n<pre>{vpn_link}</pre>"
         )
@@ -82,6 +93,7 @@ def get_instruction_text_for_device(device: str, vpn_link: str) -> str:
         instruction_text = "Пожалуйста, выберите устройство для получения инструкции."
 
     return instruction_text
+
 
 
 # Обработчик для выбора устройства

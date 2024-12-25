@@ -459,7 +459,7 @@ class UserCl:
                 await file.write(url_vless + "\n")
 
             #сообщение админу
-            await send_admin_log(bot,f"Добавлен пользователь {self.chat_id}, {self.user_name_full}. Осталось {len(remaining_urls)} ключей vless ")
+            await send_admin_log(bot,f"Добавлен пользователь {self.chat_id}, {await self.user_login.get()}. Осталось {len(remaining_urls)} ключей vless ")
             print(f"Осталось {len(remaining_urls)} доступных URL для VLESS.")
             return url_vless
 

@@ -8,7 +8,7 @@ fastapi_app/fastapi_env/
 configs/registered_user/*
 fastapi_app/.idea/
 configs/registered_user/
-
+configs/*
 # Игнорирование файлов окружения
 *.env
 vpn_bot.db
