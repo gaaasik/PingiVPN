@@ -14,7 +14,7 @@ from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
 from bot.handlers import start, support, \
-    user_help_request, feedback, app_downloaded,file_or_qr
+    user_help_request, feedback, app_downloaded,file_or_qr,thank_you
 from bot.notification_users import notification_migrate_from_wg
 from bot.utils.cache import cache_media
 #from bot.utils.check_status import check_db  #, notify_users_with_free_status
@@ -29,6 +29,7 @@ from models.country_server_data import load_server_data
 # from communication_with_servers.send_json import process_task_queue
 #from fastapi_app.all_utils_flask_db import initialize_db
 from models.daily_task_class.DailyTaskManager import DailyTaskManager
+from models.notifications.CompensationNotificationCL import CompensationNotification
 #from fastapi_app.all_utils_flask_db import initialize_db
 
 from models.notifications.NotificationManagerCL import NotificationManager
@@ -195,14 +196,18 @@ async def main():
     notification_manager.register_notification(
         PaymentReminder()  # Регистрация PaymentReminder
     )
-
+    notification_manager.register_notification(CompensationNotification())
     # Инициализация планировщика уведомлений
     notification_scheduler = NotificationScheduler(notification_manager)
 
     # Настройка расписания уведомлений
+    notification_scheduler.add_to_schedule("11:00", "CompensationNotification")
     notification_scheduler.add_to_schedule("12:00", "UnsubscribedNotification")
     notification_scheduler.add_to_schedule("13:00", "TrialEndingNotification")
-    notification_scheduler.add_to_schedule("14:02", "PaymentReminder")  # Добавили PaymentReminder
+    notification_scheduler.add_to_schedule("14:00", "PaymentReminder")  # Добавили PaymentReminder
+
+
+
     #пропущенный пользователь
 
     # us= await UserCl.load_user(763159433)
@@ -228,6 +233,7 @@ async def main():
     dp.include_router(notification_migrate_from_wg.router)
     dp.include_router(app_downloaded.router)
     dp.include_router(file_or_qr.router)
+    dp.include_router(thank_you.router)
 
     dp.include_router(menu_subscriptoin_check.router)
 

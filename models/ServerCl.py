@@ -131,6 +131,7 @@ class Field:
             "chat_id": chat_id,
             "server_ip": server_ip,
             "user_ip": user_ip,
+            "uuid_value": uuid_value,
             "enable": enable_value,
         }
         queue_name = f"queue_task_{server_name}"
