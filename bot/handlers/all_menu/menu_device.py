@@ -19,6 +19,14 @@ WIREGUARD_LINKS = {
     "linux": "https://www.wireguard.com/install/"
 }
 
+VLESS_LINKS = {
+    "android": "https://play.google.com/store/apps/details?id=com.wireguard.android",
+    "iPhone": "https://apps.apple.com/us/app/wireguard/id1441195209",
+    "windows": "https://download.wireguard.com/windows-client/",
+    "mac": "https://apps.apple.com/us/app/wireguard/id1451685025",
+    "linux": "https://www.wireguard.com/install/"
+}
+
 
 # Клавиатура для WireGuard
 def wireguard_keyboard(device):
