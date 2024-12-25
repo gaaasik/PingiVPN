@@ -126,6 +126,11 @@
       "country": "Netherlands"
     },
     {
+      "name": "Server_25000",
+      "address": "194.164.216.197",
+      "country": "USA"
+    },
+    {
       "name": "Server_tol_test",
       "address": "147.45.242.155",
       "country": "Netherlands"
