@@ -11,6 +11,8 @@ from typing import TYPE_CHECKING
 
 from dotenv import load_dotenv
 
+from models.country_server_data import get_country_server_data
+
 if TYPE_CHECKING:
     from models.UserCl import UserCl  # Только для аннотаций типов
 
@@ -104,7 +106,7 @@ class Field:
     # Использование данных в функциях
     async def set_enable(self, enable_value: bool):
         """Обновляет значение enable и отправляет задачу в Redis."""
-        global country_server_data
+        country_server_data = await get_country_server_data()
 
         if self._name != "enable":
             raise AttributeError("Метод set_enable можно вызывать только для поля 'enable'.")
