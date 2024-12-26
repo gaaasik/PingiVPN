@@ -97,7 +97,7 @@ async def get_user_status_text(us):
             if remaining_days < 0:
                 expiration_text = f"Требуется оплата"
             else:
-                expiration_text = f"Ключ активен до *{end_date_str}* (осталось {remaining_days} дней)"
+                expiration_text = f"Ключ активен до {end_date_str} (осталось {remaining_days} дней)"
 
             return expiration_text
 
@@ -175,5 +175,5 @@ async def handle_super_button(callback_query: CallbackQuery):
     await callback_query.answer()  # Закрываем уведомление о нажатии кнопки
 
     # Задержка в 2 секунды перед отправкой главного меню
-    await asyncio.sleep(2)
+    await asyncio.sleep(1)
     await show_main_menu(chat_id, bot)
