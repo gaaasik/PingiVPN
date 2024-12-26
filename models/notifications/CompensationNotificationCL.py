@@ -23,11 +23,26 @@ class CompensationNotification(NotificationBase):
         all_users = await UserCl.get_all_users()
         target_users = []
 
-        async def check_and_update_user(chat_id: int):
+        async def  check_and_update_user(chat_id: int):
             try:
                 user = await UserCl.load_user(chat_id)
                 if user and user.servers:
                     server = user.servers[0]  # Берём первый сервер пользователя
+                    # не тестировал
+
+                    # Проверяем, отправлялось ли уже уведомление с типом "compensation"
+                    async with aiosqlite.connect(os.getenv('database_path_local')) as db:
+                        query = "SELECT notification_data FROM notifications WHERE chat_id = ?"
+                        async with db.execute(query, (chat_id,)) as cursor:
+                            row = await cursor.fetchone()
+                            if row and row[0]:
+                                notification_data = json.loads(row[0])
+                                for key, notification in notification_data.items():
+                                    if notification.get("message_type") == "compensation" and notification.get(
+                                            "status") == "sent":
+                                        logging.info(
+                                            f"Уведомление 'compensation' уже отправлено пользователю {chat_id}. Пропускаем.")
+                                        return None
 
                     # Получаем необходимые данные
                     date_payment_key = await server.date_payment_key.get()
