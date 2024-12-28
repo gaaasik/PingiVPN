@@ -81,8 +81,7 @@ async def schedule_daily_tasks(bot):
 
         # Выполняем задачи
         try:
-            pass
-            #await manager.execute_daily_tasks()
+            await manager.execute_daily_tasks()
         except Exception as e:
             print(f"Ошибка при выполнении ежедневных задач: {e}")
 

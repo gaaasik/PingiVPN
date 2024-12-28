@@ -20,11 +20,11 @@ WIREGUARD_LINKS = {
 }
 
 VLESS_LINKS = {
-    "android": "https://play.google.com/store/apps/details?id=com.wireguard.android",
-    "iPhone": "https://apps.apple.com/us/app/wireguard/id1441195209",
-    "windows": "https://download.wireguard.com/windows-client/",
-    "mac": "https://apps.apple.com/us/app/wireguard/id1451685025",
-    "linux": "https://www.wireguard.com/install/"
+    "android": "https://play.google.com/store/apps/details?id=com.v2ray.ang",
+    "iPhone": "https://apps.apple.com/ru/app/streisand/id6450534064",
+    "windows": "https://apps.microsoft.com/detail/9pdfnl3qv2s5?hl=ru-ru&gl=RU",
+    "mac": "https://apps.apple.com/us/app/foxray/id6448898396",
+    "linux": "https://github.com/MatsuriDayo/nekoray/"
 }
 
 
