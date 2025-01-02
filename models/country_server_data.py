@@ -29,5 +29,6 @@ async def load_server_data(country_server_path: str):
 async def get_country_server_data():
     global country_server_data
     if country_server_data is None:
+        country_server_data = "Unknown_Server"
         raise ValueError("Данные country_server_data еще не загружены.")
     return country_server_data
