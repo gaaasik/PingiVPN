@@ -50,7 +50,7 @@ class Field:
             await self.set_enable(new_value)
             return
         await self._set(new_value)
-
+        # .set(False)
         # if self._is_protected:
         #     raise AttributeError(f"Field '{self._name}' is protected and cannot be changed directly.")
         # await self._set(new_value)

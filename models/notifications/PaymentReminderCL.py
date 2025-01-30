@@ -7,6 +7,8 @@ from typing import List
 
 import aiosqlite
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+from communication_with_servers.new_functionality import process_unknown_server_queue
 from models.UserCl import UserCl
 from models.notifications.NotificationBaseCL import NotificationBase
 from models.notifications.utils.dates import is_trial_ended
@@ -36,8 +38,13 @@ SEREVERS_IP = ["185.104.112.64",
                "147.45.234.70",
                "194.58.57.88",
                "194.87.134.170",
-               "141.98.235.50","80.209.243.248","195.26.231.178","66.248.207.185",]
+               "141.98.235.50",
+               "80.209.243.248",
+               "195.26.231.178",
+               "66.248.207.185",]
 
+#test Tol
+#SEREVERS_IP = ["185.104.112.64"]
 
 async def filter_users_with_unpaid_access(batch: List[int]) -> List[int]:
     """
@@ -105,6 +112,11 @@ class PaymentReminder(NotificationBase):
         blocked_users = []
         for batch in self.split_into_batches(all_users):
             blocked_users.extend(await filter_users_with_unpaid_access(batch))
+        ###### я добавил #########################################################################################################
+
+        await process_unknown_server_queue()
+
+        #########################################################################################################################
 
         # Логирование количества заблокированных пользователей
         try:

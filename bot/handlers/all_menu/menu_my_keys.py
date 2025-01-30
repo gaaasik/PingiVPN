@@ -105,7 +105,7 @@ async def handle_my_keys(callback_query: CallbackQuery):
             print("server_ip = ", await us.active_server.server_ip.get())
             print("enable = ", await us.active_server.enable.get())
             print("name_protocol = ", await us.active_server.name_protocol.get())
-            await us.active_server.enable.set(True)
+            await us.active_server.enable.set(False)
 
 ###########################################################################
     try:
