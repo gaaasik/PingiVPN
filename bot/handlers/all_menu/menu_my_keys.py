@@ -97,7 +97,7 @@ async def handle_my_keys(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
     us = await UserCl.load_user(chat_id)
 
-####################################TEST#####################################
+####################################TEST#####################################😈Пользователь
     # print("tolsemenov MENU_MY_KEYS ", chat_id)
     if chat_id in ADMIN_CHAT_IDS:
         us = await UserCl.load_user(1388513042)
@@ -105,7 +105,7 @@ async def handle_my_keys(callback_query: CallbackQuery):
             print("server_ip = ", await us.active_server.server_ip.get())
             print("enable = ", await us.active_server.enable.get())
             print("name_protocol = ", await us.active_server.name_protocol.get())
-            await us.active_server.enable.set(False)
+            await us.active_server.enable.set(True)
 
 ###########################################################################
     try:
