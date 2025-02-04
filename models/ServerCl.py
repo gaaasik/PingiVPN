@@ -129,6 +129,7 @@ class Field:
 
         # Формируем задачу
         task_data = {
+            "task_type": "update_user_data",
             "name_protocol": name_protocol,
             "chat_id": chat_id,
             "server_ip": server_ip,
