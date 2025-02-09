@@ -10,6 +10,20 @@ load_dotenv()
 country_server_data = None
 # Загружаем данные один раз
 
+
+# Настройка логирования
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("payments.log"),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
+
+
 async def load_server_data(country_server_path: str):
     global country_server_data
     try:
