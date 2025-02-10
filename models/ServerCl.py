@@ -118,6 +118,7 @@ class Field:
     # Использование данных в функциях
     async def set_enable(self, enable_value: bool):
         """Обновляет значение enable и отправляет задачу в Redis."""
+
         country_server_data = await get_country_server_data()
 
         if self._name != "enable":
