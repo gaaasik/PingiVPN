@@ -6,6 +6,20 @@ import redis.asyncio as redis
 from models.UserCl import UserCl
 from models.country_server_data import get_country_server_data
 
+
+# Настройка логирования
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("payments.log"),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
+
+
 async def process_unknown_server_queue():
     """Обрабатывает очередь `queue_task_Unknown_Server` и перемещает задачи с известными именами серверов."""
     try:
