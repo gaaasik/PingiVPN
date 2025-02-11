@@ -58,7 +58,6 @@ async def process_queue_results_task():
             # Получаем задачу из очереди
             task_data = await redis_client.lpop(NAME_RESULT_QUEUE)
             if task_data:
-                logging.info(f"Извлечена задача из Redis: {task_data}")
                 try:
                     task = json.loads(task_data)
                     logging.info(f"Задача после парсинга JSON: {task}")
