@@ -41,7 +41,7 @@
       "address": "194.35.119.227"
     },
     {
-      "name": "Server 8000",
+      "name": "Server_8000",
       "address": "92.51.46.66",
       "country": "Netherlands"
     },

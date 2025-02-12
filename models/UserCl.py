@@ -22,6 +22,19 @@ load_dotenv()
 database_path_local = Path(os.getenv('database_path_local'))
 
 
+
+
+# Настройка логирования
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("payments.log"),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
 class Field:
     def __init__(self, name, value, user):
         self.name = name  # Название поля (например, 'user_name')

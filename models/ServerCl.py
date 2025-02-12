@@ -11,6 +11,8 @@ from typing import TYPE_CHECKING
 
 from dotenv import load_dotenv
 
+from bot.handlers.admin import send_admin_log
+from bot_instance import bot
 from models.country_server_data import get_country_server_data
 
 if TYPE_CHECKING:
@@ -19,6 +21,16 @@ if TYPE_CHECKING:
 load_dotenv()
 
 
+# Настройка логирования
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("payments.log"),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
 
 
 
@@ -50,7 +62,7 @@ class Field:
             await self.set_enable(new_value)
             return
         await self._set(new_value)
-
+        # .set(False)
         # if self._is_protected:
         #     raise AttributeError(f"Field '{self._name}' is protected and cannot be changed directly.")
         # await self._set(new_value)
@@ -106,6 +118,7 @@ class Field:
     # Использование данных в функциях
     async def set_enable(self, enable_value: bool):
         """Обновляет значение enable и отправляет задачу в Redis."""
+
         country_server_data = await get_country_server_data()
 
         if self._name != "enable":
@@ -114,8 +127,6 @@ class Field:
         if country_server_data is None:
             raise RuntimeError("Данные серверов не загружены. Проверьте вызов load_server_data().")
 
-        # Обновляем значение в объекте и в базе данных
-        await self._set(enable_value)
 
         # Получаем данные объекта
         chat_id = self._server.user.chat_id
@@ -129,6 +140,7 @@ class Field:
 
         # Формируем задачу
         task_data = {
+            "task_type": "update_user_data",
             "name_protocol": name_protocol,
             "chat_id": chat_id,
             "server_ip": server_ip,
@@ -138,6 +150,7 @@ class Field:
         }
         queue_name = f"queue_task_{server_name}"
         logging.info(f"Формируется очередь: {queue_name}")
+
 
         # Используем redis.asyncio вместо aioredis
         try:
@@ -149,11 +162,25 @@ class Field:
             )
             await redis_client.rpush(queue_name, json.dumps(task_data))
             logging.info(f"Задача добавлена в очередь {queue_name}: {task_data}")
+            if queue_name == "queue_task_Unknown_Server":
+                await send_admin_log(bot,f"❌😈❌Пользователь {chat_id} не изменил состояние на {enable_value}, задача в очереди queue_task_Unknown_Server")
         except Exception as e:
             logging.error(f"Ошибка при добавлении задачи в очередь {queue_name}: {e}")
         finally:
             if redis:
                 await redis_client.close()
+
+    async def set_enable_admin(self, enable_value: bool):
+        """Напрямую обновление в базе данных значения поля enable"""
+
+        if self._name != "enable":
+            raise AttributeError("Метод set_enable_admin можно вызывать только для поля 'enable'.")
+
+        # Обновляем значение в объекте и в базе данных
+        await self._set(enable_value)
+        logging.info(f"enable Изменилось в базе данных enable={enable_value}")
+
+
 
     def __get_server_name_by_ip(self, server_data, ip_address: str) -> str:
         """Получает имя сервера по его IP."""
