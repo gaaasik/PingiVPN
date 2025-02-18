@@ -40,9 +40,20 @@ async def load_server_data(country_server_path: str):
         logging.error(f"Ошибка при загрузке данных серверов: {e}")
         raise
 
-async def get_country_server_data():
+async def get_json_country_server_data():
     global country_server_data
     if country_server_data is None:
         country_server_data = "Unknown_Server"
         raise ValueError("Данные country_server_data еще не загружены.")
     return country_server_data
+
+async def get_name_server_by_ip(server_ip: str) -> str:
+    """Получает имя сервера по его IP."""
+    global country_server_data
+    if country_server_data is None:
+        raise ValueError("Данные country_server_data еще не загружены.")
+
+    for server in country_server_data.get("servers", []):
+        if server.get("address") == server_ip:
+            return server.get("name", "Unknown_Server")
+    return "Unknown_Server"  # Если сервер не найден

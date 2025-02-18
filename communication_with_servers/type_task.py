@@ -1,0 +1,158 @@
+import os
+import json
+import logging
+import redis.asyncio as redis
+from typing import List, Dict
+from models.country_server_data import get_name_server_by_ip
+from models.UserCl import UserCl  # Импортируем UserCl для получения списка пользователей
+
+# Список IP-адресов серверов
+SERVERS_IP = [
+    "185.104.112.64",
+    "194.87.208.18",
+]
+
+# Настройка логирования
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[logging.FileHandler("tasks.log"), logging.StreamHandler()],
+)
+logger = logging.getLogger(__name__)
+
+
+class TaskRedis:
+    """Класс для управления отправкой задач в Redis."""
+
+    def __init__(self):
+        self.redis_client = redis.Redis(
+            host=os.getenv("ip_redis_server"),
+            port=int(os.getenv("port_redis")),
+            password=os.getenv("password_redis"),
+            decode_responses=True,
+        )
+
+    async def send_check_enable_task(self, server_ip: str, users: List[UserCl]):
+        """
+        Отправляет задачу 'check_enable_user' в очередь Redis для указанного сервера.
+
+        :param server_ip: IP-адрес сервера.
+        :param users: Список объектов UserCl, привязанных к серверу.
+        """
+        try:
+            server_name = await get_name_server_by_ip(server_ip)  # Получаем имя сервера
+            queue_name = f"queue_task_{server_name}"  # Формируем имя очереди в Redis
+
+            for us in users:
+                task_data = {
+                    "task_type": "check_enable_user",
+                    "name_protocol": await us.active_server.name_protocol.get(),
+                    "chat_id": us.chat_id,
+                    "user_ip": await us.active_server.user_ip.get(),
+                    "uuid_value": await us.active_server.uuid_id(),
+                    "enable": await us.active_server.enable.get(),
+                }
+
+                await self.redis_client.rpush(queue_name, json.dumps(task_data))  # Отправка задачи в очередь
+                logger.info(f"Отправлена задача: {task_data} -> Очередь: {queue_name}")
+
+        except Exception as e:
+            logger.error(f"Ошибка при отправке задачи на сервер {server_ip}: {e}")
+
+    async def close(self):
+        """Закрывает соединение с Redis."""
+        await self.redis_client.close()
+
+
+import os
+import json
+import logging
+import redis.asyncio as redis
+from typing import List
+from models.country_server_data import get_name_server_by_ip
+from models.UserCl import UserCl  # Импортируем UserCl для получения списка пользователей
+
+# Список IP-адресов серверов
+SERVERS_IP = [
+    "185.104.112.64",
+    "194.87.208.18",
+]
+
+# Настройка логирования
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[logging.FileHandler("tasks.log"), logging.StreamHandler()],
+)
+logger = logging.getLogger(__name__)
+
+
+class TaskRedis:
+    """Класс для управления отправкой задач в Redis."""
+
+    def __init__(self):
+        self.redis_client = redis.Redis(
+            host=os.getenv("ip_redis_server"),
+            port=int(os.getenv("port_redis")),
+            password=os.getenv("password_redis"),
+            decode_responses=True,
+        )
+
+    async def send_check_enable_task(self, server_ip: str, users: List[UserCl]):
+        """
+        Отправляет задачу 'check_enable_user' в очередь Redis для указанного сервера.
+
+        :param server_ip: IP-адрес сервера.
+        :param users: Список объектов UserCl, привязанных к серверу.
+        """
+        try:
+            server_name = await get_name_server_by_ip(server_ip)  # Получаем имя сервера
+            queue_name = f"queue_task_{server_name}"  # Формируем имя очереди в Redis
+
+            for user in users:
+                task_data = {
+                    "task_type": "check_enable_user",
+                    "name_protocol": await user.active_server.name_protocol.get(),
+                    "chat_id": user.chat_id,
+                    "user_ip": await user.active_server.user_ip.get(),
+                    "uuid_value": await user.active_server.uuid_id.get(),
+                    "enable": await user.active_server.enable.get(),
+                }
+
+                await self.redis_client.rpush(queue_name, json.dumps(task_data))  # Отправка задачи в очередь
+                logger.info(f"Отправлена задача: {task_data} -> Очередь: {queue_name}")
+
+        except Exception as e:
+            logger.error(f"Ошибка при отправке задачи на сервер {server_ip}: {e}")
+
+    async def close(self):
+        """Закрывает соединение с Redis."""
+        await self.redis_client.close()
+
+
+async def send_check_tasks_for_servers():
+    """
+    Запускает отправку задач 'check_enable_user' для всех серверов в списке `SERVERS_IP`.
+    """
+    task_manager = TaskRedis()
+    users_to_check = {}  # Словарь {server_ip: [список пользователей]}
+
+    chat_ids = await UserCl.get_all_users()  # Получаем всех пользователей
+
+    for chat_id in chat_ids:
+        us = await UserCl.load_user(chat_id)
+
+        if us and await us.count_key.get() > 0:  # Проверяем, есть ли у пользователя серверы
+            active_server_ip = await us.active_server.server_ip.get()
+
+            if active_server_ip in SERVERS_IP:  # Проверяем, находится ли сервер в списке
+                if active_server_ip not in users_to_check:
+                    users_to_check[active_server_ip] = []
+                users_to_check[active_server_ip].append(us)
+
+    # Отправляем задачи в Redis для каждого сервера
+    for server_ip, users in users_to_check.items():
+        await task_manager.send_check_enable_task(server_ip, users)
+
+    await task_manager.close()  # Закрываем соединение с Redis
+

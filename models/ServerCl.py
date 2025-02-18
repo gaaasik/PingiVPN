@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 
 from bot.handlers.admin import send_admin_log
 from bot_instance import bot
-from models.country_server_data import get_country_server_data
+from models.country_server_data import get_json_country_server_data
 
 if TYPE_CHECKING:
     from models.UserCl import UserCl  # Только для аннотаций типов
@@ -119,7 +119,7 @@ class Field:
     async def set_enable(self, enable_value: bool):
         """Обновляет значение enable и отправляет задачу в Redis."""
 
-        country_server_data = await get_country_server_data()
+        country_server_data = await get_json_country_server_data()
 
         if self._name != "enable":
             raise AttributeError("Метод set_enable можно вызывать только для поля 'enable'.")

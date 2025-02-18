@@ -4,7 +4,7 @@ import logging
 import redis.asyncio as redis
 
 from models.UserCl import UserCl
-from models.country_server_data import get_country_server_data
+from models.country_server_data import get_json_country_server_data
 
 
 # Настройка логирования
@@ -33,7 +33,7 @@ async def process_unknown_server_queue():
         )
 
         # Загрузка данных о серверах
-        server_data = await get_country_server_data()
+        server_data = await get_json_country_server_data()
         if server_data is None:
             raise RuntimeError("Не удалось загрузить данные о серверах.")
 

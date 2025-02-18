@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 
 from bot.handlers.admin import send_admin_log
 from bot_instance import bot
-from models.country_server_data import get_country_server_data
+from models.country_server_data import get_json_country_server_data
 
 from models.ServerCl import ServerCl
 import re
@@ -490,7 +490,7 @@ class UserCl:
         return "Unknown_Server"
 
     async def _generate_server_params_vless(self, current_date, url_vless, free_day):
-        country_server_data = await get_country_server_data()
+        country_server_data = await get_json_country_server_data()
         """Генерирует параметры нового сервера VLESS, извлекая информацию из URL."""
 
         # Извлечение uuid, server_ip и name_key из URL
@@ -536,7 +536,7 @@ class UserCl:
         logging.info(f"Начало работы функции _generate_server_params_wireguard. Путь к файлу: {config_file_path}")
 
         try:
-            country_server_data = await get_country_server_data()
+            country_server_data = await get_json_country_server_data()
             # Преобразуем путь в объект Path для удобной работы
             config_file_path = Path(config_file_path)
             logging.debug(f"Обработанный путь к конфигурационному файлу: {config_file_path}")
