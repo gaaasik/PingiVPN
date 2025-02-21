@@ -7,10 +7,18 @@ from typing import List
 from models.country_server_data import get_name_server_by_ip
 from models.UserCl import UserCl  # Импортируем UserCl для получения списка пользователей
 
-# Список IP-адресов серверов
+# ТЕСТОВЫЙ IP-адресов серверов
+# SERVERS_IP_FOR_CHECK_ENABLE = [
+#     "194.87.208.18",
+#     "147.45.242.155",
+# ]
+
+#Список IP - адресов серверов
 SERVERS_IP_FOR_CHECK_ENABLE = [
-    "185.104.112.64",
-    "194.87.208.18",
+    #Server USA_25000
+    "194.164.216.197",
+    #Server USA_27000
+    "80.209.243.248",
 ]
 
 # Настройка логирования
