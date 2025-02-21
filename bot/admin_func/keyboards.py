@@ -14,6 +14,8 @@ async def get_search_user_keyboard():
 async def get_user_service_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="Добавить бонусные дни", callback_data="add_bonus_days")],
+        [InlineKeyboardButton(text="Включить пользователя", callback_data="enable_user")],
+        [InlineKeyboardButton(text="Выключить пользователя", callback_data="disable_user")],
         [InlineKeyboardButton(text="Заглушка: Изменить конфигурационный ключ", callback_data="change_config_key")],
         [InlineKeyboardButton(text="Отмена", callback_data="cancel_service")]
     ])
