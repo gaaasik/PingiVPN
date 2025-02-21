@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
     menu_share, menu_connect_vpn, menu_payment, menu_about_pingi, menu_subscriptoin_check
-from bot.admin_func import bonus_days, service_mode
+from bot.admin_func import bonus_days#, service_mode
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 #from bot.payments2.payments_handler_redis import listen_to_redis_queue
 from bot.handlers import start, support, \
@@ -236,7 +236,7 @@ async def main():
 
     dp.include_router(menu_subscriptoin_check.router)
 
-    dp.include_router(service_mode.router)
+#    dp.include_router(service_mode.router)
     dp.include_router(bonus_days.router)
 
     try:
