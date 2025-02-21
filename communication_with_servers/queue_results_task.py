@@ -88,34 +88,41 @@ async def process_updata_traffic(json_task):
         status = data.get('status')
         chat_id = data.get('chat_id')
         user_ip = data.get('user_ip')
-        enable = data.get('enable')
         disabled = data.get('disabled')
         transfer_received = data.get('transfer_received')
         transfer_sent = data.get('transfer_sent')
         latest_handshake = data.get('latest_handshake')
 
+        us = await UserCl.load_user(chat_id)
+
+        if data.get('enable') == None:
+            await send_admin_log(bot, f"😈Пользователь {chat_id} НЕ изменил состояние, сейчас {us.active_server.enable.get()}, а пришло NONE status={status}")
+        else:
+            enable = data.get('enable')
+            await send_admin_log(bot, f"😈Пользователь {chat_id} изменил состояние на {enable}, status={status}")
 
 
-        await send_admin_log(bot,f"😈Пользователь {chat_id} изменил состояние на {enable}, status={status}")
+
+
 
         # if not all([chat_id, user_ip]):
         #     logging.error(f"Отсутствуют обязательные параметры в JSON: {data}")
         #     return  # Прерываем выполнение функции, если параметры отсутствуют
 
-        print("Данные с queue_result_task")
-        print("status = ", status)
-        print("user_ip = ", user_ip)
-        print("transfer_received = ", transfer_received)
-        print("transfer_sent = ", transfer_sent)
-        print("latest_handshake = ", latest_handshake)
-        print("chat_id = ", chat_id)
-        print("disabled = ", disabled)
-        print("enable = ", enable)
+        # print("Данные с queue_result_task")
+        # print("status = ", status)
+        # print("user_ip = ", user_ip)
+        # print("transfer_received = ", transfer_received)
+        # print("transfer_sent = ", transfer_sent)
+        # print("latest_handshake = ", latest_handshake)
+        # print("chat_id = ", chat_id)
+        # print("disabled = ", disabled)
+        # print("enable = ", enable)
 
         us = await UserCl.load_user(chat_id)
 
         # Обновляем значения в базе данных только если они не равны "no_parameter"
-        if enable != "no_parameter":
+        if enable != "no_parameter" and enable != None:
             logging.info(f"Запуск set_enable_admin из process_updata_traffic!!!!!!!!!!!!")
             await us.active_server.enable.set_enable_admin(enable)
         else:

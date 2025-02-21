@@ -14,6 +14,7 @@ from models.notifications.NotificationBaseCL import NotificationBase
 from models.notifications.utils.dates import is_trial_ended
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS  # Функция отправки сообщения админу
 from bot_instance import bot  # Инстанс бота для отправки сообщений
+
 SEREVERS_IP = [
     "185.104.112.64",    # Server_1000
     "194.135.38.128",    # Server_2000

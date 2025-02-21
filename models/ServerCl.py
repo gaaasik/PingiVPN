@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 
 from bot.handlers.admin import send_admin_log
 from bot_instance import bot
-from models.country_server_data import get_country_server_data
+from models.country_server_data import get_json_country_server_data
 
 if TYPE_CHECKING:
     from models.UserCl import UserCl  # Только для аннотаций типов
@@ -119,7 +119,7 @@ class Field:
     async def set_enable(self, enable_value: bool):
         """Обновляет значение enable и отправляет задачу в Redis."""
 
-        country_server_data = await get_country_server_data()
+        country_server_data = await get_json_country_server_data()
 
         if self._name != "enable":
             raise AttributeError("Метод set_enable можно вызывать только для поля 'enable'.")
@@ -140,7 +140,7 @@ class Field:
 
         # Формируем задачу
         task_data = {
-            "task_type": "update_user_data",
+            "task_type": "change_enable_user",
             "name_protocol": name_protocol,
             "chat_id": chat_id,
             "server_ip": server_ip,
@@ -153,6 +153,7 @@ class Field:
 
 
         # Используем redis.asyncio вместо aioredis
+
         try:
             redis_client = redis.Redis(
                 host=os.getenv('ip_redis_server'),
@@ -167,8 +168,12 @@ class Field:
         except Exception as e:
             logging.error(f"Ошибка при добавлении задачи в очередь {queue_name}: {e}")
         finally:
-            if redis:
-                await redis_client.close()
+            try:
+                if redis:
+                    await redis_client.close()
+            except Exception as e:
+                logging.error(f"Ошибка с redis_client")
+
 
     async def set_enable_admin(self, enable_value: bool):
         """Напрямую обновление в базе данных значения поля enable"""
