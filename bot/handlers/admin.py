@@ -6,7 +6,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # Список администраторов
-ADMIN_CHAT_IDS = [456717505, 1388513042, 7032840268, 6720032062]  # Укажи ID администраторов
+ADMIN_CHAT_IDS = [456717505, 1388513042, 7032840268, 6720032062,7554798911]  # Укажи ID администраторов
 
 # Создаем реплай-клавиатуру с кнопкой
 def get_admin_reply_keyboard():
