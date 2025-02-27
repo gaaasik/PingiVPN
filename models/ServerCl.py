@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 
 from bot.handlers.admin import send_admin_log
 from bot_instance import bot
-from models.country_server_data import get_json_country_server_data
+from models.country_server_data import get_json_country_server_data, get_name_server_by_ip
 
 if TYPE_CHECKING:
     from models.UserCl import UserCl  # Только для аннотаций типов
@@ -164,7 +164,7 @@ class Field:
             await redis_client.rpush(queue_name, json.dumps(task_data))
             logging.info(f"Задача добавлена в очередь {queue_name}: {task_data}")
             if queue_name == "queue_task_Unknown_Server":
-                await send_admin_log(bot,f"❌😈❌Пользователь {chat_id} не изменил состояние на {enable_value}, задача в очереди queue_task_Unknown_Server")
+                await send_admin_log(bot,f"❌Пользователь {chat_id} не изменил состояние на {enable_value}, задача в очереди queue_task_Unknown_Server")
         except Exception as e:
             logging.error(f"Ошибка при добавлении задачи в очередь {queue_name}: {e}")
         finally:
@@ -260,9 +260,6 @@ class ServerCl:
             # Удаляем сервер из списка servers
             self.user.servers.remove(self)
 
-
-
-
             # Обновляем value_key в базе данных (список серверов) после удаления
             await self.user._update_servers_in_db()
             # Обновляем count_key
@@ -273,70 +270,62 @@ class ServerCl:
             print("Сервер не найден в списке пользователя.")
             return False
 
-    # async def _update_json_on_server(self, new_enable_value: bool):
-    #     """Обновляет файл JSONschecна сервере через SSH и изменяет поле enable."""
-    #     ssh_host = "195.133.14.202"
-    #     ssh_user = "root"
-    #     ssh_password = "jzH^zvfW1J4qRX"
-    #     json_file_path = "/root/.wg-easy/wg0.json"
-    #
-    #     try:
-    #         # Установка SSH-соединения
-    #         print("Устанавливаем SSH-соединение...")
-    #         client = paramiko.SSHClient()
-    #         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    #         client.connect(ssh_host, username=ssh_user, password=ssh_password)
-    #
-    #         print("К серверу подключились успешно")  # Выводим фразу при успешном подключении
-    #
-    #         # Открываем SFTP-соединение
-    #         sftp = client.open_sftp()
-    #
-    #         # Проверка существования файла JSON на сервере
-    #         print(f"Пытаемся открыть JSON-файл по пути {json_file_path}")
-    #         try:
-    #             with sftp.open(json_file_path, 'r') as json_file:
-    #                 wg_config = json.load(json_file)
-    #             print(f"Файл {json_file_path} успешно считан с сервера.")
-    #         except FileNotFoundError:
-    #             print(f"Файл {json_file_path} не найден на сервере.")
-    #             return
-    #         except Exception as e:
-    #             print(f"Ошибка при чтении файла: {e}")
-    #             return
-    #
-    #         # Находим нужного клиента по user_ip и обновляем его enable значение
-    #         client_key = next(
-    #             (key for key, client in wg_config['clients'].items() if client['address'] == self.user_ip.get()), None)
-    #         if client_key:
-    #             print(f"Найден клиент с IP: {self.user_ip.get()}, обновляем enabled на {new_enable_value}")
-    #             wg_config['clients'][client_key]['enabled'] = new_enable_value
-    #             await self.enable._set(new_enable_value)  # Обновляем локально в объекте Server_cl
-    #         else:
-    #             print(f"Клиент с IP {self.user_ip.get()} не найден в JSON-файле.")
-    #             return
-    #
-    #         # Записываем изменения обратно в файл на сервере
-    #         print(f"Записываем изменения в файл {json_file_path}")
-    #         with sftp.open(json_file_path, 'w') as json_file:
-    #             json.dump(wg_config, json_file, indent=4)
-    #             print(f"Файл {json_file_path} успешно обновлен на сервере")
-    #
-    #         # Перезапускаем WireGuard Easy через Docker
-    #         print("Перезапускаем WireGuard Easy...")
-    #         stdin, stdout, stderr = client.exec_command('docker restart wg-easy')
-    #         stdout.channel.recv_exit_status()
-    #         print("WireGuard перезапущен")
-    #
-    #         # Закрываем соединение
-    #         sftp.close()
-    #         client.close()
-    #
-    #     except paramiko.SSHException as ssh_err:
-    #         print(f"Ошибка SSH: {ssh_err}")
-    #     except Exception as e:
-    #         print(f"Ошибка при обновлении JSON на сервере: {e}")
-    #
-    # async def change_enable(self, new_enable_value: bool):
-    #     """Метод обновления enable поля на сервере и в объекте"""
-    #     await self._update_json_on_server(new_enable_value)
+    async def delete_user_key(self):
+        """
+        Отправляет задачу на удаление пользователя на сервере в очередь Redis.
+        """
+        try:
+
+            # Получаем данные объекта
+            chat_id = self.user.chat_id
+            uuid_id = await self.uuid_id.get()
+            server_ip = await self.server_ip.get()
+            name_protocol = await self.name_protocol.get()
+            email_key = await self.email_key.get()
+            server_name = await get_name_server_by_ip(server_ip)
+
+            # Формируем данные задачи
+            task_data = {
+                "task_type": "delete_user",
+                "chat_id": chat_id,
+                "uuid_id": uuid_id,
+                "server_ip": server_ip,
+                "name_protocol": name_protocol,
+                "email_key": email_key
+            }
+
+            # Формируем имя очереди
+            queue_name = f"queue_task_{server_name}"
+            logging.info(f"Формируется очередь для удаления ключа: {queue_name}")
+
+            # Инициализация Redis клиента
+            redis_client = redis.Redis(
+                host=os.getenv('ip_redis_server'),
+                port=int(os.getenv('port_redis')),
+                password=os.getenv('password_redis'),
+                decode_responses=True
+            )
+
+            # Отправка задачи в Redis
+            await redis_client.rpush(queue_name, json.dumps(task_data))
+            logging.info(f"Задача удаления ключа добавлена в очередь {queue_name}: {task_data}")
+
+            # Уведомление администратора
+            await send_admin_log(
+                bot, f"🗝 Задача на удаление ключа пользователя {chat_id} добавлена в очередь {queue_name}."
+            )
+
+        except Exception as e:
+            logging.error(f"Ошибка при отправке задачи на удаление ключа: {e}")
+            await send_admin_log(
+                bot, f"❌ Ошибка при отправке задачи на удаление ключа пользователя {chat_id}: {e}"
+            )
+        finally:
+            try:
+                if redis_client:
+                    await redis_client.close()
+            except Exception as e:
+                logging.error(f"Ошибка при закрытии соединения с Redis: {e}")
+
+
+

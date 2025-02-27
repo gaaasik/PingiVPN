@@ -47,7 +47,7 @@ REGISTERED_USERS_DIR = os.getenv('REGISTERED_USERS_DIR')
 
 
 
-
+#Ошибка при обработке очереди:
 
 async def on_startup():
     """Кэширование изображений при старте"""

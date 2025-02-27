@@ -109,15 +109,7 @@ async def process_updata_traffic(json_task):
         #     logging.error(f"Отсутствуют обязательные параметры в JSON: {data}")
         #     return  # Прерываем выполнение функции, если параметры отсутствуют
 
-        # print("Данные с queue_result_task")
-        # print("status = ", status)
-        # print("user_ip = ", user_ip)
-        # print("transfer_received = ", transfer_received)
-        # print("transfer_sent = ", transfer_sent)
-        # print("latest_handshake = ", latest_handshake)
-        # print("chat_id = ", chat_id)
-        # print("disabled = ", disabled)
-        # print("enable = ", enable)
+
 
         us = await UserCl.load_user(chat_id)
 

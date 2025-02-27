@@ -1,7 +1,7 @@
 import asyncio
 import json
 import logging
-from result_task_manager import ResultTaskManager
+from .result_task_manager import ResultTaskManager
 from redis_configs.redis_settings import redis_client
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")

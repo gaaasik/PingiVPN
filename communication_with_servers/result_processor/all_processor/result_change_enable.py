@@ -1,6 +1,6 @@
 import logging
 
-from base_processor import BaseResultProcessor
+from .base_processor import BaseResultProcessor
 from bot.handlers.admin import send_admin_log
 from bot_instance import bot
 from models.UserCl import UserCl

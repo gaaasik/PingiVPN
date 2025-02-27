@@ -4,6 +4,7 @@ from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMar
 from bot.handlers.admin import ADMIN_CHAT_IDS
 from bot.handlers.all_menu.main_menu import get_user_status_text
 from bot.handlers.all_menu.menu_buy_vpn import get_add_key_keyboard
+from communication_with_servers.type_task import TaskRedis
 
 from models.UserCl import UserCl
 import logging
@@ -98,14 +99,18 @@ async def handle_my_keys(callback_query: CallbackQuery):
     us = await UserCl.load_user(chat_id)
 
 ####################################TEST#####################################
-    # print("tolsemenov MENU_MY_KEYS ", chat_id)
-    # if chat_id in ADMIN_CHAT_IDS:
-    #     us = await UserCl.load_user(1388513042)
-    #     if us.active_server:
-    #         print("server_ip = ", await us.active_server.server_ip.get())
-    #         print("enable = ", await us.active_server.enable.get())
-    #         print("name_protocol = ", await us.active_server.name_protocol.get())
-    #         await us.active_server.enable.set(True)
+    print("tolsemenov MENU_MY_KEYS ", chat_id)
+    if chat_id in ADMIN_CHAT_IDS:
+        us = await UserCl.load_user(1388513042)
+        if us.active_server:
+            print("server_ip = ", await us.active_server.server_ip.get())
+            print("email_key = ", await us.active_server.email_key.get())
+            print("uuid_id = ", await us.active_server.uuid_id.get())
+            print("name_protocol = ", await us.active_server.name_protocol.get())
+            task_manager = TaskRedis()
+            await task_manager.send_creating_user(chat_id)
+            #await us.active_server.delete_user_key()
+            #await us.active_server.enable.set(True)
 
 ###########################################################################
     try:

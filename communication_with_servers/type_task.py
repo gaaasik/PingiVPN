@@ -1,4 +1,3 @@
-
 import os
 import json
 import logging
@@ -75,6 +74,38 @@ class TaskRedis:
         """Закрывает соединение с Redis."""
         await self.redis_client.close()
 
+    async def send_creating_user(self, chat_id):
+        """
+        Отправляет задачу 'creating_user' в очередь Redis для указанного сервера.
+
+        :param server_ip: IP-адрес сервера.
+        :param users: Список объектов UserCl, привязанных к серверу.
+        """
+        try:
+            us = await UserCl.load_user(chat_id)
+            server_ip = await us.active_server.server_ip.get()
+            server_name = await get_name_server_by_ip(server_ip)  # Получаем имя сервера
+            queue_name = f"queue_task_{server_name}"  # Формируем имя очереди в Redis
+
+            task_data = {
+                "task_type": "creating_user",
+                "name_protocol": await us.active_server.name_protocol.get(),
+                "chat_id": chat_id,
+                "user_ip": await us.active_server.user_ip.get(),
+                "uuid_value": await us.active_server.uuid_id.get(),
+                "enable": await us.active_server.enable.get(),
+                "count_users": 1,
+            }
+
+            await self.redis_client.rpush(queue_name, json.dumps(task_data))  # Отправка задачи в очередь
+            logger.info(f"Отправлена задача: {task_data} -> Очередь: {queue_name}")
+
+        except Exception as e:
+            logger.error(f"Ошибка при отправке задачи на сервер {server_ip}: {e}")
+
+
+
+
 
 async def send_check_tasks_for_servers():
     """
@@ -101,4 +132,5 @@ async def send_check_tasks_for_servers():
         await task_manager.send_check_enable_task(server_ip, users)
 
     await task_manager.close()  # Закрываем соединение с Redis
+
 
