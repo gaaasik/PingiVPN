@@ -19,6 +19,7 @@ class DailyTaskManager:
         Генерация ежедневной статистики и отправка в чат администратора. Добавлен пользователь
         """
 
+
         project_root = Path(__file__).resolve().parent.parent
         url_vless_new_path = project_root / "configs" / "url_vless_new"
         async with aiofiles.open(url_vless_new_path, "r") as file:
