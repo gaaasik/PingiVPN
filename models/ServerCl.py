@@ -2,15 +2,12 @@ import os
 import json
 from datetime import datetime
 from pathlib import Path
-
-
+from redis_configs.redis_settings import redis_client
 import redis.asyncio as redis
 import paramiko
 import logging
 from typing import TYPE_CHECKING
-
 from dotenv import load_dotenv
-
 from bot.handlers.admin import send_admin_log
 from bot_instance import bot
 from models.country_server_data import get_json_country_server_data, get_name_server_by_ip
@@ -34,16 +31,11 @@ logger = logging.getLogger(__name__)
 
 
 
-
-
-
-#from fastapi import requests
 class Field:
     def __init__(self, name, value, server: 'ServerCl'):
         self._name = name  # Приватное название поля
         self._value = value  # Приватное значение поля
         self._server: ServerCl = server  # Ссылка на объект Server_cl
-
 
     # Публичный метод для получения значения
     async def get(self):
@@ -92,7 +84,6 @@ class Field:
             country = await self._server.user.get_country_by_server_ip(await self._server.server_ip.get())
             await self._server.country_server.set(country)
 
-
         # Словарь переводов стран
         COUNTRY_TRANSLATIONS = {
             "USA": "🇺🇸 США",
@@ -110,10 +101,6 @@ class Field:
         # Получаем страну из поля и возвращаем перевод
         country = self._value
         return COUNTRY_TRANSLATIONS.get(country, "Неизвестная страна")
-
-
-
-
 
     # Использование данных в функциях
     async def set_enable(self, enable_value: bool):
@@ -155,12 +142,6 @@ class Field:
         # Используем redis.asyncio вместо aioredis
 
         try:
-            redis_client = redis.Redis(
-                host=os.getenv('ip_redis_server'),
-                port=int(os.getenv('port_redis')),
-                password=os.getenv('password_redis'),
-                decode_responses=True
-            )
             await redis_client.rpush(queue_name, json.dumps(task_data))
             logging.info(f"Задача добавлена в очередь {queue_name}: {task_data}")
             if queue_name == "queue_task_Unknown_Server":
@@ -274,37 +255,42 @@ class ServerCl:
         """
         Отправляет задачу на удаление пользователя на сервере в очередь Redis.
         """
+        chat_id = self.user.chat_id
         try:
 
             # Получаем данные объекта
-            chat_id = self.user.chat_id
             uuid_id = await self.uuid_id.get()
             server_ip = await self.server_ip.get()
             name_protocol = await self.name_protocol.get()
             email_key = await self.email_key.get()
             server_name = await get_name_server_by_ip(server_ip)
+            user_ip = await self.user_ip.get()
 
-            # Формируем данные задачи
-            task_data = {
-                "task_type": "delete_user",
-                "chat_id": chat_id,
-                "uuid_id": uuid_id,
-                "server_ip": server_ip,
-                "name_protocol": name_protocol,
-                "email_key": email_key
-            }
+            task_data = {}
+
+            if name_protocol == "vless":
+                # Формируем данные задачи
+                task_data = {
+                    "task_type": "delete_user",
+                    "chat_id": chat_id,
+                    "uuid_id": uuid_id,
+                    "server_ip": server_ip,
+                    "name_protocol": name_protocol,
+                    "email_key": email_key
+                }
+            elif name_protocol == "wireguard":
+                # Формируем данные задачи
+                task_data = {
+                    "task_type": "delete_user",
+                    "chat_id": chat_id,
+                    "server_ip": server_ip,
+                    "name_protocol": name_protocol,
+                    "user_ip": user_ip
+                }
 
             # Формируем имя очереди
             queue_name = f"queue_task_{server_name}"
             logging.info(f"Формируется очередь для удаления ключа: {queue_name}")
-
-            # Инициализация Redis клиента
-            redis_client = redis.Redis(
-                host=os.getenv('ip_redis_server'),
-                port=int(os.getenv('port_redis')),
-                password=os.getenv('password_redis'),
-                decode_responses=True
-            )
 
             # Отправка задачи в Redis
             await redis_client.rpush(queue_name, json.dumps(task_data))
