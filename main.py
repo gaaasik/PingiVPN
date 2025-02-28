@@ -197,7 +197,7 @@ async def main():
     # Инициализация планировщика уведомлений
     notification_scheduler = NotificationScheduler(notification_manager)
 
-    # Настройка расписания уведомлений
+    # Настройка расписания уведомлений Ежедневная статистика
     #notification_scheduler.add_to_schedule("11:00", "CompensationNotification")
     notification_scheduler.add_to_schedule("12:00", "UnsubscribedNotification")
     notification_scheduler.add_to_schedule("13:00", "TrialEndingNotification")

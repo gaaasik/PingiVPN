@@ -473,7 +473,7 @@ class UserCl:
 
             #сообщение админу
             await send_admin_log(bot,f"Добавлен пользователь {self.chat_id}, {await self.user_login.get()}. Осталось {len(remaining_urls)} ключей vless ")
-            print(f"Осталось {len(remaining_urls)} доступных URL для VLESS.")
+            logging.info(f"Осталось {len(remaining_urls)} доступных URL для VLESS.")
             return url_vless
 
         except Exception as e:
