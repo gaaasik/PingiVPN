@@ -70,7 +70,6 @@ async def enable_user(callback: CallbackQuery, state: FSMContext):
     """Обработчик включения пользователя"""
     data = await state.get_data()
     user = data.get("current_user")
-
     if not user:
         await callback.message.answer("Ошибка: пользователь не найден.")
         return

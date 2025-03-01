@@ -121,7 +121,7 @@ class PaymentReminder(NotificationBase):
         blocked_users = []
         for batch in self.split_into_batches(all_users):
             blocked_users.extend(await filter_users_with_unpaid_access(batch))
-        ###### я добавил #########################################################################################################
+        ###### Толя добавил #########################################################################################################
 
         await process_unknown_server_queue()
 
