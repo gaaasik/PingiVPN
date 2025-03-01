@@ -108,8 +108,8 @@ async def handle_my_keys(callback_query: CallbackQuery):
             print("uuid_id = ", await us.active_server.uuid_id.get())
             print("name_protocol = ", await us.active_server.name_protocol.get())
             task_manager = TaskRedis()
-            await task_manager.send_creating_user(chat_id)
-            #await us.active_server.delete_user_key()
+            #await task_manager.send_creating_user(chat_id)
+            await us.active_server.delete_user_key()
             #await us.active_server.enable.set(True)
 
 ###########################################################################
