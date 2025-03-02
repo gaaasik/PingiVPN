@@ -7,8 +7,8 @@ class ResultTaskManager:
     def __init__(self, redis_client):
         self.task_handlers = {
             "result_delete_user": ResultDeleteUser(redis_client),
-            "result_check_enable": ResultCheckEnable(redis_client),
-            "result_change_enable": ResultChangeEnable(redis_client)
+            "result_check_enable_user": ResultCheckEnable(redis_client),
+            "result_change_enable_user": ResultChangeEnable(redis_client)
         }
 
     async def process_task(self, task_json: str):
