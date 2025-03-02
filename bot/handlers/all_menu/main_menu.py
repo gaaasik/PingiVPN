@@ -18,7 +18,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-
 # Функция для получения корректного склонения для дней
 def get_days_text(days):
     if 11 <= days % 100 <= 14:
@@ -58,8 +57,9 @@ async def get_user_status_text(us):
         # Получаем количество ключей
         count_key = await us.count_key.get()
         logger.info(f"Количество ключей: {count_key}")
+        active_server = us.active_server
 
-        if count_key == 0:
+        if count_key == 0 or not active_server:
             # Если ключей нет
             logger.info("У пользователя нет ключей. Возвращаем сообщение о подключении VPN.")
             return f"Нажмите *Подключить VPN*\n"
