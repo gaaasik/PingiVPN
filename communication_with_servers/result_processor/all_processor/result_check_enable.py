@@ -15,7 +15,7 @@ class ResultCheckEnable(BaseResultProcessor):
         us = await UserCl.load_user(chat_id)
         if us:
             logging.info(f"Получена и обработана задача result_check_enable. От chat_id = {chat_id}")
-            current_status = us.active_server.enable.get()
+            current_status = await us.active_server.enable.get()
             print(f"Статус пользователя {chat_id}: {current_status}")
             await send_admin_log(bot,
                                  f"result_check_enable: Пользователь {chat_id} изменил состояние на {current_status}, status={status_task}")
