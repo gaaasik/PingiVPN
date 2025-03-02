@@ -17,7 +17,7 @@ class ResultChangeEnable(BaseResultProcessor):
         if us and enable_status is not None:
             await us.active_server.enable.set_enable_admin(enable_status)
             logging.info(f"Получена и обработана задача result_change_enable. От chat_id = {chat_id}")
-            await send_admin_log(bot, f"😈Пользователь {chat_id} изменил состояние на {enable_status} (в db:{us.active_server.enable.get()}), status={status_task}")
+            await send_admin_log(bot, f"😈Пользователь {chat_id} изменил состояние на {enable_status} (в db:{await us.active_server.enable.get()}), status={status_task}")
 
         else:
             logging.error(f"Ошибка у enable в result_change_enable. От chat_id = {chat_id}")
