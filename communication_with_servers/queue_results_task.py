@@ -4,7 +4,7 @@ import json
 import logging
 import redis.asyncio as redis
 from dotenv import load_dotenv
-
+from redis_configs.redis_settings import redis_client
 from bot.handlers.admin import send_admin_log
 from bot_instance import bot
 from models.UserCl import UserCl
@@ -21,14 +21,7 @@ logging.basicConfig(
 
 load_dotenv()
 
-# Настройки Redis
-REDIS_HOST = os.getenv('ip_redis_server')  # IP-адрес Redis
-REDIS_PORT = int(os.getenv('port_redis'))  # Порт Redis
-REDIS_PASSWORD = os.getenv('password_redis')  # Пароль Redis (если требуется)
-NAME_RESULT_QUEUE = "queue_result_task"
 
-# Инициализация асинхронного клиента Redis
-redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD, decode_responses=True)
 
 async def process_task(task):
     """Обработка задачи."""

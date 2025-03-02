@@ -1,10 +1,7 @@
-import os
+
 import json
 from datetime import datetime
-from pathlib import Path
 from redis_configs.redis_settings import redis_client
-import redis.asyncio as redis
-import paramiko
 import logging
 from typing import TYPE_CHECKING
 from dotenv import load_dotenv
@@ -150,7 +147,7 @@ class Field:
             logging.error(f"Ошибка при добавлении задачи в очередь {queue_name}: {e}")
         finally:
             try:
-                if redis:
+                if redis_client:
                     await redis_client.close()
             except Exception as e:
                 logging.error(f"Ошибка с redis_client")
