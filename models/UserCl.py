@@ -280,7 +280,7 @@ class UserCl:
         try:
             async with aiosqlite.connect(database_path_local) as db:
                 query = """
-                SELECT COUNT(DISTINCT chat_id) 
+                SELECT COUNT(chat_id) 
                 FROM payments 
                 WHERE status = 'payment.succeeded' 
                 AND DATE(created_at) >= DATE(?)
