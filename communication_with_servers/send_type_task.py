@@ -137,7 +137,7 @@ async def send_check_tasks_for_servers():
     for chat_id in chat_ids:
         us = await UserCl.load_user(chat_id)
 
-        if us and await us.count_key.get() > 0:  # Проверяем, есть ли у пользователя серверы
+        if us and await us.count_key.get() > 0 and us.active_server:  # Проверяем, есть ли у пользователя серверы
             active_server_ip = await us.active_server.server_ip.get()
 
             if active_server_ip in SERVERS_IP_FOR_CHECK_ENABLE:  # Проверяем, находится ли сервер в списке
