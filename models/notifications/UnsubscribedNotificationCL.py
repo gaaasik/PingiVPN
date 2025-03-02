@@ -2,7 +2,7 @@ import asyncio
 import os
 from datetime import datetime
 from bot_instance import bot
-from communication_with_servers.type_task import send_check_tasks_for_servers
+from communication_with_servers.send_type_task import send_check_tasks_for_servers
 from models.UserCl import UserCl
 from .NotificationBaseCL import NotificationBase
 from typing import List

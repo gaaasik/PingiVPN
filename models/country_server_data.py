@@ -1,7 +1,6 @@
 import json
 import logging
 from pathlib import Path
-
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -23,7 +22,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-
 async def load_server_data(country_server_path: str):
     global country_server_data
     try:
@@ -40,12 +38,14 @@ async def load_server_data(country_server_path: str):
         logging.error(f"Ошибка при загрузке данных серверов: {e}")
         raise
 
+
 async def get_json_country_server_data():
     global country_server_data
     if country_server_data is None:
         country_server_data = "Unknown_Server"
         raise ValueError("Данные country_server_data еще не загружены.")
     return country_server_data
+
 
 async def get_name_server_by_ip(server_ip: str) -> str:
     """Получает имя сервера по его IP."""

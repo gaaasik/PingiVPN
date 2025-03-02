@@ -47,8 +47,8 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
     count_key = await us.count_key.get()
     keyboard = None
     text = ""
-
-    if count_key == 0:
+    active_server = us.active_server
+    if count_key == 0 or not active_server:
         # Если у пользователя нет ключей
         text = (
             "У вас нет ключей для оплаты.\n"
