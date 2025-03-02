@@ -22,7 +22,7 @@ class ResultChangeEnable(BaseResultProcessor):
         else:
             logging.error(f"Ошибка у enable в result_change_enable. От chat_id = {chat_id}")
             await send_admin_log(bot,
-                                 f"😈❌Пользователь {chat_id} НЕ изменил состояние, сейчас {us.active_server.enable.get()}, а пришло enable=NONE status={status_task}")
+                                 f"😈❌Пользователь {chat_id} НЕ изменил состояние, сейчас {await us.active_server.enable.get()}, а пришло enable=NONE status={status_task}")
 
 
 
