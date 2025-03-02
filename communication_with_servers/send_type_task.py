@@ -13,7 +13,7 @@ from models.UserCl import UserCl  # Импортируем UserCl для пол�
 # ]
 
 #Список IP - адресов серверов
-SEREVERS_IP = [
+SERVERS_IP_FOR_CHECK_ENABLE = [
     "185.104.112.64",    # Server_1000
     "194.135.38.128",    # Server_2000
     "90.156.228.68",     # Server_3000
