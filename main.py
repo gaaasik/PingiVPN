@@ -199,9 +199,9 @@ async def main():
 
     # Настройка расписания уведомлений Ежедневная статистика
     #notification_scheduler.add_to_schedule("11:00", "CompensationNotification")
-    notification_scheduler.add_to_schedule("14:53", "UnsubscribedNotification")
+    notification_scheduler.add_to_schedule("14:56", "UnsubscribedNotification")
     notification_scheduler.add_to_schedule("13:00", "TrialEndingNotification")
-    notification_scheduler.add_to_schedule("15:15", "PaymentReminder")  # Добавили PaymentReminder
+    notification_scheduler.add_to_schedule("15:16", "PaymentReminder")  # Добавили PaymentReminder
 
 
 
