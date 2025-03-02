@@ -1,3 +1,5 @@
+import logging
+
 from communication_with_servers.result_processor.all_processor.result_delete_user import ResultDeleteUser
 from communication_with_servers.result_processor.all_processor.result_check_enable import ResultCheckEnable
 from communication_with_servers.result_processor.all_processor.result_change_enable import ResultChangeEnable
@@ -11,8 +13,13 @@ class ResultTaskManager:
             "result_change_enable_user": ResultChangeEnable(redis_client)
         }
 
-    async def process_task(self, task_json: str):
-        task_type = task_json.get("task_type")
-        processor = self.task_handlers.get(task_type)
-        if processor:
-            await processor.process(task_json)
+    async def process_task(self, task_json):
+        try:
+            task_type = task_json.get("task_type")
+            logging.info(f"Получена задача с типом {task_type}")
+            processor = self.task_handlers.get(task_type)
+            if processor:
+                await processor.process(task_json)
+        except Exception as e:
+            logging.error(f"Ошибка при определении task_type: {e}")
+

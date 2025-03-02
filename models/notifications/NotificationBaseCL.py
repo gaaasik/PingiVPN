@@ -52,12 +52,13 @@ class NotificationBase(ABC):
         async def send_message(user_id):
             """Асинхронная функция для отправки сообщения одному пользователю."""
             try:
-                await bot.send_message(
-                    chat_id=user_id,
-                    text=message_template,
-                    reply_markup=keyboard,
-                    parse_mode="HTML"
-                )
+
+                # await bot.send_message(
+                #     chat_id=user_id,
+                #     text=message_template,
+                #     reply_markup=keyboard,
+                #     parse_mode="HTML"
+                # )
                 self.success_count += 1  # Увеличиваем счетчик успешных отправок
                   # Обработка после успешной отправки
                 await self.after_send_success(user_id)
