@@ -4,6 +4,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 async def get_search_user_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="Ввести Chat ID", callback_data="search_by_chat_id")],
+        [InlineKeyboardButton(text="Вывести статистику", callback_data="show_statistics")],
         [InlineKeyboardButton(text="Заглушка: Ввести никнейм", callback_data="search_by_nickname")],
         [InlineKeyboardButton(text="Заглушка: Ввести номер телефона", callback_data="search_by_phone")],
         [InlineKeyboardButton(text="Заглушка: Ввести имя пользователя", callback_data="search_by_username")],

@@ -7,10 +7,12 @@ from pathlib import Path
 from aiogram import Bot
 from aiogram.types import FSInputFile
 from dotenv import load_dotenv
+
+from bot.admin_func.show_statistics import show_statistic_handler
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
     menu_share, menu_connect_vpn, menu_payment, menu_about_pingi, menu_subscriptoin_check
-from bot.admin_func import bonus_days, service_mode
+from bot.admin_func import bonus_days, service_mode,show_statistics,set_on_off
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 
 from bot.handlers import start, support, \
@@ -124,7 +126,6 @@ async def periodic_backup_task(bot: Bot):
         time_to_sleep = (next_3am - now).total_seconds()
 
         # Спим до следующего 3:00
-        print(f"Следующая отправка бд в чат телеграма в {next_3am}, ждем {time_to_sleep} секунд.")
         await asyncio.sleep(time_to_sleep)
 
         try:
@@ -156,7 +157,6 @@ async def main():
     if not db_path or not Path(db_path).exists():
         print(f"Ошибка: файл базы данных {db_path} не найден!")
         return
-    print(f"Путь к базе данных: {db_path}")
 
     await init_db(db_path)
 
@@ -231,8 +231,10 @@ async def main():
     dp.include_router(app_downloaded.router)
     dp.include_router(file_or_qr.router)
     dp.include_router(thank_you.router)
-
+    dp.include_router(show_statistics.router)
     dp.include_router(menu_subscriptoin_check.router)
+
+    dp.include_router(set_on_off.router)
 
     dp.include_router(service_mode.router)
     dp.include_router(bonus_days.router)

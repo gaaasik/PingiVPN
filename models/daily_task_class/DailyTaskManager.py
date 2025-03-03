@@ -10,6 +10,42 @@ from communication_with_servers.queue_results_task import redis_client
 from models.UserCl import UserCl
 from models.referral_class.ReferralCL import ReferralCl
 #Надо проработать!!!!!!!!!!!
+
+async def count_remaining_vless_links(self) -> int:
+    """
+    Подсчитывает количество оставшихся VLESS ссылок в файле.
+    """
+    try:
+        # Получаем путь к директории из переменной окружения
+        config_dir = os.getenv("CONFIGS_DIR")
+        if not config_dir:
+            logging.error("Переменная окружения CONFIGS_DIR не установлена!")
+            return 0
+
+        # Полный путь к файлу
+        url_vless_new_path = os.path.join(config_dir, "url_vless_new")
+
+        logging.info(f"Открываем файл: {url_vless_new_path}")
+
+        async with aiofiles.open(url_vless_new_path, "r") as file:
+            urls = await file.readlines()
+
+        # Фильтруем только строки, содержащие ссылки vless://
+        remaining_urls = [url.strip() for url in urls if url.strip().startswith("vless://")]
+        count_remaining = len(remaining_urls)
+
+        logging.info(f"Количество оставшихся ссылок: {count_remaining}")
+
+        return count_remaining
+
+    except FileNotFoundError:
+        logging.error(f"Файл {url_vless_new_path} не найден!")
+        return 0
+    except Exception as e:
+        logging.error(f"Ошибка при чтении файла VLESS: {e}")
+        return 0
+
+
 class DailyTaskManager:
     def __init__(self, bot):
         self.bot = bot
@@ -20,11 +56,11 @@ class DailyTaskManager:
         """
 
 
-        project_root = Path(__file__).resolve().parent.parent
-        url_vless_new_path = project_root / "configs" / "url_vless_new"
-        async with aiofiles.open(url_vless_new_path, "r") as file:
-            urls = await file.readlines()
-        remaining_urls = urls[1:]
+        # project_root = Path(__file__).resolve().parent.parent
+        # url_vless_new_path = project_root / "configs" / "url_vless_new"
+        # async with aiofiles.open(url_vless_new_path, "r") as file:
+        #     urls = await file.readlines()
+        remaining_urls = await count_remaining_vless_links(self)
 
         yesterday = datetime.now() - timedelta(days=1)
         new_users = await UserCl.count_users_by_date(yesterday)

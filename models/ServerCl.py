@@ -4,7 +4,6 @@ from datetime import datetime
 from pathlib import Path
 from redis_configs.redis_settings import redis_client
 import redis.asyncio as redis
-import paramiko
 import logging
 from typing import TYPE_CHECKING
 from dotenv import load_dotenv

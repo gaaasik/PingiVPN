@@ -56,7 +56,6 @@ async def get_user_status_text(us):
     try:
         # Получаем количество ключей
         count_key = await us.count_key.get()
-        logger.info(f"Количество ключей: {count_key}")
         active_server = us.active_server
 
         if count_key == 0 or not active_server:
@@ -68,10 +67,7 @@ async def get_user_status_text(us):
         status_key = await us.active_server.status_key.get()
         enabled = await us.active_server.enable.get()
         has_paid_key = await us.active_server.has_paid_key.get()
-        logger.info(f"Статус первого ключа: {status_key}")
-
         end_date_str = await us.active_server.date_key_off.get_date()
-        logger.info(f"Дата окончания ключа: {end_date_str}")
 
         # Парсим строку даты в объект datetime для расчётов
         try:
@@ -83,8 +79,6 @@ async def get_user_status_text(us):
         # Рассчитываем оставшиеся дни
         today = datetime.now()
         remaining_days = (end_date - today).days
-        logger.info(f"Сегодня: {today.strftime('%d.%m.%Y')}, осталось {remaining_days} дней до окончания ключа.")
-
         # Формируем текст статуса в зависимости от статуса ключа
         if (enabled == True) and (has_paid_key == 0) and remaining_days > 0:
             return f"Пробный период до {end_date_str} (осталось {remaining_days} дней)"
