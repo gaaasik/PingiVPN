@@ -138,8 +138,8 @@ class Field:
         }
         queue_name = f"queue_task_{server_name}"
         logging.info(f"Формируется очередь: {queue_name}")
-
-        # Используем redis.asyncio вместо aioredis
+        redis_client=None
+        # Используем redis.asyncio вместо aioredis     Ошибка при обработке очереди
         try:
             redis_client = redis.Redis(
                 host=os.getenv('ip_redis_server'),
@@ -152,7 +152,7 @@ class Field:
         except Exception as e:
             logging.error(f"Ошибка при добавлении задачи в очередь {queue_name}: {e}")
         finally:
-            if redis:
+            if redis_client:
                 await redis_client.close()
 
     def __get_server_name_by_ip(self, server_data, ip_address: str) -> str:
