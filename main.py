@@ -10,30 +10,28 @@ from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
     menu_share, menu_connect_vpn, menu_payment, menu_about_pingi, menu_subscriptoin_check
-
+from bot.admin_func import bonus_days, service_mode
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
-#from bot.payments2.payments_handler_redis import listen_to_redis_queue
+
 from bot.handlers import start, support, \
     user_help_request, feedback, app_downloaded,file_or_qr,thank_you
 from bot.notification_users import notification_migrate_from_wg
 from bot.utils.cache import cache_media
-#from bot.utils.check_status import check_db  #, notify_users_with_free_status
+
 from bot.utils.logger import setup_logger
 from bot.database.db import database_path_local  #,  init_db
 from bot.database.init_db import init_db
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
-from communication_with_servers.queue_results_task import process_queue_results_task
+from communication_with_servers.result_processor.start_processor_result_queue import process_queue_results_task
 from models.country_server_data import load_server_data
-#from communication_with_servers.send_json import process_task_queue
-# from communication_with_servers.send_json import process_task_queue
-#from fastapi_app.all_utils_flask_db import initialize_db
+
 from models.daily_task_class.DailyTaskManager import DailyTaskManager
 from models.notifications.CompensationNotificationCL import CompensationNotification
-#from fastapi_app.all_utils_flask_db import initialize_db
+
 
 from models.notifications.NotificationManagerCL import NotificationManager
-from models.notifications.UnsubscribedNotificationCL import  UnsubscribedNotification
+from models.notifications.UnsubscribedNotificationCL import UnsubscribedNotification
 from models.notifications.TrialEndingNotificationCL import TrialEndingNotification
 from models.notifications.NotificationSchedulerCL import NotificationScheduler
 from models.notifications.PaymentReminderCL import PaymentReminder
@@ -49,7 +47,7 @@ REGISTERED_USERS_DIR = os.getenv('REGISTERED_USERS_DIR')
 
 
 
-
+#Ошибка при обработке очереди:
 
 async def on_startup():
     """Кэширование изображений при старте"""
@@ -199,7 +197,7 @@ async def main():
     # Инициализация планировщика уведомлений
     notification_scheduler = NotificationScheduler(notification_manager)
 
-    # Настройка расписания уведомлений
+    # Настройка расписания уведомлений Ежедневная статистика
     #notification_scheduler.add_to_schedule("11:00", "CompensationNotification")
     notification_scheduler.add_to_schedule("12:00", "UnsubscribedNotification")
     notification_scheduler.add_to_schedule("13:00", "TrialEndingNotification")
@@ -235,6 +233,9 @@ async def main():
     dp.include_router(thank_you.router)
 
     dp.include_router(menu_subscriptoin_check.router)
+
+    dp.include_router(service_mode.router)
+    dp.include_router(bonus_days.router)
 
     try:
         pass

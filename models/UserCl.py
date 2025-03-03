@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 
 from bot.handlers.admin import send_admin_log
 from bot_instance import bot
-from models.country_server_data import get_country_server_data
+from models.country_server_data import get_json_country_server_data
 
 from models.ServerCl import ServerCl
 import re
@@ -21,6 +21,19 @@ import logging
 load_dotenv()
 database_path_local = Path(os.getenv('database_path_local'))
 
+
+
+
+# Настройка логирования
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("payments.log"),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
 
 class Field:
     def __init__(self, name, value, user):
@@ -267,7 +280,7 @@ class UserCl:
         try:
             async with aiosqlite.connect(database_path_local) as db:
                 query = """
-                SELECT COUNT(DISTINCT chat_id) 
+                SELECT COUNT(chat_id) 
                 FROM payments 
                 WHERE status = 'payment.succeeded' 
                 AND DATE(created_at) >= DATE(?)
@@ -460,7 +473,7 @@ class UserCl:
 
             #сообщение админу
             await send_admin_log(bot,f"Добавлен пользователь {self.chat_id}, {await self.user_login.get()}. Осталось {len(remaining_urls)} ключей vless ")
-            print(f"Осталось {len(remaining_urls)} доступных URL для VLESS.")
+            logging.info(f"Осталось {len(remaining_urls)} доступных URL для VLESS.")
             return url_vless
 
         except Exception as e:
@@ -477,7 +490,7 @@ class UserCl:
         return "Unknown_Server"
 
     async def _generate_server_params_vless(self, current_date, url_vless, free_day):
-        country_server_data = await get_country_server_data()
+        country_server_data = await get_json_country_server_data()
         """Генерирует параметры нового сервера VLESS, извлекая информацию из URL."""
 
         # Извлечение uuid, server_ip и name_key из URL
@@ -523,7 +536,7 @@ class UserCl:
         logging.info(f"Начало работы функции _generate_server_params_wireguard. Путь к файлу: {config_file_path}")
 
         try:
-            country_server_data = await get_country_server_data()
+            country_server_data = await get_json_country_server_data()
             # Преобразуем путь в объект Path для удобной работы
             config_file_path = Path(config_file_path)
             logging.debug(f"Обработанный путь к конфигурационному файлу: {config_file_path}")

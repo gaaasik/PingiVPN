@@ -3,47 +3,56 @@
     {
       "name": "Server_10",
       "country": "Netherlands",
-      "address": "147.45.232.240"
+      "address": "147.45.232.240",
+      "count_users": 30
     },
     {
       "name": "Server_Bot_100",
       "country": "Poland",
-      "address": "217.25.91.109"
+      "address": "217.25.91.109",
+      "count_users": 30
     },
     {
       "name": "Server_1000",
       "country": "Poland",
-      "address": "185.104.112.64"
+      "address": "185.104.112.64",
+      "count_users": 30
     },
     {
       "name": "Server_2000",
       "country": "Netherlands",
-      "address": "194.135.38.128"
+      "address": "194.135.38.128",
+      "count_users": 30
     },
     {
       "name": "Server_3000",
       "country": "Poland",
-      "address": "90.156.228.68"
+      "address": "90.156.228.68",
+      "count_users": 30
     },
     {
       "name": "Server_5000",
       "country": "Poland",
-      "address": "87.249.50.108"
+      "address": "87.249.50.108",
+      "count_users": 30
     },
     {
       "name": "Server_6000",
       "country": "Poland",
-      "address": "217.151.231.215"
+      "address": "217.151.231.215",
+      "count_users": 30
     },
     {
       "name": "Server_7000",
       "country": "Poland",
-      "address": "194.35.119.227"
+      "address": "194.35.119.227",
+      "count_users": 30
     },
     {
-      "name": "Server 8000",
+      "name": "Server_8000",
       "address": "92.51.46.66",
-      "country": "Netherlands"
+      "country": "Netherlands",
+      "count_users": 30
     },
     {
       "name": "Server_9000",
@@ -171,12 +180,12 @@
       "country": "Netherlands"
     },
     {
-      "name": "Server_tol_test",
+      "name": "Server_tol_test_10000",
       "address": "147.45.242.155",
       "country": "Netherlands"
     },
     {
-      "name": "Server_tol_test_3x_ui",
+      "name": "Server_tol_test_3x_ui_10000",
       "address": "194.87.208.18",
       "country": "Netherlands"
     }

@@ -1,7 +1,12 @@
 import os
 import logging
 from datetime import datetime, timedelta
+from pathlib import Path
+
+import aiofiles
+
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
+from communication_with_servers.queue_results_task import redis_client
 from models.UserCl import UserCl
 from models.referral_class.ReferralCL import ReferralCl
 #Надо проработать!!!!!!!!!!!
@@ -11,8 +16,16 @@ class DailyTaskManager:
 
     async def generate_statistics(self):
         """
-        Генерация ежедневной статистики и отправка в чат администратора.
+        Генерация ежедневной статистики и отправка в чат администратора. Добавлен пользователь
         """
+
+
+        project_root = Path(__file__).resolve().parent.parent
+        url_vless_new_path = project_root / "configs" / "url_vless_new"
+        async with aiofiles.open(url_vless_new_path, "r") as file:
+            urls = await file.readlines()
+        remaining_urls = urls[1:]
+
         yesterday = datetime.now() - timedelta(days=1)
         new_users = await UserCl.count_users_by_date(yesterday)
         total_users = len(await UserCl.get_all_users())
@@ -20,12 +33,15 @@ class DailyTaskManager:
         total_paid_users = await UserCl.count_total_paid_users(datetime(2024, 11, 24))
 
         remaining_configs = await self.get_remaining_configs()
+        count_regeneration_user = await redis_client.get("new_vless_users_today")
 
         stats_message = (
             f"📊 <b>Ежедневная статистика</b> 📊\n\n"
             f"🗓 <b>Дата статистики за :</b> {yesterday.strftime('%Y-%m-%d')}\n"
             f"👥 <b>Новых пользователей:</b> {new_users}\n"
-            f"🔑 <b>Осталось конфигурационных файлов:</b> {remaining_configs}\n"
+            f"🔑 <b>Осталось конфигурационных файлов WG:</b> {remaining_configs}\n"
+            f"🔑 <b>Осталось ссылок url vless:</b> {remaining_urls}\n"
+            f"🔑 <b>Сгенерировано новых ссылок url vless:</b> {count_regeneration_user}\n"
             f"🌍 <b>Всего пользователей:</b> {total_users}\n"
             f"💳 <b>Оплатили вчера:</b> {paid_users}\n"
             f"💳 <b>Всего оплат с 24.11.2024:</b> {total_paid_users}"
@@ -68,7 +84,7 @@ class DailyTaskManager:
 
         return conf_files  # Примерное значение для тестирования
 
-    async def  update_referrals(self):
+    async def update_referrals(self):
         """
         Обновление данных рефералов и начисление бонусных дней.
         """

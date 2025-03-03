@@ -4,14 +4,13 @@ from aiogram import Router, types
 from aiogram.filters import Command
 from dotenv import load_dotenv
 
-from bot.handlers.admin import send_admin_log
+from bot.handlers.admin import send_admin_log, get_admin_reply_keyboard,ADMIN_CHAT_IDS
 from bot.handlers.all_menu.menu_connect_vpn import connect_text_messages, device_choice_keyboard
 from bot.handlers.cleanup import register_message_type
 from bot.keyboards.reply import reply_keyboard_main_menu
 from bot.utils.cache import send_cached_photo
 from models.UserCl import UserCl
 from models.referral_class.ReferralCL import ReferralCl  # Импортируем новый класс ReferralCl
-
 router = Router()
 
 # Загрузка переменных из файла .env
@@ -86,11 +85,14 @@ async def cmd_start(message: types.Message):
     # Приветственное сообщение с изображением
     welcome_text = connect_text_messages
     await send_cached_photo(message)
+    reply_markup = get_admin_reply_keyboard() if chat_id in ADMIN_CHAT_IDS else reply_keyboard_main_menu
+
     await message.answer(
         "🧊 Добро пожаловать 🚀\n\n"
         "🥶 Мы *кардинально* выделяемся, потому что используем уникальные серверы в *Антарктиде*\n\n"
         "🧊 И предлагаем *неограниченную* скорость и безопасность!",
-        parse_mode="Markdown", reply_markup=reply_keyboard_main_menu
+        parse_mode="Markdown",
+        reply_markup=reply_markup
     )
     sent_message = await message.answer(welcome_text, reply_markup=device_choice_keyboard(), parse_mode="Markdown")
 

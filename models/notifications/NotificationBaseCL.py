@@ -52,6 +52,7 @@ class NotificationBase(ABC):
         async def send_message(user_id):
             """Асинхронная функция для отправки сообщения одному пользователю."""
             try:
+
                 await bot.send_message(
                     chat_id=user_id,
                     text=message_template,
