@@ -111,8 +111,7 @@ async def process_bonus_days_input(message: types.Message, state: FSMContext):
         else:
             logging.warning(f"Не отправляем пустое сообщение пользователю {us.chat_id}")
 
-        await state.set_state(AdminStates.waiting_for_action)
-
+        await state.clear()
     except ValueError:
         await message.answer("Введите корректное число дней.")
     except Exception as e:
