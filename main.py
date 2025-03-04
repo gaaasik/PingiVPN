@@ -3,35 +3,35 @@ import logging
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
-
 from aiogram import Bot
 from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 
-from bot.admin_func.show_statistics import show_statistic_handler
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
     menu_share, menu_connect_vpn, menu_payment, menu_about_pingi, menu_subscriptoin_check
-from bot.admin_func import bonus_days, service_mode,show_statistics,set_on_off
-from bot.payments2.payments_handler_redis import listen_to_redis_queue
-
 from bot.handlers import start, support, \
     user_help_request, feedback, app_downloaded,file_or_qr,thank_you
+
+from bot.admin_func import bonus_days, service_mode,show_statistics,set_on_off, another_settings
+from bot.admin_func.searh_user import search_user_handlers
+
+from bot.payments2.payments_handler_redis import listen_to_redis_queue
+
+
 from bot.notification_users import notification_migrate_from_wg
 from bot.utils.cache import cache_media
-
 from bot.utils.logger import setup_logger
 from bot.database.db import database_path_local  #,  init_db
 from bot.database.init_db import init_db
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from communication_with_servers.result_processor.start_processor_result_queue import process_queue_results_task
+
 from models.country_server_data import load_server_data
 
 from models.daily_task_class.DailyTaskManager import DailyTaskManager
 from models.notifications.CompensationNotificationCL import CompensationNotification
-
-
 from models.notifications.NotificationManagerCL import NotificationManager
 from models.notifications.UnsubscribedNotificationCL import UnsubscribedNotification
 from models.notifications.TrialEndingNotificationCL import TrialEndingNotification
@@ -233,7 +233,8 @@ async def main():
     dp.include_router(thank_you.router)
     dp.include_router(show_statistics.router)
     dp.include_router(menu_subscriptoin_check.router)
-
+    dp.include_router(another_settings.router)
+    dp.include_router(search_user_handlers.router)
     dp.include_router(set_on_off.router)
 
     dp.include_router(service_mode.router)
