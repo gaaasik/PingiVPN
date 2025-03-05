@@ -3,8 +3,12 @@ import logging
 from aiogram import Router, types,F
 from aiogram.fsm.context import FSMContext
 from datetime import datetime, timedelta
+
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
 from bot.admin_func.states import AdminStates
 from bot.handlers.admin import send_admin_log
+from bot.keyboards.reply import reply_keyboard
 from models.UserCl import UserCl
 
 router = Router()
@@ -19,11 +23,13 @@ async def handle_add_bonus_days(callback, state: FSMContext):
         # Получаем дату окончания ключа
         active_server = user.servers[0]
         current_date_key_off = await active_server.date_key_off.get()
-
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="🔙 Галя,у нас отмена", callback_data="search_user")]
+        ])
         # Отправляем дату окончания перед добавлением бонусных дней
         await callback.message.answer(
             f"Текущая дата окончания действия ключа: {current_date_key_off}\n"
-            "Введите количество бонусных дней, которое хотите добавить, или нажмите 'Отмена'."
+            "Введите количество бонусных дней, которое хотите добавить, или нажмите 'Отмена'.",reply_markup = keyboard
         )
         await state.set_state(AdminStates.waiting_for_bonus_days)
     else:

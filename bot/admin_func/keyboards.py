@@ -4,9 +4,8 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 async def get_search_user_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🔢 Поиск по Chat ID", callback_data="search_by_chat_id")],
-        [InlineKeyboardButton(text="🆔 Поиск по никнейму (скоро)", callback_data="search_by_nickname")],
-        [InlineKeyboardButton(text="📞 Поиск по телефону (скоро)", callback_data="search_by_phone")],
-        [InlineKeyboardButton(text="📛 Поиск по имени (скоро)", callback_data="search_by_username")],
+        [InlineKeyboardButton(text="🆔 Поиск по никнейму", callback_data="search_by_nickname")],
+        [InlineKeyboardButton(text="📛 Поиск по имени", callback_data="search_by_full_name")],
         [InlineKeyboardButton(text="🔙 Назад", callback_data="cancel_service")]
     ])
 
@@ -16,7 +15,6 @@ async def get_user_service_keyboard():
         [InlineKeyboardButton(text="➕ Добавить бонусные дни", callback_data="add_bonus_days")],
         [InlineKeyboardButton(text="✅ Включить пользователя", callback_data="enable_user")],
         [InlineKeyboardButton(text="❌ Выключить пользователя", callback_data="disable_user")],
-        [InlineKeyboardButton(text="🔄 Перезапуск соединения (скоро)", callback_data="restart_connection")],
         [InlineKeyboardButton(text="🔙 Назад", callback_data="cancel_service")]
     ])
 # 📊 Кнопки для статистики
