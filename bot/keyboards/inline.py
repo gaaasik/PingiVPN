@@ -76,49 +76,49 @@ def config_or_qr_keyboard():
 
 #def keyborad_get_email(){}
 
-def create_payment_button(chat_id):
-    # Создаем инлайн-кнопку с текстом "Оплатить 199 рублей" и ссылкой на оплату
-    payment_button = InlineKeyboardButton(text="Подключить подписку - 199р", callback_data="payment_199")
-    if chat_id in ADMIN_CHAT_IDS:
-        # Создаем клавиатуру и добавляем кнопку
-        keyboard = InlineKeyboardMarkup(inline_keyboard=[[payment_button]
-            , [InlineKeyboardButton(text="Удалить себя из базы данных - опасная кнопка!",
-                                    callback_data='delete_user')]])
-    else:
-        # Создаем клавиатуру и добавляем кнопку
-        keyboard = InlineKeyboardMarkup(inline_keyboard=[[payment_button]])
-
-    return keyboard
-
-
-def create_feedback_keyboard():
-    buttons = [
-        # Первый ряд кнопок: Плохо и Отлично
-        [
-            InlineKeyboardButton(text="Плохо", callback_data="feedback_bad"),
-            InlineKeyboardButton(text="Отлично", callback_data="feedback_excellent")
-        ],
-        # Второй ряд кнопок: Поделиться с другом и Оплатить 199 рублей
-        [
-            InlineKeyboardButton(text="Поделиться с другом", callback_data="share_friend"),
-
-        ],
-        [InlineKeyboardButton(text="Оплатить 199 рублей", callback_data="pay_199")]
-    ]
-
-    # Создаем клавиатуру с кнопками
-    keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
-    return keyboard
+# def create_payment_button(chat_id):
+#     # Создаем инлайн-кнопку с текстом "Оплатить 199 рублей" и ссылкой на оплату
+#     payment_button = InlineKeyboardButton(text="Подключить подписку - 199р", callback_data="payment_199")
+#     if chat_id in ADMIN_CHAT_IDS:
+#         # Создаем клавиатуру и добавляем кнопку
+#         keyboard = InlineKeyboardMarkup(inline_keyboard=[[payment_button]
+#             , [InlineKeyboardButton(text="Удалить себя из базы данных - опасная кнопка!",
+#                                     callback_data='delete_user')]])
+#     else:
+#         # Создаем клавиатуру и добавляем кнопку
+#         keyboard = InlineKeyboardMarkup(inline_keyboard=[[payment_button]])
+#
+#     return keyboard
 
 
-def account_info_keyboard():
-    # Создаем инлайн-кнопку
-    buttons = [
-        [
-            InlineKeyboardButton(text="Информация об аккаунте ℹ️", callback_data="account_info")
-        ]
-    ]
-    return InlineKeyboardMarkup(inline_keyboard=buttons)
+# def create_feedback_keyboard():
+#     buttons = [
+#         # Первый ряд кнопок: Плохо и Отлично
+#         [
+#             InlineKeyboardButton(text="Плохо", callback_data="feedback_bad"),
+#             InlineKeyboardButton(text="Отлично", callback_data="feedback_excellent")
+#         ],
+#         # Второй ряд кнопок: Поделиться с другом и Оплатить 199 рублей
+#         [
+#             InlineKeyboardButton(text="Поделиться с другом", callback_data="share_friend"),
+#
+#         ],
+#         [InlineKeyboardButton(text="Оплатить 199 рублей", callback_data="pay_199")]
+#     ]
+#
+#     # Создаем клавиатуру с кнопками
+#     keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
+#     return keyboard
+
+
+# def account_info_keyboard():
+#     # Создаем инлайн-кнопку
+#     buttons = [
+#         [
+#             InlineKeyboardButton(text="Информация об аккаунте ℹ️", callback_data="account_info")
+#         ]
+#     ]
+#     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
 def main_menu_inline_keyboard():

@@ -16,6 +16,7 @@ from models.ServerCl import ServerCl
 import re
 import logging
 
+from models.referral_class.ReferralCL import ReferralCl
 
 # Загрузка переменных окружения из файла .env
 load_dotenv()
@@ -380,7 +381,12 @@ class UserCl:
         # Создание нового сервера и обновление базы данных
         await self.add_server_json(server_params)
         print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
-
+        # Проверяем реферала и начисляем бонус, если нужно
+        try:
+            await ReferralCl.add_referral_bonus(self.chat_id)
+        except Exception as e:
+            await send_admin_log(bot,f"❌ Ошибка при начислении бонуса за реферала {self.chat_id}: {e}")
+            logging.error(f"❌ Ошибка при начислении бонуса за реферала {self.chat_id}: {e}")
         #Теперь новый active_server
         await self.choosing_working_server()
         return True

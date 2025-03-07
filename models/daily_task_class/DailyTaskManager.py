@@ -102,19 +102,6 @@ class DailyTaskManager:
         except Exception as e:
             logging.error(f"Ошибка при отправке статистики: {e}")
             return f"❌ Ошибка при отправке статистики:\n<code>{str(e)}</code>"
-    async def update_referrals(self):
-        """
-        Обновление данных рефералов и начисление бонусных дней.
-        """
-        referrals = await ReferralCl.get_all_referrals()
-        for referral in referrals:
-            try:
-                # Проверяем активацию
-                await referral.check_activation()
-                # Проверяем оплату
-                await referral.check_payment()
-            except Exception as e:
-                logging.error(f"Ошибка при обновлении реферала {referral.referral_new_chat_id}: {e}")
 
     async def update_user_statuses(self):
         """
@@ -155,7 +142,6 @@ class DailyTaskManager:
         """
         try:
             await self.show_statistic()
-            #await self.update_referrals()
             #await self.update_user_statuses()
             #await self.send_logs_to_admin()
         except Exception as e:
