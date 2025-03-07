@@ -55,7 +55,7 @@ async def format_user_data(user_data: dict) -> str:
         f"<b>📱 Устройство:</b> {user_data.get('device', 'Не указано')}",
         f"<b>📢 Подписка на канал:</b> {'✅ Да' if user_data.get('is_subscribed_on_channel') else '❌ Нет'}",
         f"<b>📆 Дни с момента регистрации:</b> {user_data.get('days_since_registration', 'Не указано')}",
-        f"<b>🌐 Количество серверов:</b> {user_data.get('count_key', 'Не указано')}",
+
     ]
 
     # Форматируем данные серверов
@@ -67,8 +67,8 @@ async def format_user_data(user_data: dict) -> str:
                 f"  🌍 <b>Страна сервера:</b> {server.get('country_server', 'Не указано')}",
                 f"  🕒 <b>Дата создания ключа :</b> {server.get('date_creation_key', 'Не указано')}",
                 f"  ⏳ <b>Дата окончания:</b> {server.get('date_key_off', 'Не указано')}",
-                f"  📥 <b>Трафик (загрузка):</b> {server.get('traffic_down', '0')} MB",
-                f"  📤 <b>Трафик (отдача):</b> {server.get('traffic_up', '0')} MB",
+                # f"  📥 <b>Трафик (загрузка):</b> {server.get('traffic_down', '0')} MB",
+                # f"  📤 <b>Трафик (отдача):</b> {server.get('traffic_up', '0')} MB",
                 f"  💻 <b>Имя сервера:</b> {server.get('name_server', 'Не указано')}",
                 f"  🛡️ <b>Протокол:</b> {server.get('name_protocol', 'Не указано')}",
                 f"  🖥️ <b>IP сервера:</b> {server.get('server_ip', 'Не указано')}",
@@ -76,7 +76,7 @@ async def format_user_data(user_data: dict) -> str:
                 f"  ⚙️ <b>Статус:</b> {server.get('status_key', 'Не указано')}",
                 f"  🟢 <b>Статус аккаунта :</b> {'✅ Включен' if server.get('enable') else '❌ Выключен'}",
                 f"  💰 <b>Дата оплаты ключа:</b> {server.get('date_payment_key', 'Не указано')}",
-                f"  💳 <b>Кол-во оплаченных ключей:</b> {server.get('has_paid_key', 'Не указано')}",
+                f"  💳 <b>Кол-во оплат:</b> {server.get('has_paid_key', 'Не указано')}",
                 f"  📧 <b>Email ключа:</b> {server.get('email_key', 'Не указано')}",
                 f"  🌐 <b>URL VLESS:</b> {server.get('url_vless', 'Не указано')}",
                 f"  📡 <b>IP пользователя:</b> {server.get('user_ip', 'Не указано')}",

@@ -16,6 +16,7 @@ from models.ServerCl import ServerCl
 import re
 import logging
 
+from models.referral_class.ReferralCL import ReferralCl
 
 # Загрузка переменных окружения из файла .env
 load_dotenv()
@@ -213,7 +214,7 @@ class UserCl:
                 query = "SELECT chat_id FROM users"
                 async with db.execute(query) as cursor:
                     user_ids = [row[0] for row in await cursor.fetchall()]
-            print(f"Найдено пользователей: {len(user_ids)}")
+
         except Exception as e:
             print(f"Ошибка при получении всех пользователей: {e}")
         return user_ids
@@ -242,10 +243,8 @@ class UserCl:
                 async with db.execute(query, (date_str,)) as cursor:
                     result = await cursor.fetchone()
                     count = result[0] if result else 0
-
-                    # Логируем результат
-                    logging.info(f"Найдено пользователей за {date_str}: {count}")
                     return count
+
         except Exception as e:
             # Логируем ошибку
             logging.error(f"Ошибка при подсчете пользователей за дату {date}: {e}")
@@ -382,7 +381,12 @@ class UserCl:
         # Создание нового сервера и обновление базы данных
         await self.add_server_json(server_params)
         print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
-
+        # Проверяем реферала и начисляем бонус, если нужно
+        try:
+            await ReferralCl.add_referral_bonus(self.chat_id)
+        except Exception as e:
+            await send_admin_log(bot,f"❌ Ошибка при начислении бонуса за реферала {self.chat_id}: {e}")
+            logging.error(f"❌ Ошибка при начислении бонуса за реферала {self.chat_id}: {e}")
         #Теперь новый active_server
         await self.choosing_working_server()
         return True

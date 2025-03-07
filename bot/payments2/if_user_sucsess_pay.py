@@ -10,6 +10,7 @@ from bot.handlers.admin import ADMIN_CHAT_IDS
 from bot.handlers.all_menu.main_menu import show_main_menu
 from bot.handlers.cleanup import message_types_mapping, delete_message_with_type, store_message
 from models.UserCl import UserCl
+from models.referral_class.ReferralCL import ReferralCl
 
 
 # Обработка действий после успешной оплаты
@@ -44,6 +45,11 @@ async def handle_post_payment_actions(bot: Bot, chat_id: int):
             parse_mode="Markdown",
             reply_markup=keyboard
         )
+        # Проверяем реферальную систему и начисляем бонус пригласившему
+        try:
+            await ReferralCl.add_referral_bonus_after_pay(chat_id, bot)
+        except Exception as e:
+            logging.error(f"❌ Ошибка при начислении бонуса за оплату {chat_id}: {e}")
 
 
         logging.info(f"Сообщение пользователю {chat_id} об успешной оплате отправлено.")

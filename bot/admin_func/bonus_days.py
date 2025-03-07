@@ -3,7 +3,13 @@ import logging
 from aiogram import Router, types,F
 from aiogram.fsm.context import FSMContext
 from datetime import datetime, timedelta
+
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
 from bot.admin_func.states import AdminStates
+from bot.handlers.admin import send_admin_log
+from bot.keyboards.reply import reply_keyboard
+from models.UserCl import UserCl
 
 router = Router()
 
@@ -17,11 +23,13 @@ async def handle_add_bonus_days(callback, state: FSMContext):
         # Получаем дату окончания ключа
         active_server = user.servers[0]
         current_date_key_off = await active_server.date_key_off.get()
-
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="🔙 Галя,у нас отмена", callback_data="search_user")]
+        ])
         # Отправляем дату окончания перед добавлением бонусных дней
         await callback.message.answer(
             f"Текущая дата окончания действия ключа: {current_date_key_off}\n"
-            "Введите количество бонусных дней, которое хотите добавить, или нажмите 'Отмена'."
+            "Введите количество бонусных дней, которое хотите добавить, или нажмите 'Отмена'.",reply_markup = keyboard
         )
         await state.set_state(AdminStates.waiting_for_bonus_days)
     else:
@@ -33,60 +41,83 @@ async def handle_add_bonus_days(callback, state: FSMContext):
 async def process_bonus_days_input(message: types.Message, state: FSMContext):
     """Обрабатывает ввод количества бонусных дней."""
     try:
-        # Проверяем корректность ввода
         days_to_add = int(message.text.strip())
-        if days_to_add <= 0 and days_to_add <50:
-            await message.answer("Количество дней должно быть положительным числом и меньше 50. Попробуйте снова.")
+        if days_to_add <= 0 or days_to_add > 50:
+            await message.answer("Введите число от 1 до 50.")
             return
 
-        # Получаем данные о текущем пользователе
-        data = await state.get_data()
-        user = data.get("current_user")
+        #us = await UserCl.load_user(chat_id)
 
-        if not user or not user.servers:
+
+        data = await state.get_data()
+        us = data.get("current_user")
+        user = await UserCl.load_user(message.chat.id)
+
+        if not us or not us.servers:
             await message.answer("Ошибка: пользователь или сервер не найден.")
             await state.clear()
             return
 
-        # Обновляем дату окончания
-        active_server = user.servers[0]
-        current_date_key_off = await active_server.date_key_off.get()
+        server = us.active_server
 
-        # Конвертация даты
-        new_date_key_off = datetime.strptime(current_date_key_off, "%d.%m.%Y %H:%M:%S") + timedelta(days=days_to_add)
+        current_date_key_off_str = await server.date_key_off.get()
+
+        # Конвертация даты из строки в datetime
+        current_date_key_off = datetime.strptime(current_date_key_off_str, "%d.%m.%Y %H:%M:%S")
+        now = datetime.now()
+
+        # Если ключ уже истек, берем сегодняшнюю дату как основу
+        if current_date_key_off < now:
+            new_date_key_off = now + timedelta(days=days_to_add)
+            logging.info(f"Ключ истек, новая дата: {new_date_key_off.strftime('%d.%m.%Y %H:%M:%S')}")
+        else:
+            new_date_key_off = current_date_key_off + timedelta(days=days_to_add)
+            logging.info(f"Ключ активен, новая дата: {new_date_key_off.strftime('%d.%m.%Y %H:%M:%S')}")
+
         formatted_new_date = new_date_key_off.strftime("%d.%m.%Y %H:%M:%S")
+        await server.date_key_off.set(formatted_new_date)
+#+++++++++++++++++++++++++++++++++++++++++++
+        # Если пользователь был отключен, активируем его
+        if not await server.enable.get():
+            await server.enable.set(True)
+            logging.info(f"Пользователь {us.chat_id} был выключен. Сейчас Активирован.")
 
-        # Сохраняем новую дату окончания
-        await active_server.date_key_off.set(formatted_new_date)
-
-
-        # Уведомляем всех администраторов
-        from bot.handlers.admin import send_admin_log
+        # Уведомляем администраторов
         await send_admin_log(
             bot=message.bot,
             message=(
-                f"Администратор {message.from_user.full_name} добавил {days_to_add} дней "
-                f"пользователю с Chat ID {user.chat_id}. Новая дата окончания: {formatted_new_date}."
+                f"✅ Администратор {message.from_user.full_name} добавил {days_to_add} дней "
+                f"пользователю с Chat ID {us.chat_id}.\n"
+                f"🔑 Новая дата окончания: {formatted_new_date}.\n"
+                f"🔘 Пользователь активирован: {await server.enable.get()}"
             )
         )
 
-        # Уведомляем пользователя
-        try:
-            await message.bot.send_message(
-                chat_id=user.chat_id,
-                text=(
-                    f"Вам добавлено {days_to_add} бонусных дней. Новая дата окончания действия ключа: "
-                    f"<b>{formatted_new_date}</b>."
-                ),
-                parse_mode="HTML"
-            )
-        except Exception as e:
-            await send_admin_log(message.bot, "Не удалось отправить уведомление пользователю о добавлении бонусных дней")
-            logging.warning(f"Не удалось уведомить пользователя {user.chat_id}: {e}")
+        # Формируем сообщение
+        message_text = (
+            f"🔹 Вам добавлено {days_to_add} бонусных дней!\n"
+            f"📅 Новая дата окончания ключа: <b>{formatted_new_date}</b>."
+        )
 
-        # Возвращаемся к выбору действия
-        await state.set_state(AdminStates.waiting_for_action)
+        # Добавляем информацию о включении доступа, только если пользователь был отключен
+        if await server.enable.get():
+            message_text += "\n⚡ Ваш доступ активирован."
 
+        # Уведомляем пользователя, если текст не пустой
+        if message_text.strip():
+            try:
+                await message.bot.send_message(
+                    chat_id=us.chat_id,
+                    text=message_text,
+                    parse_mode="HTML"
+                )
+            except Exception as e:
+                logging.warning(f"Ошибка при уведомлении пользователя {us.chat_id}: {e}")
+                await send_admin_log(message.bot, f"❌ Ошибка при уведомлении пользователя {us.chat_id}")
+        else:
+            logging.warning(f"Не отправляем пустое сообщение пользователю {us.chat_id}")
+
+        await state.clear()
     except ValueError:
         await message.answer("Введите корректное число дней.")
     except Exception as e:

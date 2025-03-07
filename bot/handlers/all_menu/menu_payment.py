@@ -113,6 +113,7 @@ async def handle_payment_request(callback_query: types.CallbackQuery, state: FSM
             user_login = await us.user_login.get()
             await send_payment_link(chat_id, bot, user_login, user_email, state)
         await send_admin_log(callback_query.bot, f"Пользователь {chat_id} нажал ВТОРУЮ кнопку оплатить")
+
     except Exception as e:
         logging.error(f"Ошибка в обработчике handle_payment_request: {e}")
         await bot.send_message(chat_id, "Произошла ошибка при обработке запроса. Пожалуйста, попробуйте позже.")

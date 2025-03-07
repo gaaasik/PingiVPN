@@ -1,10 +1,13 @@
 # menu_buy_vpn.py
+import logging
+
 from aiogram import Router
 from aiogram.types import CallbackQuery
 
 from bot.handlers.admin import ADMIN_CHAT_IDS, send_admin_log
 from bot.handlers.all_menu.main_menu import get_user_status_text
 from models.UserCl import UserCl
+from models.referral_class.ReferralCL import ReferralCl
 
 # Инициализация роутера
 router = Router()
@@ -98,4 +101,5 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
     # Отправка сообщения с соответствующей клавиатурой
     await callback_query.message.answer(text, reply_markup=keyboard, parse_mode="HTML")
     await send_admin_log(callback_query.bot, f"Пользователь {chat_id} нажал первую кнопку оплатить")
+    # Проверяем реферальную систему и начисляем бонус пригласившему
     await callback_query.answer()

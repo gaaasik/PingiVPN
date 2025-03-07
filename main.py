@@ -4,32 +4,36 @@ import os
 from datetime import datetime, timedelta
 from pathlib import Path
 
+import aiosqlite
 from aiogram import Bot
 from aiogram.types import FSInputFile
 from dotenv import load_dotenv
+
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
     menu_share, menu_connect_vpn, menu_payment, menu_about_pingi, menu_subscriptoin_check
-from bot.admin_func import bonus_days, service_mode
-from bot.payments2.payments_handler_redis import listen_to_redis_queue
-
 from bot.handlers import start, support, \
     user_help_request, feedback, app_downloaded,file_or_qr,thank_you
+
+from bot.admin_func import bonus_days, service_mode,show_statistics,set_on_off, another_settings
+from bot.admin_func.searh_user import search_user_handlers,search_user_by_nickname,search_by_fullname
+from bot.admin_func.change_value_key import change_value_key_handler
+from bot.payments2.payments_handler_redis import listen_to_redis_queue
+
+
 from bot.notification_users import notification_migrate_from_wg
 from bot.utils.cache import cache_media
-
 from bot.utils.logger import setup_logger
 from bot.database.db import database_path_local  #,  init_db
 from bot.database.init_db import init_db
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from communication_with_servers.result_processor.start_processor_result_queue import process_queue_results_task
+
 from models.country_server_data import load_server_data
 
 from models.daily_task_class.DailyTaskManager import DailyTaskManager
 from models.notifications.CompensationNotificationCL import CompensationNotification
-
-
 from models.notifications.NotificationManagerCL import NotificationManager
 from models.notifications.UnsubscribedNotificationCL import UnsubscribedNotification
 from models.notifications.TrialEndingNotificationCL import TrialEndingNotification
@@ -48,7 +52,21 @@ REGISTERED_USERS_DIR = os.getenv('REGISTERED_USERS_DIR')
 
 
 #Ошибка при обработке очереди:
-
+async def update_database():
+    """
+    Проверяет наличие столбца `has_accepted_agreement` в таблице `users`
+    и добавляет его, если он отсутствует.
+    """
+    async with aiosqlite.connect(os.getenv('database_path_local')) as db:
+        try:
+            await db.execute("ALTER TABLE users ADD COLUMN has_accepted_agreement BOOLEAN DEFAULT FALSE")
+            await db.commit()
+            print("✅ Поле `has_accepted_agreement` добавлено в таблицу `users`")
+        except Exception as e:
+            if "duplicate column" in str(e):
+                print("⚠️ Поле `has_accepted_agreement` уже существует.")
+            else:
+                print(f"❌ Ошибка при обновлении базы данных: {e}")
 async def on_startup():
     """Кэширование изображений при старте"""
     image_path = os.path.join(PATH_TO_IMAGES, "Hello.png")
@@ -124,7 +142,6 @@ async def periodic_backup_task(bot: Bot):
         time_to_sleep = (next_3am - now).total_seconds()
 
         # Спим до следующего 3:00
-        print(f"Следующая отправка бд в чат телеграма в {next_3am}, ждем {time_to_sleep} секунд.")
         await asyncio.sleep(time_to_sleep)
 
         try:
@@ -147,7 +164,7 @@ async def main():
         logging.exception(f"Ошибка при настройке логирования: {e}")
 
     await on_startup()
-
+    await update_database()
     if not BOT_TOKEN:
         print("Ошибка: токен бота не найден в .env файле!")
         return
@@ -156,7 +173,6 @@ async def main():
     if not db_path or not Path(db_path).exists():
         print(f"Ошибка: файл базы данных {db_path} не найден!")
         return
-    print(f"Путь к базе данных: {db_path}")
 
     await init_db(db_path)
 
@@ -231,11 +247,16 @@ async def main():
     dp.include_router(app_downloaded.router)
     dp.include_router(file_or_qr.router)
     dp.include_router(thank_you.router)
-
+    dp.include_router(show_statistics.router)
     dp.include_router(menu_subscriptoin_check.router)
-
+    dp.include_router(another_settings.router)
+    dp.include_router(search_user_handlers.router)
+    dp.include_router(set_on_off.router)
+    dp.include_router(search_user_by_nickname.router)
+    dp.include_router(search_by_fullname.router)
     dp.include_router(service_mode.router)
     dp.include_router(bonus_days.router)
+    dp.include_router(change_value_key_handler.router)
 
     try:
         pass
