@@ -15,7 +15,7 @@ from bot.handlers import start, support, \
 
 from bot.admin_func import bonus_days, service_mode,show_statistics,set_on_off, another_settings
 from bot.admin_func.searh_user import search_user_handlers,search_user_by_nickname,search_by_fullname
-
+from bot.admin_func.change_value_key import change_value_key_handler
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
 
 
@@ -238,9 +238,9 @@ async def main():
     dp.include_router(set_on_off.router)
     dp.include_router(search_user_by_nickname.router)
     dp.include_router(search_by_fullname.router)
-
     dp.include_router(service_mode.router)
     dp.include_router(bonus_days.router)
+    dp.include_router(change_value_key_handler.router)
 
     try:
         pass

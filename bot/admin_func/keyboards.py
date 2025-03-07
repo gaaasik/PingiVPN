@@ -15,6 +15,8 @@ async def get_user_service_keyboard():
         [InlineKeyboardButton(text="➕ Добавить бонусные дни", callback_data="add_bonus_days")],
         [InlineKeyboardButton(text="✅ Включить пользователя", callback_data="enable_user")],
         [InlineKeyboardButton(text="❌ Выключить пользователя", callback_data="disable_user")],
+        [InlineKeyboardButton(text="🛠 Изменить ключ на VLESS", callback_data="change_to_vless")],
+        [InlineKeyboardButton(text="📁 Изменить ключ на WireGuard", callback_data="change_to_wireguard")],
         [InlineKeyboardButton(text="🔙 Назад", callback_data="cancel_service")]
     ])
 # 📊 Кнопки для статистики
@@ -31,5 +33,13 @@ async def get_service_mode_keyboard():
         [InlineKeyboardButton(text="📊 Вывести статистику", callback_data="show_statistics")],
         [InlineKeyboardButton(text="⚙️ Админ-настройки", callback_data="admin_settings")],
         [InlineKeyboardButton(text="❌ Выйти из режима обслуживания", callback_data="exit_service_mode")]
+    ])
+# меню смены ключа
+
+async def get_key_change_keyboard():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="🔑 Изменить ключ на VLESS", callback_data="change_to_vless")],
+        [InlineKeyboardButton(text="🔒 Изменить ключ на WireGuard", callback_data="change_to_wireguard")],
+        [InlineKeyboardButton(text="🔙 Назад", callback_data="back_to_user_menu")]
     ])
 
