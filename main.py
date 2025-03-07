@@ -3,6 +3,8 @@ import logging
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
+
+import aiosqlite
 from aiogram import Bot
 from aiogram.types import FSInputFile
 from dotenv import load_dotenv
@@ -50,7 +52,21 @@ REGISTERED_USERS_DIR = os.getenv('REGISTERED_USERS_DIR')
 
 
 #Ошибка при обработке очереди:
-
+async def update_database():
+    """
+    Проверяет наличие столбца `has_accepted_agreement` в таблице `users`
+    и добавляет его, если он отсутствует.
+    """
+    async with aiosqlite.connect(os.getenv('database_path_local')) as db:
+        try:
+            await db.execute("ALTER TABLE users ADD COLUMN has_accepted_agreement BOOLEAN DEFAULT FALSE")
+            await db.commit()
+            print("✅ Поле `has_accepted_agreement` добавлено в таблицу `users`")
+        except Exception as e:
+            if "duplicate column" in str(e):
+                print("⚠️ Поле `has_accepted_agreement` уже существует.")
+            else:
+                print(f"❌ Ошибка при обновлении базы данных: {e}")
 async def on_startup():
     """Кэширование изображений при старте"""
     image_path = os.path.join(PATH_TO_IMAGES, "Hello.png")
@@ -148,7 +164,7 @@ async def main():
         logging.exception(f"Ошибка при настройке логирования: {e}")
 
     await on_startup()
-
+    await update_database()
     if not BOT_TOKEN:
         print("Ошибка: токен бота не найден в .env файле!")
         return

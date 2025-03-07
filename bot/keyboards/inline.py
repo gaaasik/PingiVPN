@@ -64,7 +64,11 @@ def get_detailed_instruction_button():
         url="https://telegra.ph/Podrobnaya-instrukciya-po-podklyucheniyu-k-Pingi-VPN-09-17"
     )
 
-
+# Функция для клавиатуры с кнопкой принятия соглашения
+def accept_agreement_keyboard():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✅ Принять соглашение", callback_data="accept_agreement")]
+    ])
 # Основная функция для формирования клавиатуры
 def config_or_qr_keyboard():
     buttons = [
@@ -74,6 +78,29 @@ def config_or_qr_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
+def device_choice_keyboard():
+    """Клавиатура для выбора устройства"""
+
+    # Создаем кнопки
+    buttons = [
+        [
+            InlineKeyboardButton(text="🤖 Android", callback_data="device_android"),
+            InlineKeyboardButton(text="📱 iPhone", callback_data="device_iPhone")
+        ],
+        [
+            InlineKeyboardButton(text="💻 Mac", callback_data="device_mac"),
+            InlineKeyboardButton(text="🐧 Linux", callback_data="device_linux")
+        ],
+        [
+            InlineKeyboardButton(text="🖥️ Windows", callback_data="device_windows")
+        ],
+        [
+            InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")
+        ],
+    ]
+    # Создаем клавиатуру с кнопками
+    keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
+    return keyboard
 #def keyborad_get_email(){}
 
 # def create_payment_button(chat_id):
