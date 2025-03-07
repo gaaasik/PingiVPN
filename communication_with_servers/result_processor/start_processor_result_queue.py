@@ -1,6 +1,8 @@
 import asyncio
 import json
 import logging
+import os
+
 from .result_task_manager import ResultTaskManager
 from redis_configs.redis_settings import redis_client
 
@@ -8,13 +10,13 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 
 async def process_queue_results_task():
-    """Асинхронное прослушивание очереди Redis и обработка задач."""
+    """Асинхронное прослушивание очереди Redis и обработка задач. queue_results_task"""
     manager = ResultTaskManager(redis_client)
     logging.info("Запущено прослушивание очереди result_task_queue.")
-
+    NAME_RESULT_QUEUE = os.getenv("name_queue_result_task").strip()
     while True:
         try:
-            task_data = await redis_client.blpop("queue_result_task", timeout=0)
+            task_data = await redis_client.blpop(NAME_RESULT_QUEUE, timeout=0)
             if task_data:
                 try:
                     task_json = json.loads(task_data[1])

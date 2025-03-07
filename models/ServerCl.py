@@ -1,4 +1,5 @@
-
+import asyncio
+import re
 import json
 from datetime import datetime
 from redis_configs.redis_settings import redis_client
@@ -7,13 +8,12 @@ from typing import TYPE_CHECKING
 from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log
 from bot_instance import bot
-from models.country_server_data import get_json_country_server_data, get_name_server_by_ip
+from models.country_server_data import get_json_country_server_data, get_name_server_by_ip, get_country_server_by_ip
 
 if TYPE_CHECKING:
     from models.UserCl import UserCl  # Только для аннотаций типов
 
 load_dotenv()
-
 
 # Настройка логирования
 logging.basicConfig(
@@ -25,7 +25,6 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
-
 
 
 class Field:
@@ -43,12 +42,17 @@ class Field:
         """Приватный метод обновления значения поля."""
         self._value = new_value
         setattr(self._server, f"_{self._name}", new_value)
-        await self._server.update_in_db()  # Обновление данных в базе через объект Server_cl
+
+        if self._server in self._server.user.history_key_list:
+            await self._server.update_hist_in_db()
+            logging.info(f"enable Изменилось в history_key в базе данных enable={new_value}")
+            return
+        await self._server.update_serv_in_db()  # Обновление данных в базе через объект Server_cl
 
     # Публичный метод для изменения значения, если поле не защищено
     async def set(self, new_value):
         if self._name == "enable":
-            await self.set_enable(new_value)
+            await self._set_enable(new_value)
             return
         await self._set(new_value)
         # .set(False)
@@ -78,7 +82,7 @@ class Field:
 
         #проверяем, если страна неизвестна, смотри ее в списке серверов country_server
         if self._value == "Unknown":
-            country = await self._server.user.get_country_by_server_ip(await self._server.server_ip.get())
+            country = await get_country_server_by_ip(await self._server.server_ip.get())
             await self._server.country_server.set(country)
 
         # Словарь переводов стран
@@ -91,7 +95,8 @@ class Field:
             "China": "🇨🇳 Китай",
             "Japan": "🇯🇵 Япония",
             "Poland": "🇵🇱 Польша",
-            "Unknown": "🇳🇱 Нидерланды"
+            "Unknown": "🇳🇱 Нидерланды",
+            "Unknown_Server": "🇳🇱 Нидерланды"
             # Добавьте другие страны, если нужно
         }
 
@@ -100,7 +105,7 @@ class Field:
         return COUNTRY_TRANSLATIONS.get(country, "Неизвестная страна")
 
     # Использование данных в функциях
-    async def set_enable(self, enable_value: bool):
+    async def _set_enable(self, enable_value: bool):
         """Обновляет значение enable и отправляет задачу в Redis."""
 
         country_server_data = await get_json_country_server_data()
@@ -110,7 +115,6 @@ class Field:
 
         if country_server_data is None:
             raise RuntimeError("Данные серверов не загружены. Проверьте вызов load_server_data().")
-
 
         # Получаем данные объекта
         chat_id = self._server.user.chat_id
@@ -135,14 +139,14 @@ class Field:
         queue_name = f"queue_task_{server_name}"
         logging.info(f"Формируется очередь: {queue_name}")
 
-
         # Используем redis.asyncio вместо aioredis
 
         try:
             await redis_client.rpush(queue_name, json.dumps(task_data))
             logging.info(f"Задача добавлена в очередь {queue_name}: {task_data}")
             if queue_name == "queue_task_Unknown_Server":
-                await send_admin_log(bot,f"❌Пользователь {chat_id} не изменил состояние на {enable_value}, задача в очереди queue_task_Unknown_Server")
+                await send_admin_log(bot,
+                                     f"❌Пользователь {chat_id} не изменил состояние на {enable_value}, задача в очереди queue_task_Unknown_Server")
         except Exception as e:
             logging.error(f"Ошибка при добавлении задачи в очередь {queue_name}: {e}")
         finally:
@@ -152,18 +156,17 @@ class Field:
             except Exception as e:
                 logging.error(f"Ошибка с redis_client")
 
-
     async def set_enable_admin(self, enable_value: bool):
         """Напрямую обновление в базе данных значения поля enable"""
+        ########## TEST TOOL
+        print(f"мы зашли в функцию set_enable_admin")
 
         if self._name != "enable":
             raise AttributeError("Метод set_enable_admin можно вызывать только для поля 'enable'.")
 
         # Обновляем значение в объекте и в базе данных
         await self._set(enable_value)
-        logging.info(f"enable Изменилось в базе данных enable={enable_value}")
-
-
+        logging.info(f"enable Изменилось в value_key в базе данных enable={enable_value}")
 
     def __get_server_name_by_ip(self, server_data, ip_address: str) -> str:
         """Получает имя сервера по его IP."""
@@ -171,8 +174,6 @@ class Field:
             if server.get("address") == ip_address:
                 return server.get("name", "Unknown_Server")
         return "Unknown_Server"
-
-
 
 
 class ServerCl:
@@ -198,10 +199,13 @@ class ServerCl:
         self.uuid_id = Field('uuid_id', server_data.get("uuid_id", ""), self)
         self.user = user  # Ссылка на объект User для обновления данных в базе
 
-
-    async def update_in_db(self):
+    async def update_serv_in_db(self):
         """Метод для обновления сервера в базе данных через родительский объект User."""
         await self.user._update_servers_in_db()
+
+    async def update_hist_in_db(self):
+        """Метод для обновления сервера в базе данных через родительский объект User."""
+        await self.user._update_history_key_in_db()
 
     async def to_dict(self):
         """Преобразуем объект сервера в JSON."""
@@ -227,9 +231,6 @@ class ServerCl:
             "uuid_id": await self.uuid_id.get()
         }
 
-
-
-
     async def delete(self):
         """Удаляет текущий сервер из списка серверов пользователя и обновляет базу данных."""
 
@@ -242,7 +243,7 @@ class ServerCl:
             await self.user._update_servers_in_db()
             # Обновляем count_key
             await self.user.count_key._update_count_key()
-            print(f"Сервер { await self.name_server.get()} успешно удален из списка и базы данных.")
+            print(f"Ключ {await self.name_server.get()} успешно удален из списка и базы данных.")
             return True
         else:
             print("Сервер не найден в списке пользователя.")
@@ -309,6 +310,9 @@ class ServerCl:
                     await redis_client.close()
             except Exception as e:
                 logging.error(f"Ошибка при закрытии соединения с Redis: {e}")
+
+
+
 
 
 

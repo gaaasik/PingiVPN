@@ -101,7 +101,7 @@ class TaskRedis:
 
     async def send_creating_user(self, server_ip):
         """
-        Отправляет задачу 'creating_user' в очередь Redis для указанного сервера.
+        Отправляет задачу 'creating_user' в очередь Redis для указанного сервера. Ошибка при обработке очереди:
 
         :param server_ip: IP-адрес сервера.
         :param users: Список объектов UserCl, привязанных к серверу.

@@ -20,7 +20,7 @@ from bot.utils.cache import cache_media
 
 from bot.utils.logger import setup_logger
 from bot.database.db import database_path_local  #,  init_db
-from bot.database.init_db import init_db
+from bot.database.init_db import init_db, update_database
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from communication_with_servers.result_processor.start_processor_result_queue import process_queue_results_task
@@ -159,8 +159,9 @@ async def main():
     print(f"Путь к базе данных: {db_path}")
 
     await init_db(db_path)
+    await update_database(db_path)
 
-    #Толян загружает данные из country_server в country_server_data
+    #Толян загружает данные из country_server в country_server_data   Запущено прослушивание очереди
     country_server_path = os.getenv('country_server_path')
     await load_server_data(country_server_path)
 

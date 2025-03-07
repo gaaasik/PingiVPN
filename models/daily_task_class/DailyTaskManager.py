@@ -6,7 +6,7 @@ from pathlib import Path
 import aiofiles
 
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
-from communication_with_servers.queue_results_task import redis_client
+from redis_configs.redis_settings import redis_client
 from models.UserCl import UserCl
 from models.referral_class.ReferralCL import ReferralCl
 #Надо проработать!!!!!!!!!!!
@@ -16,7 +16,7 @@ class DailyTaskManager:
 
     async def generate_statistics(self):
         """
-        Генерация ежедневной статистики и отправка в чат администратора. Добавлен пользователь
+        Генерация ежедневной статистики и отправка в чат администратора. Добавлен пользователь queue_results_task
         """
 
 
