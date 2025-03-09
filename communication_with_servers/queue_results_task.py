@@ -22,7 +22,7 @@ logging.basicConfig(
 load_dotenv()
 
 # Настройки Redis
-REDIS_HOST = os.getenv('ip_redis_server')  # IP-адрес Redis
+REDIS_HOST = os.getenv('ip_redis_server')  # IP-адрес Redis   queue_results_task
 REDIS_PORT = int(os.getenv('port_redis'))  # Порт Redis
 REDIS_PASSWORD = os.getenv('password_redis')  # Пароль Redis (если требуется)
 NAME_RESULT_QUEUE = "queue_result_task"

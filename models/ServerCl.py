@@ -147,12 +147,12 @@ class Field:
                 await send_admin_log(bot,f"❌Пользователь {chat_id} не изменил состояние на {enable_value}, задача в очереди queue_task_Unknown_Server")
         except Exception as e:
             logging.error(f"Ошибка при добавлении задачи в очередь {queue_name}: {e}")
-        finally:
-            try:
-                if redis:
-                    await redis_client.close()
-            except Exception as e:
-                logging.error(f"Ошибка с redis_client")
+        # finally:
+        #     try:
+        #         if redis:
+        #             await redis_client.close()
+        #     except Exception as e:
+        #         logging.error(f"Ошибка с redis_client")
 
 
     async def set_enable_admin(self, enable_value: bool):
