@@ -841,9 +841,9 @@ class UserCl:
 
 
 
-            await self._update_history_key_in_db(new_key_params)
+            await self._update_history_key_in_db(old_key_data)
             await self.active_server.delete()
-            # Создание нового сервера и обновление базы данных
+            # Создание нового сервера и обновление базы данных   Ошибка при обработке очереди
             await self.add_server_json(new_key_params)
             print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
 

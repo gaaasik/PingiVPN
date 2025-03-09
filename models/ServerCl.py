@@ -141,7 +141,7 @@ class Field:
         queue_name = f"queue_task_{server_name}"
         logging.info(f"Формируется очередь: {queue_name}")
 
-        # Используем redis.asyncio вместо aioredis
+        # Используем redis.asyncio вместо aioredis BLPOP  Ошибка декодирования
 
         try:
             await redis_client.rpush(queue_name, json.dumps(task_data))
