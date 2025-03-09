@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import os
+import traceback
 
 from .result_task_manager import ResultTaskManager
 from redis_configs.redis_settings import redis_client
@@ -20,7 +21,7 @@ async def process_queue_results_task():
             task_data = await redis_client.blpop(NAME_RESULT_QUEUE, timeout=0)
             if task_data:
                 try:
-                    task_json = json.loads(task_data[0])
+                    task_json = json.loads(task_data[1])
                     logging.info(f"Получена задача: {task_json}")
                     await manager.process_task(task_json)
                 except json.JSONDecodeError as e:

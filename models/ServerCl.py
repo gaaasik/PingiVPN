@@ -153,8 +153,9 @@ class Field:
             logging.error(f"Ошибка при добавлении задачи в очередь {queue_name}: {e}")
         finally:
             try:
-                if redis_client:
-                    await redis_client.close()
+                pass
+                # if redis:
+                #     await redis_client.close()
             except Exception as e:
                 logging.error(f"Ошибка с redis_client")
 
