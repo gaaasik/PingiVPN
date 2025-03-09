@@ -2,7 +2,7 @@ import os
 import json
 import logging
 import redis.asyncio as redis
-
+from redis_configs.redis_settings import redis_client
 from models.UserCl import UserCl
 from models.country_server_data import get_json_country_server_data
 
@@ -24,13 +24,7 @@ async def process_unknown_server_queue():
     """Обрабатывает очередь `queue_task_Unknown_Server` и перемещает задачи с известными именами серверов."""
     try:
         logging.info(f"Запустился процесс обработки очереди queue_task_Unknown_Server")
-        # Подключение к Redis
-        redis_client = redis.Redis(
-            host=os.getenv('ip_redis_server'),
-            port=int(os.getenv('port_redis')),
-            password=os.getenv('password_redis'),
-            decode_responses=True
-        )
+
 
         # Загрузка данных о серверах
         server_data = await get_json_country_server_data()

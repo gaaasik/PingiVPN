@@ -7,7 +7,6 @@ from aiogram.filters import Command
 from telebot.formatting import escape_markdown
 
 from bot.handlers.admin import ADMIN_CHAT_IDS
-from communication_with_servers.send_type_task import TaskRedis
 from models.UserCl import UserCl
 
 router = Router()

@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 import redis.asyncio as redis
 import logging
-# Загружаем переменные окружения из .env
+# Загружаем переменные окружения из .env redis_client = redis.Redis(
 load_dotenv()
 
 
