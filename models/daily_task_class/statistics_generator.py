@@ -2,7 +2,7 @@ import logging
 import os
 from datetime import datetime, timedelta
 import aiofiles
-from communication_with_servers.queue_results_task import redis_client
+from redis_configs.redis_settings import redis_client
 from models.UserCl import UserCl
 
 async def generate_statistic_text(date: datetime = None) -> str:
@@ -35,11 +35,11 @@ async def generate_statistic_text(date: datetime = None) -> str:
             f"🔄 <b>Сгенерировано новых ссылок Vless:</b> {count_regeneration_user}\n"
         ).strip()
 
-        return stats_message if stats_message else f"❌ Статистика за {date.strftime('%Y-%m-%d')} недоступна"
+        return stats_message if stats_message else f"❌ Статистика за {date.strftime('%d.%m.%Y')} недоступна"
 
     except Exception as e:
         logging.error(f"Ошибка при генерации статистики: {e}")
-        return f"❌ Ошибка при генерации статистики за {date.strftime('%Y-%m-%d')}:\n<code>{str(e)}</code>"
+        return f"❌ Ошибка при генерации статистики за {date.strftime('%d.%m.%Y')}:\n<code>{str(e)}</code>"
 
 async def count_remaining_vless_links() -> int:
     """
