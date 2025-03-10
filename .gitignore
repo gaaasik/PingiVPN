@@ -26,3 +26,4 @@ __pycache__/
 logs/*.log
 configs/url_vless_new
 configs/url_vless_user
+models/new_key.json
