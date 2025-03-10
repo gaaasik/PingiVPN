@@ -2,8 +2,6 @@ import asyncio
 import json
 import logging
 import traceback
-
-import pandas as pd
 from models.UserCl import UserCl
 
 
