@@ -125,7 +125,7 @@ class Field:
         server_ip = await self._server.server_ip.get()
         user_ip = await self._server.user_ip.get()
 
-        # Получаем имя сервера
+        # Получаем имя сервера 
         server_name = self.__get_server_name_by_ip(country_server_data, server_ip)
 
         # Формируем задачу
@@ -144,7 +144,7 @@ class Field:
         # Используем redis.asyncio вместо aioredis BLPOP  Ошибка декодирования
 
         try:
-            await redis_client.rpush(queue_name, json.dumps(task_data))
+            await redis_client.lpush(queue_name, json.dumps(task_data))
             logging.info(f"Задача добавлена в очередь {queue_name}: {task_data}")
             if queue_name == "queue_task_Unknown_Server":
                 await send_admin_log(bot,

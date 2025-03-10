@@ -830,7 +830,7 @@ class UserCl:
 
             # Вычисляем оставшиеся дни
             free_day = (date_key_off - current_date).days
-            logging.info(f"высчитали количество дней до отключения = {free_day}")
+            logging.info(f"высчитали количество дней до отключения = {free_day+1}")
 
             old_key_data = await self.active_server.to_dict()
             self.history_key_list.append(old_key_data)

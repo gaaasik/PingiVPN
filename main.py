@@ -39,6 +39,7 @@ from models.notifications.UnsubscribedNotificationCL import UnsubscribedNotifica
 from models.notifications.TrialEndingNotificationCL import TrialEndingNotification
 from models.notifications.NotificationSchedulerCL import NotificationScheduler
 from models.notifications.PaymentReminderCL import PaymentReminder
+from models.work_new_url import update_users_keys
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
@@ -155,12 +156,17 @@ async def main():
         print(f"Ошибка: файл базы данных {db_path} не найден!")
         return
 
-    await init_db(db_path)
-    await update_database(db_path)
 
     #Толян загружает данные из country_server в country_server_data   Запущено прослушивание очереди
     country_server_path = os.getenv('country_server_path')
     await load_server_data(country_server_path)
+
+
+
+    await init_db(db_path)
+    await update_database(db_path)
+    #####TEST update_users_keys
+    await update_users_keys()
 
 
     async def run_test():

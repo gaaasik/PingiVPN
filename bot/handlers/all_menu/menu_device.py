@@ -43,7 +43,7 @@ def wireguard_keyboard(device):
 
 
 def get_instruction_text_for_device(device: str, vpn_link: str) -> str:
-    # Получаем ссылку на приложение для устройства из VLESS_LINKS
+    # Получаем ссылку на приложение для устройства из VLESS_LINKS  registered_user
     app_link = VLESS_LINKS.get(device.lower())
 
     # Общий текст инструкций, уникальный для каждого устройства
