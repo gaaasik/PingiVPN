@@ -8,7 +8,7 @@ from pathlib import Path
 import aiofiles
 
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
-from communication_with_servers.queue_results_task import redis_client
+from redis_configs.redis_settings import redis_client
 from models.UserCl import UserCl
 from models.referral_class.ReferralCL import ReferralCl
 #Надо проработать!!!!!!!!!!!
@@ -19,6 +19,9 @@ class DailyTaskManager:
     def __init__(self, bot):
         self.bot = bot
 
+    async def generate_statistics(self):
+        """
+        Генерация ежедневной статистики и отправка в чат администратора. Добавлен пользователь queue_results_task
     # async def count_remaining_vless_links(self) -> int:
     #     """
     #     Подсчитывает количество оставшихся VLESS ссылок в файле.

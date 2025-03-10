@@ -43,8 +43,6 @@ class ResultCreateUsers(BaseResultProcessor):
             await send_admin_log(bot,f"result_creating_user \n{message}")
 
         # 🚀 Отправляем сообщение в Telegram или логируем
-
-
         logging.info(f"📨 Сообщение отправлено в Telegram: {message}")
 
     async def append_urls_to_file(self, urls: list):

@@ -1,3 +1,4 @@
+import asyncio
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -10,7 +11,7 @@ from dotenv import load_dotenv
 
 from bot.handlers.admin import send_admin_log
 from bot_instance import bot
-from models.country_server_data import get_json_country_server_data
+from models.country_server_data import get_json_country_server_data, get_name_server_by_ip, get_country_server_by_ip
 
 from models.ServerCl import ServerCl
 import re
@@ -22,9 +23,6 @@ from models.referral_class.ReferralCL import ReferralCl
 load_dotenv()
 database_path_local = Path(os.getenv('database_path_local'))
 
-
-
-
 # Настройка логирования
 logging.basicConfig(
     level=logging.INFO,
@@ -35,6 +33,7 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
+
 
 class Field:
     def __init__(self, name, value, user):
@@ -48,7 +47,7 @@ class Field:
             return
         self.value = new_value
         setattr(self.user, f"_{self.name}", new_value)
-        await self.user._update_field_in_db(self.name, new_value)
+        await self.user._update_fild_in_db(self.name, new_value)
 
     async def _update_count_key(self):
         if self.name == "count_key":
@@ -125,6 +124,7 @@ class UserCl:
         self.email = Field('email', "", self)
         self.servers: list[ServerCl]  # Явное указание типа поля servers  # Поле для хранения списка серверов (список объектов Server_cl)
         self.active_server: ServerCl = None
+        self.history_key_list: list[ServerCl]
         self.count_key = Field('count_key', 0, self)  # Поле для хранения количества серверов
 
     @classmethod
@@ -316,9 +316,6 @@ class UserCl:
                 return  # Завершаем поиск, как только нашли активный сервер
         self.active_server = None  # Если активный сервер не найден
 
-
-
-
     async def add_server_json(self, server_params: dict):
         """Добавление нового сервера в JSON формате"""
         # Преобразуем параметры в объект Server_cl и добавляем его в список servers
@@ -328,7 +325,6 @@ class UserCl:
 
             # Обновляем поле value_key (список серверов) и count_key в базе данных
             await self._update_servers_in_db()
-
             await self.count_key._update_count_key()
 
     async def check_subscription_channel(self, channel_username="@pingi_hub"):
@@ -357,8 +353,6 @@ class UserCl:
     async def add_key_vless(self, free_day=7):
 
         """Создает сервер VLESS с фиксированными параметрами, используя первый доступный URL и добавляет его в список серверов пользователя."""
-        # Количество бесплатных дней
-        current_date = datetime.now()
 
         # Определение путей к файлам
         project_root = Path(__file__).resolve().parent.parent
@@ -372,7 +366,7 @@ class UserCl:
             return False
 
         # Параметры нового сервера VLESS
-        server_params = await self._generate_server_params_vless(current_date, url_vless, free_day)
+        server_params = await self.generate_server_params_vless(url_vless, free_day)
 
         #Если был активный ключ мы его блокируем
         if self.active_server:
@@ -391,8 +385,6 @@ class UserCl:
         await self.choosing_working_server()
         return True
 
-
-
     async def add_key_wireguard(self, free_day=7):
 
         if not await self.count_key.get():
@@ -405,14 +397,11 @@ class UserCl:
             print(f"Сервер WireGuard добавлен для пользователя с hat_id {self.chat_id}")
         await self.choosing_working_server()
 
-
     async def change_activ_key(self, new_active_protocol):
         if await self.count_key.get() <= 1:
             print()
         if new_active_protocol == "wireguard":
             pass
-
-
 
     async def check_file_PINGI(self) -> Union[str, bool]:
         user_login = await self.user_login.get()
@@ -453,9 +442,6 @@ class UserCl:
         print(f"Все необходимые файлы присутствуют в {user_dir}.")
         return config_file_path
 
-
-
-
     async def _get_first_available_url(self, new_path, used_path):
         """Получает первый доступный URL из файла, перемещает его в использованные и возвращает URL."""
         try:
@@ -484,18 +470,18 @@ class UserCl:
             print(f"Ошибка при работе с файлами URL: {e}")
             return None
 
-
     async def _get_server_name_by_ip(self, server_data, ip_address: str) -> str:
         """Получает имя сервера по его IP."""
-        print("server_data",server_data)
+        print("server_data", server_data)
         for server in server_data.get("servers", []):
             if server.get("address") == ip_address:
                 return server.get("name", "Unknown_Server")
         return "Unknown_Server"
 
-    async def _generate_server_params_vless(self, current_date, url_vless, free_day):
-        country_server_data = await get_json_country_server_data()
+    async def generate_server_params_vless(self, url_vless, free_day):
+
         """Генерирует параметры нового сервера VLESS, извлекая информацию из URL."""
+        current_date = datetime.now()
 
         # Извлечение uuid, server_ip и name_key из URL
         uuid_match = re.search(r'vless://([a-f0-9\-]+)@', url_vless)
@@ -503,13 +489,15 @@ class UserCl:
         name_key_match = re.search(r'#([^ ]+)', url_vless)
         country_match = re.search(r'_([A-Za-z]+)$', url_vless)
 
-
         uuid_id = uuid_match.group(1) if uuid_match else ""
         server_ip = server_ip_match.group(1) if server_ip_match else ""
         email_key = name_key_match.group(1).replace("Vless-", "") if name_key_match else ""
         name_key = name_key_match.group(1).replace("Vless-", "").rpartition('_')[0] if name_key_match else ""
         country_server = country_match.group(1) if country_match else "Unknown"
-        name_server = await self._get_server_name_by_ip(country_server_data, server_ip)
+        name_server = await get_name_server_by_ip(server_ip)
+
+        print(f"Создался {name_key}")
+
 
         return {
             "country_server": country_server,
@@ -531,8 +519,6 @@ class UserCl:
             "uuid_id": uuid_id,
         }
 
-
-
     async def _generate_server_params_wireguard(self, config_file_path: str, free_day: int):
 
         """Генерирует параметры нового сервера WireGuard, извлекая информацию из конфигурационного файла."""
@@ -540,7 +526,7 @@ class UserCl:
         logging.info(f"Начало работы функции _generate_server_params_wireguard. Путь к файлу: {config_file_path}")
 
         try:
-            country_server_data = await get_json_country_server_data()
+
             # Преобразуем путь в объект Path для удобной работы
             config_file_path = Path(config_file_path)
             logging.debug(f"Обработанный путь к конфигурационному файлу: {config_file_path}")
@@ -580,7 +566,7 @@ class UserCl:
             # Извлекаем server_ip из Endpoint
             server_ip = endpoint.split(":")[0] if endpoint else None
             user_ip = address.split("/")[0] if address else None
-            name_server = self._get_server_name_by_ip(country_server_data, server_ip)
+            name_server = await get_name_server_by_ip(server_ip)
 
             logging.debug(f"Извлечён server_ip: {server_ip}, user_ip: {user_ip}")
 
@@ -589,8 +575,7 @@ class UserCl:
                 logging.error("Некоторые данные из конфигурационного файла отсутствуют или некорректны.")
                 raise ValueError("Некоторые данные из конфигурационного файла отсутствуют или некорректны.")
 
-
-            country_server = await self.get_country_by_server_ip(server_ip)
+            country_server = await get_country_server_by_ip(server_ip)
 
             # Генерируем JSON с параметрами сервера
             name_key = f"WireGuard PingiVPN"  # Например, уникальное имя ключа
@@ -604,7 +589,7 @@ class UserCl:
                 "email_key": private_key,
                 "enable": True,
                 "has_paid_key": 0,
-                "name_key": "WireGuard Server PingiVPN",
+                "name_key": name_server,
                 "name_protocol": "wireguard",
                 "name_server": f"{server_ip}",
                 "server_ip": server_ip,
@@ -625,53 +610,6 @@ class UserCl:
             logging.exception(f"Непредвиденная ошибка: {e}")
             raise
 
-    async def get_country_by_server_ip(self, server_ip: str) -> str:
-        """
-        Возвращает страну сервера по IP из файла country_server_path.
-
-        :param server_ip: IP-адрес сервера.
-        :param country_server_path: Путь к файлу country_server.txt.
-        :return: Страна сервера или "Unknown", если IP или файл не найден.
-        """
-        try:
-            # Определяем путь к файлу country_server
-            project_root = Path(__file__).resolve().parent
-            country_server_path = project_root / "country_server.txt"
-            logging.debug(f"Путь к файлу country_server: {country_server_path}")
-
-            # Проверяем, существует ли файл country_server.txt
-            if not country_server_path.exists():
-                logging.error(f"Файл country_server.txt не найден: {country_server_path}")
-                raise FileNotFoundError(f"Файл country_server.txt не найден: {country_server_path}")
-
-            # Читаем информацию о серверах из JSON файла
-            logging.info(f"Открываем файл country_server.txt: {country_server_path}")
-
-
-
-            # Загружаем данные из файла
-            with country_server_path.open("r", encoding="utf-8") as file:
-                server_data = json.load(file)
-                logging.debug(f"Содержимое файла country_server.txt: {server_data}")
-
-                # Ищем сервер по IP
-                servers = server_data.get("servers", [])
-                for server in servers:
-                    if server.get("address") == server_ip:
-                        country = server.get("country", "Unknown")
-                        logging.info(f"Найдено совпадение для IP {server_ip}. Страна: {country}")
-                        return country
-
-            # Если IP не найден
-            logging.warning(f"IP-адрес {server_ip} не найден в файле {country_server_path}.")
-            return "Unknown"
-
-        except json.JSONDecodeError:
-            logging.error(f"Ошибка декодирования JSON в файле {country_server_path}.")
-            return "Unknown"
-        except Exception as e:
-            logging.error(f"Неожиданная ошибка при обработке файла {country_server_path}: {e}")
-            return "Unknown"
 
 
     async def _load_user_data(self):
@@ -709,29 +647,46 @@ class UserCl:
         """Загрузка списка серверов для пользователя"""
         async with aiosqlite.connect(database_path_local) as db:
             query = """
-            SELECT value_key, count_key FROM users_key WHERE chat_id = ?
+            SELECT value_key, count_key, history_key FROM users_key WHERE chat_id = ?
             """
             async with db.execute(query, (self.chat_id,)) as cursor:
                 result = await cursor.fetchone()
                 if result:
-                    value_key, load_count_key = result
+                    value_key, load_count_key, history_key = result
                     self.count_key.value = load_count_key
+
                     if value_key:
                         try:
                             servers_data = json.loads(value_key)
                             # Преобразуем каждый сервер в объект Server_cl
                             if isinstance(servers_data, list):
-                                self.servers = [ServerCl(server, self) for server in servers_data]
+                                self.servers = [ServerCl(key, self) for key in servers_data]
                             elif isinstance(servers_data, dict):  # На случай если value_key хранит один объект
                                 self.servers = [ServerCl(servers_data, self)]
                             else:
                                 self.servers = []
                         except json.JSONDecodeError:
-                            print(f"Ошибка при парсинге JSON для пользователя с chat_id {self.chat_id}")
+                            logging.error(f"Ошибка при парсинге JSON для пользователя с chat_id {self.chat_id}")
                     else:
                         self.servers = []  # Если value_key пуст, значит серверов нет
+
+                    if history_key:
+                        try:
+                            history_key_data = json.loads(history_key)
+                            # Преобразуем каждый сервер в объект Server_cl
+                            if isinstance(history_key_data, list):
+                                self.history_key_list = [ServerCl(key, self) for key in history_key_data]
+                            elif isinstance(history_key_data, dict):  # На случай если history_key хранит один объект
+                                self.history_key_list = [ServerCl(servers_data, self)]
+                            else:
+                                self.history_key_list = []
+                        except json.JSONDecodeError:
+                            logging.error(
+                                f"Ошибка при парсинге history_key_list для пользователя с chat_id {self.chat_id}")
+                    else:
+                        self.history_key_list = []  # Если value_key пуст, значит серверов нет
                 else:
-                    print(f"Нет серверов для пользователя с chat_id {self.chat_id}")
+                    logging.error(f"Нет серверов для пользователя с chat_id {self.chat_id}")
                     self.servers = []
 
     async def _update_servers_in_db(self):
@@ -749,7 +704,10 @@ class UserCl:
             await db.execute(query_update, (value_key_json, self.chat_id))
             await db.commit()
 
-    async def _update_field_in_db(self, field_name, value):
+
+
+
+    async def _update_fild_in_db(self, field_name, value):
         """Обновление любого поля в базе данных с проверкой на наличие chat_id."""
         async with aiosqlite.connect(database_path_local) as db:
 
@@ -792,3 +750,115 @@ class UserCl:
                 query = "UPDATE users_key SET count_key = ? WHERE chat_id = ?"
                 await db.execute(query, (value, self.chat_id))
                 await db.commit()
+    async def _update_history_key_in_db(self, new_history_key = ""):
+        """
+        Обновление списка history_key_list в базе данных с добавлением нового значения.
+        Проверяет, есть ли уже ключ с таким же URL, и не добавляет дубликаты.
+        """
+        async with aiosqlite.connect(database_path_local) as db:
+            # Получаем текущие данные history_key_list из базы
+            query_select = """
+            SELECT history_key FROM users_key WHERE chat_id = ?
+            """
+            cursor = await db.execute(query_select, (self.chat_id,))
+            row = await cursor.fetchone()
+
+            if row and row[0]:
+                history_key_list = json.loads(row[0])  # Загружаем существующие данные
+            else:
+                history_key_list = []
+
+            # Проверяем, существует ли уже такой ключ
+            existing_urls = {key.get("email_key") for key in history_key_list if "email_key" in key}
+
+            if new_history_key == "":
+                key_data = [await key.to_dict() for key in self.history_key_list]
+                history_key_json = json.dumps(key_data)
+                async with aiosqlite.connect(database_path_local) as db:
+                    query_update = """
+                            UPDATE users_key 
+                            SET history_key = ?
+                            WHERE chat_id = ?
+                            """
+                    await db.execute(query_update, (history_key_json, self.chat_id))
+                    await db.commit()
+                return
+            if new_history_key.get("email_key") in existing_urls:
+                logging.info(
+                    f"Ключ с таким email_key уже существует в history_key для chat_id {self.chat_id}, добавление пропущено.")
+                return
+            # Добавляем новый элемент в history_key_list
+            history_key_list.append(new_history_key)
+            history_key_json = json.dumps(history_key_list)
+
+            # Обновляем базу данных
+            query_update = """
+            UPDATE users_key 
+            SET history_key = ?
+            WHERE chat_id = ?
+            """
+            await db.execute(query_update, (history_key_json, self.chat_id))
+            await db.commit()
+
+            # Добавляем в переменную класса
+            self.history_key_list.append(new_history_key)
+
+            logging.info(f"Добавлен новый элемент в history_key_list для chat_id {self.chat_id}")
+    async def update_key_to_vless(self, url: str = ""):
+        """
+        Обновляет ключ пользователя на VLESS.
+        - Отключает старый ключ.
+        - Копирует старые данные в history_key_list.
+        - Обновляет uuid_id, email_key, name_protocol, server_ip.
+        - Оставляет даты создания и платежей прежними.
+        """
+        ############################## TEST ######################################################################
+        if url == "":
+            project_root = Path(__file__).resolve().parent.parent
+            url_vless_new_path = project_root / "configs" / "url_vless_new"
+            url_vless_user_path = project_root / "configs" / "url_vless_user"
+
+            # Асинхронное чтение URL из файла
+            url_vless = await self._get_first_available_url(url_vless_new_path, url_vless_user_path)
+            if not url_vless:
+                print("Нет доступных URL для VLESS.")
+                return False
+            url = url_vless
+        ############################## TEST ######################################################################
+
+        if self.active_server:
+            current_date = datetime.now()
+
+            # Получаем дату отключения ключа и конвертируем её из строки в datetime
+            date_key_off_str = await self.active_server.date_key_off.get()
+            date_key_off = datetime.strptime(date_key_off_str, "%d.%m.%Y %H:%M:%S")
+
+            # Вычисляем оставшиеся дни
+            free_day = (date_key_off - current_date).days
+            logging.info(f"высчитали количество дней до отключения = {free_day}")
+
+            old_key_data = await self.active_server.to_dict()
+            self.history_key_list.append(old_key_data)
+            new_key_params = await self.generate_server_params_vless(url, free_day)
+            await self.active_server.enable.set(False)
+            logging.info(f"отключение старого ключа")
+
+
+
+
+            await self._update_history_key_in_db(new_key_params)
+            await self.active_server.delete()
+            # Создание нового сервера и обновление базы данных
+            await self.add_server_json(new_key_params)
+            print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
+
+            # Теперь новый active_server
+            await self.choosing_working_server()
+            return True
+
+        else:
+            logging.info(f"Нет активных ключей, создаю новый ключ для chat_id == {self.chat_id}")
+
+
+
+

@@ -1,3 +1,5 @@
+import logging
+
 import aiosqlite
 
 
@@ -79,3 +81,19 @@ async def init_db(database_path: str):
 
         # Завершаем транзакцию
         await db.commit()
+
+
+async def update_database(database_path: str):
+    async with aiosqlite.connect(database_path) as db:
+        # Проверяем, существует ли поле history_key
+        async with db.execute("PRAGMA table_info(users_key);") as cursor:
+            columns = [row[1] async for row in cursor]  # row[1] — имя колонки
+
+        if "history_key" in columns:
+            logging.info("Поле 'history_key' уже существует, обновление не требуется.")
+            return
+
+        # Если колонки нет, выполняем ALTER TABLE
+        await db.execute("ALTER TABLE users_key ADD COLUMN history_key TEXT;")
+        await db.commit()
+        logging.info("Поле 'history_key' успешно добавлено в таблицу 'users_key'.")
