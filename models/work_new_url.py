@@ -35,6 +35,18 @@ async def update_users_keys():
                     print(f"Ошибка: Не удалось загрузить пользователя с chat_id {chat_id}")
                     continue
 
+                # Проверяем, есть ли этот URL в истории пользователя
+                is_duplicate = False
+                if hasattr(user, "history_key_list") and isinstance(user.history_key_list, list):
+                    for key in user.history_key_list:
+                        if url == await key.url_vless.get():
+                            print(f"🔄 Пропуск: URL {url} уже есть в истории пользователя {chat_id}")
+                            is_duplicate = True
+                            break
+
+                if is_duplicate:
+                    continue  # Пропускаем обновление
+
                 await user.update_key_to_vless(url)  # Обновляем ключ
                 print(f"✅ Успешно обновлен ключ для пользователя {chat_id}")
 

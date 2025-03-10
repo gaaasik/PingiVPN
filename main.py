@@ -166,7 +166,7 @@ async def main():
     await init_db(db_path)
     await update_database(db_path)
     #####TEST update_users_keys
-    await update_users_keys()
+    #await update_users_keys()
 
 
     async def run_test():
