@@ -43,7 +43,12 @@ async def handle_support(event: types.Message | types.CallbackQuery):
     print("tolsemenov MENU_MY_KEYS ", chat_id)
     if chat_id in ADMIN_CHAT_IDS:
         us = await UserCl.load_user(chat_id)
-        await update_users_keys()
+        #не запускать!!
+
+        ###await update_users_keys()
+
+
+
         # if us.active_server:
         #     print("server_ip = ", await us.active_server.server_ip.get())
         #     for key in us.history_key_list:
