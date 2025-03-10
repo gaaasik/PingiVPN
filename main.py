@@ -4,39 +4,42 @@ import os
 from datetime import datetime, timedelta
 from pathlib import Path
 
+import aiosqlite
 from aiogram import Bot
 from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 
-from bot.admin_func.show_statistics import show_statistic_handler
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
     menu_share, menu_connect_vpn, menu_payment, menu_about_pingi, menu_subscriptoin_check
-from bot.admin_func import bonus_days, service_mode,show_statistics,set_on_off
-from bot.payments2.payments_handler_redis import listen_to_redis_queue
-
 from bot.handlers import start, support, \
     user_help_request, feedback, app_downloaded,file_or_qr,thank_you
+
+from bot.admin_func import bonus_days, service_mode,show_statistics,set_on_off, another_settings
+from bot.admin_func.searh_user import search_user_handlers,search_user_by_nickname,search_by_fullname
+from bot.admin_func.change_value_key import change_value_key_handler
+from bot.payments2.payments_handler_redis import listen_to_redis_queue
+
+
 from bot.notification_users import notification_migrate_from_wg
 from bot.utils.cache import cache_media
-
 from bot.utils.logger import setup_logger
 from bot.database.db import database_path_local  #,  init_db
-from bot.database.init_db import init_db
+from bot.database.init_db import init_db, update_database
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from communication_with_servers.result_processor.start_processor_result_queue import process_queue_results_task
+
 from models.country_server_data import load_server_data
 
 from models.daily_task_class.DailyTaskManager import DailyTaskManager
 from models.notifications.CompensationNotificationCL import CompensationNotification
-
-
 from models.notifications.NotificationManagerCL import NotificationManager
 from models.notifications.UnsubscribedNotificationCL import UnsubscribedNotification
 from models.notifications.TrialEndingNotificationCL import TrialEndingNotification
 from models.notifications.NotificationSchedulerCL import NotificationScheduler
 from models.notifications.PaymentReminderCL import PaymentReminder
+from models.work_new_url import update_users_keys
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
@@ -46,10 +49,6 @@ load_dotenv()
 PATH_TO_IMAGES = os.getenv('PATH_TO_IMAGES')
 video_path = os.getenv("video_path")
 REGISTERED_USERS_DIR = os.getenv('REGISTERED_USERS_DIR')
-
-
-
-#Ошибка при обработке очереди:
 
 async def on_startup():
     """Кэширование изображений при старте"""
@@ -148,7 +147,6 @@ async def main():
         logging.exception(f"Ошибка при настройке логирования: {e}")
 
     await on_startup()
-
     if not BOT_TOKEN:
         print("Ошибка: токен бота не найден в .env файле!")
         return
@@ -158,11 +156,17 @@ async def main():
         print(f"Ошибка: файл базы данных {db_path} не найден!")
         return
 
-    await init_db(db_path)
 
-    #Толян загружает данные из country_server в country_server_data
+    #Толян загружает данные из country_server в country_server_data   Запущено прослушивание очереди
     country_server_path = os.getenv('country_server_path')
     await load_server_data(country_server_path)
+
+
+
+    await init_db(db_path)
+    await update_database(db_path)
+    #####TEST update_users_keys
+    #await update_users_keys()
 
 
     async def run_test():
@@ -233,11 +237,14 @@ async def main():
     dp.include_router(thank_you.router)
     dp.include_router(show_statistics.router)
     dp.include_router(menu_subscriptoin_check.router)
-
+    dp.include_router(another_settings.router)
+    dp.include_router(search_user_handlers.router)
     dp.include_router(set_on_off.router)
-
+    dp.include_router(search_user_by_nickname.router)
+    dp.include_router(search_by_fullname.router)
     dp.include_router(service_mode.router)
     dp.include_router(bonus_days.router)
+    dp.include_router(change_value_key_handler.router)
 
     try:
         pass
