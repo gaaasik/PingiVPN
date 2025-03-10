@@ -84,6 +84,22 @@ async def init_db(database_path: str):
 
 
 async def update_database(database_path: str):
+    """
+       Проверяет наличие столбца `has_accepted_agreement` в таблице `users`
+       и добавляет его, если он отсутствует.
+       """
+    async with aiosqlite.connect(database_path) as db:
+        try:
+            await db.execute("ALTER TABLE users ADD COLUMN has_accepted_agreement BOOLEAN DEFAULT FALSE")
+            await db.commit()
+            print("✅ Поле `has_accepted_agreement` добавлено в таблицу `users`")
+        except Exception as e:
+            if "duplicate column" in str(e):
+                print("⚠️ Поле `has_accepted_agreement` уже существует.")
+            else:
+                print(f"❌ Ошибка при обновлении базы данных: {e}")
+
+
     async with aiosqlite.connect(database_path) as db:
         # Проверяем, существует ли поле history_key
         async with db.execute("PRAGMA table_info(users_key);") as cursor:

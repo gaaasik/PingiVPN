@@ -496,8 +496,6 @@ class UserCl:
         country_server = country_match.group(1) if country_match else "Unknown"
         name_server = await get_name_server_by_ip(server_ip)
 
-        print(f"Создался {name_key}")
-
 
         return {
             "country_server": country_server,
@@ -704,9 +702,6 @@ class UserCl:
             await db.execute(query_update, (value_key_json, self.chat_id))
             await db.commit()
 
-
-
-
     async def _update_fild_in_db(self, field_name, value):
         """Обновление любого поля в базе данных с проверкой на наличие chat_id."""
         async with aiosqlite.connect(database_path_local) as db:
@@ -846,9 +841,9 @@ class UserCl:
 
 
 
-            await self._update_history_key_in_db(new_key_params)
+            await self._update_history_key_in_db(old_key_data)
             await self.active_server.delete()
-            # Создание нового сервера и обновление базы данных
+            # Создание нового сервера и обновление базы данных   Ошибка при обработке очереди
             await self.add_server_json(new_key_params)
             print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
 

@@ -4,18 +4,16 @@ import logging
 import os
 from datetime import datetime, timedelta
 
-import aiosqlite
-import pytz
+
 import redis
 from dotenv import load_dotenv
 from yookassa import Configuration, Payment
 from aiogram import Router, types, Bot
 from models.UserCl import UserCl
-from bot.handlers.cleanup import delete_important_message
+
 from bot.payments2.if_user_sucsess_pay import handle_post_payment_actions
-#from fastapi_app.all_utils_flask_db import logger
 from bot.handlers.admin import send_admin_log
-from bot.database.db import  update_payment_status, update_user_subscription_db
+
 
 load_dotenv()
 WEBHOOK_URL = os.getenv('WEBHOOK_URL')

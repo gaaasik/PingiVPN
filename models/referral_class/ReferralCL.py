@@ -18,7 +18,7 @@ class ReferralCl:
 
     # Возможные статусы бонусов
     BONUS_NONE = "no_bonus"         # Бонус не начислен
-    BONUS_ACTIVATION = "bonus_2_days_added"  # Начислены 2 дня за активацию
+    BONUS_ACTIVATION = "bonus_2_days_added"  # Начислены 2 дня за активацию close()
     BONUS_PAYMENT = "bonus_14_days_added"    # Начислены 14 дней за оплату подписки
 
 
