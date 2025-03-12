@@ -845,7 +845,17 @@ class UserCl:
             new_key_params = await self.generate_server_params_vless(url, free_day)
             await self.active_server.enable.set(False)
             logging.info(f"отключение старого ключа")
+            await self._update_history_key_in_db(old_key_data)
+            await self.active_server.delete()
+            # Создание нового сервера и обновление базы данных   Ошибка при обработке очереди
+            await self.add_server_json(new_key_params)
+            print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
 
+            # Теперь новый active_server
+            await self.choosing_working_server()
+            return True
+
+        else:
 
     async def update_key_to_wireguard(self, json_with_wg: Dict):
         """
