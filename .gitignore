@@ -20,9 +20,9 @@ PingiVPN/
 # Игнорируем скомпилированные файлы Python
 __pycache__/
 *.pyc
-
 # Игнорируем архивы и логи
 *.zip
 logs/*.log
 configs/url_vless_new
 configs/url_vless_user
+models/new_key.json

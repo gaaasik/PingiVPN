@@ -460,7 +460,7 @@ class UserCl:
                 await file.write(url_vless + "\n")
 
             #сообщение админу
-            await send_admin_log(bot,                                 f"Добавлен пользователь {self.chat_id}, {await self.user_login.get()}. Осталось {len(remaining_urls)} ключей vless ")
+            await send_admin_log(bot,f"Добавлен пользователь {self.chat_id}, {await self.user_login.get()}. Осталось {len(remaining_urls)} ключей vless ")
             logging.info(f"Осталось {len(remaining_urls)} доступных URL для VLESS.")
             return url_vless
 
@@ -837,8 +837,8 @@ class UserCl:
             date_key_off = datetime.strptime(date_key_off_str, "%d.%m.%Y %H:%M:%S")
 
             # Вычисляем оставшиеся дни
-            free_day = (date_key_off - current_date).days
-            logging.info(f"высчитали количество дней до отключения = {free_day+1}")
+            free_day = (date_key_off - current_date).days + 1
+            logging.info(f"высчитали количество дней до отключения = {free_day}")
 
             old_key_data = await self.active_server.to_dict()
             self.history_key_list.append(old_key_data)

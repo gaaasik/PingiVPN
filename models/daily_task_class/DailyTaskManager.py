@@ -19,6 +19,9 @@ class DailyTaskManager:
     def __init__(self, bot):
         self.bot = bot
 
+    async def generate_statistics(self):
+        """
+        Генерация ежедневной статистики и отправка в чат администратора. Добавлен пользователь queue_results_task
     # async def count_remaining_vless_links(self) -> int:
     #     """
     #     Подсчитывает количество оставшихся VLESS ссылок в файле.

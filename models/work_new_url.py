@@ -2,6 +2,8 @@ import asyncio
 import json
 import logging
 import traceback
+
+import pandas as pd
 from models.UserCl import UserCl
 
 
@@ -35,12 +37,9 @@ async def update_users_keys():
 
                 # Проверяем, есть ли этот URL в истории пользователя
                 is_duplicate = False
-                if hasattr(user, "history_key_list") and isinstance(user.history_key_list, list):
-                    for key in user.history_key_list:
-                        if url == await key.url_vless.get():
-                            print(f"🔄 Пропуск: URL {url} уже есть в истории пользователя {chat_id}")
-                            is_duplicate = True
-                            break
+                if url == await user.active_server.url_vless.get():
+                    is_duplicate = True
+
 
                 if is_duplicate:
                     continue  # Пропускаем обновление
