@@ -239,15 +239,23 @@ class ServerCl:
         if self in self.user.servers:
             # Удаляем сервер из списка servers
             self.user.servers.remove(self)
-
             # Обновляем value_key в базе данных (список серверов) после удаления
             await self.user._update_servers_in_db()
             # Обновляем count_key
             await self.user.count_key._update_count_key()
             print(f"Ключ {await self.name_server.get()} успешно удален из списка и базы данных.")
             return True
+        elif self in self.user.history_key_list:
+            # Удаляем сервер из списка servers
+            self.user.history_key_list.remove(self)
+            # Обновляем value_key в базе данных (список серверов) после удаления
+            await self.user._update_history_key_in_db()
+            # Обновляем count_key
+            await self.user.count_key._update_count_key()
+            print(f"Ключ {await self.name_server.get()} успешно удален из списка и базы данных.")
+            return True
         else:
-            print("Сервер не найден в списке пользователя.")
+            print("Сервер не найден в списке пользователя. Ни в value_key ни в history_key")
             return False
 
     async def delete_user_key(self):

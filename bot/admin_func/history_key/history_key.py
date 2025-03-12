@@ -77,17 +77,30 @@ async def back_to_chat_id(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
 
 
-@router.callback_query(F.data == "change_active_server_")
+@router.callback_query(lambda c: c.data.startswith("change_active_server_"))
 async def back_to_chat_id(callback: CallbackQuery, state: FSMContext):
     """Возвращает в состояние ожидания ввода Chat ID."""
+    logging.info("Запуск change_active_server_")
     data = await state.get_data()
     user = data.get("current_user")
     us = await UserCl.load_user(user.chat_id)
     index = int(callback.data.split("_")[-1])
     back_old_active_server = us.active_server
     back_new_server = us.history_key_list[index]
+    await us.history_key_list[index].delete()
 
-    us.active_server.status_key.set(back_new_server.server_ip)
+    if await back_new_server.name_protocol.get() == "wireguard":
+        json_dire = {
+            "server_ip": await back_new_server.server_ip.get(),
+            "user_ip": await back_new_server.user_ip.get()
+        }
+        await us.update_key_to_wireguard(json_dire)
+    elif await back_new_server.name_protocol.get() == "vless":
+        await us.update_key_to_vless(await back_new_server.url_vless.get())
+
+    print(f"date_key_off у нового ключа = {await us.active_server.date_key_off.get()}")
+    await callback.message.answer(f"Изменил основной сервер у пользователя с chat_id {user.chat_id}.")
+    await state.set_state(AdminStates.waiting_for_bonus_days)
 
 
     await callback.answer()
