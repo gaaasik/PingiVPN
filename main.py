@@ -9,6 +9,7 @@ from aiogram import Bot
 from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 
+from bot.admin_func.history_key import history_key
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
     menu_share, menu_connect_vpn, menu_payment, menu_about_pingi, menu_subscriptoin_check
@@ -243,6 +244,7 @@ async def main():
     dp.include_router(search_user_by_nickname.router)
     dp.include_router(search_by_fullname.router)
     dp.include_router(service_mode.router)
+    dp.include_router(history_key.router)    # history_key
     dp.include_router(bonus_days.router)
     dp.include_router(change_value_key_handler.router)
 

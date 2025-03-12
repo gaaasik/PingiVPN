@@ -23,7 +23,7 @@ async def search_user_menu(callback: CallbackQuery, state: FSMContext):
 
 
 
-# 📌 Запрос на ввод Chat ID (добавлена кнопка "🔙 Назад")
+# 📌 Запрос на ввод Chat ID (добавлена кнопка "🔙 Назад") search_user
 @router.callback_query(F.data == "search_by_chat_id")
 async def search_by_chat_id(callback: CallbackQuery, state: FSMContext):
     """Просим ввести Chat ID с возможностью вернуться назад"""

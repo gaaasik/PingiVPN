@@ -4,6 +4,8 @@ import logging
 from datetime import datetime
 from typing import Optional
 
+from models.ServerCl import ServerCl
+
 
 async def user_to_json(user, db_path: str) -> dict:
     """Конвертирует объект пользователя и его серверов в JSON."""
@@ -85,3 +87,29 @@ async def format_user_data(user_data: dict) -> str:
         formatted_data.append("\n<b>🚫 Серверы:</b> Нет информации о серверах.")
 
     return "\n".join(formatted_data)
+
+
+async def format_history_key(key: ServerCl, i: int = 0) -> str:
+    """Форматирует данные одного ключа из history_key_list для вывода пользователю."""
+    if not key:
+        return "<b>🚫 Серверы:</b> Нет информации о серверах."
+
+    return "\n".join([
+        f"\n<b>🖥️ Сервер {i}:</b>",
+        f"  🌍 <b>Страна сервера:</b> {await key.country_server.get()}",
+        f"  🕒 <b>Дата создания ключа :</b> {await key.date_creation_key.get()}",
+        f"  ⏳ <b>Дата окончания:</b> {await key.date_key_off.get()}",
+        f"  📥 <b>Трафик (загрузка):</b> {await key.traffic_up.get()} MB",
+        f"  📤 <b>Трафик (отдача):</b> {await key.traffic_down.get()} MB",
+        f"  💻 <b>Имя сервера:</b> {await key.name_server.get()}",
+        f"  🛡️ <b>Протокол:</b> {await key.name_protocol.get()}",
+        f"  🖥️ <b>IP сервера:</b> {await key.server_ip.get()}",
+        f"  🔑 <b>UUID:</b> {await key.uuid_id.get()}",
+        f"  ⚙️ <b>Статус:</b> {await key.status_key.get()}",
+        f"  🟢 <b>Статус аккаунта :</b> {'✅ Включен' if await key.enable.get() else '❌ Выключен'}",
+        f"  💰 <b>Дата оплаты ключа:</b> {await key.date_payment_key.get()}",
+        f"  💳 <b>Кол-во оплат:</b> {await key.has_paid_key.get()}",
+        f"  📧 <b>Email ключа:</b> {await key.email_key.get()}",
+        f"  🌐 <b>URL VLESS:</b> {await key.url_vless.get()}",
+        f"  📡 <b>IP пользователя:</b> {await key.user_ip.get()}",
+    ])
