@@ -78,7 +78,7 @@ async def format_user_data(user_data: dict) -> str:
                 f"  💰 <b>Дата оплаты ключа:</b> {server.get('date_payment_key', 'Не указано')}",
                 f"  💳 <b>Кол-во оплат:</b> {server.get('has_paid_key', 'Не указано')}",
                 f"  📧 <b>Email ключа:</b> {server.get('email_key', 'Не указано')}",
-                f"  🌐 <b>URL VLESS:</b> {server.get('url_vless', 'Не указано')}",
+                f"  🌐 <b>URL VLESS:</b> <pre>{server.get('url_vless', 'Не указано')}</pre>",
                 f"  📡 <b>IP пользователя:</b> {server.get('user_ip', 'Не указано')}",
             ])
     else:

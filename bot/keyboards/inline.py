@@ -15,7 +15,7 @@ def download_app_keyboard(device: str) -> InlineKeyboardMarkup:
         download_link = "https://play.google.com/store/apps/details?id=com.hiddify"
         instruction_link = "https://telegra.ph/Instrukciya-dlya-Android-01-01"
     elif device.lower() == 'iphone':
-        download_link = "https://apps.apple.com/us/app/streisand/id6450534064"
+        download_link = "https://apps.apple.com/ru/app/v2raytun/id6476628951"
         instruction_link = "https://telegra.ph/Podklyuchenie-PingiVPN-na-iPhone-11-01"
     elif device.lower() == 'mac':
         download_link = "https://apps.apple.com/us/app/foxray/id6448898396"
