@@ -15,6 +15,7 @@ async def get_user_service_keyboard():
         [InlineKeyboardButton(text="➕ Добавить бонусные дни", callback_data="add_bonus_days")],
         [InlineKeyboardButton(text="✅ Включить пользователя", callback_data="enable_user")],
         [InlineKeyboardButton(text="❌ Выключить пользователя", callback_data="disable_user")],
+        [InlineKeyboardButton(text="📖 Старые ключи", callback_data="history_key_show_0")],
         [InlineKeyboardButton(text="🛠 Изменить ключ на VLESS", callback_data="change_to_vless")],
         [InlineKeyboardButton(text="📁 Изменить ключ на WireGuard", callback_data="change_to_wireguard")],
         [InlineKeyboardButton(text="🔙 Назад", callback_data="cancel_service")]

@@ -2,7 +2,7 @@ import asyncio
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional, Union, Dict
 
 import aiofiles
 import aiosqlite
@@ -122,7 +122,8 @@ class UserCl:
         self.is_subscribed_on_channel = Field('is_subscribed_on_channel', 0, self)
         self.days_since_registration = Field('days_since_registration', 0, self)
         self.email = Field('email', "", self)
-        self.servers: list[ServerCl]  # Явное указание типа поля servers  # Поле для хранения списка серверов (список объектов Server_cl)
+        self.servers: list[
+            ServerCl]  # Явное указание типа поля servers  # Поле для хранения списка серверов (список объектов Server_cl)
         self.active_server: ServerCl = None
         self.history_key_list: list[ServerCl]
         self.count_key = Field('count_key', 0, self)  # Поле для хранения количества серверов
@@ -379,19 +380,17 @@ class UserCl:
         try:
             await ReferralCl.add_referral_bonus(self.chat_id)
         except Exception as e:
-            await send_admin_log(bot,f"❌ Ошибка при начислении бонуса за реферала {self.chat_id}: {e}")
+            await send_admin_log(bot, f"❌ Ошибка при начислении бонуса за реферала {self.chat_id}: {e}")
             logging.error(f"❌ Ошибка при начислении бонуса за реферала {self.chat_id}: {e}")
         #Теперь новый active_server
         await self.choosing_working_server()
         return True
 
-    async def add_key_wireguard(self, free_day=7):
+    async def add_key_wireguard(self, json_with_wg=None, free_day=7):
 
         if not await self.count_key.get():
-            config_file_path = await self.check_file_PINGI()
-            if config_file_path:
-                server_params = await self._generate_server_params_wireguard(config_file_path, free_day)
-                await self.add_server_json(server_params)
+            server_params = await self._generate_server_params_wireguard(json_with_wg, free_day)
+            await self.add_server_json(server_params)
 
             # Создание нового сервера и обновление базы данных
             print(f"Сервер WireGuard добавлен для пользователя с hat_id {self.chat_id}")
@@ -462,7 +461,8 @@ class UserCl:
                 await file.write(url_vless + "\n")
 
             #сообщение админу
-            await send_admin_log(bot,f"Добавлен пользователь {self.chat_id}, {await self.user_login.get()}. Осталось {len(remaining_urls)} ключей vless ")
+            await send_admin_log(bot,
+                                 f"Добавлен пользователь {self.chat_id}, {await self.user_login.get()}. Осталось {len(remaining_urls)} ключей vless ")
             logging.info(f"Осталось {len(remaining_urls)} доступных URL для VLESS.")
             return url_vless
 
@@ -496,7 +496,6 @@ class UserCl:
         country_server = country_match.group(1) if country_match else "Unknown"
         name_server = await get_name_server_by_ip(server_ip)
 
-
         return {
             "country_server": country_server,
             "date_creation_key": current_date.strftime("%d.%m.%Y %H:%M:%S"),
@@ -517,62 +516,70 @@ class UserCl:
             "uuid_id": uuid_id,
         }
 
-    async def _generate_server_params_wireguard(self, config_file_path: str, free_day: int):
+    async def _generate_server_params_wireguard(self, json_with_wg, free_day: int):
 
         """Генерирует параметры нового сервера WireGuard, извлекая информацию из конфигурационного файла."""
-        current_date = datetime.now()
-        logging.info(f"Начало работы функции _generate_server_params_wireguard. Путь к файлу: {config_file_path}")
-
         try:
-
-            # Преобразуем путь в объект Path для удобной работы
-            config_file_path = Path(config_file_path)
-            logging.debug(f"Обработанный путь к конфигурационному файлу: {config_file_path}")
-
-            # Проверяем, существует ли файл
-            if not config_file_path.exists():
-                logging.error(f"Файл конфигурации не найден: {config_file_path}")
-                raise FileNotFoundError(f"Файл конфигурации не найден: {config_file_path}")
-
-            # Читаем содержимое конфигурационного файла
-            logging.info(f"Открываем файл: {config_file_path}")
-            with config_file_path.open('r', encoding='utf-8') as file:
-                lines = file.readlines()
-
-            logging.debug(f"Файл прочитан. Количество строк: {len(lines)}")
-
+            current_date = datetime.now()
             # Инициализируем переменные для данных
             private_key = None
             address = None
             endpoint = None
+            if json_with_wg:
+                logging.info(
+                    f"Начало работы функции _generate_server_params_wireguard. c json {json_with_wg}")
+                server_ip = json_with_wg.get("server_ip")
+                user_ip = json_with_wg.get("user_ip")
+            else:
 
-            # Парсим файл построчно
-            for line in lines:
-                line = line.strip()
-                logging.debug(f"Обработка строки: {line}")
+                config_file_path = await self.check_file_PINGI()
+                if not config_file_path:
+                    logging.error("Ошибка с путем к конфигурациям config_file_path")
+                    return
+                logging.info(
+                    f"Начало работы функции _generate_server_params_wireguard. Путь к файлу: {config_file_path}")
+                # Преобразуем путь в объект Path для удобной работы
+                config_file_path = Path(config_file_path)
+                logging.debug(f"Обработанный путь к конфигурационному файлу: {config_file_path}")
 
-                if line.startswith("PrivateKey"):
-                    private_key = line.split("=")[1].strip()
-                    logging.info(f"Найден PrivateKey: {private_key}")
-                elif line.startswith("Address"):
-                    address = line.split("=")[1].strip()
-                    logging.info(f"Найден Address: {address}")
-                elif line.startswith("Endpoint"):
-                    endpoint = line.split("=")[1].strip()
-                    logging.info(f"Найден Endpoint: {endpoint}")
+                # Проверяем, существует ли файл
+                if not config_file_path.exists():
+                    logging.error(f"Файл конфигурации не найден: {config_file_path}")
+                    raise FileNotFoundError(f"Файл конфигурации не найден: {config_file_path}")
 
-            # Извлекаем server_ip из Endpoint
-            server_ip = endpoint.split(":")[0] if endpoint else None
-            user_ip = address.split("/")[0] if address else None
+                # Читаем содержимое конфигурационного файла
+                logging.info(f"Открываем файл: {config_file_path}")
+                with config_file_path.open('r', encoding='utf-8') as file:
+                    lines = file.readlines()
+
+                logging.debug(f"Файл прочитан. Количество строк: {len(lines)}")
+
+                # Парсим файл построчно
+                for line in lines:
+                    line = line.strip()
+                    logging.debug(f"Обработка строки: {line}")
+
+                    if line.startswith("PrivateKey"):
+                        private_key = line.split("=")[1].strip()
+                        logging.info(f"Найден PrivateKey: {private_key}")
+                    elif line.startswith("Address"):
+                        address = line.split("=")[1].strip()
+                        logging.info(f"Найден Address: {address}")
+                    elif line.startswith("Endpoint"):
+                        endpoint = line.split("=")[1].strip()
+                        logging.info(f"Найден Endpoint: {endpoint}")
+
+                # Извлекаем server_ip из Endpoint
+                server_ip = endpoint.split(":")[0] if endpoint else None
+                user_ip = address.split("/")[0] if address else None
+
+                logging.debug(f"Извлечён server_ip: {server_ip}, user_ip: {user_ip}")
+
+                # Проверяем, что все необходимые данные извлечены
+                if not all([private_key, address, server_ip]):
+                    logging.error("Некоторые данные из конфигурационного файла отсутствуют или некорректны.")
+                    raise ValueError("Некоторые данные из конфигурационного файла отсутствуют или некорректны.")
             name_server = await get_name_server_by_ip(server_ip)
-
-            logging.debug(f"Извлечён server_ip: {server_ip}, user_ip: {user_ip}")
-
-            # Проверяем, что все необходимые данные извлечены
-            if not all([private_key, address, server_ip]):
-                logging.error("Некоторые данные из конфигурационного файла отсутствуют или некорректны.")
-                raise ValueError("Некоторые данные из конфигурационного файла отсутствуют или некорректны.")
-
             country_server = await get_country_server_by_ip(server_ip)
 
             # Генерируем JSON с параметрами сервера
@@ -589,7 +596,7 @@ class UserCl:
                 "has_paid_key": 0,
                 "name_key": name_server,
                 "name_protocol": "wireguard",
-                "name_server": f"{server_ip}",
+                "name_server": f"{name_server}",
                 "server_ip": server_ip,
                 "status_key": "active",
                 "traffic_down": 0,
@@ -607,8 +614,6 @@ class UserCl:
         except Exception as e:
             logging.exception(f"Непредвиденная ошибка: {e}")
             raise
-
-
 
     async def _load_user_data(self):
         async with aiosqlite.connect(database_path_local) as db:
@@ -745,7 +750,8 @@ class UserCl:
                 query = "UPDATE users_key SET count_key = ? WHERE chat_id = ?"
                 await db.execute(query, (value, self.chat_id))
                 await db.commit()
-    async def _update_history_key_in_db(self, new_history_key = ""):
+
+    async def _update_history_key_in_db(self, new_history_key=""):
         """
         Обновление списка history_key_list в базе данных с добавлением нового значения.
         Проверяет, есть ли уже ключ с таким же URL, и не добавляет дубликаты.
@@ -799,6 +805,7 @@ class UserCl:
             self.history_key_list.append(new_history_key)
 
             logging.info(f"Добавлен новый элемент в history_key_list для chat_id {self.chat_id}")
+
     async def update_key_to_vless(self, url: str = ""):
         """
         Обновляет ключ пользователя на VLESS.
@@ -837,13 +844,9 @@ class UserCl:
             new_key_params = await self.generate_server_params_vless(url, free_day)
             await self.active_server.enable.set(False)
             logging.info(f"отключение старого ключа")
-
-
-
-
             await self._update_history_key_in_db(old_key_data)
             await self.active_server.delete()
-            # Создание нового сервера и обновление базы данных   Ошибка при обработке очереди
+            # Создание нового сервера и обновление базы данных Ошибка при обработке очереди  Ключ с таким email_key уже существует
             await self.add_server_json(new_key_params)
             print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
 
@@ -854,6 +857,49 @@ class UserCl:
         else:
             logging.info(f"Нет активных ключей, создаю новый ключ для chat_id == {self.chat_id}")
 
+    async def update_key_to_wireguard(self, json_with_wg: Dict = None):
+        """
+        Обновляет ключ пользователя на VLESS.
+        - Отключает старый ключ.
+        - Копирует старые данные в history_key_list.
+        - Обновляет uuid_id, email_key, name_protocol, server_ip.
+        - Оставляет даты создания и платежей прежними.
+        """
+        ############################## TEST ######################################################################
+        if not json_with_wg:
+            logging.info("вызван ТЕСТОВЫЙ update_key_to_wireguard")
+            json_with_wg = {
+                "server_ip": "147.45.242.155",
+                "user_ip": "10.8.0.5",
+            }
+        ############################## TEST ######################################################################
 
+        if self.active_server:
+            logging.info("вызван update_key_to_wireguard")
+            current_date = datetime.now()
 
+            # Получаем дату отключения ключа и конвертируем её из строки в datetime
+            date_key_off_str = await self.active_server.date_key_off.get()
+            date_key_off = datetime.strptime(date_key_off_str, "%d.%m.%Y %H:%M:%S")
 
+            # Вычисляем оставшиеся дни
+            free_day = (date_key_off - current_date).days
+            logging.info(f"высчитали количество дней до отключения = {free_day + 1}")
+
+            old_key_data = await self.active_server.to_dict()
+            self.history_key_list.append(old_key_data)
+            new_key_params = await self._generate_server_params_wireguard(json_with_wg, free_day)
+            await self.active_server.enable.set(False)
+            logging.info(f"отключение старого ключа")
+            await self._update_history_key_in_db(old_key_data)
+            await self.active_server.delete()
+            # Создание нового сервера и обновление базы данных Ошибка при обработке очереди
+            await self.add_server_json(new_key_params)
+            print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
+
+            # Теперь новый active_server
+            await self.choosing_working_server()
+            return True
+
+        else:
+            logging.info(f"Нет активных ключей, создаю новый ключ для chat_id == {self.chat_id}")
