@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
-    menu_share, menu_connect_vpn, menu_payment, menu_about_pingi, menu_subscriptoin_check
+    menu_share, menu_connect_vpn, menu_payment, menu_about_pingi, menu_subscriptoin_check, keenetic_setup
 from bot.handlers import start, support, \
     user_help_request, feedback, app_downloaded,file_or_qr,thank_you
 
@@ -245,6 +245,7 @@ async def main():
     dp.include_router(service_mode.router)
     dp.include_router(bonus_days.router)
     dp.include_router(change_value_key_handler.router)
+    dp.include_router(keenetic_setup.router)
 
     try:
         pass

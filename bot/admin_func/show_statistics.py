@@ -46,8 +46,13 @@ async def choose_stat_date(callback: CallbackQuery, state: FSMContext):
     """
     Запрашивает у администратора дату в формате ДД.ММ.ГГГГ для получения статистики.
     """
-    await callback.message.edit_text("📅 Введите дату в формате <b>ДД.ММ.ГГГГ</b> (например, <code>02.03.2025</code>):",
-                                     parse_mode="HTML")
+    # Получаем текущую дату в формате ДД.ММ.ГГГГ
+    current_date = datetime.now().strftime("%d.%m.%Y")
+
+    await callback.message.edit_text(
+        f"📅 Введите дату в формате <b>ДД.ММ.ГГГГ</b> (например, <code>{current_date}</code>):",
+        parse_mode="HTML"
+    )
 
     # Устанавливаем состояние
     await state.set_state(StatisticStates.waiting_for_stat_date)

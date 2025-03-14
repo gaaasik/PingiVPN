@@ -92,6 +92,7 @@ def device_choice_keyboard():
             InlineKeyboardButton(text="🐧 Linux", callback_data="device_linux")
         ],
         [
+            InlineKeyboardButton(text="📶 Роутер Keenetic", callback_data="keenetic_setup"),
             InlineKeyboardButton(text="🖥️ Windows", callback_data="device_windows")
         ],
         [

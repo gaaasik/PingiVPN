@@ -21,17 +21,13 @@ REGISTERED_USERS_DIR = os.getenv("REGISTERED_USERS_DIR")
 @router.callback_query(lambda c: c.data == "get_config")
 async def handle_get_file(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
-    await send_instruction_video(callback_query)
+
+    #видео инструкция которая уже не нужна
+    #await send_instruction_video(callback_query)
+
+
     # Если подписка подтверждена, отправляем файл
     await send_config_file(callback_query)
-    # Отправляем сообщение после отправки файла с двумя кнопками: "Подробная инструкция" и "Показать QR-код"
-    await callback_query.message.answer(
-        "Загрузите конфигурацию в приложение WireGuard 📂",
-        reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [get_detailed_instruction_button()],
-            [get_qr_code_button()], [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
-        ])
-    )
 
     await callback_query.answer()
 
