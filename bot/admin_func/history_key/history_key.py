@@ -1,8 +1,11 @@
 import logging
+from datetime import datetime
+
 from aiogram import Router, types, F
 from aiogram.fsm.context import FSMContext
-from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, Chat, User, Message
 
+from bot.admin_func.searh_user.search_user_handlers import handle_chat_id_input
 from bot.admin_func.searh_user.utils import format_history_key
 from bot.admin_func.states import AdminStates
 from models.UserCl import UserCl
@@ -65,20 +68,39 @@ async def generate_history_keyboard(history_key_list, selected_index):
 
         buttons.append([InlineKeyboardButton(text=f"{prefix}{name}", callback_data=f"history_key_show_{i}")])
     buttons.append([InlineKeyboardButton(text="✅ Сделать сервер основным", callback_data=f"change_active_server_{index}")])
-    buttons.append([InlineKeyboardButton(text="🔙 Назад", callback_data="back_to_chat_id")])
+    buttons.append([InlineKeyboardButton(text="🔙 Назад", callback_data="my_back_menu")]) #search_by_chat_id
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
-@router.callback_query(F.data == "back_to_chat_id")
-async def back_to_chat_id(callback: CallbackQuery, state: FSMContext):
+@router.callback_query(F.data == "my_back_menu")
+async def my_back_menu(callback: CallbackQuery, state: FSMContext):
     """Возвращает в состояние ожидания ввода Chat ID."""
-    await callback.message.edit_text("🔢 Введите Chat ID пользователя:")
-    await state.set_state(AdminStates.waiting_for_chat_id)  # Устанавливаем состояние
+    logging.info("Зашли в my_back_menu")
+
+    data = await state.get_data()
+    user = data.get("current_user")
+    if not user:
+        logging.error("Ошибка: current_user отсутствует в state.")
+        await callback.message.edit_text("❌ Ошибка: пользователь не найден.")
+        return
+
+    print("user.chat_id = ", user.chat_id)
+
+    # Создаем фейковое сообщение
+    fake_message = Message(
+        message_id=callback.message.message_id,  # Берем ID текущего сообщения
+        from_user=User(id=1388513042, is_bot=False, first_name="Admin"),  # Фейковый отправитель
+        chat=Chat(id=callback.message.chat.id, type="private"),  # Используем ID текущего чата
+        text=str(user.chat_id),  # Передаем chat_id как текст
+        date=datetime.utcnow()  # Обязательное поле date
+    )
+
+    # Передаем fake_message вместо chat_id
+    await handle_chat_id_input(fake_message, state)
     await callback.answer()
 
-
 @router.callback_query(lambda c: c.data.startswith("change_active_server_"))
-async def back_to_chat_id(callback: CallbackQuery, state: FSMContext):
+async def handler_change_active_server(callback: CallbackQuery, state: FSMContext):
     """Возвращает в состояние ожидания ввода Chat ID."""
     logging.info("Запуск change_active_server_")
     data = await state.get_data()

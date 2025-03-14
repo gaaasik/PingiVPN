@@ -7,6 +7,7 @@ from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardBut
 from bot.admin_func.keyboards import get_search_user_keyboard, get_user_service_keyboard
 from bot.admin_func.states import AdminStates
 from bot.admin_func.searh_user.utils import user_to_json, format_user_data
+from bot_instance import bot
 from models.UserCl import UserCl
 
 router = Router()
@@ -46,7 +47,9 @@ async def handle_chat_id_input(message: types.Message, state: FSMContext):
             keyboard = InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="🔙 Назад", callback_data="search_user")]
             ])
-            await message.answer("⚠️ Chat ID должен быть числом. Попробуйте снова.", reply_markup=keyboard)
+            #await message.answer("⚠️ Chat ID должен быть числом. Попробуйте снова.", reply_markup=keyboard)
+            await bot.send_message(message.chat.id, "⚠️ Chat ID должен быть числом. Попробуйте снова.",
+                                   reply_markup=keyboard)
             return
 
         user = await UserCl.load_user(int(chat_id))  # Загружаем пользователя
@@ -54,7 +57,8 @@ async def handle_chat_id_input(message: types.Message, state: FSMContext):
             keyboard = InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="🔙 Назад", callback_data="search_user")]
             ])
-            await message.answer("❌ Пользователь не найден.", reply_markup=keyboard)
+            #await message.answer("❌ Пользователь не найден.", reply_markup=keyboard)
+            await bot.send_message(message.chat.id, "❌ Пользователь не найден.", reply_markup=keyboard)
             return
 
         # Сохраняем найденного пользователя
@@ -68,11 +72,19 @@ async def handle_chat_id_input(message: types.Message, state: FSMContext):
         keyboard = await get_user_service_keyboard()
 
         # Отправляем новое сообщение и сохраняем его ID
-        sent_message = await message.answer(
+        # sent_message = await message.answer(
+        #     f"✅ Найден пользователь:\n{formatted_data}\n\nВыберите действие:",
+        #     parse_mode="HTML",
+        #     reply_markup=keyboard
+        # )
+        sent_message = await bot.send_message(
+            message.chat.id,
             f"✅ Найден пользователь:\n{formatted_data}\n\nВыберите действие:",
             parse_mode="HTML",
             reply_markup=keyboard
         )
+
+
         await state.update_data(last_message_id=sent_message.message_id)
 
         # Меняем состояние
@@ -80,4 +92,5 @@ async def handle_chat_id_input(message: types.Message, state: FSMContext):
 
     except Exception as e:
         logging.error(f"Ошибка при поиске пользователя: {e}")
-        await message.answer("❌ Произошла ошибка при обработке запроса.")
+        await bot.send_message(message.chat.id, "❌ Произошла ошибка при обработке запроса.")
+        #await message.answer("❌ Произошла ошибка при обработке запроса.")

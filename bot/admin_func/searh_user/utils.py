@@ -95,7 +95,7 @@ async def format_history_key(key: ServerCl, i: int = 0) -> str:
         return "<b>🚫 Серверы:</b> Нет информации о серверах."
 
     return "\n".join([
-        f"\n<b>🖥️ Сервер {i}:</b>",
+        f"\n<b>🖥️ Сервер {i+1}:</b>",
         f"  🌍 <b>Страна сервера:</b> {await key.country_server.get()}",
         f"  🕒 <b>Дата создания ключа :</b> {await key.date_creation_key.get()}",
         f"  ⏳ <b>Дата окончания:</b> {await key.date_key_off.get()}",
