@@ -125,7 +125,7 @@ class Field:
         server_ip = await self._server.server_ip.get()
         user_ip = await self._server.user_ip.get()
 
-        # Получаем имя сервера 
+        # Получаем имя сервера
         server_name = self.__get_server_name_by_ip(country_server_data, server_ip)
 
         # Формируем задачу
@@ -311,9 +311,6 @@ class ServerCl:
                     await redis_client.close()
             except Exception as e:
                 logging.error(f"Ошибка при закрытии соединения с Redis: {e}")
-
-
-
 
 
 
