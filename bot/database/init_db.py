@@ -79,6 +79,21 @@ async def init_db(database_path: str):
                );
            ''')
 
+        # Таблица друзей (friends)
+        await db.execute('''
+                   CREATE TABLE IF NOT EXISTS "friends" (
+                       "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+                       "admin_chat_id" INTEGER NOT NULL,
+                       "friend_chat_id" INTEGER NOT NULL,
+                       "friend_username" TEXT,
+                       "date_added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                       "status" VARCHAR(20) DEFAULT 'active',
+                       "notes" TEXT,
+                       FOREIGN KEY("admin_chat_id") REFERENCES "users"("chat_id"),
+                       FOREIGN KEY("friend_chat_id") REFERENCES "users"("chat_id")
+                   );
+               ''')
+
         # Завершаем транзакцию
         await db.commit()
 
@@ -99,6 +114,28 @@ async def update_database(database_path: str):
             else:
                 print(f"❌ Ошибка при обновлении базы данных: {e}")
 
+            # Проверяем, существует ли таблица friends
+        async with db.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='friends';") as cursor:
+            table_exists = await cursor.fetchone()
+
+        if not table_exists:
+            await db.execute("""
+                     CREATE TABLE friends (
+                         id INTEGER PRIMARY KEY AUTOINCREMENT,
+                         admin_chat_id INTEGER NOT NULL,
+                         friend_chat_id INTEGER NOT NULL,
+                         friend_username TEXT,
+                         date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                         status VARCHAR(20) DEFAULT 'active',
+                         notes TEXT,
+                         FOREIGN KEY(admin_chat_id) REFERENCES users(chat_id),
+                         FOREIGN KEY(friend_chat_id) REFERENCES users(chat_id)
+                     );
+                 """)
+            await db.commit()
+            print("✅ Таблица `friends` успешно создана.")
+        else:
+            print("⚠️ Таблица `friends` уже существует, обновление не требуется.")
 
     async with aiosqlite.connect(database_path) as db:
         # Проверяем, существует ли поле history_key
