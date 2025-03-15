@@ -5,6 +5,8 @@ from bot.admin_func.keyboards import get_key_change_keyboard
 from bot.admin_func.states import AdminStates
 import re
 
+from models.UserCl import UserCl
+
 router = Router()
 
 # Регулярное выражение для проверки VLESS ключа
@@ -30,22 +32,18 @@ async def change_to_wireguard(callback: CallbackQuery, state: FSMContext):
 @router.message(AdminStates.waiting_for_vless_key)
 async def process_vless_key(message: Message, state: FSMContext):
     """Обработчик ввода нового VLESS ключа."""
-    chat_id = message.chat.id  # Получаем chat_id пользователя
+    data = await state.get_data()
+    us = data.get("current_user")
+
     key = message.text.strip()
 
     if not VLESS_PATTERN.match(key):
         await message.answer("❌ Неверный формат VLESS ключа. Пожалуйста, введите корректный ключ.")
         return
 
-
-
-
     # Вызов функции обновления ключа
 
-
-
-
-
+    await us.update_key_to_vless(key)
     await message.answer("✅ Новый VLESS ключ сохранен.")
     await state.clear()
 
@@ -53,14 +51,15 @@ async def process_vless_key(message: Message, state: FSMContext):
 @router.message(AdminStates.waiting_for_wireguard_file, F.document)
 async def process_wireguard_file(message: Message, state: FSMContext):
     """Обработчик загрузки нового конфигурационного файла WireGuard."""
-    chat_id = message.chat.id
+    data = await state.get_data()
+    us = data.get("current_user")
     document: Document = message.document
 
     if not document.file_name.endswith(".conf"):
         await message.answer("❌ Ошибка: загруженный файл должен быть в формате .conf")
         return
 
-
+    await us.update_key_to_wireguard()
 
 
     # Вызов функции обновления ключа

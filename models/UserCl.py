@@ -784,12 +784,13 @@ class UserCl:
                     await db.execute(query_update, (history_key_json, self.chat_id))
                     await db.commit()
                 return
-            if new_history_key.get("email_key") in existing_urls:
+            if not (new_history_key.get("email_key") in existing_urls):
+                history_key_list.append(new_history_key)
                 logging.info(
                     f"Ключ с таким email_key уже существует в history_key для chat_id {self.chat_id}, добавление пропущено.")
                 return
             # Добавляем новый элемент в history_key_list
-            history_key_list.append(new_history_key)
+
             history_key_json = json.dumps(history_key_list)
 
             # Обновляем базу данных
@@ -838,13 +839,16 @@ class UserCl:
             # Вычисляем оставшиеся дни
             free_day = (date_key_off - current_date).days + 1
             logging.info(f"высчитали количество дней до отключения = {free_day}")
-
             old_key_data = await self.active_server.to_dict()
+
             self.history_key_list.append(old_key_data)
-            new_key_params = await self.generate_server_params_vless(url, free_day)
             await self.active_server.enable.set(False)
             logging.info(f"отключение старого ключа")
             await self._update_history_key_in_db(old_key_data)
+
+
+            new_key_params = await self.generate_server_params_vless(url, free_day)
+
             await self.active_server.delete()
             # Создание нового сервера и обновление базы данных Ошибка при обработке очереди  Ключ с таким email_key уже существует
             await self.add_server_json(new_key_params)

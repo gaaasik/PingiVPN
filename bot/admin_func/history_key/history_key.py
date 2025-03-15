@@ -67,7 +67,7 @@ async def generate_history_keyboard(history_key_list, selected_index):
             prefix = ""
 
         buttons.append([InlineKeyboardButton(text=f"{prefix}{name}", callback_data=f"history_key_show_{i}")])
-    buttons.append([InlineKeyboardButton(text="✅ Сделать сервер основным", callback_data=f"change_active_server_{index}")])
+    buttons.append([InlineKeyboardButton(text="✅ Сделать ключ основным", callback_data=f"change_active_server_{index}")])
     buttons.append([InlineKeyboardButton(text="🔙 Назад", callback_data="my_back_menu")]) #search_by_chat_id
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
@@ -121,8 +121,8 @@ async def handler_change_active_server(callback: CallbackQuery, state: FSMContex
         await us.update_key_to_vless(await back_new_server.url_vless.get())
 
     print(f"date_key_off у нового ключа = {await us.active_server.date_key_off.get()}")
-    await callback.message.answer(f"Изменил основной сервер у пользователя с chat_id {user.chat_id}.")
+    await callback.message.answer(f"Изменил основной ключ у пользователя с chat_id {user.chat_id}.")
     await state.set_state(AdminStates.waiting_for_bonus_days)
-
+    await my_back_menu()
 
     await callback.answer()
