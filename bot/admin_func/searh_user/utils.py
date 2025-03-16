@@ -80,7 +80,7 @@ async def format_user_data(user_data: dict) -> str:
                 f"  💰 <b>Дата оплаты ключа:</b> {server.get('date_payment_key', 'Не указано')}",
                 f"  💳 <b>Кол-во оплат:</b> {server.get('has_paid_key', 'Не указано')}",
                 f"  📧 <b>Email ключа:</b> {server.get('email_key', 'Не указано')}",
-                f"  🌐 <b>URL VLESS:</b> {server.get('url_vless', 'Не указано')}",
+                f"  🌐 <b>URL VLESS:</b> <pre>{server.get('url_vless', 'Не указано')}</pre>",
                 f"  📡 <b>IP пользователя:</b> {server.get('user_ip', 'Не указано')}",
             ])
     else:
@@ -95,7 +95,7 @@ async def format_history_key(key: ServerCl, i: int = 0) -> str:
         return "<b>🚫 Серверы:</b> Нет информации о серверах."
 
     return "\n".join([
-        f"\n<b>🖥️ Сервер {i+1}:</b>",
+        f"\n<b>🖥️ Ключ {i+1}:</b>",
         f"  🌍 <b>Страна сервера:</b> {await key.country_server.get()}",
         f"  🕒 <b>Дата создания ключа :</b> {await key.date_creation_key.get()}",
         f"  ⏳ <b>Дата окончания:</b> {await key.date_key_off.get()}",

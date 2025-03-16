@@ -43,7 +43,7 @@ async def handle_support(event: types.Message | types.CallbackQuery):
     print("tolsemenov MENU_MY_KEYS ", chat_id)
     if chat_id in ADMIN_CHAT_IDS:
         us = await UserCl.load_user(chat_id)
-        await us.update_key_to_wireguard()
+        await us.update_key_to_vless()
         #не запускать!!
 
         ###await update_users_keys()

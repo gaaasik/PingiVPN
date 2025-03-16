@@ -18,6 +18,7 @@ async def get_user_service_keyboard():
         [InlineKeyboardButton(text="📖 Старые ключи", callback_data="history_key_show_0")],
         [InlineKeyboardButton(text="🛠 Изменить ключ на VLESS", callback_data="change_to_vless")],
         [InlineKeyboardButton(text="📁 Изменить ключ на WireGuard", callback_data="change_to_wireguard")],
+        [InlineKeyboardButton(text="➕ Добавить в список друзей", callback_data="add_to_friends")],  # 🔥 Новая кнопка
         [InlineKeyboardButton(text="🔙 Назад", callback_data="cancel_service")]
     ])
 # 📊 Кнопки для статистики

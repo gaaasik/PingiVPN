@@ -26,42 +26,42 @@ cancel_keyboard = InlineKeyboardMarkup(
 )
 
 
+#
+# @router.callback_query(lambda c: c.data == "help_ask_question")
+# async def handle_ask_question(callback_query: CallbackQuery, state: FSMContext):
+#     chat_id = callback_query.message.chat.id
+#     user_id = callback_query.from_user.id
+#     bot = callback_query.bot
+#
+#     # Устанавливаем состояние для ожидания вопроса от пользователя
+#     await state.set_state(SupportState.waiting_for_question)
+#
+#     # Отправляем сообщение с запросом вопроса и инлайн-кнопкой "Отменить"
+#     sent_message = await bot.send_message(chat_id, text=support_message, reply_markup=cancel_keyboard)
+#
+#     # Выводим текущее состояние для отладки
+#     current_state = await state.get_state()
+#     print(f"Текущее состояние: {current_state}")
+#
+#     # Подтверждаем callback_query
+#     await callback_query.answer()
 
-@router.callback_query(lambda c: c.data == "help_ask_question")
-async def handle_ask_question(callback_query: CallbackQuery, state: FSMContext):
-    chat_id = callback_query.message.chat.id
-    user_id = callback_query.from_user.id
-    bot = callback_query.bot
-
-    # Устанавливаем состояние для ожидания вопроса от пользователя
-    await state.set_state(SupportState.waiting_for_question)
-
-    # Отправляем сообщение с запросом вопроса и инлайн-кнопкой "Отменить"
-    sent_message = await bot.send_message(chat_id, text=support_message, reply_markup=cancel_keyboard)
-
-    # Выводим текущее состояние для отладки
-    current_state = await state.get_state()
-    print(f"Текущее состояние: {current_state}")
-
-    # Подтверждаем callback_query
-    await callback_query.answer()
-
-
-# Обработчик для получения вопроса от пользователя
-@router.message(SupportState.waiting_for_question)
-async def process_user_question(message: types.Message, state: FSMContext):
-    # Сохраняем вопрос пользователя в базу данных
-    await add_user_question(message.chat.id, message.from_user.id, message.text)
-    username = message.from_user.username or str(message.from_user.id)
-    # Сохраняем ID сообщения пользователя
-
-    # Отправляем пользователю подтверждение
-    confirmation_message = await message.answer(f"Ваш вопрос записан \n\n {message.text} \n\n Ожидайте ответа!")
-    await send_admin_log(message.bot,f"❓❓❓Пользователь задал вопрос: @{username} (ID чата: {message.chat.id}) \n Задал вопрос: {message.text}")
-
-    # Завершаем состояние ожидания вопроса
-    await state.clear()
-    await show_main_menu(message.chat.id, message.bot)
+#
+# # Обработчик для получения вопроса от пользователя
+# @router.message(SupportState.waiting_for_question)
+# async def process_user_question(message: types.Message, state: FSMContext):
+#     # Сохраняем вопрос пользователя в базу данных
+#     await add_user_question(message.chat.id, message.from_user.id, message.text)
+#     username = message.from_user.username or str(message.from_user.id)
+#     # Сохраняем ID сообщения пользователя
+#
+#     # Отправляем пользователю подтверждение
+#     confirmation_message = await message.answer(f"Ваш вопрос записан \n\n {message.text} \n\n Ожидайте ответа!")
+#     await send_admin_log(message.bot,f"❓❓❓Пользователь задал вопрос: @{username} (ID чата: {message.chat.id}) \n Задал вопрос: {message.text}")
+#
+#     # Завершаем состояние ожидания вопроса
+#     await state.clear()
+#     await show_main_menu(message.chat.id, message.bot)
 
 
 @router.callback_query(lambda c: c.data == "cancel_question")

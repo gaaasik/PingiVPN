@@ -9,10 +9,11 @@ from aiogram import Bot
 from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 
+from bot.admin_func.class_friends import handler_friends
 from bot.admin_func.history_key import history_key
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
-    menu_share, menu_connect_vpn, menu_payment, menu_about_pingi, menu_subscriptoin_check
+    menu_share, menu_connect_vpn, menu_payment, menu_about_pingi, menu_subscriptoin_check, keenetic_setup
 from bot.handlers import start, support, \
     user_help_request, feedback, app_downloaded,file_or_qr,thank_you
 
@@ -247,6 +248,8 @@ async def main():
     dp.include_router(history_key.router)    # history_key
     dp.include_router(bonus_days.router)
     dp.include_router(change_value_key_handler.router)
+    dp.include_router(keenetic_setup.router)
+    dp.include_router(handler_friends.router)
 
     try:
         pass
