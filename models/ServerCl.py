@@ -46,10 +46,10 @@ class Field:
         setattr(self._server, f"_{self._name}", new_value)
 
         if self._server in self._server.user.history_key_list:
-            await self._server.update_hist_in_db()
-            logging.info(f"enable Изменилось в history_key в базе данных enable={new_value}")
+            await self._server.push_json_in_db("history_key_list")
+            logging.info(f"Изменилось в history_key в базе данных {self._name}={new_value}")
             return
-        await self._server.update_serv_in_db()  # Обновление данных в базе через объект Server_cl
+        await self._server.push_json_in_db("servers")  # Обновление данных в базе через объект Server_cl
 
     # Публичный метод для изменения значения, если поле не защищено
     async def set(self, new_value):
@@ -200,6 +200,10 @@ class ServerCl:
         self.uuid_id = Field('uuid_id', server_data.get("uuid_id", ""), self)
         self.user = user  # Ссылка на объект User для обновления данных в базе
 
+    async def push_json_in_db(self, field_json: str):
+        """Метод для обновления сервера в базе данных через родительский объект User."""
+        await self.user.push_field_json_in_db(field_json)
+
     async def update_serv_in_db(self):
         """Метод для обновления сервера в базе данных через родительский объект User."""
         await self.user._update_servers_in_db()
@@ -232,31 +236,31 @@ class ServerCl:
             "uuid_id": await self.uuid_id.get()
         }
 
-    async def delete(self):
-        """Удаляет текущий сервер из списка серверов пользователя и обновляет базу данных."""
-
-        # Проверяем, что текущий сервер есть в списке servers пользователя
-        if self in self.user.servers:
-            # Удаляем сервер из списка servers
-            self.user.servers.remove(self)
-            # Обновляем value_key в базе данных (список серверов) после удаления
-            await self.user._update_servers_in_db()
-            # Обновляем count_key
-            await self.user.count_key._update_count_key()
-            print(f"Ключ {await self.name_server.get()} успешно удален из списка и базы данных.")
-            return True
-        elif self in self.user.history_key_list:
-            # Удаляем сервер из списка servers
-            self.user.history_key_list.remove(self)
-            # Обновляем value_key в базе данных (список серверов) после удаления
-            await self.user._update_history_key_in_db()
-            # Обновляем count_key
-            await self.user.count_key._update_count_key()
-            print(f"Ключ {await self.name_server.get()} успешно удален из списка и базы данных.")
-            return True
-        else:
-            print("Сервер не найден в списке пользователя. Ни в value_key ни в history_key")
-            return False
+    # async def delete(self, list):
+    #     """Удаляет текущий сервер из списка серверов пользователя и обновляет базу данных. .delete()"""
+    #
+    #     # Проверяем, что текущий сервер есть в списке servers пользователя
+    #     if self in self.user.servers:
+    #         # Удаляем сервер из списка servers
+    #         self.user.servers.remove(self)
+    #         # Обновляем value_key в базе данных (список серверов) после удаления
+    #         await self.user._update_servers_in_db()
+    #         # Обновляем count_key
+    #         await self.user.count_key._update_count_key()
+    #         print(f"Ключ {await self.name_server.get()} успешно удален из списка и базы данных.")
+    #         return True
+    #     elif self in self.user.history_key_list:
+    #         # Удаляем сервер из списка servers
+    #         self.user.history_key_list.remove(self)
+    #         # Обновляем value_key в базе данных (список серверов) после удаления
+    #         await self.user._update_history_key_in_db()
+    #         # Обновляем count_key
+    #         await self.user.count_key._update_count_key()
+    #         print(f"Ключ {await self.name_server.get()} успешно удален из списка и базы данных.")
+    #         return True
+    #     else:
+    #         print("Сервер не найден в списке пользователя. Ни в value_key ни в history_key")
+    #         return False
 
     async def delete_user_key(self):
         """

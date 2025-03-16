@@ -35,15 +35,13 @@ class ResultChangeEnable(BaseResultProcessor):
             identifier = task_data.get('user_ip')
 
         if identifier:
-            await self.update_enable_status(us, identifier, enable_status, protocol)
+            await self.update_enable_status(us, identifier, enable_status, protocol, status_task)
 
         logging.info(f"Получена и обработана задача result_change_enable. От chat_id = {chat_id}")
-        await send_admin_log(bot,
-                             f"😈 Пользователь {chat_id} изменил состояние на {enable_status} (в db:{await us.active_server.enable.get()}), status={status_task}")
 
-    async def update_enable_status(self, us: UserCl, identifier: str, enable_status: bool, protocol: str):
+    async def update_enable_status(self, us: UserCl, identifier: str, enable_status: bool, protocol: str, status_task: str):
         """
-        Универсальная функция обновления enable_status для VLESS и WireGuard.
+        Универсальная функция обновления enable_status для VLESS и WireGuard update_hist_in_db.
         """
 
         current_identifier = await us.active_server.uuid_id.get() if protocol == "vless" else await us.active_server.user_ip.get()
@@ -51,6 +49,8 @@ class ResultChangeEnable(BaseResultProcessor):
         if current_identifier == identifier:
             await us.active_server.enable.set_enable_admin(enable_status)
             logging.info(f"Успешно обновлен enable для активного ключа {identifier}")
+            await send_admin_log(bot,
+                                 f"😈 Пользователь {us.chat_id} изменил состояние на {enable_status} (в db:{await us.active_server.enable.get()}), status={status_task}")
         else:
             # Проверяем history_key_list
             for key in us.history_key_list:
@@ -58,9 +58,20 @@ class ResultChangeEnable(BaseResultProcessor):
                 if key_identifier == identifier:
                     await key.enable.set_enable_admin(enable_status)
                     logging.info(f"✅ Обновлен ключ в history_key_list: {identifier}, enable={enable_status}")
+                    await send_admin_log(bot,
+                                         f"😈 Пользователь {us.chat_id} изменил состояние в HISTORY_KEY {enable_status} (в db:{await us.active_server.enable.get()}), status={status_task}")
+                    return
+            for key in us.servers:
+                key_identifier = await key.uuid_id.get() if protocol == "vless" else await key.user_ip.get()
+                if key_identifier == identifier:
+                    await key.enable.set_enable_admin(enable_status)
+                    logging.info(f"✅ Обновлен ключ в value_key: {identifier}, enable={enable_status}")
+                    await send_admin_log(bot,f"😈 Пользователь {us.chat_id} изменил состояние в SERVERS {enable_status} (в db:{await us.active_server.enable.get()}), status={status_task}")
                     return
 
+
             logging.error(f"⚠️ Ошибка: идентификатор {identifier} не найден ни в active_server, ни в history_key_list")
+
             await send_admin_log(f"⚠️😈 Ошибка: идентификатор {identifier} не найден ни в active_server, ни в history_key_list chat_id={us.chat_id}")
 
 

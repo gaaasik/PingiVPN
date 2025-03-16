@@ -122,8 +122,7 @@ class UserCl:
         self.is_subscribed_on_channel = Field('is_subscribed_on_channel', 0, self)
         self.days_since_registration = Field('days_since_registration', 0, self)
         self.email = Field('email', "", self)
-        self.servers: list[
-            ServerCl]  # Явное указание типа поля servers  # Поле для хранения списка серверов (список объектов Server_cl)
+        self.servers: list[ServerCl]  # Явное указание типа поля servers  # Поле для хранения списка серверов (список объектов Server_cl)
         self.active_server: ServerCl = None
         self.history_key_list: list[ServerCl]
         self.count_key = Field('count_key', 0, self)  # Поле для хранения количества серверов
@@ -325,7 +324,8 @@ class UserCl:
             self.servers.append(new_server)
 
             # Обновляем поле value_key (список серверов) и count_key в базе данных
-            await self._update_servers_in_db()
+            await self.push_field_json_in_db("servers")
+            #await self._update_servers_in_db()
             await self.count_key._update_count_key()
 
     async def check_subscription_channel(self, channel_username="@pingi_hub"):
@@ -395,12 +395,6 @@ class UserCl:
             # Создание нового сервера и обновление базы данных
             print(f"Сервер WireGuard добавлен для пользователя с hat_id {self.chat_id}")
         await self.choosing_working_server()
-
-    async def change_activ_key(self, new_active_protocol):
-        if await self.count_key.get() <= 1:
-            print()
-        if new_active_protocol == "wireguard":
-            pass
 
     async def check_file_PINGI(self) -> Union[str, bool]:
         user_login = await self.user_login.get()
@@ -707,6 +701,34 @@ class UserCl:
             await db.execute(query_update, (value_key_json, self.chat_id))
             await db.commit()
 
+    async def push_field_json_in_db(self, field_json: str):
+        try:
+            """Обновление списка серверов и количества серверов в базе данных"""
+            if field_json == "history_key_list" or field_json == "history_key":
+                push_variable = self.history_key_list
+                push_field_in_db = "history_key"
+            elif field_json == "servers" or field_json == "server"  or field_json == "value_key":
+                push_variable = self.servers
+                push_field_in_db = "value_key"
+            else:
+                logging.error("Не известное поле для обновления в базе данных, не понятно что обновлять")
+                return
+            # Преобразуем каждый сервер обратно в словарь перед сохранением в базу данных
+            servers_data = [await key.to_dict() for key in push_variable]
+            value_key_json = json.dumps(servers_data)
+
+            async with aiosqlite.connect(database_path_local) as db:
+                query_update = f"""
+                        UPDATE users_key 
+                        SET {push_field_in_db} = ?
+                        WHERE chat_id = ?
+                        """
+                await db.execute(query_update, (value_key_json, self.chat_id))
+                await db.commit()
+        except Exception as e:
+            logging.error(f"Ошибка при обновление поля в db: {e}")
+
+
     async def _update_fild_in_db(self, field_name, value):
         """Обновление любого поля в базе данных с проверкой на наличие chat_id."""
         async with aiosqlite.connect(database_path_local) as db:
@@ -751,61 +773,7 @@ class UserCl:
                 await db.execute(query, (value, self.chat_id))
                 await db.commit()
 
-    async def _update_history_key_in_db(self, new_history_key=""):
-        """
-        Обновление списка history_key_list в базе данных с добавлением нового значения.
-        Проверяет, есть ли уже ключ с таким же URL, и не добавляет дубликаты.
-        """
-        async with aiosqlite.connect(database_path_local) as db:
-            # Получаем текущие данные history_key_list из базы
-            query_select = """
-            SELECT history_key FROM users_key WHERE chat_id = ?
-            """
-            cursor = await db.execute(query_select, (self.chat_id,))
-            row = await cursor.fetchone()
 
-            if row and row[0]:
-                history_key_list = json.loads(row[0])  # Загружаем существующие данные
-            else:
-                history_key_list = []
-
-            # Проверяем, существует ли уже такой ключ
-            existing_urls = {key.get("email_key") for key in history_key_list if "email_key" in key}
-
-            if new_history_key == "":
-                key_data = [await key.to_dict() for key in self.history_key_list]
-                history_key_json = json.dumps(key_data)
-                async with aiosqlite.connect(database_path_local) as db:
-                    query_update = """
-                            UPDATE users_key 
-                            SET history_key = ?
-                            WHERE chat_id = ?
-                            """
-                    await db.execute(query_update, (history_key_json, self.chat_id))
-                    await db.commit()
-                return
-            if not (new_history_key.get("email_key") in existing_urls):
-                history_key_list.append(new_history_key)
-                logging.info(
-                    f"Ключ с таким email_key уже существует в history_key для chat_id {self.chat_id}, добавление пропущено.")
-                return
-            # Добавляем новый элемент в history_key_list
-
-            history_key_json = json.dumps(history_key_list)
-
-            # Обновляем базу данных
-            query_update = """
-            UPDATE users_key 
-            SET history_key = ?
-            WHERE chat_id = ?
-            """
-            await db.execute(query_update, (history_key_json, self.chat_id))
-            await db.commit()
-
-            # Добавляем в переменную класса
-            self.history_key_list.append(new_history_key)
-
-            logging.info(f"Добавлен новый элемент в history_key_list для chat_id {self.chat_id}")
 
     async def update_key_to_vless(self, url: str = ""):
         """
@@ -827,7 +795,7 @@ class UserCl:
                 print("Нет доступных URL для VLESS.")
                 return False
             url = url_vless
-        ############################## TEST ######################################################################
+        ############################## TEST ######################################################################Ошибка при определении task_type:
 
         if self.active_server:
             current_date = datetime.now()
@@ -839,21 +807,20 @@ class UserCl:
             # Вычисляем оставшиеся дни
             free_day = (date_key_off - current_date).days + 1
             logging.info(f"высчитали количество дней до отключения = {free_day}")
-            old_key_data = await self.active_server.to_dict()
+            old_key_data = self.active_server
 
+            self.servers.remove(old_key_data)
+            logging.info("Удаляем старый ключ из servers, ")
+            for server in self.servers:
+                logging.error(f"Сейчас в server есть ключ, а его не должно быть, {server}")
             self.history_key_list.append(old_key_data)
+            await self.push_field_json_in_db("history_key_list")
+            logging.info(f"добавили старый ключ в поле history_key_list")
             await self.active_server.enable.set(False)
             logging.info(f"отключение старого ключа")
-            await self._update_history_key_in_db(old_key_data)
-
 
             new_key_params = await self.generate_server_params_vless(url, free_day)
-
-            await self.active_server.delete()
-            # Создание нового сервера и обновление базы данных Ошибка при обработке очереди  Ключ с таким email_key уже существует
             await self.add_server_json(new_key_params)
-            print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
-
             # Теперь новый active_server
             await self.choosing_working_server()
             return True
@@ -896,7 +863,7 @@ class UserCl:
             await self.active_server.enable.set(False)
             logging.info(f"отключение старого ключа")
             await self._update_history_key_in_db(old_key_data)
-            await self.active_server.delete()
+            #await self.active_server.delete()
             # Создание нового сервера и обновление базы данных Ошибка при обработке очереди
             await self.add_server_json(new_key_params)
             print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
