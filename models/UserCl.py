@@ -773,8 +773,6 @@ class UserCl:
                 await db.execute(query, (value, self.chat_id))
                 await db.commit()
 
-
-
     async def update_key_to_vless(self, url: str = ""):
         """
         Обновляет ключ пользователя на VLESS.
