@@ -1,6 +1,11 @@
+import logging
+import os
+
 from aiogram import Router, types, F
 from aiogram.types import CallbackQuery, Message, Document
 from aiogram.fsm.context import FSMContext
+
+from bot.admin_func.history_key.history_key import move_in_history_files_wg
 from bot.admin_func.keyboards import get_key_change_keyboard
 from bot.admin_func.states import AdminStates
 import re
@@ -33,7 +38,7 @@ async def change_to_wireguard(callback: CallbackQuery, state: FSMContext):
 async def process_vless_key(message: Message, state: FSMContext):
     """Обработчик ввода нового VLESS ключа."""
     data = await state.get_data()
-    us = data.get("current_user")
+    us: UserCl = data.get("current_user")
 
     key = message.text.strip()
 
@@ -42,7 +47,9 @@ async def process_vless_key(message: Message, state: FSMContext):
         return
 
     # Вызов функции обновления ключа
-
+    if await us.active_server.name_protocol.get() == "wireguard":
+        logging.info("Перевел старые файлы в history_key")
+        await move_in_history_files_wg(us.active_server)
     await us.update_key_to_vless(key)
     await message.answer("✅ Новый VLESS ключ сохранен.")
     await state.clear()
@@ -50,24 +57,93 @@ async def process_vless_key(message: Message, state: FSMContext):
 
 @router.message(AdminStates.waiting_for_wireguard_file, F.document)
 async def process_wireguard_file(message: Message, state: FSMContext):
-    """Обработчик загрузки нового конфигурационного файла WireGuard."""
-    data = await state.get_data()
-    us = data.get("current_user")
-    document: Document = message.document
 
-    if not document.file_name.endswith(".conf"):
-        await message.answer("❌ Ошибка: загруженный файл должен быть в формате .conf")
-        return
+    """ Обрабатывает загруженный конфигурационный файл WireGuard  update_key_to_wireguard.
+    - Проверяет формат файла (.conf).
+    - Извлекает server_ip и user_ip.
+    - Сохраняет файл в папку пользователя (создает, если нет).
+    - Вызывает update_key_to_wireguard для обновления ключа."""
 
-    await us.update_key_to_wireguard()
+    try:
+        logging.info("📥 Получен файл конфигурации WireGuard")
 
+        data = await state.get_data()
+        us: UserCl = data.get("current_user")
+        user_login = str(await us.user_login.get())
 
-    # Вызов функции обновления ключа
+        if not us:
+            await message.answer("❌ Ошибка: Не удалось определить пользователя.")
+            logging.error("❌ Ошибка: current_user отсутствует в состоянии.")
+            return
 
+        document: Document = message.document
 
+        if not document.file_name.endswith(".conf"):
+            await message.answer("❌ Ошибка: загруженный файл должен быть в формате .conf")
+            logging.warning(f"⚠️ Файл {document.file_name} имеет неподдерживаемый формат.")
+            return
 
+        # Получаем путь к основной папке пользователей из .env
+        base_directory = os.getenv("REGISTERED_USERS_DIR")
+        if not base_directory:
+            logging.error("❌ Ошибка: Переменная окружения base_directory_user_files_wg не найдена!")
+            return
 
-    await message.answer("✅ Файл конфигурации WireGuard получен.")
-    # Здесь можно добавить код для скачивания файла и проверки его содержимого
+        # Определяем папку пользователя (ищем или создаем)
+        chat_id = str(us.chat_id)
+        user_folder = None
 
-    await state.clear()
+        for folder in os.listdir(base_directory):
+            if folder.startswith(chat_id):
+                user_folder = os.path.join(base_directory, folder)
+                break
+
+        if not user_folder:
+            user_folder = os.path.join(base_directory, f"{chat_id}_{user_login}")
+            os.makedirs(user_folder, exist_ok=True)
+            logging.info(f"📂 Создана папка для пользователя: {user_folder}")
+
+        # Путь для сохранения нового конфигурационного файла
+        file_path = os.path.join(user_folder, "PingiVPN.conf")
+
+        # Скачивание файла
+        file = await message.bot.get_file(document.file_id)
+        await message.bot.download_file(file.file_path, file_path)
+
+        logging.info(f"✅ Файл сохранен: {file_path}")
+
+        # Читаем файл и извлекаем данные
+        server_ip, user_ip = None, None
+        with open(file_path, "r", encoding="utf-8") as conf_file:
+            conf_content = conf_file.read()
+
+            # Извлекаем server_ip (из строки Endpoint)
+            endpoint_match = re.search(r"Endpoint\s*=\s*([\d\.]+):\d+", conf_content)
+            if endpoint_match:
+                server_ip = endpoint_match.group(1)
+
+            # Извлекаем user_ip (из строки Address)
+            address_match = re.search(r"Address\s*=\s*([\d\.]+)", conf_content)
+            if address_match:
+                user_ip = address_match.group(1)
+
+        if not server_ip or not user_ip:
+            await message.answer("❌ Ошибка: Не удалось извлечь server_ip или user_ip из файла.")
+            logging.error(f"❌ Ошибка парсинга IP в файле {file_path}")
+            return
+
+        logging.info(f"🔍 Извлечены данные: server_ip={server_ip}, user_ip={user_ip}")
+
+        # Обновляем ключ пользователя
+        json_with_wg = {
+            "server_ip": server_ip,
+            "user_ip": user_ip
+        }
+        await us.update_key_to_wireguard(json_with_wg)
+
+        await message.answer("✅ WireGuard-ключ успешно обновлен!")
+        logging.info(f"✅ Ключ WireGuard успешно обновлен для пользователя {us.chat_id}")
+
+    except Exception as e:
+        logging.error(f"🔥 Ошибка в process_wireguard_file: {e}")
+        await message.answer("❌ Произошла ошибка при обработке файла WireGuard.")

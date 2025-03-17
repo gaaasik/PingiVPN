@@ -315,19 +315,29 @@ class UserCl:
                 await self.active_server.status_key.set("active")
                 return  # Завершаем поиск, как только нашли активный сервер
         self.active_server = None  # Если активный сервер не найден
-
+#################################################### Можно объеденить в одно##############################################################################################
     async def add_server_json(self, server_params: dict):
         """Добавление нового сервера в JSON формате"""
         # Преобразуем параметры в объект Server_cl и добавляем его в список servers
         if server_params:
             new_server = ServerCl(server_params, self)
             self.servers.append(new_server)
-
             # Обновляем поле value_key (список серверов) и count_key в базе данных
             await self.push_field_json_in_db("servers")
             #await self._update_servers_in_db()
             await self.count_key._update_count_key()
 
+    async def add_history_json(self, server_params: dict):
+        """Добавление нового сервера в JSON формате"""
+        # Преобразуем параметры в объект Server_cl и добавляем его в список servers
+        if server_params:
+            new_server = ServerCl(server_params, self)
+            self.history_key_list.append(new_server)
+            # Обновляем поле value_key (список серверов) и count_key в базе данных
+            await self.push_field_json_in_db("history_key_list")
+            await self.count_key._update_count_key()
+
+    ################################################### Можно объеденить в одно##############################################################################################
     async def check_subscription_channel(self, channel_username="@pingi_hub"):
         """
         Проверяет, подписан ли пользователь на указанный канал.
@@ -763,7 +773,7 @@ class UserCl:
                 query = f"UPDATE users SET {field_name} = ? WHERE chat_id = ?"
                 await db.execute(query, (value, self.chat_id))
                 await db.commit()
-                print(f"Поле '{field_name}' обновлено для пользователя с chat_id {self.chat_id}.")
+
 
     async def _update_count_key_in_db(self, field_name, value):
         """Обновление count_key в таблице users_key для текущего пользователя."""
@@ -807,12 +817,13 @@ class UserCl:
             logging.info(f"высчитали количество дней до отключения = {free_day}")
             old_key_data = self.active_server
 
-            self.servers.remove(old_key_data)
-            logging.info("Удаляем старый ключ из servers, ")
+            if old_key_data in self.servers:
+                self.servers.remove(old_key_data)
+                self.history_key_list.append(old_key_data)
+                await self.push_field_json_in_db("history_key_list")
             for server in self.servers:
                 logging.error(f"Сейчас в server есть ключ, а его не должно быть, {server}")
-            self.history_key_list.append(old_key_data)
-            await self.push_field_json_in_db("history_key_list")
+
             logging.info(f"добавили старый ключ в поле history_key_list")
             await self.active_server.enable.set(False)
             logging.info(f"отключение старого ключа")
@@ -855,18 +866,20 @@ class UserCl:
             free_day = (date_key_off - current_date).days
             logging.info(f"высчитали количество дней до отключения = {free_day + 1}")
 
-            old_key_data = await self.active_server.to_dict()
-            self.history_key_list.append(old_key_data)
-            new_key_params = await self._generate_server_params_wireguard(json_with_wg, free_day)
+            old_key_data = self.active_server
+            if old_key_data in self.servers:
+                self.servers.remove(old_key_data)
+                self.history_key_list.append(old_key_data)
+                await self.push_field_json_in_db("history_key_list")
+            logging.info("Удаляем старый ключ из servers, ")
+            for server in self.servers:
+                logging.error(f"Сейчас в server есть ключ, а его не должно быть, {server}")
+            logging.info(f"добавили старый ключ в поле history_key_list")
             await self.active_server.enable.set(False)
             logging.info(f"отключение старого ключа")
-            await self._update_history_key_in_db(old_key_data)
-            #await self.active_server.delete()
-            # Создание нового сервера и обновление базы данных Ошибка при обработке очереди
-            await self.add_server_json(new_key_params)
-            print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
 
-            # Теперь новый active_server
+            new_key_params = await self._generate_server_params_wireguard(json_with_wg, free_day)
+            await self.add_history_json(new_key_params)
             await self.choosing_working_server()
             return True
 
