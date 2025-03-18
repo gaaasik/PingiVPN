@@ -8,7 +8,7 @@ from bot.admin_func.keyboards import get_search_user_keyboard, get_user_service_
 from bot.admin_func.states import AdminStates
 from bot.admin_func.searh_user.utils import user_to_json, format_user_data
 from bot_instance import bot
-from models.UserCl import UserCl
+
 
 router = Router()
 DB_PATH = os.getenv('database_path_local')
@@ -40,6 +40,7 @@ async def search_by_chat_id(callback: CallbackQuery, state: FSMContext):
 # 📌 Обработка ввода Chat ID (добавлена кнопка "🔙 Назад" и возврат при ошибке)
 @router.message(AdminStates.waiting_for_chat_id)
 async def handle_chat_id_input(message: types.Message, state: FSMContext):
+    from models.UserCl import UserCl
     """Обрабатываем ввод Chat ID"""
     try:
         chat_id = message.text.strip()

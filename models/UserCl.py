@@ -9,6 +9,7 @@ import aiosqlite
 import json
 from dotenv import load_dotenv
 
+from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg
 from bot.handlers.admin import send_admin_log
 from bot_instance import bot
 from models.country_server_data import get_json_country_server_data, get_name_server_by_ip, get_country_server_by_ip
@@ -315,27 +316,22 @@ class UserCl:
                 await self.active_server.status_key.set("active")
                 return  # Завершаем поиск, как только нашли активный сервер
         self.active_server = None  # Если активный сервер не найден
-#################################################### Можно объеденить в одно##############################################################################################
-    async def add_server_json(self, server_params: dict):
+#################################################### Можно объеденить в одно###########################  add_history_json  ###################################################################
+    async def add_history_servers_json(self, server_params: dict = None, ready_server: ServerCl = None, field: str = "servers"):
         """Добавление нового сервера в JSON формате"""
         # Преобразуем параметры в объект Server_cl и добавляем его в список servers
-        if server_params:
-            new_server = ServerCl(server_params, self)
+        new_server = ServerCl(server_params, self) if server_params else ready_server
+        if field == "servers":
             self.servers.append(new_server)
             # Обновляем поле value_key (список серверов) и count_key в базе данных
             await self.push_field_json_in_db("servers")
-            #await self._update_servers_in_db()
-            await self.count_key._update_count_key()
-
-    async def add_history_json(self, server_params: dict):
-        """Добавление нового сервера в JSON формате"""
-        # Преобразуем параметры в объект Server_cl и добавляем его в список servers
-        if server_params:
-            new_server = ServerCl(server_params, self)
+        elif field == "history_key_list":
             self.history_key_list.append(new_server)
             # Обновляем поле value_key (список серверов) и count_key в базе данных
             await self.push_field_json_in_db("history_key_list")
-            await self.count_key._update_count_key()
+        else:
+            logging.error("Нету такого протокола, ошибка у параметра field")
+        await self.count_key._update_count_key()
 
     ################################################### Можно объеденить в одно##############################################################################################
     async def check_subscription_channel(self, channel_username="@pingi_hub"):
@@ -384,7 +380,7 @@ class UserCl:
             await self.active_server.status_key.set("blocked")
 
         # Создание нового сервера и обновление базы данных
-        await self.add_server_json(server_params)
+        await self.add_history_servers_json(server_params=server_params, field="servers")
         print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
         # Проверяем реферала и начисляем бонус, если нужно
         try:
@@ -400,7 +396,7 @@ class UserCl:
 
         if not await self.count_key.get():
             server_params = await self._generate_server_params_wireguard(json_with_wg, free_day)
-            await self.add_server_json(server_params)
+            await self.add_history_servers_json(server_params=server_params, field="servers")
 
             # Создание нового сервера и обновление базы данных
             print(f"Сервер WireGuard добавлен для пользователя с hat_id {self.chat_id}")
@@ -696,20 +692,6 @@ class UserCl:
                     logging.error(f"Нет серверов для пользователя с chat_id {self.chat_id}")
                     self.servers = []
 
-    async def _update_servers_in_db(self):
-        """Обновление списка серверов и количества серверов в базе данных"""
-        # Преобразуем каждый сервер обратно в словарь перед сохранением в базу данных
-        servers_data = [await server.to_dict() for server in self.servers]
-        value_key_json = json.dumps(servers_data)
-
-        async with aiosqlite.connect(database_path_local) as db:
-            query_update = """
-            UPDATE users_key 
-            SET value_key = ?
-            WHERE chat_id = ?
-            """
-            await db.execute(query_update, (value_key_json, self.chat_id))
-            await db.commit()
 
     async def push_field_json_in_db(self, field_json: str):
         try:
@@ -774,7 +756,6 @@ class UserCl:
                 await db.execute(query, (value, self.chat_id))
                 await db.commit()
 
-
     async def _update_count_key_in_db(self, field_name, value):
         """Обновление count_key в таблице users_key для текущего пользователя."""
         async with aiosqlite.connect(database_path_local) as db:
@@ -815,23 +796,25 @@ class UserCl:
             # Вычисляем оставшиеся дни
             free_day = (date_key_off - current_date).days + 1
             logging.info(f"высчитали количество дней до отключения = {free_day}")
-            old_key_data = self.active_server
+            old_key = self.active_server
 
-            if old_key_data in self.servers:
-                self.servers.remove(old_key_data)
-                self.history_key_list.append(old_key_data)
-                await self.push_field_json_in_db("history_key_list")
+            if old_key in self.servers:
+                self.servers.remove(old_key)
+                await self.add_history_servers_json(ready_server=old_key, field="history_key_list")
+
             for server in self.servers:
                 logging.error(f"Сейчас в server есть ключ, а его не должно быть, {server}")
+            if await old_key.name_protocol.get() == "wireguard":
+                await move_in_history_files_wg(old_key)
 
             logging.info(f"добавили старый ключ в поле history_key_list")
             await self.active_server.enable.set(False)
             logging.info(f"отключение старого ключа")
 
             new_key_params = await self.generate_server_params_vless(url, free_day)
-            await self.add_server_json(new_key_params)
+            await self.add_history_servers_json(server_params=new_key_params, field="servers")
             # Теперь новый active_server
-            await self.choosing_working_server()
+            # await self.choosing_working_server()
             return True
 
         else:
@@ -839,7 +822,7 @@ class UserCl:
 
     async def update_key_to_wireguard(self, json_with_wg: Dict = None):
         """
-        Обновляет ключ пользователя на VLESS.
+        Обновляет ключ пользователя на wireguard.
         - Отключает старый ключ.
         - Копирует старые данные в history_key_list.
         - Обновляет uuid_id, email_key, name_protocol, server_ip.
@@ -866,21 +849,23 @@ class UserCl:
             free_day = (date_key_off - current_date).days
             logging.info(f"высчитали количество дней до отключения = {free_day + 1}")
 
-            old_key_data = self.active_server
-            if old_key_data in self.servers:
-                self.servers.remove(old_key_data)
-                self.history_key_list.append(old_key_data)
-                await self.push_field_json_in_db("history_key_list")
+            old_key = self.active_server
+            if old_key in self.servers:
+                self.servers.remove(old_key)
+                await self.add_history_servers_json(ready_server=old_key, field="history_key_list")
             logging.info("Удаляем старый ключ из servers, ")
             for server in self.servers:
                 logging.error(f"Сейчас в server есть ключ, а его не должно быть, {server}")
             logging.info(f"добавили старый ключ в поле history_key_list")
+
+            if await old_key.name_protocol.get() == "wireguard":
+                await move_in_history_files_wg(old_key)
+
             await self.active_server.enable.set(False)
             logging.info(f"отключение старого ключа")
 
             new_key_params = await self._generate_server_params_wireguard(json_with_wg, free_day)
-            await self.add_history_json(new_key_params)
-            await self.choosing_working_server()
+            await self.add_history_servers_json(server_params=new_key_params, field="servers")
             return True
 
         else:

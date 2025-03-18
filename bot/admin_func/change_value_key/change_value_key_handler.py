@@ -5,7 +5,7 @@ from aiogram import Router, types, F
 from aiogram.types import CallbackQuery, Message, Document
 from aiogram.fsm.context import FSMContext
 
-from bot.admin_func.history_key.history_key import move_in_history_files_wg
+from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg, validate_conf_file
 from bot.admin_func.keyboards import get_key_change_keyboard
 from bot.admin_func.states import AdminStates
 import re
@@ -98,10 +98,16 @@ async def process_wireguard_file(message: Message, state: FSMContext):
                 user_folder = os.path.join(base_directory, folder)
                 break
 
+
+
         if not user_folder:
             user_folder = os.path.join(base_directory, f"{chat_id}_{user_login}")
             os.makedirs(user_folder, exist_ok=True)
             logging.info(f"📂 Создана папка для пользователя: {user_folder}")
+
+        if await us.active_server.name_protocol.get() == "wireguard":
+            await move_in_history_files_wg(us.active_server)
+
 
         # Путь для сохранения нового конфигурационного файла
         file_path = os.path.join(user_folder, "PingiVPN.conf")
