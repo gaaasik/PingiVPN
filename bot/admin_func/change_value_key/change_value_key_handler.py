@@ -5,7 +5,7 @@ from aiogram import Router, types, F
 from aiogram.types import CallbackQuery, Message, Document
 from aiogram.fsm.context import FSMContext
 
-from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg, validate_conf_file
+from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg, validate_conf_file, generate_qr_code
 from bot.admin_func.keyboards import get_key_change_keyboard
 from bot.admin_func.states import AdminStates
 import re
@@ -146,6 +146,12 @@ async def process_wireguard_file(message: Message, state: FSMContext):
             "user_ip": user_ip
         }
         await us.update_key_to_wireguard(json_with_wg)
+
+        # ✅ **Генерация QR-кода и сохранение**
+        conf_file_path = os.path.join(user_folder, "PingiVPN.conf")
+        qr_code_path = os.path.join(user_folder, "PingiVPN.png")
+        generate_qr_code(conf_file_path, qr_code_path)
+        logging.info(f"✅ QR-код создан: {qr_code_path}")
 
         await message.answer("✅ WireGuard-ключ успешно обновлен!")
         logging.info(f"✅ Ключ WireGuard успешно обновлен для пользователя {us.chat_id}")
