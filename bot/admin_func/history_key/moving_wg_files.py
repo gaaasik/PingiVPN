@@ -3,6 +3,8 @@ import os
 import re
 import shutil
 
+import qrcode
+
 from models.ServerCl import ServerCl
 
 async def move_in_history_files_wg(old_key: ServerCl, server_ip: str = None, user_ip: str = None):
@@ -225,3 +227,27 @@ async def validate_conf_file(conf_file: str, server_ip: str, user_ip: str) -> bo
     except Exception as e:
         logging.error(f"🔥 Ошибка при проверке конфигурационного файла {conf_file}: {e}")
         return False
+
+
+
+def generate_qr_code(input_file, output_file):
+    """Генерирует QR-код из конфигурационного файла WireGuard."""
+    try:
+        with open(input_file, 'r', encoding="utf-8") as file:
+            config_data = file.read()
+
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(config_data)
+        qr.make(fit=True)
+
+        img = qr.make_image(fill='black', back_color='white')
+        img.save(output_file)
+
+        logging.info(f"✅ QR-код успешно сохранен: {output_file}")
+    except Exception as e:
+        logging.error(f"🔥 Ошибка при создании QR-кода: {e}")
