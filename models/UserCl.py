@@ -9,7 +9,7 @@ import aiosqlite
 import json
 from dotenv import load_dotenv
 
-from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg
+from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg, move_in_user_files_wg
 from bot.handlers.admin import send_admin_log
 from bot_instance import bot
 from models.country_server_data import get_json_country_server_data, get_name_server_by_ip, get_country_server_by_ip
@@ -325,6 +325,7 @@ class UserCl:
             self.servers.append(new_server)
             # Обновляем поле value_key (список серверов) и count_key в базе данных
             await self.push_field_json_in_db("servers")
+            await self.choosing_working_server()
         elif field == "history_key_list":
             self.history_key_list.append(new_server)
             # Обновляем поле value_key (список серверов) и count_key в базе данных
@@ -332,7 +333,7 @@ class UserCl:
         else:
             logging.error("Нету такого протокола, ошибка у параметра field")
         await self.count_key._update_count_key()
-
+        return new_server
     ################################################### Можно объеденить в одно##############################################################################################
     async def check_subscription_channel(self, channel_username="@pingi_hub"):
         """
@@ -808,7 +809,7 @@ class UserCl:
                 await move_in_history_files_wg(old_key)
 
             logging.info(f"добавили старый ключ в поле history_key_list")
-            await self.active_server.enable.set(False)
+            await old_key.enable.set(False)
             logging.info(f"отключение старого ключа")
 
             new_key_params = await self.generate_server_params_vless(url, free_day)
@@ -852,21 +853,37 @@ class UserCl:
             old_key = self.active_server
             if old_key in self.servers:
                 self.servers.remove(old_key)
+                logging.info("Удаляем старый ключ из servers, ")
                 await self.add_history_servers_json(ready_server=old_key, field="history_key_list")
-            logging.info("Удаляем старый ключ из servers, ")
+            await old_key.enable.set(False)
+            logging.info(f"отключение старого ключа")
+
             for server in self.servers:
                 logging.error(f"Сейчас в server есть ключ, а его не должно быть, {server}")
-            logging.info(f"добавили старый ключ в поле history_key_list")
 
             if await old_key.name_protocol.get() == "wireguard":
                 await move_in_history_files_wg(old_key)
-
-            await self.active_server.enable.set(False)
-            logging.info(f"отключение старого ключа")
+                logging.info("Переместили файлы старого ключа из папки пользователя")
 
             new_key_params = await self._generate_server_params_wireguard(json_with_wg, free_day)
-            await self.add_history_servers_json(server_params=new_key_params, field="servers")
+            new_key = await self.add_history_servers_json(server_params=new_key_params, field="servers")
+            if new_key:
+                await move_in_user_files_wg(new_key)
+
+            print(f"self.active")
+            print(f"server_ip = {await new_key.server_ip.get()}")
+            print(f"user_ip = {await new_key.user_ip.get()}")
+            print(f"name_server = {await new_key.name_server.get()}")
+            print(f"name_key = {await new_key.name_key.get()}")
+
+            if old_key == new_key:
+                logging.error("Ключ новый не изменился self.active остался прежним, ")
+                return False
+
+
             return True
 
         else:
+            new_key_params = await self._generate_server_params_wireguard(json_with_wg, 7)
+            await self.add_history_servers_json(server_params=new_key_params, field="servers")
             logging.info(f"Нет активных ключей, создаю новый ключ для chat_id == {self.chat_id}")

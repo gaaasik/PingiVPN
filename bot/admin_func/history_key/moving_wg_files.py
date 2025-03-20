@@ -98,7 +98,7 @@ async def move_in_user_files_wg(new_key: ServerCl):
         base_directory = os.getenv("REGISTERED_USERS_DIR")
         if not base_directory:
             logging.error("Ошибка: Переменная окружения REGISTERED_USERS_DIR не найдена!")
-            return
+            return False
 
         # Получаем данные из объекта new_key
         chat_id = str(new_key.user.chat_id)
@@ -119,7 +119,7 @@ async def move_in_user_files_wg(new_key: ServerCl):
 
         if not user_folder:
             logging.warning(f"Папка пользователя с chat_id {chat_id} не найдена.")
-            return
+            return False
 
         # Проверяем существование файла конфигурации
         conf_file = os.path.join(user_folder, "PingiVPN.conf")
@@ -138,7 +138,7 @@ async def move_in_user_files_wg(new_key: ServerCl):
 
             if not endpoint_match or not address_match:
                 logging.error(f"Ошибка: Не удалось извлечь Endpoint или Address из {conf_file}")
-                return
+                return False
 
             file_server_ip = endpoint_match.group(1)
             file_user_ip = address_match.group(1)
@@ -146,7 +146,7 @@ async def move_in_user_files_wg(new_key: ServerCl):
             # Проверяем соответствие IP-адресов
             if file_server_ip == server_ip and file_user_ip == user_ip:
                 logging.info(f"Файлы пользователя {chat_id} уже актуальны. Действия не требуются.")
-                return
+                return False
             else:
                 logging.warning(f"⚠Несоответствие IP в файле {conf_file}. Архивируем файлы...")
                 await move_in_history_files_wg(new_key, file_server_ip, file_user_ip)
@@ -155,7 +155,7 @@ async def move_in_user_files_wg(new_key: ServerCl):
         history_folder = os.path.join(user_folder, "history_key")
         if not os.path.exists(history_folder):
             logging.error(f"Ошибка: Папка history_key у пользователя {chat_id} отсутствует.")
-            return
+            return False
 
         # Ищем файлы с нужным именем в history_key
         history_conf_file = os.path.join(history_folder, f"{server_ip_formatted}-{user_ip_formatted}.conf")
@@ -163,7 +163,7 @@ async def move_in_user_files_wg(new_key: ServerCl):
 
         if not os.path.exists(history_conf_file) or not os.path.exists(history_png_file):
             logging.error(f"Ошибка: Не найдены актуальные файлы в history_key у {chat_id}.")
-            return
+            return False
 
         # Восстанавливаем файлы из history_key
         shutil.copy(history_conf_file, os.path.join(user_folder, "PingiVPN.conf"))
@@ -176,6 +176,7 @@ async def move_in_user_files_wg(new_key: ServerCl):
         os.remove(history_png_file)
 
         logging.info(f"🗑Удалены старые файлы {history_conf_file} и {history_png_file} из history_key.")
+        return True
 
     except Exception as e:
         logging.error(f"Ошибка при валидации и восстановлении файлов для chat_id {chat_id}: {e}")
