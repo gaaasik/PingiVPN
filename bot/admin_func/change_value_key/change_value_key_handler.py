@@ -1,12 +1,16 @@
+
 import logging
 import os
+from datetime import datetime
 
 from aiogram import Router, types, F
-from aiogram.types import CallbackQuery, Message, Document
+from aiogram.types import CallbackQuery, Message, Document, Chat, User
 from aiogram.fsm.context import FSMContext
 
+from bot.admin_func.history_key.history_key import handler_my_back_menu
 from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg, validate_conf_file
 from bot.admin_func.keyboards import get_key_change_keyboard
+from bot.admin_func.searh_user.search_user_handlers import handle_chat_id_input
 from bot.admin_func.states import AdminStates
 import re
 
@@ -46,12 +50,26 @@ async def process_vless_key(message: Message, state: FSMContext):
         await message.answer("❌ Неверный формат VLESS ключа. Пожалуйста, введите корректный ключ.")
         return
 
-    # Вызов функции обновления ключа
-    if await us.active_server.name_protocol.get() == "wireguard":
-        logging.info("Перевел старые файлы в history_key")
-        await move_in_history_files_wg(us.active_server)
+    if us.active_server:
+        # Вызов функции обновления ключа
+        if await us.active_server.name_protocol.get() == "wireguard":
+            logging.info("Перевел старые файлы в history_key")
+            await move_in_history_files_wg(us.active_server)
     await us.update_key_to_vless(key)
     await message.answer("✅ Новый VLESS ключ сохранен.")
+    # Вместо вызова handler_my_back_menu вызываем команду с inline-кнопки
+    #await router.feed_callback_query(callback=CallbackQuery(id="123", from_user=message.from_user, data="my_back_menu"))
+
+    fake_message = Message(
+        message_id=message.message_id,  # Берем ID текущего сообщения
+        from_user=User(id=message.message_id, is_bot=False, first_name="Admin"),  # Фейковый отправитель
+        chat=Chat(id=message.chat.id, type="private"),  # Используем ID текущего чата
+        text=str(us.chat_id),  # Передаем chat_id как текст
+        date=datetime.utcnow()  # Обязательное поле date
+    )
+
+    # Передаем fake_message вместо chat_id
+    await handle_chat_id_input(fake_message, state)
     await state.clear()
 
 

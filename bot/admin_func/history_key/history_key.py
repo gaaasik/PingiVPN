@@ -79,7 +79,7 @@ async def generate_history_keyboard(history_key_list, selected_index):
 
 
 @router.callback_query(F.data == "my_back_menu")
-async def my_back_menu(callback: CallbackQuery, state: FSMContext):
+async def handler_my_back_menu(callback: CallbackQuery, state: FSMContext):
     """Возвращает в состояние ожидания ввода Chat ID."""
     logging.info("Зашли в my_back_menu")
 
@@ -145,7 +145,7 @@ async def handler_change_active_server(callback: CallbackQuery, state: FSMContex
     await state.set_state(AdminStates.waiting_for_bonus_days)
     fake_message = Message(
         message_id=callback.message.message_id,  # Берем ID текущего сообщения
-        from_user=User(id=1388513042, is_bot=False, first_name="Admin"),  # Фейковый отправитель
+        from_user=User(id=callback.message.message_id, is_bot=False, first_name="Admin"),  # Фейковый отправитель
         chat=Chat(id=callback.message.chat.id, type="private"),  # Используем ID текущего чата
         text=str(user.chat_id),  # Передаем chat_id как текст
         date=datetime.utcnow()  # Обязательное поле date
