@@ -150,7 +150,7 @@ async def process_wireguard_file(message: Message, state: FSMContext):
         # ✅ **Генерация QR-кода и сохранение**
         conf_file_path = os.path.join(user_folder, "PingiVPN.conf")
         qr_code_path = os.path.join(user_folder, "PingiVPN.png")
-        generate_qr_code(conf_file_path, qr_code_path)
+        await generate_qr_code(conf_file_path, qr_code_path)
         logging.info(f"✅ QR-код создан: {qr_code_path}")
 
         await message.answer("✅ WireGuard-ключ успешно обновлен!")

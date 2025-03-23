@@ -229,8 +229,7 @@ async def validate_conf_file(conf_file: str, server_ip: str, user_ip: str) -> bo
         return False
 
 
-
-def generate_qr_code(input_file, output_file):
+async def generate_qr_code(input_file, output_file):
     """Генерирует QR-код из конфигурационного файла WireGuard."""
     try:
         with open(input_file, 'r', encoding="utf-8") as file:

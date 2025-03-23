@@ -12,6 +12,8 @@ from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg,
 from bot.admin_func.searh_user.search_user_handlers import handle_chat_id_input
 from bot.admin_func.searh_user.utils import format_history_key
 from bot.admin_func.states import AdminStates
+from bot.handlers.admin import send_admin_log
+from bot_instance import bot
 from models.ServerCl import ServerCl
 from models.UserCl import UserCl
 from dotenv import load_dotenv
@@ -113,7 +115,9 @@ async def handler_change_active_server(callback: CallbackQuery, state: FSMContex
     user = data.get("current_user")
     us = await UserCl.load_user(user.chat_id)
     index = int(callback.data.split("_")[-1])
-    old_key = us.active_server
+    if us.active_server:
+        old_key = us.active_server
+        logging.error(f"у пользователя {us.chat_id} нету active_server")
     new_key = us.history_key_list[index]
     del us.history_key_list[index]
     await new_key.date_key_off.set(await old_key.date_key_off.get())
@@ -137,10 +141,7 @@ async def handler_change_active_server(callback: CallbackQuery, state: FSMContex
     if await new_key.name_protocol.get() == "wireguard":
         await move_in_user_files_wg(new_key)
 
-
-
-
-
+    await send_admin_log(bot,f"🆕 Администратор {callback.message.chat} изменил основной ключ у {us.chat_id} c {await old_key.name_protocol.get() if old_key else '$ключа не было$'} на {await new_key.name_protocol.get()}")
     await callback.message.answer(f"Изменил основной ключ у пользователя с chat_id {user.chat_id}.")
     await state.set_state(AdminStates.waiting_for_bonus_days)
     fake_message = Message(
