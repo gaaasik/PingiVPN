@@ -819,6 +819,8 @@ class UserCl:
             return True
 
         else:
+            new_key_params = await self.generate_server_params_vless(url, 7)
+            await self.add_history_servers_json(server_params=new_key_params, field="servers")
             logging.info(f"Нет активных ключей, создаю новый ключ для chat_id == {self.chat_id}")
 
     async def update_key_to_wireguard(self, json_with_wg: Dict = None):
