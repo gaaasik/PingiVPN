@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Глобальная переменная для хранения данных серверов
+# Глобальная переменная для хранения данных серверов aioredis
 country_server_data = None
 # Загружаем данные один раз
 
@@ -57,6 +57,17 @@ async def get_name_server_by_ip(server_ip: str) -> str:
         if server.get("address") == server_ip:
             return server.get("name", "Unknown_Server")
     return "Unknown_Server"  # Если сервер не найден
+
+async def get_protocol_server_by_ip(server_ip: str) -> str:
+    """Получает имя сервера по его IP."""
+    global country_server_data
+    if country_server_data is None:
+        raise ValueError("Данные country_server_data еще не загружены.")
+
+    for server in country_server_data.get("servers", []):
+        if server.get("address") == server_ip:
+            return server.get("name_protocol", None)
+    return None  # Если сервер не найден
 
 
 async def get_country_server_by_ip(server_ip: str) -> str:

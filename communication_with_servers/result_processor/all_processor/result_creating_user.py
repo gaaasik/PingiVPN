@@ -3,7 +3,7 @@ import asyncio
 import logging
 import os
 
-import aioredis
+import redis.asyncio as aioredis
 from datetime import datetime
 from pathlib import Path
 
