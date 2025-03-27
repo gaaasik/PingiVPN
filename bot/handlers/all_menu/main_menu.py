@@ -2,10 +2,12 @@ import asyncio
 
 from aiogram import Router, types, Bot, F
 from aiogram.filters import Command
+from aiogram.fsm.context import FSMContext
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from bot.handlers.cleanup import delete_unimportant_messages, store_message, messages_for_db, register_message_type
 import os
 
+from bot.states.StatesCL import GeneralStates
 #from fastapi_app.all_utils_flask_db import logger
 from models.UserCl import UserCl
 from bot.keyboards.inline import main_menu_inline_keyboard
@@ -105,57 +107,62 @@ async def get_user_status_text(us):
         return "Произошла ошибка при проверке статуса. Попробуйте позже."
 
 
-# Функция для отображения основного меню
-async def show_main_menu(chat_id: int, bot: Bot):
-    user = await UserCl.load_user(chat_id)
-
-    if not user:
+async def show_main_menu(chat_id: int, bot: Bot, edit=False, message=None):
+    us = await UserCl.load_user(chat_id)
+    if not us:
         await bot.send_message(chat_id, "Для начала нажмите /start")
         return
 
-    # Получаем данные о пользователе по chat_id
-    us = await UserCl.load_user(chat_id)
-
     user_name_full = await us.user_name_full.get()
-    days_since_registration_text = await get_count_days_since_registration(us)
-    # Получаем статус пользователя
-    status_text = await get_user_status_text(us)
-
     user_name = await us.user_login.get()
+    status_text = await get_user_status_text(us)
+    days_text = await get_count_days_since_registration(us)
 
-    # Формирование текста главного меню
     text = (
         f"Привет {user_name_full}! 🕶\n\n"
-        "PingiVPN - быстрый и безопасный доступ к свободному интернету без ограничений\n\n"
-        "📱 Доступ к любым социальным сетям\n"
+        "PingiVPN — быстрый и безопасный интернет без ограничений:\n\n"
+        "📱 Доступ к соцсетям\n"
         "🛡 Анонимность\n"
         "📶 Устойчивость к блокировкам\n"
         "🚀 Высокая скорость\n"
-        "💻 Поддержка любых устройств\n\n"
+        "💻 Все устройства\n\n"
         f"🔑 Статус: *{status_text}*\n\n"
-        f"{days_since_registration_text}\n"
+        f"{days_text}"
     )
 
-    # Отправка сообщения с меню
-    await bot.send_message(chat_id=chat_id, text=text, reply_markup=main_menu_inline_keyboard(), parse_mode="Markdown")
+    if edit and message:
+        await message.edit_text(text, reply_markup=main_menu_inline_keyboard(), parse_mode="Markdown")
+    else:
+        await bot.send_message(chat_id=chat_id, text=text, reply_markup=main_menu_inline_keyboard(), parse_mode="Markdown")
 
 
-# Обработчики для кнопок главного меню
+
+
 @router.message(F.text == "🏠 Главное меню")
 @router.message(Command(commands=["menu"]))
 @router.callback_query(F.data == "main_menu")
-async def handle_main_menu(event: types.Message | types.CallbackQuery):
-    # Проверяем тип события (Message или CallbackQuery)
-    if isinstance(event, types.CallbackQuery):
-        chat_id = event.message.chat.id
-        bot = event.bot
-        await event.answer()  # Закрыть CallbackQuery, чтобы Telegram не показывал часы загрузки
-    else:
-        chat_id = event.chat.id
-        bot = event.bot
+async def handle_main_menu(event: types.Message | types.CallbackQuery, state: FSMContext):
+    await state.set_state(GeneralStates.main_menu)
 
-    # Отображение главного меню
-    await show_main_menu(chat_id, bot)
+    if isinstance(event, types.CallbackQuery):
+        await event.answer()
+        await show_main_menu(
+            chat_id=event.message.chat.id,
+            bot=event.bot,
+            edit=True,
+            message=event.message
+        )
+    elif isinstance(event, types.Message):
+        try:
+            await event.delete()
+        except Exception:
+            pass  # Иногда сообщение не удаляется (например, от бота)
+
+        await show_main_menu(
+            chat_id=event.chat.id,
+            bot=event.bot,
+            edit=False  # Поскольку edit невозможно без message
+        )
 
 
 # Обработчик для кнопки "Супер!"

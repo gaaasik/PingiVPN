@@ -43,7 +43,7 @@ async def handle_share(event: Message | CallbackQuery, bot: Bot):
     referral_link = f"https://t.me/{name_bot}?start={referral_code}"
 
     # Формируем сообщение о реферальной программе
-    share_message = generate_referral_text(-1)
+    share_message = generate_referral_text(0)
     share_keyboard = referral_menu_keyboard()
 
     # Отправляем сообщение в зависимости от типа события

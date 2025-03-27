@@ -100,6 +100,22 @@ async def init_db(database_path: str):
 
 async def update_database(database_path: str):
     """
+       Добавляет поле `active_chat` в таблицу users, если отсутствует,
+       и поле `history_key` в таблицу users_key.
+       """
+    async with aiosqlite.connect(database_path) as db:
+        # Добавление поля active_chat
+        try:
+            await db.execute("ALTER TABLE users ADD COLUMN active_chat BOOLEAN DEFAULT TRUE")
+            await db.commit()
+            print("✅ Поле `active_chat` добавлено в таблицу `users`")
+        except Exception as e:
+            if "duplicate column" in str(e).lower() or "already exists" in str(e).lower():
+                print("⚠️ Поле `active_chat` уже существует.")
+            else:
+                print(f"❌ Ошибка при добавлении `active_chat`: {e}")
+
+    """
        Проверяет наличие столбца `has_accepted_agreement` в таблице `users`
        и добавляет его, если он отсутствует.
        """

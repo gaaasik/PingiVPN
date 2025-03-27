@@ -153,7 +153,7 @@ def main_menu_inline_keyboard():
     # Создание клавиатуры с кнопками
     buttons = [
         [InlineKeyboardButton(text="🛒 Оплатить VPN", callback_data="buy_vpn")],
-        [InlineKeyboardButton(text="🔑 Мои ключи", callback_data="my_keys"), InlineKeyboardButton(text="❓ Помощь", callback_data="help")],
+        [InlineKeyboardButton(text="🔑 Мой ключ", callback_data="my_keys"), InlineKeyboardButton(text="❓ Помощь", callback_data="help")],
         [InlineKeyboardButton(text="📨 Пригласить", callback_data="share"), InlineKeyboardButton(text="ℹ️ Всё о PingiVPN", callback_data="about_pingi")],
         [InlineKeyboardButton(text="🔌 Подключить VPN", callback_data="connect_vpn")]
     ]
