@@ -255,7 +255,6 @@ async def generate_qr_code(input_file, output_file):
     except Exception as e:
         logging.error(f"Ошибка при создании QR-кода: {e}")
 
-#TEST
 async def add_key_from_buffer(old_key: ServerCl, name_new_protocol: str):
     try:
         chat_id = old_key.user.chat_id
