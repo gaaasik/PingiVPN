@@ -1,7 +1,35 @@
 import asyncio
+import logging
+import os
 from abc import ABC, abstractmethod
 from typing import List, Optional
+
+import aiosqlite
+
 from bot.handlers.admin import ADMIN_CHAT_IDS, send_admin_log
+
+
+async def handle_send_error(user_id: int, error: Exception):
+    """
+    Обработка ошибок отправки уведомления.
+    Если бот был заблокирован пользователем — обновляем поле active_chat = FALSE.
+    """
+    error_text = str(error).lower()
+    print(f"Ошибка при отправке пользователю {user_id}: {error_text}")
+
+    if "bot was blocked by the user" in error_text or "forbidden: bot was blocked by the user" in error_text:
+        try:
+            async with aiosqlite.connect(os.getenv("database_path_local")) as db:
+                await db.execute(
+                    "UPDATE users SET active_chat = 0 WHERE chat_id = ?",
+                    (user_id,)
+                )
+                await db.commit()
+            logging.info(f"❌ Пользователь {user_id} заблокировал бота. active_chat = FALSE")
+        except Exception as db_error:
+            logging.error(f"Ошибка при обновлении active_chat для {user_id}: {db_error}")
+    else:
+        logging.warning(f"Ошибка отправки сообщения пользователю {user_id}: {error}")
 
 
 class NotificationBase(ABC):
@@ -80,20 +108,10 @@ class NotificationBase(ABC):
 
             except Exception as e:
                 self.error_count += 1  # Увеличиваем счетчик ошибок
-                await self.handle_send_error(user_id, e)  # Обработка ошибок отправки
+                await handle_send_error(user_id, e)  # Обработка ошибок отправки
 
         # Параллельная отправка сообщений пользователям в батче
         await asyncio.gather(*[send_message(user_id) for user_id in batch])
-
-
-
-
-    async def handle_send_error(self, user_id: int, error: Exception):
-        """
-        Обработка ошибок отправки уведомления.
-        Можно переопределить в дочерних классах для логирования ошибок.
-        """
-        print(f"Ошибка при отправке уведомления пользователю {user_id}: {error}")
 
     async def run(self, bot):
         """

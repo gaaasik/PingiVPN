@@ -13,7 +13,7 @@ from bot.admin_func.class_friends import handler_friends
 from bot.admin_func.history_key import history_key
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
 from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_keys, menu_help, \
-    menu_share, menu_connect_vpn, menu_payment, menu_about_pingi, menu_subscriptoin_check, keenetic_setup
+    menu_share, menu_connect_vpn, menu_payment, menu_about_pingi, menu_subscriptoin_check, keenetic_setup, feedback_menu
 from bot.handlers import start, support, \
     user_help_request, feedback, app_downloaded,file_or_qr,thank_you
 
@@ -35,12 +35,14 @@ from communication_with_servers.result_processor.start_processor_result_queue im
 from models.country_server_data import load_server_data
 
 from models.daily_task_class.DailyTaskManager import DailyTaskManager
+from models.notifications.AccessExpiredReminder import AccessExpiredReminder
 from models.notifications.CompensationNotificationCL import CompensationNotification
 from models.notifications.NotificationManagerCL import NotificationManager
 from models.notifications.UnsubscribedNotificationCL import UnsubscribedNotification
 from models.notifications.TrialEndingNotificationCL import TrialEndingNotification
 from models.notifications.NotificationSchedulerCL import NotificationScheduler
 from models.notifications.PaymentReminderCL import PaymentReminder
+from models.notifications.utils import lottery
 from models.work_new_url import update_users_keys
 
 # Загружаем переменные окружения из файла .env
@@ -200,21 +202,25 @@ async def main():
         PaymentReminder()  # Регистрация PaymentReminder
     )
     notification_manager.register_notification(CompensationNotification())
+    notification_manager.register_notification(AccessExpiredReminder())
+
     # Инициализация планировщика уведомлений
     notification_scheduler = NotificationScheduler(notification_manager)
 
     # Настройка расписания уведомлений Ежедневная статистика
     #notification_scheduler.add_to_schedule("11:00", "CompensationNotification")
+    notification_scheduler.add_to_schedule("14:20", "AccessExpiredReminder")
     notification_scheduler.add_to_schedule("12:00", "UnsubscribedNotification")
     notification_scheduler.add_to_schedule("13:00", "TrialEndingNotification")
     notification_scheduler.add_to_schedule("14:00", "PaymentReminder")  # Добавили PaymentReminder
-
 
 
     #пропущенный пользователь
 
     # us= await UserCl.load_user(763159433)
 
+    # reminder = AccessExpiredReminder()
+    # await reminder.send_all_templates_to_admins(bot)
 
     # Запуск уведомлений по расписанию
     asyncio.create_task(notification_scheduler.start(bot))
@@ -250,6 +256,8 @@ async def main():
     dp.include_router(change_value_key_handler.router)
     dp.include_router(keenetic_setup.router)
     dp.include_router(handler_friends.router)
+    dp.include_router(lottery.router)
+    dp.include_router(feedback_menu.router)
 
     try:
         pass
