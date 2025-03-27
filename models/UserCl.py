@@ -326,6 +326,7 @@ class UserCl:
             # Обновляем поле value_key (список серверов) и count_key в базе данных
             await self.push_field_json_in_db("servers")
             await self.choosing_working_server()
+        # Преобразуем параметры в объект Server_cl и добавляем его в список history_key_list
         elif field == "history_key_list":
             self.history_key_list.append(new_server)
             # Обновляем поле value_key (список серверов) и count_key в базе данных
@@ -377,8 +378,20 @@ class UserCl:
         server_params = await self.generate_server_params_vless(url_vless, free_day)
 
         #Если был активный ключ мы его блокируем
+        if self.servers:
+            for old_key in self.servers:
+                if await old_key.name_protocol.get() == "wireguard":
+                    await move_in_history_files_wg(old_key)
+                await old_key.enable.set(False)
+                self.servers.remove(old_key)
+                await self.add_history_servers_json(ready_server=old_key, field="history_key_list")
         if self.active_server:
-            await self.active_server.status_key.set("blocked")
+            if await self.active_server.name_protocol.get() == "wireguard":
+                await move_in_history_files_wg(self.active_server)
+            await self.active_server.enable.set(False)
+            self.servers.remove(self.active_server)
+            await self.add_history_servers_json(ready_server=self.active_server, field="history_key_list")
+
 
         # Создание нового сервера и обновление базы данных
         await self.add_history_servers_json(server_params=server_params, field="servers")
@@ -394,6 +407,20 @@ class UserCl:
         return True
 
     async def add_key_wireguard(self, json_with_wg=None, free_day=7):
+
+        if self.servers:
+            for old_key in self.servers:
+                if await old_key.name_protocol.get() == "wireguard":
+                    await move_in_history_files_wg(old_key)
+                await old_key.enable.set(False)
+                self.servers.remove(old_key)
+                await self.add_history_servers_json(ready_server=old_key, field="history_key_list")
+        if self.active_server:
+            if await self.active_server.name_protocol.get() == "wireguard":
+                await move_in_history_files_wg(self.active_server)
+            await self.active_server.enable.set(False)
+            self.servers.remove(self.active_server)
+            await self.add_history_servers_json(ready_server=self.active_server, field="history_key_list")
 
         if not await self.count_key.get():
             server_params = await self._generate_server_params_wireguard(json_with_wg, free_day)
@@ -700,7 +727,7 @@ class UserCl:
             if field_json == "history_key_list" or field_json == "history_key":
                 push_variable = self.history_key_list
                 push_field_in_db = "history_key"
-            elif field_json == "servers" or field_json == "server"  or field_json == "value_key":
+            elif field_json == "servers" or field_json == "server" or field_json == "value_key":
                 push_variable = self.servers
                 push_field_in_db = "value_key"
             else:
@@ -850,7 +877,7 @@ class UserCl:
 
             # Вычисляем оставшиеся дни
             free_day = (date_key_off - current_date).days
-            logging.info(f"высчитали количество дней до отключения = {free_day + 1}")
+
 
             old_key = self.active_server
             if old_key in self.servers:

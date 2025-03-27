@@ -2,10 +2,15 @@ import logging
 import os
 import re
 import shutil
+from datetime import datetime
 
 import qrcode
 
+from bot.utils.file_sender import create_user_files
+from bot_instance import bot
 from models.ServerCl import ServerCl
+from models.UserCl import UserCl
+
 
 async def move_in_history_files_wg(old_key: ServerCl, server_ip: str = None, user_ip: str = None):
     """
@@ -55,8 +60,6 @@ async def move_in_history_files_wg(old_key: ServerCl, server_ip: str = None, use
         history_folder = os.path.join(user_folder, "history_key")
         os.makedirs(history_folder, exist_ok=True)
 
-
-
         # Путь к файлу конфигурации
         conf_file = os.path.join(user_folder, "PingiVPN.conf")
 
@@ -84,6 +87,7 @@ async def move_in_history_files_wg(old_key: ServerCl, server_ip: str = None, use
 
     except Exception as e:
         logging.error(f"Ошибка при перемещении файлов для chat_id {chat_id}: {e}")
+
 
 async def move_in_user_files_wg(new_key: ServerCl):
     """
@@ -249,4 +253,30 @@ async def generate_qr_code(input_file, output_file):
 
         logging.info(f"✅ QR-код успешно сохранен: {output_file}")
     except Exception as e:
-        logging.error(f"🔥 Ошибка при создании QR-кода: {e}")
+        logging.error(f"Ошибка при создании QR-кода: {e}")
+
+#TEST
+async def add_key_from_buffer(old_key: ServerCl, name_new_protocol: str):
+    try:
+        chat_id = old_key.user.chat_id
+        us = await UserCl.load_user(chat_id)
+        username = await us.user_login.get()
+
+        current_date = datetime.now()
+        date_key_off_str = await old_key.date_key_off.get()
+        date_key_off = datetime.strptime(date_key_off_str, "%d.%m.%Y %H:%M:%S")
+        # Вычисляем оставшиеся дни
+        free_day = (date_key_off - current_date).days
+        if name_new_protocol == "vless":
+            logging.info("Зашли обновлять на vless")
+            await us.add_key_vless(free_day)
+        elif name_new_protocol == "wireguard":
+            logging.info("Зашли обновлять на wireguard")
+            if await old_key.name_protocol.get() == "wireguard":
+                await move_in_history_files_wg(old_key)
+            await create_user_files(chat_id, username, bot, free_day)
+    except Exception as e:
+        logging.error(f"Ошибка при добавлении нового ключа из буфера: {e}")
+
+
+
