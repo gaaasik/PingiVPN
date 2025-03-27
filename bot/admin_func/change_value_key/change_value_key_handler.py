@@ -15,6 +15,8 @@ from bot.admin_func.searh_user.search_user_handlers import handle_chat_id_input
 from bot.admin_func.states import AdminStates
 import re
 
+from bot.handlers.admin import send_admin_log
+from bot_instance import bot
 from models.UserCl import UserCl
 
 router = Router()
@@ -28,7 +30,7 @@ def vless_key_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text="📥 Вставить из буфера", callback_data="paste_vless_key")],
-            [InlineKeyboardButton(text="🔙 Назад", callback_data="main_menu")]
+            [InlineKeyboardButton(text="🔙 Назад", callback_data="my_back_menu")]
         ]
     )
 
@@ -36,7 +38,7 @@ def wireguard_key_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text="📥 Загрузить из буфера", callback_data="paste_wireguard_file")],
-            [InlineKeyboardButton(text="🔙 Назад", callback_data="main_menu")]
+            [InlineKeyboardButton(text="🔙 Назад", callback_data="my_back_menu")]
         ]
     )
 
@@ -66,20 +68,51 @@ async def change_to_wireguard(callback: CallbackQuery, state: FSMContext):
 # --- Заглушки на кнопки из буфера ---
 @router.callback_query(F.data == "paste_vless_key")
 async def handle_paste_vless(callback: CallbackQuery, state: FSMContext):
-    await callback.answer(
-        "📋 Функция вставки из буфера скоро будет доступна. Вставьте ключ вручную.",
-        show_alert=True
+    data = await state.get_data()
+    us: UserCl = data.get("current_user")
+    if us.active_server:
+        await us.add_key_from_buffer(us.active_server, "vless")
+    else:
+        await callback.answer(
+            f"у пользователя {us.chat_id} нету ключа, пусть сам создаст ключ",
+            show_alert=True
+        )
+
+    await send_admin_log(bot,
+                         f"🆕 Администратор {callback.message.chat.id} изменил основной ключ у {us.chat_id} добавлен из буфера vless")
+    fake_message = Message(
+        message_id=callback.message.message_id,  # Берем ID текущего сообщения
+        from_user=User(id=callback.message.message_id, is_bot=False, first_name="Admin"),  # Фейковый отправитель
+        chat=Chat(id=callback.message.chat.id, type="private"),  # Используем ID текущего чата
+        text=str(us.chat_id),  # Передаем chat_id как текст
+        date=datetime.utcnow()  # Обязательное поле date
     )
-    await state.clear()
+    # Передаем fake_message вместо chat_id
+    await handle_chat_id_input(fake_message, state)
 
 
 @router.callback_query(F.data == "paste_wireguard_file")
 async def handle_paste_wireguard(callback: CallbackQuery, state: FSMContext):
-    await callback.answer(
-        "📁 Загрузка из буфера пока не реализована. Пожалуйста, отправьте `.conf` файл вручную.",
-        show_alert=True
+    data = await state.get_data()
+    us: UserCl = data.get("current_user")
+    if us.active_server:
+        await us.add_key_from_buffer(us.active_server, "wireguard")
+    else:
+        await callback.answer(
+            f"у пользователя {us.chat_id} нету ключа, пусть сам создаст ключ",
+            show_alert=True
+        )
+    await send_admin_log(bot,
+                         f"🆕 Администратор {callback.message.chat.id} изменил основной ключ у {us.chat_id} добавлен из буфера wireguard")
+    fake_message = Message(
+        message_id=callback.message.message_id,  # Берем ID текущего сообщения
+        from_user=User(id=callback.message.message_id, is_bot=False, first_name="Admin"),  # Фейковый отправитель
+        chat=Chat(id=callback.message.chat.id, type="private"),  # Используем ID текущего чата
+        text=str(us.chat_id),  # Передаем chat_id как текст
+        date=datetime.utcnow()  # Обязательное поле date
     )
-    await state.clear()
+    # Передаем fake_message вместо chat_id
+    await handle_chat_id_input(fake_message, state)
 
 # --- Приём текста VLESS ключа ---
 
@@ -101,7 +134,8 @@ async def process_vless_key(message: Message, state: FSMContext):
             logging.info("Перевел старые файлы в history_key")
             await move_in_history_files_wg(us.active_server)
     await us.update_key_to_vless(key)
-    await message.answer("✅ Новый VLESS ключ сохранен.")
+
+
     # Вместо вызова handler_my_back_menu вызываем команду с inline-кнопки
     #await router.feed_callback_query(callback=CallbackQuery(id="123", from_user=message.from_user, data="my_back_menu"))
 
@@ -115,8 +149,9 @@ async def process_vless_key(message: Message, state: FSMContext):
 
     # Передаем fake_message вместо chat_id
     await handle_chat_id_input(fake_message, state)
-    await message.answer("✅ Новый VLESS ключ сохранён.")
-    await state.clear()
+    await send_admin_log(bot,
+                         f"🆕 Администратор {message.chat.id} вставил сам новый ключ пользователю {us.chat_id}.")
+
 
 # --- Приём файла WireGuard ---
 

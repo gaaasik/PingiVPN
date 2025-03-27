@@ -377,12 +377,12 @@ class UserCl:
 
         # Параметры нового сервера VLESS
         server_params = await self.generate_server_params_vless(url_vless, free_day)
-
+        old_key = None
         #Если был активный ключ мы его блокируем
         if self.active_server:
             if await self.active_server.name_protocol.get() == "wireguard":
                 await move_in_history_files_wg(self.active_server)
-            await self.active_server.enable.set(False)
+            old_key = self.active_server
             self.servers.remove(self.active_server)
             await self.add_history_servers_json(ready_server=self.active_server, field="history_key_list")
 
@@ -398,15 +398,20 @@ class UserCl:
             logging.error(f"❌ Ошибка при начислении бонуса за реферала {self.chat_id}: {e}")
         #Теперь новый active_server   Ошибка при создании файлов для пользователя
         await self.choosing_working_server()
+
+        #выключаем старый ключ если он был
+        if old_key:
+            await old_key.enable.set(False)
+
         return True
 
     async def add_key_wireguard(self, json_with_wg=None, free_day=7):
-
+        old_key = None
         if self.active_server:
             print(f" active_server: ", self.active_server)
             if await self.active_server.name_protocol.get() == "wireguard":
                 await move_in_history_files_wg(self.active_server)
-            await self.active_server.enable.set(False)
+            old_key = self.active_server
             try:
                 self.servers.remove(self.active_server)
             except ValueError:
@@ -417,6 +422,9 @@ class UserCl:
         # Создание нового сервера и обновление базы данных
         print(f"Сервер WireGuard добавлен для пользователя с hat_id {self.chat_id}")
         await self.choosing_working_server()
+        # выключаем старый ключ если он был
+        if old_key:
+            await old_key.enable.set(False)
 
     async def check_file_PINGI(self) -> Union[str, bool]:
         user_login = await self.user_login.get()
