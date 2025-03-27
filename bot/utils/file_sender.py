@@ -6,13 +6,15 @@ from aiogram.types import FSInputFile
 import logging
 
 from bot.handlers.admin import send_admin_log
-from models.UserCl import UserCl
+
 from work_with_conf_WG.file_manager import find_user_directory
 
 from dotenv import load_dotenv
 from bot.utils.cache import cached_video  # Предполагаем, что видео кешируется аналогично фото
-from main import PATH_TO_IMAGES
 
+
+
+PATH_TO_IMAGES = os.getenv('PATH_TO_IMAGES')
 # Загрузка переменных окружения из .env
 load_dotenv()
 CONFIGS_DIR = os.getenv('CONFIGS_DIR')
@@ -126,7 +128,9 @@ async def send_qr_code(callback_query):
 
 
 async def create_user_files(chat_id, username, bot, free_day=7):
+    from models.UserCl import UserCl
     try:
+
         # Ищем папку пользователя, которая содержит chat_id в своем имени
         user_dir = find_user_directory(chat_id)  #=============#
         us = await UserCl.load_user(chat_id)

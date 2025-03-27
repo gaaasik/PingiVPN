@@ -9,10 +9,10 @@ import qrcode
 from bot.utils.file_sender import create_user_files
 from bot_instance import bot
 from models.ServerCl import ServerCl
-from models.UserCl import UserCl
 
 
-async def move_in_history_files_wg(old_key: ServerCl, server_ip: str = None, user_ip: str = None):
+
+async def move_in_history_files_wg(old_key: ServerCl, server_ip: str=None, user_ip: str=None, condition: str=None):
     """
     Перемещает файлы PingiVPN.conf и PingiVPN.png в папку history_key
     внутри директории пользователя, полученной из .env.
@@ -63,9 +63,20 @@ async def move_in_history_files_wg(old_key: ServerCl, server_ip: str = None, use
         # Путь к файлу конфигурации
         conf_file = os.path.join(user_folder, "PingiVPN.conf")
 
-        # Проверяем соответствие server_ip и user_ip в файле конфигурации
-        if not await validate_conf_file(conf_file, server_ip, user_ip):
-            return  # Если проверка не прошла, не выполняем перемещение
+        if condition == "all":
+            with open(conf_file, "r", encoding="utf-8") as f:
+                content = f.read()
+            # Найти IP пользователя
+            user_ip_match = re.search(r'Address\s*=\s*([\d.]+)/', content)
+            user_ip_formatted = user_ip_match.group(1).replace(".", "_") if user_ip_match else None
+            # Найти IP сервера
+            server_ip_match = re.search(r'Endpoint\s*=\s*([\d.]+):', content)
+            server_ip_formatted = server_ip_match.group(1).replace(".", "_") if server_ip_match else None
+
+        else:
+            # Проверяем соответствие server_ip и user_ip в файле конфигурации
+            if not await validate_conf_file(conf_file, server_ip, user_ip):
+                return  # Если проверка не прошла, не выполняем перемещение
 
         # Формируем новые имена файлов
         new_conf_file = os.path.join(history_folder, f"{server_ip_formatted}-{user_ip_formatted}.conf")
@@ -255,27 +266,7 @@ async def generate_qr_code(input_file, output_file):
     except Exception as e:
         logging.error(f"Ошибка при создании QR-кода: {e}")
 
-async def add_key_from_buffer(old_key: ServerCl, name_new_protocol: str):
-    try:
-        chat_id = old_key.user.chat_id
-        us = await UserCl.load_user(chat_id)
-        username = await us.user_login.get()
 
-        current_date = datetime.now()
-        date_key_off_str = await old_key.date_key_off.get()
-        date_key_off = datetime.strptime(date_key_off_str, "%d.%m.%Y %H:%M:%S")
-        # Вычисляем оставшиеся дни
-        free_day = (date_key_off - current_date).days
-        if name_new_protocol == "vless":
-            logging.info("Зашли обновлять на vless")
-            await us.add_key_vless(free_day)
-        elif name_new_protocol == "wireguard":
-            logging.info("Зашли обновлять на wireguard")
-            if await old_key.name_protocol.get() == "wireguard":
-                await move_in_history_files_wg(old_key)
-            await create_user_files(chat_id, username, bot, free_day)
-    except Exception as e:
-        logging.error(f"Ошибка при добавлении нового ключа из буфера: {e}")
 
 
 

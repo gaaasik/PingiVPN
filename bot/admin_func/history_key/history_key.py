@@ -8,7 +8,7 @@ from aiogram import Router, types, F
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, Chat, User, Message
 
-from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg, move_in_user_files_wg
+
 from bot.admin_func.searh_user.search_user_handlers import handle_chat_id_input
 from bot.admin_func.searh_user.utils import format_history_key
 from bot.admin_func.states import AdminStates
@@ -109,6 +109,7 @@ async def handler_my_back_menu(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(lambda c: c.data.startswith("change_active_server_"))
 async def handler_change_active_server(callback: CallbackQuery, state: FSMContext):
+    from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg, move_in_user_files_wg
     """Возвращает в состояние ожидания ввода Chat ID."""
     logging.info("Запуск change_active_server_")
     data = await state.get_data()
@@ -141,7 +142,7 @@ async def handler_change_active_server(callback: CallbackQuery, state: FSMContex
     if await new_key.name_protocol.get() == "wireguard":
         await move_in_user_files_wg(new_key)
 
-    await send_admin_log(bot,f"🆕 Администратор {callback.message.chat} изменил основной ключ у {us.chat_id} c {await old_key.name_protocol.get() if old_key else '$ключа не было$'} на {await new_key.name_protocol.get()}")
+    await send_admin_log(bot,f"🆕 Администратор {callback.message.chat.id} изменил основной ключ у {us.chat_id} c {await old_key.name_protocol.get() if old_key else '$ключа не было$'} на {await new_key.name_protocol.get()}")
     await callback.message.answer(f"Изменил основной ключ у пользователя с chat_id {user.chat_id}.")
     await state.set_state(AdminStates.waiting_for_bonus_days)
     fake_message = Message(

@@ -7,7 +7,7 @@ from aiogram.types import CallbackQuery, Message, Document, Chat, User
 from aiogram.fsm.context import FSMContext
 
 from bot.admin_func.history_key.history_key import handler_my_back_menu
-from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg, validate_conf_file
+
 from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg, validate_conf_file, generate_qr_code
 from bot.admin_func.keyboards import get_key_change_keyboard
 from bot.admin_func.searh_user.search_user_handlers import handle_chat_id_input
