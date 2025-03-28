@@ -18,7 +18,6 @@ class ResultTaskManager:
     async def process_task(self, task_json):
         try:
             task_type = task_json.get("task_type")
-            logging.info(f"Получена задача с типом {task_type}")
             processor = self.task_handlers.get(task_type)
             if processor:
                 await processor.process(task_json)

@@ -23,7 +23,6 @@ async def move_in_history_files_wg(old_key: ServerCl, server_ip: str=None, user_
     :param user_ip: (опционально) IP пользователя, если не передан - берется из old_key.
     """
     try:
-        logging.info("Запустилась функция _______move_in_history_files_wg_________")
         base_directory = os.getenv("REGISTERED_USERS_DIR")
         if not base_directory:
             logging.error("Ошибка: Переменная окружения REGISTERED_USERS_DIR не найдена!")
@@ -229,13 +228,13 @@ async def validate_conf_file(conf_file: str, server_ip: str, user_ip: str) -> bo
 
         # Проверяем соответствие IP-адресов
         if file_server_ip == server_ip and file_user_ip == user_ip:
-            logging.info(f"✅ Файл {conf_file} прошел проверку: server_ip и user_ip совпадают.")
+            logging.info(f"Файл {conf_file} прошел проверку: server_ip и user_ip совпадают.")
             return True
         else:
             logging.error(
-                f"⚠️ Несоответствие данных в {conf_file}\n"
-                f"  🔹 Ожидалось: server_ip={server_ip}, user_ip={user_ip}\n"
-                f"  🔹 В файле:  server_ip={file_server_ip}, user_ip={file_user_ip}"
+                f"Несоответствие данных в {conf_file}\n"
+                f" Ожидалось: server_ip={server_ip}, user_ip={user_ip}\n"
+                f" В файле:  server_ip={file_server_ip}, user_ip={file_user_ip}"
             )
             return False
 

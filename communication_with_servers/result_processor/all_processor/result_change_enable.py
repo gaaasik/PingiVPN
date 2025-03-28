@@ -37,7 +37,6 @@ class ResultChangeEnable(BaseResultProcessor):
         if identifier:
             await self.update_enable_status(us, identifier, enable_status, protocol, status_task)
 
-        logging.info(f"Получена и обработана задача result_change_enable. От chat_id = {chat_id}")
 
     async def update_enable_status(self, us: UserCl, identifier: str, enable_status: bool, protocol: str, status_task: str):
         """
@@ -57,7 +56,6 @@ class ResultChangeEnable(BaseResultProcessor):
                 key_identifier = await key.uuid_id.get() if protocol == "vless" else await key.user_ip.get()
                 if key_identifier == identifier:
                     await key.enable.set_enable_admin(enable_status)
-                    logging.info(f"✅ Обновлен ключ в history_key_list: {identifier}, enable={enable_status}")
                     await send_admin_log(bot,
                                          f"😈 Пользователь {us.chat_id} изменил состояние в HISTORY_KEY {enable_status} (в db:{await us.active_server.enable.get()}), status={status_task}")
                     return
@@ -65,7 +63,6 @@ class ResultChangeEnable(BaseResultProcessor):
                 key_identifier = await key.uuid_id.get() if protocol == "vless" else await key.user_ip.get()
                 if key_identifier == identifier:
                     await key.enable.set_enable_admin(enable_status)
-                    logging.info(f"✅ Обновлен ключ в value_key: {identifier}, enable={enable_status}")
                     await send_admin_log(bot,f"😈 Пользователь {us.chat_id} изменил состояние в SERVERS {enable_status} (в db:{await us.active_server.enable.get()}), status={status_task}")
                     return
 

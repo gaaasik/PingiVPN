@@ -218,7 +218,6 @@ async def process_wireguard_file(message: Message, state: FSMContext):
         file = await message.bot.get_file(document.file_id)
         await message.bot.download_file(file.file_path, file_path)
 
-        logging.info(f"✅ Файл сохранен: {file_path}")
 
         # Читаем файл и извлекаем данные
         server_ip, user_ip = None, None

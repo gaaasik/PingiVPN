@@ -21,7 +21,20 @@ from dotenv import load_dotenv
 router = Router()
 load_dotenv()
 
-############Толян начал ебашить кнопки
+############Толян начал ебашить кнопки     Запустилась функция _______move_in_history_files_wg
+
+def button_back_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="🔙 Назад", callback_data="my_back_menu")]
+        ]
+    )
+def button_search_by_chat_id_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="🔙 Назад", callback_data="search_by_chat_id")]
+        ]
+    )
 
 
 @router.callback_query(lambda c: c.data.startswith("history_key_show_"))
@@ -34,17 +47,17 @@ async def handle_history_key_show(callback: CallbackQuery, state: FSMContext):
 
     if not user:
         logging.error("Ошибка: current_user отсутствует в state.")
-        await callback.message.edit_text("❌ Ошибка: пользователь не найден.")
+        await callback.message.edit_text("❌ Ошибка: пользователь не найден.", reply_markup=button_search_by_chat_id_keyboard())
         return
 
     if not user.history_key_list:
-        await callback.message.edit_text("❌ История ключей пуста.")
+        await callback.message.edit_text("❌ История ключей пуста.",  reply_markup=button_back_keyboard())
         return
 
     chat_id = user.chat_id
     us = await UserCl.load_user(chat_id)
     if not us or not us.history_key_list:
-        await callback.message.edit_text("❌ История ключей пуста.")
+        await callback.message.edit_text("❌ История ключей пуста.",  reply_markup=button_back_keyboard())
         return
 
     # Получаем индекс выбранного ключа
@@ -89,10 +102,9 @@ async def handler_my_back_menu(callback: CallbackQuery, state: FSMContext):
     user = data.get("current_user")
     if not user:
         logging.error("Ошибка: current_user отсутствует в state.")
-        await callback.message.edit_text("❌ Ошибка: пользователь не найден.")
+        await callback.message.edit_text("❌ Ошибка: пользователь не найден.", )
         return
 
-    print("user.chat_id = ", user.chat_id)
 
     # Создаем фейковое сообщение
     fake_message = Message(
