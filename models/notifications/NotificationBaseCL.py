@@ -12,21 +12,34 @@ from bot.handlers.admin import ADMIN_CHAT_IDS, send_admin_log
 async def handle_send_error(user_id: int, error: Exception):
     """
     Обработка ошибок отправки уведомления.
-    Если бот был заблокирован пользователем — обновляем поле active_chat = FALSE.
+    Если бот был заблокирован или пользователь недоступен — устанавливаем active_chat = 0.
     """
     error_text = str(error).lower()
     print(f"Ошибка при отправке пользователю {user_id}: {error_text}")
 
-    try:
-        async with aiosqlite.connect(os.getenv("database_path_local")) as db:
-            await db.execute(
-                "UPDATE users SET active_chat = 0 WHERE chat_id = ?",
-                (user_id,)
-            )
-            await db.commit()
-        logging.info(f"❌ Пользователь {user_id} заблокировал бота. active_chat = FALSE")
-    except Exception as db_error:
-        logging.error(f"Ошибка при обновлении active_chat для {user_id}: {db_error}")
+    ERROR_PATTERNS_TO_DISABLE_CHAT = (
+        "bot was blocked by the user",
+        "user is deactivated",
+        "chat not found",
+        "user not found",
+        "forbidden: user is deactivated",
+        "forbidden: bot was blocked by the user",
+        "forbidden: chat not found",
+    )
+
+    if any(pattern in error_text for pattern in ERROR_PATTERNS_TO_DISABLE_CHAT):
+        try:
+            async with aiosqlite.connect(os.getenv("database_path_local")) as db:
+                await db.execute(
+                    "UPDATE users SET active_chat = 0 WHERE chat_id = ?",
+                    (user_id,)
+                )
+                await db.commit()
+            logging.info(f"❌ Пользователь {user_id} недоступен. active_chat = FALSE")
+        except Exception as db_error:
+            logging.error(f"Ошибка при обновлении active_chat для {user_id}: {db_error}")
+    else:
+        logging.warning(f"⛔ Ошибка отправки пользователю {user_id}, но active_chat не меняется: {error_text}")
 
 
 class NotificationBase(ABC):
