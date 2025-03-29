@@ -17,19 +17,16 @@ async def handle_send_error(user_id: int, error: Exception):
     error_text = str(error).lower()
     print(f"Ошибка при отправке пользователю {user_id}: {error_text}")
 
-    if "bot was blocked by the user" in error_text or "forbidden: bot was blocked by the user" in error_text:
-        try:
-            async with aiosqlite.connect(os.getenv("database_path_local")) as db:
-                await db.execute(
-                    "UPDATE users SET active_chat = 0 WHERE chat_id = ?",
-                    (user_id,)
-                )
-                await db.commit()
-            logging.info(f"❌ Пользователь {user_id} заблокировал бота. active_chat = FALSE")
-        except Exception as db_error:
-            logging.error(f"Ошибка при обновлении active_chat для {user_id}: {db_error}")
-    else:
-        logging.warning(f"Ошибка отправки сообщения пользователю {user_id}: {error}")
+    try:
+        async with aiosqlite.connect(os.getenv("database_path_local")) as db:
+            await db.execute(
+                "UPDATE users SET active_chat = 0 WHERE chat_id = ?",
+                (user_id,)
+            )
+            await db.commit()
+        logging.info(f"❌ Пользователь {user_id} заблокировал бота. active_chat = FALSE")
+    except Exception as db_error:
+        logging.error(f"Ошибка при обновлении active_chat для {user_id}: {db_error}")
 
 
 class NotificationBase(ABC):
@@ -80,6 +77,14 @@ class NotificationBase(ABC):
         async def send_message(user_id):
             """Асинхронная функция для отправки сообщения одному пользователю."""
             try:
+                # Проверка active_chat из базы
+                async with aiosqlite.connect(os.getenv("database_path_local")) as db:
+                    query = "SELECT active_chat FROM users WHERE chat_id = ?"
+                    async with db.execute(query, (user_id,)) as cursor:
+                        row = await cursor.fetchone()
+
+                    if not row or row[0] != 1:
+                        return  # Не отправляем сообщение
 
                 await bot.send_message(
                     chat_id=user_id,
@@ -126,7 +131,7 @@ class NotificationBase(ABC):
         for batch in self.split_into_batches(self.target_users):
             await self.send_batch(bot, batch)
 
-        # После завершения отправки всех уведомлений отправляем результат администратору
+        # После завершения отправки всех уведомлений отправляем результат администратору active_chat
         if self.target_users:  # Проверяем, есть ли пользователи в выборке
             summary_message = (
                 f"📊 *Уведомления завершены:*\n\n"
