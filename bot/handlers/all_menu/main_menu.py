@@ -113,6 +113,8 @@ async def show_main_menu(chat_id: int, bot: Bot, edit=False, message=None):
         await bot.send_message(chat_id, "Для начала нажмите /start")
         return
 
+
+
     user_name_full = await us.user_name_full.get()
     user_name = await us.user_login.get()
     status_text = await get_user_status_text(us)

@@ -116,6 +116,7 @@ async def handle_paste_wireguard(callback: CallbackQuery, state: FSMContext):
     )
     # Передаем fake_message вместо chat_id
     await handle_chat_id_input(fake_message, state)
+    await callback.answer()
 
 # --- Приём текста VLESS ключа ---
 

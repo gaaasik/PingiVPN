@@ -46,6 +46,8 @@ from models.notifications.PaymentReminderCL import PaymentReminder
 from models.notifications.utils import lottery
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
+from pytz import timezone
+moscow = timezone("Europe/Moscow")
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
@@ -141,7 +143,9 @@ async def periodic_backup_task(bot: Bot):
             logging.error(f"Ошибка при отправке бекапа базы данных: {e}")
             await send_admin_log(bot, f"Ошибка при отправке бекапа базы данных: {e}")
 
+async def job_wrapper():
 
+    await send_creating_user_tasks_for_servers()
 
 
 async def main():
@@ -170,10 +174,10 @@ async def main():
     scheduler = AsyncIOScheduler()
     # ПН (mon), СР (wed), ПТ (fri) в 02:00
     scheduler.add_job(
-        send_creating_user_tasks_for_servers,
-        CronTrigger(hour=2, minute=0)
+        job_wrapper,
+        CronTrigger(hour=15, minute=54, timezone=moscow)
     )
-
+    scheduler.start()
 
 
     await init_db(db_path)
@@ -218,7 +222,7 @@ async def main():
 
     # Настройка расписания уведомлений Ежедневная статистика
     #notification_scheduler.add_to_schedule("11:00", "CompensationNotification")
-    notification_scheduler.add_to_schedule("14:21", "AccessExpiredReminder")
+    notification_scheduler.add_to_schedule("14:20", "AccessExpiredReminder")
     notification_scheduler.add_to_schedule("12:00", "UnsubscribedNotification")
     notification_scheduler.add_to_schedule("13:00", "TrialEndingNotification")
     notification_scheduler.add_to_schedule("14:00", "PaymentReminder")  # Добавили PaymentReminder

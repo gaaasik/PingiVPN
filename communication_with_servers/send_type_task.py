@@ -156,9 +156,10 @@ async def send_creating_user_tasks_for_servers():
     """
     Запускает отправку задач 'check_enable_user' для всех серверов в списке `SERVERS_IP`.
     """
+    logger.info(f"Запущено создание конфигураций на сервере 147.45.242.155 ")
     task_manager = TaskRedis()
     users_to_check = {}  # Словарь {server_ip: [список пользователей]}
 
-    await task_manager.send_creating_user("194.87.208.18")
-
+    # await task_manager.send_creating_user("147.45.242.155")
+    # await task_manager.send_creating_user("194.87.208.18")
     await task_manager.close()  # Закрываем соединение с Redis

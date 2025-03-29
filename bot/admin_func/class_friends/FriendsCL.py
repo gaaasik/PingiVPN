@@ -33,8 +33,8 @@ class FriendsManager:
             async with aiosqlite.connect(DATABASE_PATH) as db:
                 # Проверяем, есть ли друг уже в списке
                 async with db.execute(
-                        "SELECT id FROM friends WHERE admin_chat_id = ? AND friend_chat_id = ? AND status = 'active'",
-                        (admin_chat_id, friend_chat_id),
+                        "SELECT id FROM friends WHERE friend_chat_id = ? AND status = 'active'",
+                        (friend_chat_id,),
                 ) as cursor:
                     if await cursor.fetchone():
                         logger.warning(
