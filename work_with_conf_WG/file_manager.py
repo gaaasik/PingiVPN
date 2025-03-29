@@ -14,7 +14,6 @@ def find_user_directory(chat_id):
     # Ищем первую папку, в названии которой содержится chat_id
     for dir_name in all_dirs:
         if str(chat_id) in dir_name:
-            print(f"Найдена папка: {dir_name}")
             return os.path.join(REGISTERED_USERS_DIR, dir_name)
 
     # Если не найдено, возвращаем None

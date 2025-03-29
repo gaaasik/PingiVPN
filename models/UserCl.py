@@ -389,7 +389,6 @@ class UserCl:
 
         # Создание нового сервера и обновление базы данных
         await self.add_history_servers_json(server_params=server_params, field="servers")
-        print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
         # Проверяем реферала и начисляем бонус, если нужно
         try:
             await ReferralCl.add_referral_bonus(self.chat_id)
@@ -402,13 +401,11 @@ class UserCl:
         #выключаем старый ключ если он был
         if old_key:
             await old_key.enable.set(False)
-
         return True
 
     async def add_key_wireguard(self, json_with_wg=None, free_day=7):
         old_key = None
         if self.active_server:
-            print(f" active_server: ", self.active_server)
             if await self.active_server.name_protocol.get() == "wireguard":
                 await move_in_history_files_wg(self.active_server)
             old_key = self.active_server
@@ -420,7 +417,6 @@ class UserCl:
         server_params = await self._generate_server_params_wireguard(json_with_wg, free_day)
         await self.add_history_servers_json(server_params=server_params, field="servers")
         # Создание нового сервера и обновление базы данных
-        print(f"Сервер WireGuard добавлен для пользователя с hat_id {self.chat_id}")
         await self.choosing_working_server()
         # выключаем старый ключ если он был
         if old_key:
@@ -461,8 +457,6 @@ class UserCl:
         if missing_files:
             print(f"Отсутствуют файлы: {', '.join(missing_files)} в папке {user_dir}.")
             return False
-
-        print(f"Все необходимые файлы присутствуют в {user_dir}.")
         return config_file_path
 
     async def _get_first_available_url(self, new_path, used_path):

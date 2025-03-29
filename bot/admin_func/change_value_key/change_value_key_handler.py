@@ -30,6 +30,7 @@ def vless_key_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text="📥 Вставить из буфера", callback_data="paste_vless_key")],
+            [InlineKeyboardButton(text="📂 Загрузить ключ самому", callback_data="change_to_vless")],
             [InlineKeyboardButton(text="🔙 Назад", callback_data="my_back_menu")]
         ]
     )
@@ -38,6 +39,7 @@ def wireguard_key_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text="📥 Загрузить из буфера", callback_data="paste_wireguard_file")],
+            [InlineKeyboardButton(text="📂 Загрузить ключ самому", callback_data="change_to_wireguard")],
             [InlineKeyboardButton(text="🔙 Назад", callback_data="my_back_menu")]
         ]
     )
@@ -216,7 +218,6 @@ async def process_wireguard_file(message: Message, state: FSMContext):
         file = await message.bot.get_file(document.file_id)
         await message.bot.download_file(file.file_path, file_path)
 
-        logging.info(f"✅ Файл сохранен: {file_path}")
 
         # Читаем файл и извлекаем данные
         server_ip, user_ip = None, None
