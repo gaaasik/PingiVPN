@@ -204,13 +204,13 @@ class ServerCl:
         """Метод для обновления сервера в базе данных через родительский объект User."""
         await self.user.push_field_json_in_db(field_json)
 
-    async def update_serv_in_db(self):
-        """Метод для обновления сервера в базе данных через родительский объект User."""
-        await self.user._update_servers_in_db()
-
-    async def update_hist_in_db(self):
-        """Метод для обновления сервера в базе данных через родительский объект User."""
-        await self.user._update_history_key_in_db()
+    # async def update_serv_in_db(self):
+    #     """Метод для обновления сервера в базе данных через родительский объект User."""
+    #     await self.user._update_servers_in_db()
+    #
+    # async def update_hist_in_db(self):
+    #     """Метод для обновления сервера в базе данных через родительский объект User."""
+    #     await self.user._update_history_key_in_db()
 
     async def to_dict(self):
         """Преобразуем объект сервера в JSON."""
