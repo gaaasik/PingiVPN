@@ -96,7 +96,7 @@ class NotificationBase(ABC):
                   # Обработка после успешной отправки
                 await self.after_send_success(user_id)
 
-            # #Для тестов
+            # #Для тестов отправлено сообщение
             #     if user_id in ADMIN_CHAT_IDS:
             #         await bot.send_message(
             #             chat_id=user_id,
