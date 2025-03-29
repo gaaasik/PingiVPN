@@ -6,13 +6,15 @@ from aiogram.types import FSInputFile
 import logging
 
 from bot.handlers.admin import send_admin_log
-from models.UserCl import UserCl
+
 from work_with_conf_WG.file_manager import find_user_directory
 
 from dotenv import load_dotenv
 from bot.utils.cache import cached_video  # Предполагаем, что видео кешируется аналогично фото
-from main import PATH_TO_IMAGES
 
+
+
+PATH_TO_IMAGES = os.getenv('PATH_TO_IMAGES')
 # Загрузка переменных окружения из .env
 load_dotenv()
 CONFIGS_DIR = os.getenv('CONFIGS_DIR')
@@ -125,8 +127,10 @@ async def send_qr_code(callback_query):
         await callback_query.message.answer("QR-код не найден.")
 
 
-async def create_user_files(chat_id, username, bot):
+async def create_user_files(chat_id, username, bot, free_day=7):
+    from models.UserCl import UserCl
     try:
+
         # Ищем папку пользователя, которая содержит chat_id в своем имени
         user_dir = find_user_directory(chat_id)  #=============#
         us = await UserCl.load_user(chat_id)
@@ -151,8 +155,6 @@ async def create_user_files(chat_id, username, bot):
         free_images = sorted([f for f in os.listdir(BASE_CONFIGS_DIR) if f.endswith('_free.png')])
 
 
-
-
         if free_files and free_images:
             # Копирование и переименование файлов для пользователя
             shutil.copy(os.path.join(BASE_CONFIGS_DIR, free_files[0]), config_file_path)
@@ -164,7 +166,7 @@ async def create_user_files(chat_id, username, bot):
             conf_files_count, png_files_count = count_files_in_directory()
             await send_admin_log(bot, f" Созданы файлы для {chat_id} {username}. осталось {conf_files_count} файлов и \n"
                                       f"{png_files_count} картинок")
-            await us.add_key_wireguard()
+            await us.add_key_wireguard(free_day=free_day)
         else:
             # Если нет доступных файлов, используем резервные файлы
             if os.path.exists(GENERAL_CONFIG_FILE) and os.path.exists(GENERAL_IMAGE_FILE):
@@ -181,7 +183,7 @@ async def create_user_files(chat_id, username, bot):
                     f"Пользователю {chat_id} были отправлены общие конфигурационные файлы."
                 )
                 await bot.send_message(admin_chat_id, warning_message)
-                await us.add_key_wireguard()
+                await us.add_key_wireguard(free_day=free_day)
             else:
                 raise Exception("Резервные конфигурационные файлы также не найдены!")
 

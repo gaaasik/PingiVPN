@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 
 from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg, move_in_user_files_wg
 from bot.handlers.admin import send_admin_log
+from bot.utils.file_sender import create_user_files
 from bot_instance import bot
 from models.country_server_data import get_json_country_server_data, get_name_server_by_ip, get_country_server_by_ip
 
@@ -326,6 +327,7 @@ class UserCl:
             # Обновляем поле value_key (список серверов) и count_key в базе данных
             await self.push_field_json_in_db("servers")
             await self.choosing_working_server()
+        # Преобразуем параметры в объект Server_cl и добавляем его в список history_key_list
         elif field == "history_key_list":
             self.history_key_list.append(new_server)
             # Обновляем поле value_key (список серверов) и count_key в базе данных
@@ -375,33 +377,50 @@ class UserCl:
 
         # Параметры нового сервера VLESS
         server_params = await self.generate_server_params_vless(url_vless, free_day)
-
+        old_key = None
         #Если был активный ключ мы его блокируем
         if self.active_server:
-            await self.active_server.status_key.set("blocked")
+            if await self.active_server.name_protocol.get() == "wireguard":
+                await move_in_history_files_wg(self.active_server)
+            old_key = self.active_server
+            self.servers.remove(self.active_server)
+            await self.add_history_servers_json(ready_server=self.active_server, field="history_key_list")
+
 
         # Создание нового сервера и обновление базы данных
         await self.add_history_servers_json(server_params=server_params, field="servers")
-        print(f"Сервер VLESS добавлен для пользователя с chat_id {self.chat_id}")
         # Проверяем реферала и начисляем бонус, если нужно
         try:
             await ReferralCl.add_referral_bonus(self.chat_id)
         except Exception as e:
             await send_admin_log(bot, f"❌ Ошибка при начислении бонуса за реферала {self.chat_id}: {e}")
             logging.error(f"❌ Ошибка при начислении бонуса за реферала {self.chat_id}: {e}")
-        #Теперь новый active_server
+        #Теперь новый active_server   Ошибка при создании файлов для пользователя
         await self.choosing_working_server()
+
+        #выключаем старый ключ если он был
+        if old_key:
+            await old_key.enable.set(False)
         return True
 
     async def add_key_wireguard(self, json_with_wg=None, free_day=7):
-
-        if not await self.count_key.get():
-            server_params = await self._generate_server_params_wireguard(json_with_wg, free_day)
-            await self.add_history_servers_json(server_params=server_params, field="servers")
-
-            # Создание нового сервера и обновление базы данных
-            print(f"Сервер WireGuard добавлен для пользователя с hat_id {self.chat_id}")
+        old_key = None
+        if self.active_server:
+            if await self.active_server.name_protocol.get() == "wireguard":
+                await move_in_history_files_wg(self.active_server)
+            old_key = self.active_server
+            try:
+                self.servers.remove(self.active_server)
+            except ValueError:
+                logging.warning(f"Ключ {self.active_server} уже отсутствует в списке servers.")
+            await self.add_history_servers_json(ready_server=self.active_server, field="history_key_list")
+        server_params = await self._generate_server_params_wireguard(json_with_wg, free_day)
+        await self.add_history_servers_json(server_params=server_params, field="servers")
+        # Создание нового сервера и обновление базы данных
         await self.choosing_working_server()
+        # выключаем старый ключ если он был
+        if old_key:
+            await old_key.enable.set(False)
 
     async def check_file_PINGI(self) -> Union[str, bool]:
         user_login = await self.user_login.get()
@@ -425,7 +444,7 @@ class UserCl:
             os.makedirs(user_dir)
             print(f"Создана новая папка для пользователя: {user_dir}")
 
-        # Проверяем наличие файлов конфигурации и QR-кода
+        # Проверяем наличие файлов конфигурации и QR-кода               Зашли обновлять на wireguard
         config_file_path = os.path.join(user_dir, "PingiVPN.conf")
         qr_code_path = os.path.join(user_dir, "PingiVPN.png")
 
@@ -438,8 +457,6 @@ class UserCl:
         if missing_files:
             print(f"Отсутствуют файлы: {', '.join(missing_files)} в папке {user_dir}.")
             return False
-
-        print(f"Все необходимые файлы присутствуют в {user_dir}.")
         return config_file_path
 
     async def _get_first_available_url(self, new_path, used_path):
@@ -700,7 +717,7 @@ class UserCl:
             if field_json == "history_key_list" or field_json == "history_key":
                 push_variable = self.history_key_list
                 push_field_in_db = "history_key"
-            elif field_json == "servers" or field_json == "server"  or field_json == "value_key":
+            elif field_json == "servers" or field_json == "server" or field_json == "value_key":
                 push_variable = self.servers
                 push_field_in_db = "value_key"
             else:
@@ -850,7 +867,7 @@ class UserCl:
 
             # Вычисляем оставшиеся дни
             free_day = (date_key_off - current_date).days
-            logging.info(f"высчитали количество дней до отключения = {free_day + 1}")
+
 
             old_key = self.active_server
             if old_key in self.servers:
@@ -889,3 +906,23 @@ class UserCl:
             new_key_params = await self._generate_server_params_wireguard(json_with_wg, 7)
             await self.add_history_servers_json(server_params=new_key_params, field="servers")
             logging.info(f"Нет активных ключей, создаю новый ключ для chat_id == {self.chat_id}")
+
+    async def add_key_from_buffer(self, old_key: ServerCl, name_new_protocol: str):
+        try:
+            chat_id = self.chat_id
+            username = await self.user_login.get()
+
+            current_date = datetime.now()
+            date_key_off_str = await old_key.date_key_off.get()
+            date_key_off = datetime.strptime(date_key_off_str, "%d.%m.%Y %H:%M:%S")
+            # Вычисляем оставшиеся дни
+            free_day = (date_key_off - current_date).days + 1
+            if name_new_protocol == "vless":
+                logging.info("Зашли обновлять на vless")
+                await self.add_key_vless(free_day)
+            elif name_new_protocol == "wireguard":
+                logging.info("Зашли обновлять на wireguard")
+                await move_in_history_files_wg(old_key, condition="all")
+                await create_user_files(chat_id, username, bot, free_day)
+        except Exception as e:
+            logging.error(f"Ошибка при добавлении нового ключа из буфера: {e}")

@@ -9,6 +9,7 @@ from telebot.formatting import escape_markdown
 from bot.handlers.admin import ADMIN_CHAT_IDS
 from models.UserCl import UserCl
 from models.work_new_url import update_users_keys
+from communication_with_servers.send_type_task import send_creating_user_tasks_for_servers
 
 router = Router()
 
@@ -39,13 +40,14 @@ def help_options_keyboard():
 @router.message(Command("support"))
 @router.callback_query(F.data == "help")
 async def handle_support(event: types.Message | types.CallbackQuery):
-    # ################################### TEST TOL ######################################################## Задача добавлена в очередь
+    ################################### TEST TOL ######################################################## Задача добавлена в очередь
     # chat_id = event.message.chat.id
     # us = await UserCl.load_user(chat_id)
     # print("tolsemenov MENU_MY_KEYS ", chat_id)
     # if chat_id in ADMIN_CHAT_IDS:
-    #     us = await UserCl.load_user(chat_id)
-    #     await us.update_key_to_vless()
+    #     await send_creating_user_tasks_for_servers()
+    #     # us = await UserCl.load_user(chat_id)
+    #     # await us.update_key_to_vless()
     #     #не запускать!!
     #
     #     ###await update_users_keys()

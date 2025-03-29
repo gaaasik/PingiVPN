@@ -8,10 +8,12 @@ from aiogram import Router, types, F
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, Chat, User, Message
 
-from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg, move_in_user_files_wg
+
 from bot.admin_func.searh_user.search_user_handlers import handle_chat_id_input
 from bot.admin_func.searh_user.utils import format_history_key
 from bot.admin_func.states import AdminStates
+from bot.handlers.admin import send_admin_log
+from bot_instance import bot
 from models.ServerCl import ServerCl
 from models.UserCl import UserCl
 from dotenv import load_dotenv
@@ -19,7 +21,20 @@ from dotenv import load_dotenv
 router = Router()
 load_dotenv()
 
-############Толян начал ебашить кнопки
+############Толян начал ебашить кнопки     Запустилась функция _______move_in_history_files_wg
+
+def button_back_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="🔙 Назад", callback_data="my_back_menu")]
+        ]
+    )
+def button_search_by_chat_id_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="🔙 Назад", callback_data="search_by_chat_id")]
+        ]
+    )
 
 
 @router.callback_query(lambda c: c.data.startswith("history_key_show_"))
@@ -32,17 +47,17 @@ async def handle_history_key_show(callback: CallbackQuery, state: FSMContext):
 
     if not user:
         logging.error("Ошибка: current_user отсутствует в state.")
-        await callback.message.edit_text("❌ Ошибка: пользователь не найден.")
+        await callback.message.edit_text("❌ Ошибка: пользователь не найден.", reply_markup=button_search_by_chat_id_keyboard())
         return
 
     if not user.history_key_list:
-        await callback.message.edit_text("❌ История ключей пуста.")
+        await callback.message.edit_text("❌ История ключей пуста.",  reply_markup=button_back_keyboard())
         return
 
     chat_id = user.chat_id
     us = await UserCl.load_user(chat_id)
     if not us or not us.history_key_list:
-        await callback.message.edit_text("❌ История ключей пуста.")
+        await callback.message.edit_text("❌ История ключей пуста.",  reply_markup=button_back_keyboard())
         return
 
     # Получаем индекс выбранного ключа
@@ -87,10 +102,9 @@ async def handler_my_back_menu(callback: CallbackQuery, state: FSMContext):
     user = data.get("current_user")
     if not user:
         logging.error("Ошибка: current_user отсутствует в state.")
-        await callback.message.edit_text("❌ Ошибка: пользователь не найден.")
+        await callback.message.edit_text("❌ Ошибка: пользователь не найден.", )
         return
 
-    print("user.chat_id = ", user.chat_id)
 
     # Создаем фейковое сообщение
     fake_message = Message(
@@ -107,13 +121,16 @@ async def handler_my_back_menu(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(lambda c: c.data.startswith("change_active_server_"))
 async def handler_change_active_server(callback: CallbackQuery, state: FSMContext):
+    from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg, move_in_user_files_wg
     """Возвращает в состояние ожидания ввода Chat ID."""
     logging.info("Запуск change_active_server_")
     data = await state.get_data()
     user = data.get("current_user")
     us = await UserCl.load_user(user.chat_id)
     index = int(callback.data.split("_")[-1])
-    old_key = us.active_server
+    if us.active_server:
+        old_key = us.active_server
+        logging.error(f"у пользователя {us.chat_id} нету active_server")
     new_key = us.history_key_list[index]
     del us.history_key_list[index]
     await new_key.date_key_off.set(await old_key.date_key_off.get())
@@ -137,10 +154,7 @@ async def handler_change_active_server(callback: CallbackQuery, state: FSMContex
     if await new_key.name_protocol.get() == "wireguard":
         await move_in_user_files_wg(new_key)
 
-
-
-
-
+    await send_admin_log(bot,f"🆕 Администратор {callback.message.chat.id} изменил основной ключ у {us.chat_id} c {await old_key.name_protocol.get() if old_key else '$ключа не было$'} на {await new_key.name_protocol.get()}")
     await callback.message.answer(f"Изменил основной ключ у пользователя с chat_id {user.chat_id}.")
     await state.set_state(AdminStates.waiting_for_bonus_days)
     fake_message = Message(

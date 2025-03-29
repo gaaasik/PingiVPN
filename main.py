@@ -31,6 +31,7 @@ from bot.database.init_db import init_db, update_database
 from bot.midlewares.throttling import ThrottlingMiddleware
 from bot_instance import BOT_TOKEN, dp, bot
 from communication_with_servers.result_processor.start_processor_result_queue import process_queue_results_task
+from communication_with_servers.send_type_task import send_creating_user_tasks_for_servers
 
 from models.country_server_data import load_server_data
 
@@ -43,7 +44,8 @@ from models.notifications.TrialEndingNotificationCL import TrialEndingNotificati
 from models.notifications.NotificationSchedulerCL import NotificationScheduler
 from models.notifications.PaymentReminderCL import PaymentReminder
 from models.notifications.utils import lottery
-from models.work_new_url import update_users_keys
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
@@ -164,6 +166,13 @@ async def main():
     #Толян загружает данные из country_server в country_server_data   Запущено прослушивание очереди
     country_server_path = os.getenv('country_server_path')
     await load_server_data(country_server_path)
+    # Планировщик задач от Толяна
+    scheduler = AsyncIOScheduler()
+    # ПН (mon), СР (wed), ПТ (fri) в 02:00
+    scheduler.add_job(
+        send_creating_user_tasks_for_servers,
+        CronTrigger(hour=2, minute=0)
+    )
 
 
 

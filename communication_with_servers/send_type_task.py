@@ -3,7 +3,7 @@ import json
 import logging
 import redis.asyncio as redis
 from typing import List
-from models.country_server_data import get_name_server_by_ip
+from models.country_server_data import get_name_server_by_ip, get_protocol_server_by_ip
 from models.UserCl import UserCl  # Импортируем UserCl для получения списка пользователей
 
 # ТЕСТОВЫЙ IP-адресов серверов
@@ -109,10 +109,14 @@ class TaskRedis:
         try:
             server_name = await get_name_server_by_ip(server_ip)  # Получаем имя сервера
             queue_name = f"queue_task_{server_name}"  # Формируем имя очереди в Redis
-
+            name_protocol = await get_protocol_server_by_ip(server_ip)
+            if not name_protocol:
+                logger.error(f"При отправки создания пользоваетелей неизвестен протокол с которым работает сервер!")
+                return
             task_data = {
                 "task_type": "creating_user",
                 "server_ip": server_ip,
+                "name_protocol": name_protocol,
             }
 
             await self.redis_client.rpush(queue_name, json.dumps(task_data))  # Отправка задачи в очередь
@@ -120,10 +124,6 @@ class TaskRedis:
 
         except Exception as e:
             logger.error(f"Ошибка при отправке задачи на сервер {server_ip}: {e}")
-
-
-
-
 
 async def send_check_tasks_for_servers():
     """
@@ -152,3 +152,13 @@ async def send_check_tasks_for_servers():
     await task_manager.close()  # Закрываем соединение с Redis
 
 
+async def send_creating_user_tasks_for_servers():
+    """
+    Запускает отправку задач 'check_enable_user' для всех серверов в списке `SERVERS_IP`.
+    """
+    task_manager = TaskRedis()
+    users_to_check = {}  # Словарь {server_ip: [список пользователей]}
+
+    await task_manager.send_creating_user("194.87.208.18")
+
+    await task_manager.close()  # Закрываем соединение с Redis

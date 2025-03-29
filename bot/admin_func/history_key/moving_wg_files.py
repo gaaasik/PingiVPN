@@ -2,12 +2,17 @@ import logging
 import os
 import re
 import shutil
+from datetime import datetime
 
 import qrcode
 
+from bot.utils.file_sender import create_user_files
+from bot_instance import bot
 from models.ServerCl import ServerCl
 
-async def move_in_history_files_wg(old_key: ServerCl, server_ip: str = None, user_ip: str = None):
+
+
+async def move_in_history_files_wg(old_key: ServerCl, server_ip: str=None, user_ip: str=None, condition: str=None):
     """
     Перемещает файлы PingiVPN.conf и PingiVPN.png в папку history_key
     внутри директории пользователя, полученной из .env.
@@ -18,7 +23,6 @@ async def move_in_history_files_wg(old_key: ServerCl, server_ip: str = None, use
     :param user_ip: (опционально) IP пользователя, если не передан - берется из old_key.
     """
     try:
-        logging.info("Запустилась функция _______move_in_history_files_wg_________")
         base_directory = os.getenv("REGISTERED_USERS_DIR")
         if not base_directory:
             logging.error("Ошибка: Переменная окружения REGISTERED_USERS_DIR не найдена!")
@@ -55,14 +59,23 @@ async def move_in_history_files_wg(old_key: ServerCl, server_ip: str = None, use
         history_folder = os.path.join(user_folder, "history_key")
         os.makedirs(history_folder, exist_ok=True)
 
-
-
         # Путь к файлу конфигурации
         conf_file = os.path.join(user_folder, "PingiVPN.conf")
 
-        # Проверяем соответствие server_ip и user_ip в файле конфигурации
-        if not await validate_conf_file(conf_file, server_ip, user_ip):
-            return  # Если проверка не прошла, не выполняем перемещение
+        if condition == "all":
+            with open(conf_file, "r", encoding="utf-8") as f:
+                content = f.read()
+            # Найти IP пользователя
+            user_ip_match = re.search(r'Address\s*=\s*([\d.]+)/', content)
+            user_ip_formatted = user_ip_match.group(1).replace(".", "_") if user_ip_match else None
+            # Найти IP сервера
+            server_ip_match = re.search(r'Endpoint\s*=\s*([\d.]+):', content)
+            server_ip_formatted = server_ip_match.group(1).replace(".", "_") if server_ip_match else None
+
+        else:
+            # Проверяем соответствие server_ip и user_ip в файле конфигурации
+            if not await validate_conf_file(conf_file, server_ip, user_ip):
+                return  # Если проверка не прошла, не выполняем перемещение
 
         # Формируем новые имена файлов
         new_conf_file = os.path.join(history_folder, f"{server_ip_formatted}-{user_ip_formatted}.conf")
@@ -84,6 +97,7 @@ async def move_in_history_files_wg(old_key: ServerCl, server_ip: str = None, use
 
     except Exception as e:
         logging.error(f"Ошибка при перемещении файлов для chat_id {chat_id}: {e}")
+
 
 async def move_in_user_files_wg(new_key: ServerCl):
     """
@@ -214,13 +228,13 @@ async def validate_conf_file(conf_file: str, server_ip: str, user_ip: str) -> bo
 
         # Проверяем соответствие IP-адресов
         if file_server_ip == server_ip and file_user_ip == user_ip:
-            logging.info(f"✅ Файл {conf_file} прошел проверку: server_ip и user_ip совпадают.")
+            logging.info(f"Файл {conf_file} прошел проверку: server_ip и user_ip совпадают.")
             return True
         else:
             logging.error(
-                f"⚠️ Несоответствие данных в {conf_file}\n"
-                f"  🔹 Ожидалось: server_ip={server_ip}, user_ip={user_ip}\n"
-                f"  🔹 В файле:  server_ip={file_server_ip}, user_ip={file_user_ip}"
+                f"Несоответствие данных в {conf_file}\n"
+                f" Ожидалось: server_ip={server_ip}, user_ip={user_ip}\n"
+                f" В файле:  server_ip={file_server_ip}, user_ip={file_user_ip}"
             )
             return False
 
@@ -229,8 +243,7 @@ async def validate_conf_file(conf_file: str, server_ip: str, user_ip: str) -> bo
         return False
 
 
-
-def generate_qr_code(input_file, output_file):
+async def generate_qr_code(input_file, output_file):
     """Генерирует QR-код из конфигурационного файла WireGuard."""
     try:
         with open(input_file, 'r', encoding="utf-8") as file:
@@ -250,4 +263,9 @@ def generate_qr_code(input_file, output_file):
 
         logging.info(f"✅ QR-код успешно сохранен: {output_file}")
     except Exception as e:
-        logging.error(f"🔥 Ошибка при создании QR-кода: {e}")
+        logging.error(f"Ошибка при создании QR-кода: {e}")
+
+
+
+
+
