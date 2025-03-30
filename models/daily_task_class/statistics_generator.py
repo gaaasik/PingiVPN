@@ -17,6 +17,7 @@ async def generate_statistic_text(date: datetime = None) -> str:
         # Собираем данные статистики
         new_users = await UserCl.count_users_by_date(date) or 0
         total_users = len(await UserCl.get_all_users()) or 0
+        active_users = await UserCl.count_active_chat_users() or 0
         paid_users = await UserCl.count_paid_users_by_date(date) or 0
         total_paid_users = await UserCl.count_total_paid_users(datetime(2024, 11, 24)) or 0
         remaining_configs = await get_remaining_configs() or 0
@@ -27,6 +28,7 @@ async def generate_statistic_text(date: datetime = None) -> str:
         stats_message = (
             f"📊 <b>Статистика за {date.strftime('%d.%m.%Y')}</b> 📊\n\n"
             f"👥 <b>Новых пользователей:</b> {new_users}\n"
+            f"🟢 <b>Активных чатов:</b> {active_users}\n"
             f"🌍 <b>Всего пользователей:</b> {total_users}\n"
             f"💳 <b>Оплатили за день:</b> {paid_users}\n"
             f"💳 <b>Всего оплат с 24.11.2024:</b> {total_paid_users}\n"
