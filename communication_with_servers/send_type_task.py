@@ -48,6 +48,11 @@ SERVERS_IP_FOR_CHECK_ENABLE = [
     "5.39.220.237",      # NL_33000
 ]
 
+SERVERS_CREATE_USER_TEST = [
+    "147.45.242.155",
+    "194.87.208.18",
+]
+
 # Настройка логирования
 logging.basicConfig(
     level=logging.INFO,
@@ -159,7 +164,8 @@ async def send_creating_user_tasks_for_servers():
     logger.info(f"Запущено создание конфигураций на сервере 147.45.242.155 ")
     task_manager = TaskRedis()
     users_to_check = {}  # Словарь {server_ip: [список пользователей]}
-
+    for server in SERVERS_CREATE_USER_TEST:
+        await task_manager.send_creating_user(server)
     # await task_manager.send_creating_user("147.45.242.155")
     # await task_manager.send_creating_user("194.87.208.18")
     await task_manager.close()  # Закрываем соединение с Redis
