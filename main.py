@@ -163,7 +163,7 @@ async def main():
         return
 
 
-    #Толян загружает данные из country_server в country_server_data   Запущено прослушивание очереди
+     #Толян загружает данные из country_server в country_server_data   При отправки создания пользоваетелей неизвестен протокол с которым работает сервер
     country_server_path = os.getenv('country_server_path')
     await load_server_data(country_server_path)
     # Планировщик задач от Толяна
