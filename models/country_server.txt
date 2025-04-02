@@ -245,6 +245,48 @@
       "count_users": 40
     },
     {
+      "name": "Server_35000",
+      "address": "212.108.82.206",
+      "country": "Netherlands",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_36000",
+      "address": "66.151.33.224",
+      "country": "Netherlands",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_37000",
+      "address": "167.224.64.213",
+      "country": "USA",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_38000",
+      "address": "80.209.240.23",
+      "country": "USA",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_39000",
+      "address": "194.164.216.151",
+      "country": "UK",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_40000",
+      "address": "205.172.57.139",
+      "country": "USA",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
       "name": "Server_tol_test_10000",
       "address": "147.45.242.155",
       "country": "Netherlands",
