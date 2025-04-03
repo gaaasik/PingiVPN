@@ -5,6 +5,7 @@ from datetime import datetime
 from aiogram import Router, types, F
 from aiogram.types import CallbackQuery, Message, Document, Chat, User
 from aiogram.types import CallbackQuery, Message, Document, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import CallbackQuery, Message, Document, Chat, User
 from aiogram.fsm.context import FSMContext
 
 from bot.admin_func.history_key.history_key import handler_my_back_menu
@@ -115,6 +116,7 @@ async def handle_paste_wireguard(callback: CallbackQuery, state: FSMContext):
     )
     # Передаем fake_message вместо chat_id
     await handle_chat_id_input(fake_message, state)
+    await callback.answer()
 
 # --- Приём текста VLESS ключа ---
 

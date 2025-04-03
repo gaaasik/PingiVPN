@@ -37,7 +37,7 @@ class ResultCreateUsers(BaseResultProcessor):
         server_ip = task_data.get("server_ip", "unknown")
         count_users = task_data.get("count_users", 0)
 
-
+        message = "Ошибка, мы не выбрали протокол"
         if status == "success":
 
             logging.info(f"📌 Созданные пользователи: {count_users}")
@@ -45,15 +45,15 @@ class ResultCreateUsers(BaseResultProcessor):
             if protocol == "wireguard":
                 all_users = task_data.get("created_users", [])
                 await self.append_files_wg_to_user(all_users)
-                message = f"Успешно создано {count_users} пользователей WG {all_users}"
+                message = f"Успешно создано {count_users} пользователей WG"
             # 📌 Добавляем URL в файл и увеличиваем счетчик в Redis
             elif protocol == "vless":
 
                 all_urls = task_data.get("all_urls", [])
                 await self.append_urls_to_file(all_urls)
-                message = f"Успешно создано {count_users} пользователей.\n\n🔗 Ссылки на VLESS:\n" + "\n".join(all_urls)
+                message = f"Успешно создано {count_users} пользователей VLESS"
             #await self.increment_user_count(count_users)
-
+            await send_admin_log(bot, f"result_creating_user \n{message}")
         else:
             message = f"Ошибка при создании пользователей!\n\n{task_data.get('message', 'Неизвестная ошибка')}"
             logging.error("Ошибка при обработке result_create_users")

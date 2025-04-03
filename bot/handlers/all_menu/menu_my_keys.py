@@ -17,6 +17,7 @@ def get_payment_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text="💳 Оплатить ключ", callback_data="buy_vpn")],
+            #[InlineKeyboardButton(text="Скачать", callback_data="app_downloaded")],
             [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
         ]
     )
@@ -95,22 +96,22 @@ async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
 async def handle_my_keys(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
     us = await UserCl.load_user(chat_id)
-
-####################################TEST#####################################
-    print("tolsemenov MENU_MY_KEYS ", chat_id)
-    if chat_id in ADMIN_CHAT_IDS:
-        us = await UserCl.load_user(chat_id)
-        if us.active_server:
-            await us.add_key_from_buffer(us.active_server, "vless")
-
-            #await us.active_server.enable.set(False)
-            #await task_manager.send_creating_user(server_ip)
-            #await us.active_server.delete_user_key()
-            #await us.update_key_to_vless("vless://05f71aa4-6ddb-4466-a15a-d523a7b4d24e@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=google.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#user_1_Netherlands")
-    #
-
-
-###########################################################################
+#
+# ####################################TEST#####################################
+#     print("tolsemenov MENU_MY_KEYS ", chat_id)
+#     if chat_id in ADMIN_CHAT_IDS:
+#         us = await UserCl.load_user(chat_id)
+#         if us.active_server:
+#             await us.add_key_from_buffer(us.active_server, "vless")
+#
+#             #await us.active_server.enable.set(False)
+#             #await task_manager.send_creating_user(server_ip)
+#             #await us.active_server.delete_user_key()
+#             #await us.update_key_to_vless("vless://05f71aa4-6ddb-4466-a15a-d523a7b4d24e@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=google.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#user_1_Netherlands")
+#     #
+#
+#
+# ###########################################################################
     try:
         # Генерируем текст и клавиатуру для ответа
         text, keyboard = await generate_key_status_text(us)

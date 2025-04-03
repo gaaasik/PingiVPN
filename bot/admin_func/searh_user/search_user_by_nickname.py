@@ -46,6 +46,10 @@ async def handle_nickname_input(message: types.Message, state: FSMContext):
     """Ищет пользователя по никнейму и выполняет поиск по его chat_id"""
     nickname = message.text.strip()
 
+    # Удаляем @, если он есть в начале
+    if nickname.startswith("@"):
+        nickname = nickname[1:]
+
     if not nickname:
         keyboard = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="🔙 Назад", callback_data="search_user")]

@@ -249,14 +249,14 @@
       "address": "147.45.242.155",
       "country": "Netherlands",
       "name_protocol": "wireguard",
-      "count_users": 40
+      "count_users": 50
     },
     {
       "name": "Server_tol_test_3x_ui_10000",
       "address": "194.87.208.18",
       "country": "Netherlands",
       "name_protocol": "vless",
-      "count_users": 40
+      "count_users": 50
     }
   ]
 }

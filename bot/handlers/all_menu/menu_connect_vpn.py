@@ -19,11 +19,6 @@ connect_text_messages = (
 )
 
 
-
-
-
-
-
 @router.callback_query(lambda c: c.data == "connect_vpn")
 async def handle_buy_vpn(callback_query: CallbackQuery):
     """Обработчик нажатия кнопки 'Подключиться к VPN'."""

@@ -27,6 +27,8 @@ def help_options_keyboard():
                 text="💬 Задать вопрос",
                 url="https://t.me/pingi_help"  # Ссылка на чат с админами
             ),
+        ],[
+            InlineKeyboardButton(text="✍️ Оставить отзыв", callback_data="leave_feedback")
         ],
         [
             InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")

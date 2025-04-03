@@ -294,6 +294,21 @@ class UserCl:
             logging.error(f"Ошибка при подсчете всех оплаченных пользователей с {start_date}: {e}")
             return 0
 
+    @classmethod
+    async def count_active_chat_users(cls) -> int:
+        """
+        Подсчитывает количество пользователей с активным чатом (active_chat = 1).
+        """
+        try:
+            async with aiosqlite.connect(database_path_local) as db:
+                query = "SELECT COUNT(*) FROM users WHERE active_chat = 1"
+                async with db.execute(query) as cursor:
+                    result = await cursor.fetchone()
+                    return result[0] if result else 0
+        except Exception as e:
+            logging.error(f"Ошибка при подсчёте активных чатов: {e}")
+            return 0
+
     @staticmethod
     async def user_exists(chat_id: int) -> bool:
         """
