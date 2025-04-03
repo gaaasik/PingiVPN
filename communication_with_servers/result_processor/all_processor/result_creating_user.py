@@ -1,6 +1,7 @@
 import json
 import asyncio
 import logging
+
 import os
 
 import redis.asyncio as aioredis
@@ -40,7 +41,7 @@ class ResultCreateUsers(BaseResultProcessor):
         message = "Ошибка, мы не выбрали протокол"
         if status == "success":
 
-            logging.info(f"📌 Созданные пользователи: {count_users}")
+            logging.info(f"Созданные пользователи: {count_users}")
 
             if protocol == "wireguard":
                 all_users = task_data.get("created_users", [])
@@ -60,7 +61,7 @@ class ResultCreateUsers(BaseResultProcessor):
             await send_admin_log(bot,f"result_creating_user \n{message}")
 
         # 🚀 Отправляем сообщение в Telegram или логируем
-        logging.info(f"📨 Сообщение отправлено в Telegram: {message}")
+        logging.info(f"Сообщение отправлено в Telegram: {message}")
 
     async def append_files_wg_to_user(self, all_users):
         """
@@ -103,7 +104,7 @@ Endpoint = {user["endpoint"]}
                 # Сохраняем .conf
                 with open(conf_path, "w", encoding="utf-8") as f:
                     f.write(conf_content)
-                logging.info(f"📄 Конфигурация сохранена: {conf_path}")
+                logging.info(f"Конфигурация сохранена: {conf_path}")
 
                 # Генерируем QR
                 await generate_qr_code(conf_path, qr_path)
@@ -136,7 +137,7 @@ Endpoint = {user["endpoint"]}
             redis = await aioredis.from_url("redis://localhost")
             await redis.incrby(REDIS_KEY, count_users)
             await redis.close()
-            logging.info(f"📈 Увеличен счетчик созданных пользователей на {count_users}.")
+            logging.info(f"Увеличен счетчик созданных пользователей на {count_users}.")
         except Exception as e:
             logging.error(f"Ошибка при увеличении счетчика пользователей в Redis: {e}")
 
@@ -148,7 +149,7 @@ Endpoint = {user["endpoint"]}
             redis = await aioredis.from_url("redis://localhost")
             await redis.set(REDIS_KEY, 0)
             await redis.close()
-            logging.info("🔄 Дневной счетчик сброшен в Redis")
+            logging.info("Дневной счетчик сброшен в Redis")
         except Exception as e:
             logging.error(f"Ошибка при сбросе счетчика в Redis: {e}")
 

@@ -261,7 +261,7 @@ async def generate_qr_code(input_file, output_file):
         img = qr.make_image(fill='black', back_color='white')
         img.save(output_file)
 
-        logging.info(f"✅ QR-код успешно сохранен: {output_file}")
+        logging.info(f"QR-код успешно сохранен: {output_file}")
     except Exception as e:
         logging.error(f"Ошибка при создании QR-кода: {e}")
 

@@ -87,7 +87,7 @@ class PaymentReminder(NotificationBase):
                 async with db.execute(query) as cursor:
                     rows = await cursor.fetchall()
 
-            logging.info(f"✅ SQL-запрос выполнен! Найдено записей: {len(rows)}")
+            logging.info(f"SQL-запрос выполнен! Найдено записей: {len(rows)}")
 
             # Выводим первых 5 записей для отладки
             for row in rows[:5]:
@@ -100,7 +100,7 @@ class PaymentReminder(NotificationBase):
                 us = await UserCl.load_user(user)
                 await us.active_server.enable.set(False)
 
-            ###### Толя добавил #########################################################################################################
+            ###### Толя добавил #########################################################################################################logging
             await process_unknown_server_queue()
             #########################################################################################################################
 

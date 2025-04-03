@@ -24,7 +24,7 @@ async def enable_user(callback: CallbackQuery, state: FSMContext):
         # Обновляем сообщение с информацией
         keyboard = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="❌ Выключить пользователя", callback_data="disable_user")],
-            [InlineKeyboardButton(text="🔙 Назад", callback_data="cancel_service")]
+            [InlineKeyboardButton(text="🔙 Назад", callback_data="main_menu_user")]
         ])
 
         await callback.message.edit_text(
@@ -63,7 +63,7 @@ async def disable_user(callback: CallbackQuery, state: FSMContext):
         # Обновляем сообщение с информацией
         keyboard = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✅ Включить пользователя", callback_data="enable_user")],
-            [InlineKeyboardButton(text="🔙 Назад", callback_data="cancel_service")]
+            [InlineKeyboardButton(text="🔙 Назад", callback_data="main_menu_user")]
         ])
 
         await callback.message.edit_text(
