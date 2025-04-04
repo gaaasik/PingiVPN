@@ -47,8 +47,8 @@ from models.notifications.NotificationSchedulerCL import NotificationScheduler
 from models.notifications.PaymentReminderCL import PaymentReminder
 from models.notifications.WithoutKeyNotification import WithoutKeyNotification
 from models.notifications.utils import lottery
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler.triggers.cron import CronTrigger
+import communication_with_servers.result_processor.all_processor.result_creating_user as result_module
+
 from pytz import timezone
 moscow = timezone("Europe/Moscow")
 
@@ -147,7 +147,11 @@ async def periodic_backup_task(bot: Bot):
             await send_admin_log(bot, f"Ошибка при отправке бекапа базы данных: {e}")
 
 async def job_wrapper():
+    result_module.daily_created_users_wg = 0
+    result_module.daily_created_users_vless = 0
+    logging.info("🔁 Обнулены суточные счётчики пользователей (WG и VLESS)")
 
+    # ⏩ Запуск создания пользователей
     await send_creating_user_tasks_for_servers()
 
 

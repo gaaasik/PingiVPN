@@ -14,10 +14,10 @@ PAGE_SIZE = 6  # количество серверов на страницу
 # 📌 Главное меню админ-настроек
 async def get_admin_settings_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="Вывести все сервера", callback_data="view_all_servers")],
-        [InlineKeyboardButton(text="Регенерация ключей", callback_data="action:regenerate")],
-        [InlineKeyboardButton(text="Перезагрузка всех серверов", callback_data="action:reboot")],
-        [InlineKeyboardButton(text="Назад", callback_data="main_menu_user")]
+        [InlineKeyboardButton(text="📋 Вывести все сервера", callback_data="view_all_servers")],
+        [InlineKeyboardButton(text="♻️ Регенерация ключей", callback_data="action:regenerate")],
+        [InlineKeyboardButton(text="🔄 Перезагрузка всех серверов", callback_data="action:reboot")],
+        [InlineKeyboardButton(text="🔙 Назад", callback_data="main_menu_user")]
     ])
 
 

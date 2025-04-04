@@ -23,6 +23,11 @@ REDIS_KEY = "daily_created_users"  # 🔥 Ключ для хранения чи�
 CONFIGS_DIR = os.getenv('CONFIGS_DIR')
 BASE_CONFIGS_DIR = os.path.join(CONFIGS_DIR, 'base_configs')
 
+
+# Глобальный счётчик созданных пользователей (в оперативной памяти)
+daily_created_users_wg = 0
+daily_created_users_vless = 0
+
 class ResultCreateUsers(BaseResultProcessor):
     """Обработчик результата создания пользователей VLESS."""
 
@@ -40,6 +45,12 @@ class ResultCreateUsers(BaseResultProcessor):
 
         message = "Ошибка, мы не выбрали протокол"
         if status == "success":
+            global daily_created_users_wg, daily_created_users_vless
+            if protocol == "wireguard":
+                daily_created_users_wg += count_users
+            elif protocol == "vless":
+                daily_created_users_vless += count_users
+
 
             logging.info(f"Созданные пользователи: {count_users}")
 

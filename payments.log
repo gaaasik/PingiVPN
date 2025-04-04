@@ -494,3 +494,125 @@ ValueError: Данные country_server_data еще не загружены.
 2025-04-04 00:14:24,010 - INFO - Сообщение отправлено в Telegram: Успешно создано 1 пользователей WG
 2025-04-04 00:14:43,945 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
 2025-04-04 00:14:43,945 - INFO - Polling stopped
+2025-04-04 21:42:43,259 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-04 21:42:43,267 - INFO - Данные серверов успешно загружены.
+2025-04-04 21:42:43,276 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-04 21:42:43,277 - INFO - Start polling
+2025-04-04 21:42:43,277 - INFO - Начало прослушивания очереди tasks
+2025-04-04 21:42:43,277 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-04 21:42:43,278 - INFO - Планировщик уведомлений запущен.
+2025-04-04 21:42:43,280 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 857.28 минут.
+2025-04-04 21:42:43,361 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-04 21:42:50,796 - INFO - Update id=560853859 is handled. Duration 577 ms by bot id=7718121314
+2025-04-04 21:42:52,407 - INFO - Выполняется подсчет пользователей за дату: 2025-04-03
+2025-04-04 21:42:52,407 - INFO - SQL-запрос: 
+                SELECT COUNT(*) FROM users 
+                WHERE DATE(substr(registration_date, 7, 4) || '-' || substr(registration_date, 4, 2) || '-' || substr(registration_date, 1, 2)) = ?
+                
+2025-04-04 21:42:52,411 - ERROR - Ошибка при подсчете оплаченных пользователей за дату 2025-04-03 21:42:52.406807: no such column: chat_id
+2025-04-04 21:42:52,411 - ERROR - Ошибка при подсчете всех оплаченных пользователей с 2024-11-24 00:00:00: no such column: chat_id
+2025-04-04 21:42:52,717 - INFO - Update id=560853860 is handled. Duration 312 ms by bot id=7718121314
+2025-04-04 21:42:57,631 - INFO - Update id=560853861 is handled. Duration 219 ms by bot id=7718121314
+2025-04-04 21:43:05,820 - INFO - Выполняется подсчет пользователей за дату: 2025-04-04
+2025-04-04 21:43:05,821 - INFO - SQL-запрос: 
+                SELECT COUNT(*) FROM users 
+                WHERE DATE(substr(registration_date, 7, 4) || '-' || substr(registration_date, 4, 2) || '-' || substr(registration_date, 1, 2)) = ?
+                
+2025-04-04 21:43:05,824 - ERROR - Ошибка при подсчете оплаченных пользователей за дату 2025-04-04 00:00:00: no such column: chat_id
+2025-04-04 21:43:05,824 - ERROR - Ошибка при подсчете всех оплаченных пользователей с 2024-11-24 00:00:00: no such column: chat_id
+2025-04-04 21:43:05,960 - INFO - Update id=560853862 is handled. Duration 140 ms by bot id=7718121314
+2025-04-04 21:46:17,000 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-04 21:46:17,000 - INFO - Polling stopped
+2025-04-04 21:46:20,936 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-04 21:46:20,936 - INFO - Данные серверов успешно загружены.
+2025-04-04 21:46:20,940 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-04 21:46:20,941 - INFO - Start polling
+2025-04-04 21:46:20,941 - INFO - Начало прослушивания очереди tasks
+2025-04-04 21:46:20,941 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-04 21:46:20,942 - INFO - Планировщик уведомлений запущен.
+2025-04-04 21:46:20,943 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 853.65 минут.
+2025-04-04 21:46:21,030 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-04 21:46:23,477 - INFO - Update id=560853863 is handled. Duration 890 ms by bot id=7718121314
+2025-04-04 21:46:24,778 - INFO - Выполняется подсчет пользователей за дату: 2025-04-03
+2025-04-04 21:46:24,778 - INFO - SQL-запрос: 
+                SELECT COUNT(*) FROM users 
+                WHERE DATE(substr(registration_date, 7, 4) || '-' || substr(registration_date, 4, 2) || '-' || substr(registration_date, 1, 2)) = ?
+                
+2025-04-04 21:46:24,781 - ERROR - Ошибка при подсчете оплаченных пользователей за дату 2025-04-03 21:46:24.777980: no such column: chat_id
+2025-04-04 21:46:24,782 - ERROR - Ошибка при подсчете всех оплаченных пользователей с 2024-11-24 00:00:00: no such column: chat_id
+2025-04-04 21:46:24,984 - INFO - Update id=560853864 is handled. Duration 202 ms by bot id=7718121314
+2025-04-04 21:46:32,082 - INFO - Update id=560853865 is handled. Duration 265 ms by bot id=7718121314
+2025-04-04 21:46:33,495 - INFO - Update id=560853866 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 21:46:35,273 - INFO - Update id=560853867 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 21:46:36,713 - INFO - Update id=560853868 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 21:46:37,512 - INFO - Update id=560853869 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 21:46:38,182 - INFO - Update id=560853870 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 21:46:38,874 - INFO - Update id=560853871 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 21:46:39,525 - INFO - Update id=560853872 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 21:46:40,275 - INFO - Update id=560853873 is handled. Duration 219 ms by bot id=7718121314
+2025-04-04 21:46:44,813 - INFO - Update id=560853874 is handled. Duration 328 ms by bot id=7718121314
+2025-04-04 21:46:45,943 - INFO - Запущено создание конфигураций для серверов: 147.45.242.155
+2025-04-04 21:46:46,589 - INFO - Отправлена задача: {'task_type': 'creating_user', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> Очередь: queue_task_Server_tol_test_10000
+2025-04-04 21:46:46,805 - INFO - Update id=560853875 is handled. Duration 968 ms by bot id=7718121314
+2025-04-04 21:46:47,770 - INFO - Получена задача: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 1, 'created_users': [{'user_id': 'f94c667c-9073-444f-85df-8d32457684ce', 'name': '10039_free', 'address': '10.8.0.43', 'private_key': 'CK6KR5a0Lo5Z1/HdcxYI3e5k6IaeZBbwodduCD60vUo=', 'public_key': 'P6jTjo48lueWJegNtUSGY3YKS+AlYkFGjr+8D8AK+0U=', 'pre_shared_key': '3JDOct50IuJ14kY7EWFIetvdNQsgd0ebDEAWb0rSX34=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
+2025-04-04 21:46:47,770 - INFO - Начало обработки результата создания пользователей: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 1, 'created_users': [{'user_id': 'f94c667c-9073-444f-85df-8d32457684ce', 'name': '10039_free', 'address': '10.8.0.43', 'private_key': 'CK6KR5a0Lo5Z1/HdcxYI3e5k6IaeZBbwodduCD60vUo=', 'public_key': 'P6jTjo48lueWJegNtUSGY3YKS+AlYkFGjr+8D8AK+0U=', 'pre_shared_key': '3JDOct50IuJ14kY7EWFIetvdNQsgd0ebDEAWb0rSX34=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
+2025-04-04 21:46:47,770 - INFO - Созданные пользователи: 1
+2025-04-04 21:46:47,771 - INFO - Конфигурация сохранена: D:\Office\telegramBot\PingiVPN\configs\base_configs\10039_free.conf
+2025-04-04 21:46:47,850 - INFO - QR-код успешно сохранен: D:\Office\telegramBot\PingiVPN\configs\base_configs\10039_free.png
+2025-04-04 21:46:48,545 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: result_creating_user 
+Успешно создано 1 пользователей WG. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-04 21:46:48,545 - INFO - Сообщение отправлено в Telegram: Успешно создано 1 пользователей WG
+2025-04-04 21:46:52,612 - INFO - Update id=560853876 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 21:46:54,686 - INFO - Выполняется подсчет пользователей за дату: 2025-04-03
+2025-04-04 21:46:54,686 - INFO - SQL-запрос: 
+                SELECT COUNT(*) FROM users 
+                WHERE DATE(substr(registration_date, 7, 4) || '-' || substr(registration_date, 4, 2) || '-' || substr(registration_date, 1, 2)) = ?
+                
+2025-04-04 21:46:54,689 - ERROR - Ошибка при подсчете оплаченных пользователей за дату 2025-04-03 21:46:54.686179: no such column: chat_id
+2025-04-04 21:46:54,690 - ERROR - Ошибка при подсчете всех оплаченных пользователей с 2024-11-24 00:00:00: no such column: chat_id
+2025-04-04 21:46:54,906 - INFO - Update id=560853877 is handled. Duration 219 ms by bot id=7718121314
+2025-04-04 21:47:04,783 - INFO - Update id=560853878 is handled. Duration 375 ms by bot id=7718121314
+2025-04-04 21:47:05,340 - INFO - Выполняется подсчет пользователей за дату: 2025-04-03
+2025-04-04 21:47:05,341 - INFO - SQL-запрос: 
+                SELECT COUNT(*) FROM users 
+                WHERE DATE(substr(registration_date, 7, 4) || '-' || substr(registration_date, 4, 2) || '-' || substr(registration_date, 1, 2)) = ?
+                
+2025-04-04 21:47:05,344 - ERROR - Ошибка при подсчете оплаченных пользователей за дату 2025-04-03 21:47:05.340399: no such column: chat_id
+2025-04-04 21:47:05,345 - ERROR - Ошибка при подсчете всех оплаченных пользователей с 2024-11-24 00:00:00: no such column: chat_id
+2025-04-04 21:47:05,564 - INFO - Update id=560853879 is handled. Duration 218 ms by bot id=7718121314
+2025-04-04 21:47:07,496 - INFO - Update id=560853880 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 21:47:08,793 - INFO - Update id=560853881 is handled. Duration 217 ms by bot id=7718121314
+2025-04-04 21:47:10,217 - INFO - Update id=560853882 is handled. Duration 94 ms by bot id=7718121314
+2025-04-04 21:47:15,981 - INFO - Update id=560853883 is handled. Duration 218 ms by bot id=7718121314
+2025-04-04 21:47:19,142 - INFO - Update id=560853884 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 21:47:20,012 - INFO - Update id=560853885 is handled. Duration 219 ms by bot id=7718121314
+2025-04-04 21:47:20,629 - INFO - Update id=560853886 is handled. Duration 219 ms by bot id=7718121314
+2025-04-04 21:47:21,036 - INFO - Update id=560853887 is handled. Duration 202 ms by bot id=7718121314
+2025-04-04 21:47:21,671 - INFO - Update id=560853888 is handled. Duration 296 ms by bot id=7718121314
+2025-04-04 21:47:22,028 - INFO - Update id=560853889 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 21:47:22,468 - INFO - Update id=560853890 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 21:47:23,758 - INFO - Update id=560853891 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 21:47:27,603 - INFO - Запущено создание конфигураций для серверов: 194.87.208.18
+2025-04-04 21:47:28,238 - INFO - Отправлена задача: {'task_type': 'creating_user', 'server_ip': '194.87.208.18', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_tol_test_3x_ui_10000
+2025-04-04 21:47:28,263 - INFO - Получена задача: {'status': 'success', 'server_id': '194.87.208.18', 'server_name': 'Server_tol_test_3x_ui_10000', 'task_type': 'result_create_user', 'protocol': 'vless', 'count_users': 3, 'all_urls': ['vless://24bc7f70-62e2-4d03-b0af-c5c266b419fe@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=google.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#PingiVPN_10024_Netherlands', 'vless://579a4ea5-6309-46d9-a869-c77e2b1bf3fa@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=google.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#PingiVPN_10025_Netherlands', 'vless://3dc85bcd-9aa8-4bf0-9b7b-bce012fb9061@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=google.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#PingiVPN_10026_Netherlands'], 'action': 'created_batch'}
+2025-04-04 21:47:28,263 - INFO - Начало обработки результата создания пользователей: {'status': 'success', 'server_id': '194.87.208.18', 'server_name': 'Server_tol_test_3x_ui_10000', 'task_type': 'result_create_user', 'protocol': 'vless', 'count_users': 3, 'all_urls': ['vless://24bc7f70-62e2-4d03-b0af-c5c266b419fe@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=google.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#PingiVPN_10024_Netherlands', 'vless://579a4ea5-6309-46d9-a869-c77e2b1bf3fa@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=google.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#PingiVPN_10025_Netherlands', 'vless://3dc85bcd-9aa8-4bf0-9b7b-bce012fb9061@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=google.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#PingiVPN_10026_Netherlands'], 'action': 'created_batch'}
+2025-04-04 21:47:28,263 - INFO - Созданные пользователи: 3
+2025-04-04 21:47:28,264 - INFO - Добавлено 3 новых URL в configs\url_vless_new
+2025-04-04 21:47:28,299 - INFO - Update id=560853892 is not handled. Duration 812 ms by bot id=7718121314
+2025-04-04 21:47:28,454 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2025-04-04 21:47:28,454 - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7718121314)
+2025-04-04 21:47:30,346 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: result_creating_user 
+Успешно создано 3 пользователей VLESS. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-04 21:47:30,346 - INFO - Сообщение отправлено в Telegram: Успешно создано 3 пользователей VLESS
+2025-04-04 21:47:36,329 - INFO - Connection established (tryings = 1, bot id = 7718121314)
+2025-04-04 21:47:36,438 - INFO - Update id=560853893 is handled. Duration 108 ms by bot id=7718121314
+2025-04-04 21:47:39,690 - INFO - Выполняется подсчет пользователей за дату: 2025-04-03
+2025-04-04 21:47:39,690 - INFO - SQL-запрос: 
+                SELECT COUNT(*) FROM users 
+                WHERE DATE(substr(registration_date, 7, 4) || '-' || substr(registration_date, 4, 2) || '-' || substr(registration_date, 1, 2)) = ?
+                
+2025-04-04 21:47:39,693 - ERROR - Ошибка при подсчете оплаченных пользователей за дату 2025-04-03 21:47:39.689511: no such column: chat_id
+2025-04-04 21:47:39,694 - ERROR - Ошибка при подсчете всех оплаченных пользователей с 2024-11-24 00:00:00: no such column: chat_id
+2025-04-04 21:47:39,908 - INFO - Update id=560853894 is handled. Duration 219 ms by bot id=7718121314
+2025-04-04 21:48:50,442 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-04 21:48:50,442 - INFO - Polling stopped
