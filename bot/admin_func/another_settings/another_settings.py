@@ -4,7 +4,8 @@ from aiogram import Router, F, types
 from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.fsm.context import FSMContext
 
-from communication_with_servers.send_type_task import send_creating_user_tasks_for_servers
+from communication_with_servers.send_type_task import send_creating_user_tasks_for_servers, \
+    send_update_and_reboot_server
 from models.country_server_data import get_json_country_server_data
 
 router = Router()
@@ -86,9 +87,9 @@ async def handle_action(callback: CallbackQuery, state: FSMContext):
         await callback.message.edit_text("✅ Задачи на создание ключей отправлены.", reply_markup=keyboard)
 
     elif action == "reboot":
-
+        await send_update_and_reboot_server(targets)
         keyboard = await get_back_keyboard()
-        await callback.message.edit_text(f"Пока в разработке:\n{chr(10).join(targets)}", reply_markup=keyboard)
+        await callback.message.edit_text(f"✅ Задачи на перезагрузку серверов отправлены.", reply_markup=keyboard)
         # Тут будет вызов перезагрузки позже
     await callback.answer()
 
@@ -114,14 +115,13 @@ async def do_confirmed_action(callback: CallbackQuery):
     action = callback.data.split(":")[1].replace("_all", "")
 
     if action == "regenerate":
-        await callback.message.edit_text("🛠 Регенерация ключей запущена для всех серверов...")
         await send_creating_user_tasks_for_servers()
         result_text = "✅ Задачи на создание ключей отправлены на все сервера."
 
     elif action == "reboot":
         # Здесь можно будет вставить реализацию
-        await callback.answer("Функционал пока не доделан", show_alert=True)
-        result_text = "♻️ Перезагрузка запущена для всех серверов. (Пока в разработке)"
+        await send_update_and_reboot_server()
+        result_text = "♻️ Перезагрузка запущена для всех серверов."
 
     else:
         result_text = "❌ Неизвестное действие."

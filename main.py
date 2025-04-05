@@ -184,7 +184,7 @@ async def main():
     # ПН (mon), СР (wed), ПТ (fri) в 02:00
     scheduler.add_job(
         job_wrapper,
-        CronTrigger(hour=15, minute=54, timezone=moscow)
+        CronTrigger(hour=3, minute=0, timezone=moscow)
     )
     scheduler.start()
 

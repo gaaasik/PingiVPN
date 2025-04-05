@@ -1072,3 +1072,251 @@ ValueError: Данные country_server_data еще не загружены.
 2025-04-05 14:00:35,508 - ERROR - Redis Connection Error: Connection closed by server.
 2025-04-05 14:02:42,184 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
 2025-04-05 14:02:42,184 - INFO - Polling stopped
+2025-04-05 14:30:25,645 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-05 14:30:25,653 - INFO - Данные серверов успешно загружены.
+2025-04-05 14:30:25,662 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-05 14:30:25,663 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-05 14:30:25,663 - INFO - Scheduler started
+2025-04-05 14:30:25,669 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-05 14:30:25,669 - INFO - Start polling
+2025-04-05 14:30:25,670 - INFO - Начало прослушивания очереди tasks
+2025-04-05 14:30:25,670 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-05 14:30:25,670 - INFO - Планировщик уведомлений запущен.
+2025-04-05 14:30:25,672 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 1289.57 минут.
+2025-04-05 14:30:25,734 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-05 14:30:31,023 - INFO - Update id=560853931 is handled. Duration 407 ms by bot id=7718121314
+2025-04-05 14:30:33,179 - INFO - Update id=560853932 is handled. Duration 172 ms by bot id=7718121314
+2025-04-05 14:30:39,246 - INFO - Update id=560853933 is handled. Duration 577 ms by bot id=7718121314
+2025-04-05 14:30:40,434 - INFO - Update id=560853934 is handled. Duration 156 ms by bot id=7718121314
+2025-04-05 14:30:41,636 - INFO - Update id=560853935 is handled. Duration 171 ms by bot id=7718121314
+2025-04-05 14:30:42,195 - INFO - Update id=560853936 is handled. Duration 188 ms by bot id=7718121314
+2025-04-05 14:30:42,614 - INFO - Update id=560853937 is handled. Duration 170 ms by bot id=7718121314
+2025-04-05 14:30:46,216 - INFO - Update id=560853938 is handled. Duration 172 ms by bot id=7718121314
+2025-04-05 14:30:48,079 - INFO - Update id=560853939 is handled. Duration 157 ms by bot id=7718121314
+2025-04-05 14:30:49,205 - INFO - Update id=560853940 is handled. Duration 157 ms by bot id=7718121314
+2025-04-05 14:30:49,858 - INFO - Update id=560853941 is handled. Duration 172 ms by bot id=7718121314
+2025-04-05 14:30:50,320 - INFO - Update id=560853942 is handled. Duration 157 ms by bot id=7718121314
+2025-04-05 14:30:53,804 - INFO - Update id=560853943 is handled. Duration 172 ms by bot id=7718121314
+2025-04-05 14:30:56,371 - INFO - Update id=560853944 is handled. Duration 155 ms by bot id=7718121314
+2025-04-05 14:30:56,874 - INFO - Update id=560853945 is handled. Duration 155 ms by bot id=7718121314
+2025-04-05 14:30:57,450 - INFO - Update id=560853946 is handled. Duration 188 ms by bot id=7718121314
+2025-04-05 14:30:58,994 - INFO - Запущено создание конфигураций для серверов: 147.45.242.155
+2025-04-05 14:30:59,640 - INFO - Отправлена задача: {'task_type': 'creating_user', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> Очередь: queue_task_Server_tol_test_10000
+2025-04-05 14:30:59,886 - INFO - Update id=560853947 is handled. Duration 1016 ms by bot id=7718121314
+2025-04-05 14:31:00,697 - INFO - Получена задача: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 0, 'created_users': [], 'action': 'created_batch'}
+2025-04-05 14:31:00,698 - INFO - Начало обработки результата создания пользователей: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 0, 'created_users': [], 'action': 'created_batch'}
+2025-04-05 14:31:00,698 - INFO - Созданные пользователи: 0
+2025-04-05 14:31:02,131 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: result_creating_user 
+Успешно создано 0 пользователей WG. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-05 14:31:02,132 - INFO - Сообщение отправлено в Telegram: Успешно создано 0 пользователей WG
+2025-04-05 14:31:05,326 - INFO - Update id=560853948 is handled. Duration 266 ms by bot id=7718121314
+2025-04-05 14:31:06,220 - INFO - Выполняется подсчет пользователей за дату: 2025-04-04
+2025-04-05 14:31:06,220 - INFO - SQL-запрос: 
+                SELECT COUNT(*) FROM users 
+                WHERE DATE(substr(registration_date, 7, 4) || '-' || substr(registration_date, 4, 2) || '-' || substr(registration_date, 1, 2)) = ?
+                
+2025-04-05 14:31:06,225 - ERROR - Ошибка при подсчете оплаченных пользователей за дату 2025-04-04 14:31:06.219830: no such column: chat_id
+2025-04-05 14:31:06,226 - ERROR - Ошибка при подсчете всех оплаченных пользователей с 2024-11-24 00:00:00: no such column: chat_id
+2025-04-05 14:31:06,398 - INFO - Update id=560853949 is handled. Duration 187 ms by bot id=7718121314
+2025-04-05 14:32:19,193 - INFO - Update id=560853950 is handled. Duration 829 ms by bot id=7718121314
+2025-04-05 14:32:20,109 - INFO - Update id=560853951 is handled. Duration 297 ms by bot id=7718121314
+2025-04-05 14:32:21,286 - INFO - Update id=560853952 is handled. Duration 172 ms by bot id=7718121314
+2025-04-05 14:32:22,327 - INFO - Update id=560853953 is handled. Duration 172 ms by bot id=7718121314
+2025-04-05 14:32:22,937 - INFO - Update id=560853954 is handled. Duration 156 ms by bot id=7718121314
+2025-04-05 14:32:26,488 - INFO - Update id=560853955 is handled. Duration 170 ms by bot id=7718121314
+2025-04-05 14:32:29,429 - INFO - Update id=560853956 is handled. Duration 266 ms by bot id=7718121314
+2025-04-05 14:32:30,180 - INFO - Update id=560853957 is handled. Duration 172 ms by bot id=7718121314
+2025-04-05 14:32:31,022 - INFO - Update id=560853958 is handled. Duration 187 ms by bot id=7718121314
+2025-04-05 14:32:33,019 - INFO - Update id=560853959 is handled. Duration 171 ms by bot id=7718121314
+2025-04-05 14:32:33,658 - INFO - Update id=560853960 is handled. Duration 157 ms by bot id=7718121314
+2025-04-05 14:32:34,122 - INFO - Update id=560853961 is handled. Duration 250 ms by bot id=7718121314
+2025-04-05 14:32:34,543 - INFO - Update id=560853962 is handled. Duration 156 ms by bot id=7718121314
+2025-04-05 14:32:35,174 - INFO - Update id=560853963 is handled. Duration 172 ms by bot id=7718121314
+2025-04-05 14:32:40,630 - INFO - Update id=560853964 is handled. Duration 171 ms by bot id=7718121314
+2025-04-05 14:32:43,827 - INFO - Update id=560853965 is handled. Duration 2282 ms by bot id=7718121314
+2025-04-05 14:32:45,896 - INFO - Update id=560853966 is handled. Duration 1532 ms by bot id=7718121314
+2025-04-05 14:32:45,933 - INFO - Выполняется подсчет пользователей за дату: 2025-04-04
+2025-04-05 14:32:45,933 - INFO - SQL-запрос: 
+                SELECT COUNT(*) FROM users 
+                WHERE DATE(substr(registration_date, 7, 4) || '-' || substr(registration_date, 4, 2) || '-' || substr(registration_date, 1, 2)) = ?
+                
+2025-04-05 14:32:45,936 - ERROR - Ошибка при подсчете оплаченных пользователей за дату 2025-04-04 14:32:45.933009: no such column: chat_id
+2025-04-05 14:32:45,937 - ERROR - Ошибка при подсчете всех оплаченных пользователей с 2024-11-24 00:00:00: no such column: chat_id
+2025-04-05 14:32:46,918 - INFO - Update id=560853967 is handled. Duration 983 ms by bot id=7718121314
+2025-04-05 14:40:26,208 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 14:50:31,771 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 15:00:37,329 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 15:10:42,874 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 15:20:48,428 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 15:30:53,978 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 15:40:59,549 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 15:51:05,108 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 15:54:00,016 - INFO - Running job "job_wrapper (trigger: cron[hour='15', minute='54'], next run at: 2025-04-06 15:54:00 MSK)" (scheduled at 2025-04-05 15:54:00+03:00)
+2025-04-05 15:54:00,033 - INFO - Job "job_wrapper (trigger: cron[hour='15', minute='54'], next run at: 2025-04-06 15:54:00 MSK)" executed successfully
+2025-04-05 16:01:10,685 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 16:11:16,255 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 16:21:21,838 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 16:31:27,396 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 16:41:32,974 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 16:51:38,603 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 17:01:44,179 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 17:11:49,738 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 17:21:55,297 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 17:32:00,866 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 17:42:06,435 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 17:46:43,062 - ERROR - Ошибка подключения к Redis: Connection closed by server.
+2025-04-05 17:46:53,374 - ERROR - Ошибка подключения к Redis: Connection closed by server.
+2025-04-05 17:47:03,715 - ERROR - Ошибка подключения к Redis: Connection closed by server.
+2025-04-05 17:47:14,032 - ERROR - Ошибка подключения к Redis: Connection closed by server.
+2025-04-05 17:47:24,352 - ERROR - Ошибка подключения к Redis: Connection closed by server.
+2025-04-05 17:47:26,327 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2025-04-05 17:47:26,328 - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7718121314)
+2025-04-05 17:47:34,664 - ERROR - Ошибка подключения к Redis: Connection closed by server.
+2025-04-05 17:47:38,259 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 17:47:48,630 - INFO - Connection established (tryings = 1, bot id = 7718121314)
+2025-04-05 17:48:00,727 - ERROR - Ошибка при обработке сообщения из Redis: Timeout connecting to server
+2025-04-05 17:48:04,309 - ERROR - Redis Connection Error: Error 22 connecting to 194.87.208.18:6379. Превышен таймаут семафора.
+2025-04-05 17:48:11,064 - ERROR - Ошибка подключения к Redis: Connection closed by server.
+2025-04-05 17:48:14,638 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 17:48:21,404 - ERROR - Ошибка подключения к Redis: Connection closed by server.
+2025-04-05 17:48:21,692 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 17:48:47,471 - ERROR - Ошибка при обработке сообщения из Redis: Timeout connecting to server
+2025-04-05 17:48:47,753 - ERROR - Redis Connection Error: Error 22 connecting to 194.87.208.18:6379. Превышен таймаут семафора.
+2025-04-05 17:58:53,319 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 18:08:58,892 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 18:19:04,452 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 18:29:10,377 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 18:39:15,929 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 18:49:21,491 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 18:59:27,068 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 19:09:32,607 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 19:14:46,176 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 19:14:46,181 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2025-04-05 19:14:46,181 - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7718121314)
+2025-04-05 19:14:57,371 - INFO - Connection established (tryings = 1, bot id = 7718121314)
+2025-04-05 20:09:26,814 - ERROR - Ошибка при обработке сообщения из Redis: Timeout reading from socket
+2025-04-05 20:09:37,142 - ERROR - Ошибка подключения к Redis: Connection closed by server.
+2025-04-05 20:09:47,466 - ERROR - Ошибка подключения к Redis: Connection closed by server.
+2025-04-05 20:09:57,787 - ERROR - Ошибка подключения к Redis: Connection closed by server.
+2025-04-05 20:10:08,113 - ERROR - Ошибка подключения к Redis: Connection closed by server.
+2025-04-05 20:10:11,323 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2025-04-05 20:10:11,323 - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7718121314)
+2025-04-05 20:10:22,508 - INFO - Connection established (tryings = 1, bot id = 7718121314)
+2025-04-05 20:10:34,171 - ERROR - Ошибка при обработке сообщения из Redis: Timeout connecting to server
+2025-04-05 22:08:17,379 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-05 22:08:17,381 - INFO - Polling stopped
+2025-04-05 22:08:18,595 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот завершил работу и пошел отдыхать. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-05 23:24:35,989 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-05 23:24:35,990 - INFO - Данные серверов успешно загружены.
+2025-04-05 23:24:35,993 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-05 23:24:35,994 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-05 23:24:35,994 - INFO - Scheduler started
+2025-04-05 23:24:35,999 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-05 23:24:35,999 - INFO - Start polling
+2025-04-05 23:24:35,999 - INFO - Начало прослушивания очереди tasks
+2025-04-05 23:24:36,000 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-05 23:24:36,000 - INFO - Планировщик уведомлений запущен.
+2025-04-05 23:24:36,002 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 755.40 минут.
+2025-04-05 23:24:36,066 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-05 23:24:36,623 - INFO - Получена задача: {'status': 'alive', 'task_type': 'result_update_and_reboot_server', 'server_name': 'Server_tol_test_10000', 'server_ip': '147.45.242.155'}
+2025-04-05 23:24:57,148 - INFO - Update id=560853968 is handled. Duration 437 ms by bot id=7718121314
+2025-04-05 23:25:06,213 - INFO - Update id=560853969 is handled. Duration 187 ms by bot id=7718121314
+2025-04-05 23:25:07,820 - INFO - Update id=560853970 is handled. Duration 188 ms by bot id=7718121314
+2025-04-05 23:25:09,862 - INFO - Update id=560853971 is handled. Duration 186 ms by bot id=7718121314
+2025-04-05 23:25:10,597 - INFO - Update id=560853972 is handled. Duration 266 ms by bot id=7718121314
+2025-04-05 23:25:11,073 - INFO - Update id=560853973 is handled. Duration 188 ms by bot id=7718121314
+2025-04-05 23:25:11,561 - INFO - Update id=560853974 is handled. Duration 172 ms by bot id=7718121314
+2025-04-05 23:25:12,145 - INFO - Update id=560853975 is handled. Duration 157 ms by bot id=7718121314
+2025-04-05 23:25:13,001 - INFO - Update id=560853976 is handled. Duration 139 ms by bot id=7718121314
+2025-04-05 23:25:15,059 - INFO - Update id=560853977 is handled. Duration 172 ms by bot id=7718121314
+2025-04-05 23:25:28,135 - INFO - Update id=560853978 is handled. Duration 186 ms by bot id=7718121314
+2025-04-05 23:28:11,518 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-05 23:28:11,518 - INFO - Polling stopped
+2025-04-05 23:28:18,823 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-05 23:28:18,823 - INFO - Данные серверов успешно загружены.
+2025-04-05 23:28:18,826 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-05 23:28:18,827 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-05 23:28:18,827 - INFO - Scheduler started
+2025-04-05 23:28:18,831 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-05 23:28:18,832 - INFO - Start polling
+2025-04-05 23:28:18,832 - INFO - Начало прослушивания очереди tasks
+2025-04-05 23:28:18,832 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-05 23:28:18,833 - INFO - Планировщик уведомлений запущен.
+2025-04-05 23:28:18,835 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 751.69 минут.
+2025-04-05 23:28:18,917 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-05 23:28:23,662 - INFO - Update id=560853979 is handled. Duration 358 ms by bot id=7718121314
+2025-04-05 23:28:24,728 - INFO - Update id=560853980 is handled. Duration 172 ms by bot id=7718121314
+2025-04-05 23:28:26,815 - INFO - Update id=560853981 is handled. Duration 157 ms by bot id=7718121314
+2025-04-05 23:28:27,525 - INFO - Update id=560853982 is handled. Duration 77 ms by bot id=7718121314
+2025-04-05 23:28:31,889 - INFO - Update id=560853983 is handled. Duration 108 ms by bot id=7718121314
+2025-04-05 23:28:33,787 - INFO - Update id=560853984 is handled. Duration 172 ms by bot id=7718121314
+2025-04-05 23:28:34,511 - INFO - Update id=560853985 is handled. Duration 155 ms by bot id=7718121314
+2025-04-05 23:28:34,897 - INFO - Update id=560853986 is handled. Duration 157 ms by bot id=7718121314
+2025-04-05 23:28:35,382 - INFO - Update id=560853987 is handled. Duration 171 ms by bot id=7718121314
+2025-04-05 23:28:38,938 - INFO - Update id=560853988 is handled. Duration 156 ms by bot id=7718121314
+2025-04-05 23:28:40,213 - INFO - Update id=560853989 is handled. Duration 172 ms by bot id=7718121314
+2025-04-05 23:28:40,970 - INFO - Update id=560853990 is handled. Duration 156 ms by bot id=7718121314
+2025-04-05 23:28:49,587 - INFO - Запущено создание конфигураций для серверов: 147.45.242.155
+2025-04-05 23:28:50,220 - INFO - Отправлена задача: {'task_type': 'update_and_reboot_server', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> Очередь: queue_task_Server_tol_test_10000
+2025-04-05 23:28:50,715 - INFO - Update id=560853991 is handled. Duration 1125 ms by bot id=7718121314
+2025-04-05 23:30:40,141 - INFO - Получена задача: {'status': 'alive', 'task_type': 'result_update_and_reboot_server', 'server_name': 'Server_tol_test_10000', 'server_ip': '147.45.242.155'}
+2025-04-05 23:31:28,790 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-05 23:31:28,790 - INFO - Polling stopped
+2025-04-05 23:34:05,203 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-05 23:34:05,204 - INFO - Данные серверов успешно загружены.
+2025-04-05 23:34:05,207 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-05 23:34:05,207 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-05 23:34:05,207 - INFO - Scheduler started
+2025-04-05 23:34:05,212 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-05 23:34:05,212 - INFO - Start polling
+2025-04-05 23:34:05,212 - INFO - Начало прослушивания очереди tasks
+2025-04-05 23:34:05,213 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-05 23:34:05,213 - INFO - Планировщик уведомлений запущен.
+2025-04-05 23:34:05,215 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 745.91 минут.
+2025-04-05 23:34:05,300 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-05 23:34:05,760 - INFO - Update id=560853992 is handled. Duration 358 ms by bot id=7718121314
+2025-04-05 23:34:05,920 - INFO - Update id=560853993 is handled. Duration 515 ms by bot id=7718121314
+2025-04-05 23:34:09,974 - INFO - Update id=560853994 is handled. Duration 188 ms by bot id=7718121314
+2025-04-05 23:34:11,271 - INFO - Update id=560853995 is handled. Duration 157 ms by bot id=7718121314
+2025-04-05 23:34:12,515 - INFO - Update id=560853996 is handled. Duration 202 ms by bot id=7718121314
+2025-04-05 23:34:13,263 - INFO - Update id=560853997 is handled. Duration 358 ms by bot id=7718121314
+2025-04-05 23:34:13,970 - INFO - Update id=560853998 is handled. Duration 312 ms by bot id=7718121314
+2025-04-05 23:34:17,365 - INFO - Update id=560853999 is handled. Duration 155 ms by bot id=7718121314
+2025-04-05 23:34:18,114 - INFO - Update id=560854000 is handled. Duration 155 ms by bot id=7718121314
+2025-04-05 23:34:18,991 - INFO - Update id=560854001 is handled. Duration 202 ms by bot id=7718121314
+2025-04-05 23:34:19,965 - INFO - Update id=560854002 is handled. Duration 187 ms by bot id=7718121314
+2025-04-05 23:34:23,983 - INFO - Запущено создание конфигураций для серверов: 147.45.242.155
+2025-04-05 23:34:24,605 - INFO - Отправлена задача: {'task_type': 'update_and_reboot_server', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> Очередь: queue_task_Server_tol_test_10000
+2025-04-05 23:34:24,976 - INFO - Update id=560854003 is handled. Duration 1000 ms by bot id=7718121314
+2025-04-05 23:44:05,762 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-05 23:54:11,314 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 00:04:16,883 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 00:08:45,838 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 00:08:45,838 - INFO - Polling stopped
+2025-04-06 00:08:50,512 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-06 00:08:50,512 - INFO - Данные серверов успешно загружены.
+2025-04-06 00:08:50,515 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-06 00:08:50,515 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-06 00:08:50,515 - INFO - Scheduler started
+2025-04-06 00:08:50,520 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-06 00:08:50,520 - INFO - Start polling
+2025-04-06 00:08:50,520 - INFO - Начало прослушивания очереди tasks
+2025-04-06 00:08:50,520 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-06 00:08:50,521 - INFO - Планировщик уведомлений запущен.
+2025-04-06 00:08:50,522 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 711.16 минут.
+2025-04-06 00:08:50,583 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 00:08:57,969 - INFO - Update id=560854004 is handled. Duration 531 ms by bot id=7718121314
+2025-04-06 00:08:59,322 - INFO - Update id=560854005 is handled. Duration 218 ms by bot id=7718121314
+2025-04-06 00:09:00,990 - INFO - Update id=560854006 is handled. Duration 250 ms by bot id=7718121314
+2025-04-06 00:09:01,994 - INFO - Update id=560854007 is handled. Duration 264 ms by bot id=7718121314
+2025-04-06 00:09:02,532 - INFO - Update id=560854008 is handled. Duration 202 ms by bot id=7718121314
+2025-04-06 00:09:03,039 - INFO - Update id=560854009 is handled. Duration 202 ms by bot id=7718121314
+2025-04-06 00:09:06,729 - INFO - Update id=560854010 is handled. Duration 235 ms by bot id=7718121314
+2025-04-06 00:09:07,290 - INFO - Update id=560854011 is handled. Duration 217 ms by bot id=7718121314
+2025-04-06 00:09:08,486 - INFO - Update id=560854012 is handled. Duration 375 ms by bot id=7718121314
+2025-04-06 00:09:09,263 - INFO - Update id=560854013 is handled. Duration 358 ms by bot id=7718121314
+2025-04-06 00:09:09,622 - INFO - Запущено создание конфигураций для серверов: 147.45.242.155
+2025-04-06 00:09:10,250 - INFO - Отправлена задача: {'task_type': 'update_and_reboot_server', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> Очередь: queue_task_Server_tol_test_10000
+2025-04-06 00:09:10,549 - INFO - Update id=560854014 is handled. Duration 938 ms by bot id=7718121314
+2025-04-06 00:15:02,693 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 00:15:02,693 - INFO - Polling stopped

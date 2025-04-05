@@ -28,6 +28,8 @@ BASE_CONFIGS_DIR = os.path.join(CONFIGS_DIR, 'base_configs')
 daily_created_users_wg = 0
 daily_created_users_vless = 0
 
+
+
 class ResultCreateUsers(BaseResultProcessor):
     """Обработчик результата создания пользователей VLESS."""
 
