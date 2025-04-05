@@ -7,6 +7,8 @@ from pathlib import Path
 import aiosqlite
 from aiogram import Bot
 from aiogram.types import FSInputFile
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
 from dotenv import load_dotenv
 
 from bot.admin_func.another_settings import another_settings
@@ -152,7 +154,7 @@ async def job_wrapper():
     logging.info("🔁 Обнулены суточные счётчики пользователей (WG и VLESS)")
 
     # ⏩ Запуск создания пользователей
-    await send_creating_user_tasks_for_servers()
+    #await send_creating_user_tasks_for_servers()
 
 
 async def main():
@@ -177,14 +179,14 @@ async def main():
      #Толян загружает данные из country_server в country_server_data   При отправки создания пользоваетелей неизвестен протокол с которым работает сервер
     country_server_path = os.getenv('country_server_path')
     await load_server_data(country_server_path)
-    # # Планировщик задач от Толяна
-    # scheduler = AsyncIOScheduler()
-    # # ПН (mon), СР (wed), ПТ (fri) в 02:00
-    # scheduler.add_job(
-    #     job_wrapper,
-    #     CronTrigger(hour=15, minute=54, timezone=moscow)
-    # )
-    # scheduler.start()
+    # Планировщик задач от Толяна
+    scheduler = AsyncIOScheduler()
+    # ПН (mon), СР (wed), ПТ (fri) в 02:00
+    scheduler.add_job(
+        job_wrapper,
+        CronTrigger(hour=15, minute=54, timezone=moscow)
+    )
+    scheduler.start()
 
 
     await init_db(db_path)

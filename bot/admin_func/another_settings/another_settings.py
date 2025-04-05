@@ -15,8 +15,13 @@ PAGE_SIZE = 6  # количество серверов на страницу
 async def get_admin_settings_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="📋 Вывести все сервера", callback_data="view_all_servers")],
-        [InlineKeyboardButton(text="♻️ Регенерация ключей", callback_data="action:regenerate")],
-        [InlineKeyboardButton(text="🔄 Перезагрузка всех серверов", callback_data="action:reboot")],
+        [InlineKeyboardButton(text="♻️ Регенерация ключей", callback_data="confirm:regenerate_all")],
+        [InlineKeyboardButton(text="🔄 Перезагрузка всех серверов", callback_data="confirm:reboot_all")],
+        [InlineKeyboardButton(text="🔙 Назад", callback_data="search_user")]
+    ])
+
+async def get_back_keyboard():
+    return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🔙 Назад", callback_data="main_menu_user")]
     ])
 
@@ -74,16 +79,55 @@ async def handle_action(callback: CallbackQuery, state: FSMContext):
         return
 
     if action == "regenerate":
-        print(">>> Вызван regenerate")
+
         await callback.message.edit_text("🛠 Регенерация ключей запущена...")
         await send_creating_user_tasks_for_servers(targets)
-        await callback.message.edit_text("✅ Задачи на создание ключей отправлены.")
+        keyboard = await get_back_keyboard()
+        await callback.message.edit_text("✅ Задачи на создание ключей отправлены.", reply_markup=keyboard)
 
     elif action == "reboot":
-        print(">>> Вызван reboot")
-        await callback.message.edit_text(f"🔄 Перезагрузка серверов:\n{chr(10).join(targets)}")
-        # Тут будет вызов перезагрузки позже
 
+        keyboard = await get_back_keyboard()
+        await callback.message.edit_text(f"Пока в разработке:\n{chr(10).join(targets)}", reply_markup=keyboard)
+        # Тут будет вызов перезагрузки позже
+    await callback.answer()
+
+
+@router.callback_query(F.data.startswith("confirm:"))
+async def confirm_action(callback: CallbackQuery, state: FSMContext):
+    action = callback.data.split(":")[1].replace("_all", "")
+
+    # Показываем подтверждение
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✅ Подтвердить", callback_data=f"do:{action}_all")],
+        [InlineKeyboardButton(text="❌ Отмена", callback_data="admin_settings")]
+    ])
+    text_map = {
+        "regenerate": "♻️ Вы уверены, что хотите запустить регенерацию ключей на <b>все сервера</b>?",
+        "reboot": "🔄 Вы уверены, что хотите перезагрузить <b>все сервера</b>?"
+    }
+    await callback.message.edit_text(text_map.get(action, "❓ Неизвестное действие."), parse_mode="HTML", reply_markup=keyboard)
+    await callback.answer()
+
+@router.callback_query(F.data.startswith("do:"))
+async def do_confirmed_action(callback: CallbackQuery):
+    action = callback.data.split(":")[1].replace("_all", "")
+
+    if action == "regenerate":
+        await callback.message.edit_text("🛠 Регенерация ключей запущена для всех серверов...")
+        await send_creating_user_tasks_for_servers()
+        result_text = "✅ Задачи на создание ключей отправлены на все сервера."
+
+    elif action == "reboot":
+        # Здесь можно будет вставить реализацию
+        await callback.answer("Функционал пока не доделан", show_alert=True)
+        result_text = "♻️ Перезагрузка запущена для всех серверов. (Пока в разработке)"
+
+    else:
+        result_text = "❌ Неизвестное действие."
+
+    keyboard = await get_back_keyboard()
+    await callback.message.edit_text(result_text, reply_markup=keyboard)
     await callback.answer()
 
 
