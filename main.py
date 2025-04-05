@@ -84,7 +84,7 @@ async def schedule_daily_tasks(bot):
         wait_time = (target_time - now).total_seconds()
         print(f"Следующая задача будет выполнена через {wait_time} секунд")
 
-        # Ожидаем до целевого времени
+        # Ожидаем до целевого времени 217.25.91.109
         await asyncio.sleep(wait_time)
 
         # Выполняем задачи

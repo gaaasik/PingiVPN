@@ -36,11 +36,6 @@ async def filter_users_with_expired_trials(batch: List[int]) -> List[int]:
                 logging.info(
                     f"Пользователь {chat_id}: date_key_off={date_key_off}, has_paid_key={has_paid_key}, is_enabled={is_enabled}"
                 )
-                # # Пропускаем, если IP сервера не входит в список
-                # if server_ip not in SEREVERS_IP:
-                #     logging.info(f"Пользователь {chat_id} пропущен: server_ip={server_ip} не в списке разрешённых IP.")
-                #     return None
-                # Пропускаем, если сервер уже отключен
                 if not is_enabled:
                     logging.info(f"Пользователь {chat_id} пропущен: server.enable=False.")
                     return None

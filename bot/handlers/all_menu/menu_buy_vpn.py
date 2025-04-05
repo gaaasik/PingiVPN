@@ -16,13 +16,25 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQu
 
 
 # Создание клавиатуры для каждого статуса
+
+# Словарь тарифов
+TARIFFS = {
+    "1": {"months": 1, "amount": "199.00", "label": "1 месяц"},
+    "3": {"months": 3, "amount": "549.00", "label": "3 месяца"},
+    "6": {"months": 6, "amount": "1049.00", "label": "6 месяцев"},
+}
+
 def get_payment_keyboard():
-    # Создаем клавиатуру с вложенным списком кнопок
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🗓️ 1 месяц: 199₽", callback_data="payment_199")],
-        [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
-    ])
-    return keyboard
+    buttons = []
+
+    for tariff_id, tariff in TARIFFS.items():
+        text = f"📦 {tariff['label']} — {tariff['amount']}₽"
+        callback_data = f"payment_plan_{tariff_id}"
+        buttons.append([InlineKeyboardButton(text=text, callback_data=callback_data)])
+
+    buttons.append([InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")])
+
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 def get_add_key_keyboard():
     # Создаем клавиатуру с вложенным списком кнопок

@@ -8,6 +8,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from bot.handlers.admin import send_admin_log
 from bot.handlers.all_menu.main_menu import show_main_menu
+from bot.handlers.all_menu.menu_buy_vpn import TARIFFS
 from models.UserCl import UserCl
 from bot.payments2.payments_handler_redis import create_one_time_payment
 #import dns.resolver
@@ -53,17 +54,26 @@ async def request_user_email(chat_id: int, bot: Bot, state: FSMContext):
     except Exception as e:
         logging.error(f"Ошибка при запросе email у пользователя: {e}")
 
-# Функция отправки ссылки на оплату
-async def send_payment_link(chat_id: int, bot: Bot, user_login: str, email: str, state: FSMContext):
+
+async def send_payment_link(chat_id: int, bot: Bot, user_login: str, email: str, state: FSMContext, tariff_code: str):
+    tariff = TARIFFS.get(tariff_code)
+    if not tariff:
+        await bot.send_message(chat_id, "❌ Неверный тариф.")
+        return
+
     try:
-        one_time_id, one_time_link = await create_one_time_payment(chat_id, user_login, email)
+        # Генерация платёжной ссылки
+        one_time_id, one_time_link = await create_one_time_payment(chat_id, user_login, email, tariff_code)
+
+        # Текст сообщения
         text = (
-            "🛡 *Оформление подписки через ЮKassa*\n\n"
-            "💵 1 месяц: *199₽*\n\n"
+            f"🛡 *Оформление подписки через ЮKassa*\n\n"
+            f"💵 {tariff['label']}: *{tariff['amount']}₽*\n\n"
             f"📧 Чек отправим на *{email}*\n\n"
-            "⬇️ Нажмите для оплаты ⬇️"
+            "⬇️ Нажмите кнопку для оплаты ⬇️"
         )
 
+        # Кнопки
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 [InlineKeyboardButton(text="💳 Оплатить через Юкассу", url=one_time_link)],
@@ -73,56 +83,131 @@ async def send_payment_link(chat_id: int, bot: Bot, user_login: str, email: str,
                 ]
             ]
         )
-        await bot.send_message(chat_id, text=text, reply_markup=keyboard,parse_mode="Markdown")
-        logging.info(f"Отправлена ссылка на оплату пользователю: chat_id={chat_id}")
 
-        # Сбрасываем состояние FSM
+        await bot.send_message(chat_id, text=text, reply_markup=keyboard, parse_mode="Markdown")
+        logging.info(f"✅ Отправлена ссылка на оплату {tariff_code} пользователю: chat_id={chat_id}")
         await state.clear()
+
     except Exception as e:
-        logging.error(f"Ошибка при отправке ссылки на оплату: {e}")
+        logging.error(f"Ошибка при создании платежа для {tariff_code}: {e}")
         await bot.send_message(chat_id, "Произошла ошибка при создании платежа. Пожалуйста, попробуйте позже.")
 
-# Основной обработчик при нажатии на кнопку "Оплатить 199 рублей"
-@router.callback_query(lambda c: c.data == 'payment_199')
-async def handle_payment_request(callback_query: types.CallbackQuery, state: FSMContext):
-    chat_id = callback_query.message.chat.id
-    bot = callback_query.message.bot
 
-    try:
-        # Загружаем пользователя и проверяем статус подписки
-        us = await UserCl.load_user(chat_id)
-        if not us:
-            logging.error(f"Ошибка загрузки данных пользователя: chat_id={chat_id}")
-            await bot.send_message(chat_id, "Ошибка загрузки данных пользователя.")
-            await callback_query.answer()
-            return
+#
+# # Функция отправки ссылки на оплату process_payment_message
+# async def send_payment_link(chat_id: int, bot: Bot, user_login: str, email: str, state: FSMContext):
+#     try:
+#         one_time_id, one_time_link = await create_one_time_payment(chat_id, user_login, email)
+#         text = (
+#             "🛡 *Оформление подписки через ЮKassa*\n\n"
+#             "💵 1 месяц: *199₽*\n\n"
+#             f"📧 Чек отправим на *{email}*\n\n"
+#             "⬇️ Нажмите для оплаты ⬇️"
+#         )
+#
+#         keyboard = InlineKeyboardMarkup(
+#             inline_keyboard=[
+#                 [InlineKeyboardButton(text="💳 Оплатить через Юкассу", url=one_time_link)],
+#                 [
+#                     InlineKeyboardButton(text="✏️ Изменить почту", callback_data="edit_email"),
+#                     InlineKeyboardButton(text="❌ Отменить платеж", callback_data="cancel_payment")
+#                 ]
+#             ]
+#         )
+#         await bot.send_message(chat_id, text=text, reply_markup=keyboard,parse_mode="Markdown")
+#         logging.info(f"Отправлена ссылка на оплату пользователю: chat_id={chat_id}")
+#
+#         # Сбрасываем состояние FSM
+#         await state.clear()
+#     except Exception as e:
+#         logging.error(f"Ошибка при отправке ссылки на оплату: {e}")
+#         await bot.send_message(chat_id, "Произошла ошибка при создании платежа. Пожалуйста, попробуйте позже.")
 
-        # Проверка, есть ли у пользователя ключ
-        if await us.count_key.get() == 0:
-            await bot.send_message(chat_id, "У вас нет ключа для оплаты, добавьте ключ.")
-            await callback_query.answer()
-            return
-
-        # Проверка email пользователя
-        user_email = await us.email.get()
-        if user_email is None or not validate_email(user_email):
-            logging.info(f"Запрос email у пользователя: chat_id={chat_id}")
-            await request_user_email(chat_id, bot, state)  # Запрашиваем email, если он отсутствует или не валиден
-            await state.set_state(PaymentForm.awaiting_email)
-        else:
-            user_login = await us.user_login.get()
-            await send_payment_link(chat_id, bot, user_login, user_email, state)
-        await send_admin_log(callback_query.bot, f"Пользователь {chat_id} нажал ВТОРУЮ кнопку оплатить")
-
-    except Exception as e:
-        logging.error(f"Ошибка в обработчике handle_payment_request: {e}")
-        await bot.send_message(chat_id, "Произошла ошибка при обработке запроса. Пожалуйста, попробуйте позже.")
-    finally:
-        # Подтверждаем callback_query
-        await callback_query.answer()
+# # Основной обработчик при нажатии на кнопку "Оплатить 199 рублей"
+# @router.callback_query(lambda c: c.data == 'payment_199')
+# async def handle_payment_request(callback_query: types.CallbackQuery, state: FSMContext):
+#     chat_id = callback_query.message.chat.id
+#     bot = callback_query.message.bot
+#
+#     try:
+#         # Загружаем пользователя и проверяем статус подписки
+#         us = await UserCl.load_user(chat_id)
+#         if not us:
+#             logging.error(f"Ошибка загрузки данных пользователя: chat_id={chat_id}")
+#             await bot.send_message(chat_id, "Ошибка загрузки данных пользователя.")
+#             await callback_query.answer()
+#             return
+#
+#         # Проверка, есть ли у пользователя ключ
+#         if await us.count_key.get() == 0:
+#             await bot.send_message(chat_id, "У вас нет ключа для оплаты, добавьте ключ.")
+#             await callback_query.answer()
+#             return
+#
+#         # Проверка email пользователя
+#         user_email = await us.email.get()
+#         if user_email is None or not validate_email(user_email):
+#             logging.info(f"Запрос email у пользователя: chat_id={chat_id}")
+#             await request_user_email(chat_id, bot, state)  # Запрашиваем email, если он отсутствует или не валиден
+#             await state.set_state(PaymentForm.awaiting_email)
+#         else:
+#             user_login = await us.user_login.get()
+#             await send_payment_link(chat_id, bot, user_login, user_email, state)
+#         await send_admin_log(callback_query.bot, f"Пользователь {chat_id} нажал ВТОРУЮ кнопку оплатить")
+#
+#     except Exception as e:
+#         logging.error(f"Ошибка в обработчике handle_payment_request: {e}")
+#         await bot.send_message(chat_id, "Произошла ошибка при обработке запроса. Пожалуйста, попробуйте позже.")
+#     finally:
+#         # Подтверждаем callback_query
+#         await callback_query.answer()
 
 
 # Обработчик ввода email
+
+@router.callback_query(lambda c: c.data.startswith("payment_plan_"))
+async def handle_tariff_payment(callback_query: types.CallbackQuery, state: FSMContext):
+    chat_id = callback_query.message.chat.id
+    bot = callback_query.message.bot
+
+    tariff_code = callback_query.data.split("_")[-1]  # "1", "3", "6"
+    tariff = TARIFFS.get(tariff_code)
+
+    if not tariff:
+        await bot.send_message(chat_id, "❌ Неверный тариф.")
+        await callback_query.answer()
+        return
+
+    try:
+        user = await UserCl.load_user(chat_id)
+        if not user:
+            await bot.send_message(chat_id, "Ошибка: пользователь не найден.")
+            await callback_query.answer()
+            return
+
+        if await user.count_key.get() == 0:
+            await bot.send_message(chat_id, "У вас нет ключа для оплаты. Пожалуйста, сначала подключите VPN.")
+            await callback_query.answer()
+            return
+
+        user_email = await user.email.get()
+        if not user_email or not validate_email(user_email):
+            await request_user_email(chat_id, bot, state)
+            await state.set_state(PaymentForm.awaiting_email)
+            await state.update_data(tariff_code=tariff_code)
+        else:
+            user_login = await user.user_login.get()
+            await send_payment_link(chat_id, bot, user_login, user_email, state, tariff_code)
+
+        await send_admin_log(bot, f"Пользователь {chat_id} выбрал оплату: {tariff['label']}")
+        await callback_query.answer()
+
+    except Exception as e:
+        logging.error(f"Ошибка в обработчике тарифной оплаты: {e}")
+        await bot.send_message(chat_id, "Произошла ошибка. Попробуйте позже.")
+        await callback_query.answer()
+
+
 @router.message(PaymentForm.awaiting_email)
 async def handle_email_input(message: types.Message, state: FSMContext):
     email = message.text

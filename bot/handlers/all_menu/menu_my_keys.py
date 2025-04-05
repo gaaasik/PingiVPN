@@ -13,7 +13,7 @@ router = Router()
 
 
 # Вспомогательные функции для клавиатур
-def get_payment_keyboard() -> InlineKeyboardMarkup:
+def get_first_payment_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text="💳 Оплатить ключ", callback_data="buy_vpn")],
@@ -63,7 +63,7 @@ async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
 
         # Определяем статус и срок действия ключа
         status_text = await get_user_status_text(us)
-        keyboard = get_payment_keyboard()
+        keyboard = get_first_payment_keyboard()
 
         name_protocol = await us.active_server.name_protocol.get()
         if name_protocol == "wireguard":

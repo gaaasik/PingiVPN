@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import os
+import sys
 from contextlib import asynccontextmanager
 from datetime import datetime
 
@@ -14,24 +15,28 @@ from pydantic import BaseModel
 import hmac
 import hashlib
 import base64
+
+from starlette.responses import HTMLResponse
+
 from config_flask_redis import DATABASE_PATH
 
 load_dotenv()
 
-# Настройка логирования
+# Поддержка UTF-8 для консоли и файла
+console_handler = logging.StreamHandler(sys.stdout)
+console_handler.stream.reconfigure(encoding='utf-8')  # 👈 ключевая строка
+console_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+
+file_handler = logging.FileHandler("payments.log", encoding="utf-8")
+
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler("payments.log"),
-        logging.StreamHandler()
-    ]
+    handlers=[console_handler, file_handler]
 )
 logger = logging.getLogger(__name__)
-
 # Глобальная переменная Redis-клиента
 redis_client: redis.Redis = None
-
+#нужно сделать тестовый стенд и начать тестировать оплату !!!!!!
 
 class PaymentData(BaseModel):
     user_id: int
@@ -52,9 +57,13 @@ async def app_lifespan(app: FastAPI):
     logger.info("Инициализация приложения...")
     PASSWORD_REDIS = os.getenv('password_redis')
     # Инициализация Redis
-    redis_client = redis.Redis(host="localhost", port=6379, password=PASSWORD_REDIS, decode_responses=True)
+    redis_client = redis.Redis(host="217.25.91.109", port=6379, password=PASSWORD_REDIS, decode_responses=True)
     logger.info("Redis успешно инициализирован.")
-
+    try:
+        await redis_client.ping()
+        logger.info("✅ Подключение к Redis прошло успешно.")
+    except Exception as e:
+        logger.error(f"❌ Не удалось подключиться к Redis: {e}")
     yield  # Здесь FastAPI выполняет действия приложения
 
     # Закрытие Redis при завершении
@@ -62,6 +71,7 @@ async def app_lifespan(app: FastAPI):
     logger.info("Соединение с Redis закрыто.")
     logger.info("Приложение остановлено.")
 # Создаем приложение FastAPI с lifespan
+
 app = FastAPI(lifespan=app_lifespan)
 
 # Сохранение некорректного payload в БД
@@ -176,8 +186,13 @@ async def webhook(request: Request):
             "payload_json": payload
         }
 
+        # # Отправляем в Redis
+        # await redis_client.lpush("payment_notifications", json.dumps(message))
+        # logger.info(f"Платёж {payment_id} добавлен в очередь Redis")
+
+        #Для тестов!!
         # Отправляем в Redis
-        await redis_client.lpush("payment_notifications", json.dumps(message))
+        await redis_client.lpush("payment_notifications_test", json.dumps(message))
         logger.info(f"Платёж {payment_id} добавлен в очередь Redis")
 
         # Сохраняем в БД
@@ -199,10 +214,19 @@ async def webhook(request: Request):
         raise HTTPException(status_code=500, detail="Internal server error")
 
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 async def home():
-    return {"message": "Hello, this is FastAPI application!"}
-
+    return """
+    <html>
+        <head>
+            <title>FastAPI Webhook Receiver</title>
+        </head>
+        <body>
+            <h1>✅ FastAPI работает!</h1>
+            <p>Ожидаем webhook от Юкассы на <code>/webhook</code></p>
+        </body>
+    </html>
+    """
 
 if __name__ == "__main__":
     import uvicorn
