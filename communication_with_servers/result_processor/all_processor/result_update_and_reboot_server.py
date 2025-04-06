@@ -2,17 +2,9 @@ import json
 import asyncio
 import logging
 
-import os
-
-import redis.asyncio as aioredis
-from datetime import datetime, timedelta
-from pathlib import Path
-
-from dotenv import load_dotenv
-
-from bot.admin_func.history_key.moving_wg_files import generate_qr_code
 from bot.handlers.admin import send_admin_log
 from bot_instance import bot
+from communication_with_servers.error_handler_queue import QueueErrorHandler
 from communication_with_servers.result_processor.all_processor.base_processor import BaseResultProcessor
 
 # Глобальный счётчик и список серверов для отслеживания перезапуска
@@ -28,16 +20,30 @@ async def monitor_reboot_timeout(delay_minutes=5):
     await asyncio.sleep(delay_minutes * 60)
     global rebooted_servers_expected
     if rebooted_servers_expected:  # если список не пуст — значит кто-то не ответил
-        await send_admin_log(
-            bot,
-            f"⚠️ Не все сервера перезапустились за {delay_minutes} минут!\n\n"
-            f"Не ответили:\n{chr(10).join(rebooted_servers_expected)}"
+        from models.country_server_data import get_name_server_by_ip  # если ещё не импортировано
+
+        lines = []
+        for ip in rebooted_servers_expected:
+            server_name = await get_name_server_by_ip(ip)
+            if server_name:
+                lines.append(f"{server_name} – {ip}")
+            else:
+                lines.append(f"Неизвестный сервер – {ip}")
+
+        message_text = (
+            f"⚠️⚠️ Не все сервера перезапустились за {delay_minutes} минут!\n\n"
+            f"Не ответили:\n{chr(10).join(lines)}"
         )
+
+        await send_admin_log(bot, message_text)
+
+        # Очистка задач из очередей
+        cleaner = QueueErrorHandler()
+        for ip in rebooted_servers_expected:
+            await cleaner.remove_tasks_from_queue(server_ip=ip, task_type="update_and_reboot_server")
         rebooted_servers_expected = []
 
-    else:
-        # если всё пришло до таймера, ничего не делать
-        pass
+
 
 class UpdateAndRebootServer(BaseResultProcessor):
     """Обработчик результата перезагрузки и обновления конфигурации серверов."""

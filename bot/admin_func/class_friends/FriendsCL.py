@@ -1,11 +1,10 @@
 import os
 import aiosqlite
-import logging
 from datetime import datetime, timedelta
 from typing import Optional
 from dotenv import load_dotenv
+import logging
 
-from communication_with_servers.handler_unknown_server_queue import logger
 from models.UserCl import UserCl
 
 load_dotenv()
@@ -37,7 +36,7 @@ class FriendsManager:
                         (friend_chat_id,),
                 ) as cursor:
                     if await cursor.fetchone():
-                        logger.warning(
+                        logging.warning(
                             f"❌ Пользователь {friend_chat_id} уже добавлен в список друзей админа {admin_chat_id}."
                         )
                         return False  # Уже друг
@@ -52,7 +51,7 @@ class FriendsManager:
                 )
 
                 await db.commit()  # Закрываем транзакцию перед продлением подписки
-                logger.info(f"✅ Пользователь {friend_chat_id} добавлен в список друзей админа {admin_chat_id}.")
+                logging.info(f"✅ Пользователь {friend_chat_id} добавлен в список друзей админа {admin_chat_id}.")
 
             # Вызываем продление подписки вне блока `async with`
             await FriendsManager._extend_subscription(friend_chat_id, 365)
@@ -60,7 +59,7 @@ class FriendsManager:
             return True
 
         except Exception as e:
-            logger.error(f"⚠️ Ошибка при добавлении друга {friend_chat_id} администратором {admin_chat_id}: {e}")
+            logging.error(f"⚠️ Ошибка при добавлении друга {friend_chat_id} администратором {admin_chat_id}: {e}")
             return False
 
     @staticmethod
@@ -76,11 +75,11 @@ class FriendsManager:
                 ) as cursor:
                     is_friend = await cursor.fetchone() is not None
 
-            logger.info(f"🔍 Проверка друга {friend_chat_id}: {'Да' if is_friend else 'Нет'}")
+            logging.info(f"🔍 Проверка друга {friend_chat_id}: {'Да' if is_friend else 'Нет'}")
             return is_friend
 
         except Exception as e:
-            logger.error(f"⚠️ Ошибка при проверке друга {friend_chat_id}: {e}")
+            logging.error(f"⚠️ Ошибка при проверке друга {friend_chat_id}: {e}")
             return False
 
     @staticmethod
@@ -98,11 +97,11 @@ class FriendsManager:
                 await FriendsManager._extend_subscription(friend_chat_id, 7)
 
                 await db.commit()
-                logger.info(f"❌ Пользователь {friend_chat_id} удален из списка друзей.")
+                logging.info(f"❌ Пользователь {friend_chat_id} удален из списка друзей.")
                 return True
 
         except Exception as e:
-            logger.error(f"⚠️ Ошибка при удалении друга {friend_chat_id}: {e}")
+            logging.error(f"⚠️ Ошибка при удалении друга {friend_chat_id}: {e}")
             return False
 
     @staticmethod
@@ -116,7 +115,7 @@ class FriendsManager:
             # Загружаем пользователя
             user = await UserCl.load_user(chat_id)
             if not user or not user.active_server:
-                logger.warning(f"❌ Пользователь {chat_id} не найден или не имеет активного сервера.")
+                logging.warning(f"❌ Пользователь {chat_id} не найден или не имеет активного сервера.")
                 return
 
             # Получаем текущую дату окончания подписки
@@ -125,7 +124,7 @@ class FriendsManager:
             try:
                 current_end_date = datetime.strptime(current_end_date_str, "%d.%m.%Y %H:%M:%S")
             except ValueError:
-                logger.warning(f"⚠️ Некорректная дата у {chat_id}, устанавливаем с текущего момента.")
+                logging.warning(f"⚠️ Некорректная дата у {chat_id}, устанавливаем с текущего момента.")
                 current_end_date = now
 
             # Вычисляем, сколько дней нужно добавить
@@ -136,11 +135,11 @@ class FriendsManager:
             # Устанавливаем новую дату подписки через `ServerCl`
             await user.active_server.date_key_off.set(new_end_date.strftime("%d.%m.%Y %H:%M:%S"))
 
-            logger.info(
+            logging.info(
                 f"🔄 Подписка {chat_id} продлена до {new_end_date.strftime('%d.%m.%Y %H:%M:%S')} "
                 f"(добавлено {days_to_add} дней)"
             )
 
         except Exception as e:
-            logger.error(f"⚠️ Ошибка при продлении подписки {chat_id}: {e}")
+            logging.error(f"⚠️ Ошибка при продлении подписки {chat_id}: {e}")
 

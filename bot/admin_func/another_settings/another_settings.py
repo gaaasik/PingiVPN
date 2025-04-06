@@ -23,7 +23,7 @@ async def get_admin_settings_keyboard():
 
 async def get_back_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🔙 Назад", callback_data="main_menu_user")]
+        [InlineKeyboardButton(text="🔙 Назад", callback_data="search_user")]
     ])
 
 

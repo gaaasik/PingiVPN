@@ -2,7 +2,7 @@ import logging
 import os
 from datetime import datetime, timedelta
 import aiofiles
-from redis_configs.redis_settings import redis_client
+from redis_configs.redis_settings import redis_client_main
 from models.UserCl import UserCl
 import communication_with_servers.result_processor.all_processor.result_creating_user as result_module
 

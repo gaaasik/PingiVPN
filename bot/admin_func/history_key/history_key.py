@@ -1,10 +1,5 @@
 import logging
-import os
-import shutil
-from datetime import datetime
-import re
-
-from aiogram import Router, types, F
+from aiogram import Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, Chat, User, Message
 
@@ -13,7 +8,6 @@ from bot.admin_func.searh_user.utils import format_history_key
 from bot.admin_func.states import AdminStates
 from bot.handlers.admin import send_admin_log
 from bot_instance import bot
-from models.ServerCl import ServerCl
 from models.UserCl import UserCl
 from dotenv import load_dotenv
 

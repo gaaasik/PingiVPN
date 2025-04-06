@@ -9,10 +9,9 @@ from typing import List
 import aiosqlite
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from communication_with_servers.handler_unknown_server_queue import process_unknown_server_queue
 from models.UserCl import UserCl
 from models.notifications.NotificationBaseCL import NotificationBase
-from models.notifications.utils.dates import is_trial_ended
+
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS  # Функция отправки сообщения админу
 from bot_instance import bot  # Инстанс бота для отправки сообщений
 
@@ -104,9 +103,7 @@ class PaymentReminder(NotificationBase):
                 us = await UserCl.load_user(user)
                 await us.active_server.enable.set(False)
 
-            ###### Толя добавил #########################################################################################################logging
-            await process_unknown_server_queue()
-            #########################################################################################################################
+
 
             # Логирование количества заблокированных пользователей
             if blocked_users:

@@ -7,7 +7,7 @@ load_dotenv()
 
 
 # Инициализация асинхронного клиента Redis
-redis_client = redis.Redis(
+redis_client_main = redis.Redis(
     host=os.getenv('ip_redis_server'),
     port=int(os.getenv('port_redis')),
     password=os.getenv('password_redis'),

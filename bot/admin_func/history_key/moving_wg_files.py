@@ -2,12 +2,7 @@ import logging
 import os
 import re
 import shutil
-from datetime import datetime
-
 import qrcode
-
-from bot.utils.file_sender import create_user_files
-from bot_instance import bot
 from models.ServerCl import ServerCl
 
 

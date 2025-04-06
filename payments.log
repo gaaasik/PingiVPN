@@ -1320,3 +1320,555 @@ ValueError: Данные country_server_data еще не загружены.
 2025-04-06 00:09:10,549 - INFO - Update id=560854014 is handled. Duration 938 ms by bot id=7718121314
 2025-04-06 00:15:02,693 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
 2025-04-06 00:15:02,693 - INFO - Polling stopped
+2025-04-06 09:54:25,678 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-06 09:54:25,678 - INFO - Данные серверов успешно загружены.
+2025-04-06 09:54:25,682 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-06 09:54:25,683 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-06 09:54:25,683 - INFO - Scheduler started
+2025-04-06 09:54:25,691 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-06 09:54:25,692 - INFO - Start polling
+2025-04-06 09:54:25,692 - INFO - Начало прослушивания очереди tasks
+2025-04-06 09:54:25,692 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-06 09:54:25,693 - INFO - Планировщик уведомлений запущен.
+2025-04-06 09:54:25,696 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 125.57 минут.
+2025-04-06 09:54:25,780 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 09:54:51,276 - INFO - Update id=560854015 is handled. Duration 452 ms by bot id=7718121314
+2025-04-06 09:54:52,924 - INFO - Update id=560854016 is handled. Duration 202 ms by bot id=7718121314
+2025-04-06 09:54:54,171 - INFO - Update id=560854017 is handled. Duration 202 ms by bot id=7718121314
+2025-04-06 09:54:55,712 - INFO - Update id=560854018 is handled. Duration 233 ms by bot id=7718121314
+2025-04-06 09:54:56,431 - INFO - Update id=560854019 is handled. Duration 202 ms by bot id=7718121314
+2025-04-06 09:54:57,109 - INFO - Update id=560854020 is handled. Duration 188 ms by bot id=7718121314
+2025-04-06 09:54:58,019 - INFO - Update id=560854021 is handled. Duration 187 ms by bot id=7718121314
+2025-04-06 09:54:58,757 - INFO - Update id=560854022 is handled. Duration 218 ms by bot id=7718121314
+2025-04-06 09:54:59,732 - INFO - Update id=560854023 is handled. Duration 188 ms by bot id=7718121314
+2025-04-06 09:55:01,059 - INFO - Update id=560854024 is handled. Duration 233 ms by bot id=7718121314
+2025-04-06 09:55:03,605 - INFO - Запущено создание конфигураций для серверов: 147.45.242.155
+2025-04-06 09:55:04,241 - INFO - Отправлена задача: {'task_type': 'update_and_reboot_server', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> Очередь: queue_task_Server_tol_test_10000
+2025-04-06 09:55:06,889 - INFO - Update id=560854026 is handled. Duration 266 ms by bot id=7718121314
+2025-04-06 09:55:10,329 - INFO - Update id=560854027 is handled. Duration 188 ms by bot id=7718121314
+2025-04-06 09:55:48,770 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2025-04-06 09:55:48,771 - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7718121314)
+2025-04-06 09:55:48,771 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 09:55:59,952 - INFO - Connection established (tryings = 1, bot id = 7718121314)
+2025-04-06 09:56:05,353 - ERROR - Exception in callback _ProactorBasePipeTransport._call_connection_lost(None)
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost(None)>
+Traceback (most recent call last):
+  File "D:\Program\Python\Python310\lib\asyncio\events.py", line 80, in _run
+    self._context.run(self._callback, *self._args)
+  File "D:\Program\Python\Python310\lib\asyncio\proactor_events.py", line 162, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+ConnectionAbortedError: [WinError 10053] Программа на вашем хост-компьютере разорвала установленное подключение
+2025-04-06 09:56:05,354 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 09:56:05,552 - INFO - Update id=560854025 is not handled. Duration 61952 ms by bot id=7718121314
+2025-04-06 09:56:05,552 - ERROR - Cause exception while process update id=560854025 by bot id=7718121314
+TelegramBadRequest: Telegram server says - Bad Request: query is too old and response timeout expired or query ID is invalid
+Traceback (most recent call last):
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "D:\Office\telegramBot\PingiVPN\bot\admin_func\another_settings\another_settings.py", line 94, in handle_action
+    await callback.answer()
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\methods\base.py", line 84, in emit
+    return await bot(self)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\bot.py", line 432, in __call__
+    return await self.session(self, method, timeout=request_timeout)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\session\base.py", line 257, in __call__
+    return cast(TelegramType, await middleware(bot, method))
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\session\aiohttp.py", line 175, in make_request
+    response = self.check_response(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\session\base.py", line 120, in check_response
+    raise TelegramBadRequest(method=method, message=description)
+aiogram.exceptions.TelegramBadRequest: Telegram server says - Bad Request: query is too old and response timeout expired or query ID is invalid
+2025-04-06 09:57:07,844 - INFO - Update id=560854028 is handled. Duration 1672 ms by bot id=7718121314
+2025-04-06 09:57:09,302 - INFO - Update id=560854029 is handled. Duration 202 ms by bot id=7718121314
+2025-04-06 09:57:10,287 - INFO - Update id=560854030 is handled. Duration 202 ms by bot id=7718121314
+2025-04-06 09:57:11,453 - INFO - Update id=560854031 is handled. Duration 234 ms by bot id=7718121314
+2025-04-06 09:57:12,060 - INFO - Update id=560854032 is handled. Duration 266 ms by bot id=7718121314
+2025-04-06 09:57:12,596 - INFO - Update id=560854033 is handled. Duration 235 ms by bot id=7718121314
+2025-04-06 09:57:16,545 - INFO - Update id=560854034 is handled. Duration 500 ms by bot id=7718121314
+2025-04-06 09:57:17,429 - INFO - Update id=560854035 is handled. Duration 202 ms by bot id=7718121314
+2025-04-06 09:57:18,040 - INFO - Update id=560854036 is handled. Duration 202 ms by bot id=7718121314
+2025-04-06 09:57:18,865 - INFO - Update id=560854037 is handled. Duration 202 ms by bot id=7718121314
+2025-04-06 09:57:19,311 - INFO - Запущено создание конфигураций для серверов: 147.45.242.155
+2025-04-06 09:57:19,936 - INFO - Отправлена задача: {'task_type': 'update_and_reboot_server', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> Очередь: queue_task_Server_tol_test_10000
+2025-04-06 09:58:20,782 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 09:58:20,927 - INFO - Update id=560854038 is not handled. Duration 61625 ms by bot id=7718121314
+2025-04-06 09:58:20,927 - ERROR - Cause exception while process update id=560854038 by bot id=7718121314
+TelegramBadRequest: Telegram server says - Bad Request: query is too old and response timeout expired or query ID is invalid
+Traceback (most recent call last):
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "D:\Office\telegramBot\PingiVPN\bot\admin_func\another_settings\another_settings.py", line 94, in handle_action
+    await callback.answer()
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\methods\base.py", line 84, in emit
+    return await bot(self)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\bot.py", line 432, in __call__
+    return await self.session(self, method, timeout=request_timeout)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\session\base.py", line 257, in __call__
+    return cast(TelegramType, await middleware(bot, method))
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\session\aiohttp.py", line 175, in make_request
+    response = self.check_response(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\session\base.py", line 120, in check_response
+    raise TelegramBadRequest(method=method, message=description)
+aiogram.exceptions.TelegramBadRequest: Telegram server says - Bad Request: query is too old and response timeout expired or query ID is invalid
+2025-04-06 10:00:00,024 - INFO - Выполняется подсчет пользователей за дату: 2025-04-05
+2025-04-06 10:00:00,024 - INFO - SQL-запрос: 
+                SELECT COUNT(*) FROM users 
+                WHERE DATE(substr(registration_date, 7, 4) || '-' || substr(registration_date, 4, 2) || '-' || substr(registration_date, 1, 2)) = ?
+                
+2025-04-06 10:00:00,028 - ERROR - Ошибка при подсчете оплаченных пользователей за дату 2025-04-05 10:00:00.023543: no such column: chat_id
+2025-04-06 10:00:00,029 - ERROR - Ошибка при подсчете всех оплаченных пользователей с 2024-11-24 00:00:00: no such column: chat_id
+2025-04-06 10:05:37,728 - INFO - Polling stopped
+2025-04-06 10:05:37,729 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 10:05:43,755 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-06 10:05:43,755 - INFO - Данные серверов успешно загружены.
+2025-04-06 10:05:43,758 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-06 10:05:43,759 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-06 10:05:43,759 - INFO - Scheduler started
+2025-04-06 10:05:43,764 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-06 10:05:43,764 - INFO - Start polling
+2025-04-06 10:05:43,764 - INFO - Начало прослушивания очереди tasks
+2025-04-06 10:05:43,764 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-06 10:05:43,765 - INFO - Планировщик уведомлений запущен.
+2025-04-06 10:05:43,766 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 114.27 минут.
+2025-04-06 10:05:43,847 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 10:05:45,066 - INFO - Update id=560854039 is handled. Duration 500 ms by bot id=7718121314
+2025-04-06 10:05:46,861 - INFO - Update id=560854040 is handled. Duration 156 ms by bot id=7718121314
+2025-04-06 10:05:47,667 - INFO - Update id=560854041 is handled. Duration 172 ms by bot id=7718121314
+2025-04-06 10:05:48,649 - INFO - Update id=560854042 is handled. Duration 157 ms by bot id=7718121314
+2025-04-06 10:05:49,185 - INFO - Update id=560854043 is handled. Duration 156 ms by bot id=7718121314
+2025-04-06 10:05:49,691 - INFO - Update id=560854044 is handled. Duration 172 ms by bot id=7718121314
+2025-04-06 10:05:53,164 - INFO - Update id=560854045 is handled. Duration 156 ms by bot id=7718121314
+2025-04-06 10:05:56,235 - INFO - Update id=560854046 is handled. Duration 141 ms by bot id=7718121314
+2025-04-06 10:05:57,276 - INFO - Update id=560854047 is handled. Duration 157 ms by bot id=7718121314
+2025-04-06 10:05:58,003 - INFO - Update id=560854048 is handled. Duration 171 ms by bot id=7718121314
+2025-04-06 10:05:58,649 - INFO - Запущено создание конфигураций для серверов: 147.45.242.155
+2025-04-06 10:05:59,268 - INFO - Отправлена задача: {'task_type': 'update_and_reboot_server', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> Очередь: queue_task_Server_tol_test_10000
+2025-04-06 10:07:00,714 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 10:07:00,913 - INFO - Update id=560854049 is not handled. Duration 62265 ms by bot id=7718121314
+2025-04-06 10:07:00,913 - ERROR - Cause exception while process update id=560854049 by bot id=7718121314
+TelegramBadRequest: Telegram server says - Bad Request: query is too old and response timeout expired or query ID is invalid
+Traceback (most recent call last):
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "D:\Office\telegramBot\PingiVPN\bot\admin_func\another_settings\another_settings.py", line 94, in handle_action
+    await callback.answer()
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\methods\base.py", line 84, in emit
+    return await bot(self)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\bot.py", line 432, in __call__
+    return await self.session(self, method, timeout=request_timeout)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\session\base.py", line 257, in __call__
+    return cast(TelegramType, await middleware(bot, method))
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\session\aiohttp.py", line 175, in make_request
+    response = self.check_response(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\session\base.py", line 120, in check_response
+    raise TelegramBadRequest(method=method, message=description)
+aiogram.exceptions.TelegramBadRequest: Telegram server says - Bad Request: query is too old and response timeout expired or query ID is invalid
+2025-04-06 10:16:32,163 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 10:16:32,163 - INFO - Polling stopped
+2025-04-06 10:16:36,684 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-06 10:16:36,685 - INFO - Данные серверов успешно загружены.
+2025-04-06 10:16:36,688 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-06 10:16:36,688 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-06 10:16:36,688 - INFO - Scheduler started
+2025-04-06 10:16:36,693 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-06 10:16:36,693 - INFO - Start polling
+2025-04-06 10:16:36,694 - INFO - Начало прослушивания очереди tasks
+2025-04-06 10:16:36,694 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-06 10:16:36,694 - INFO - Планировщик уведомлений запущен.
+2025-04-06 10:16:36,696 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 103.39 минут.
+2025-04-06 10:16:36,778 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 10:16:37,206 - INFO - Update id=560854050 is handled. Duration 344 ms by bot id=7718121314
+2025-04-06 10:16:38,663 - INFO - Update id=560854051 is handled. Duration 156 ms by bot id=7718121314
+2025-04-06 10:16:39,976 - INFO - Update id=560854052 is handled. Duration 156 ms by bot id=7718121314
+2025-04-06 10:16:42,839 - INFO - Update id=560854053 is handled. Duration 358 ms by bot id=7718121314
+2025-04-06 10:16:43,316 - INFO - Update id=560854054 is handled. Duration 157 ms by bot id=7718121314
+2025-04-06 10:16:43,957 - INFO - Update id=560854055 is handled. Duration 219 ms by bot id=7718121314
+2025-04-06 10:16:44,483 - INFO - Update id=560854056 is handled. Duration 156 ms by bot id=7718121314
+2025-04-06 10:16:45,092 - INFO - Update id=560854057 is handled. Duration 156 ms by bot id=7718121314
+2025-04-06 10:16:45,712 - INFO - Update id=560854058 is handled. Duration 172 ms by bot id=7718121314
+2025-04-06 10:16:46,595 - INFO - Update id=560854059 is handled. Duration 187 ms by bot id=7718121314
+2025-04-06 10:16:50,203 - INFO - Запущено создание конфигураций для серверов: 147.45.242.155
+2025-04-06 10:16:50,828 - INFO - Отправлена задача: {'task_type': 'update_and_reboot_server', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> Очередь: queue_task_Server_tol_test_10000
+2025-04-06 10:17:51,889 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 10:17:52,083 - INFO - Update id=560854060 is not handled. Duration 61890 ms by bot id=7718121314
+2025-04-06 10:17:52,083 - ERROR - Cause exception while process update id=560854060 by bot id=7718121314
+TelegramBadRequest: Telegram server says - Bad Request: query is too old and response timeout expired or query ID is invalid
+Traceback (most recent call last):
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "D:\Office\telegramBot\PingiVPN\bot\admin_func\another_settings\another_settings.py", line 94, in handle_action
+    await callback.answer()
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\methods\base.py", line 84, in emit
+    return await bot(self)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\bot.py", line 432, in __call__
+    return await self.session(self, method, timeout=request_timeout)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\session\base.py", line 257, in __call__
+    return cast(TelegramType, await middleware(bot, method))
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\session\aiohttp.py", line 175, in make_request
+    response = self.check_response(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\session\base.py", line 120, in check_response
+    raise TelegramBadRequest(method=method, message=description)
+aiogram.exceptions.TelegramBadRequest: Telegram server says - Bad Request: query is too old and response timeout expired or query ID is invalid
+2025-04-06 10:22:23,105 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 10:22:23,105 - INFO - Polling stopped
+2025-04-06 10:22:26,562 - INFO - Данные серверов успешно загружены.
+2025-04-06 10:22:26,565 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-06 10:22:26,565 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-06 10:22:26,565 - INFO - Scheduler started
+2025-04-06 10:22:26,570 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-06 10:22:26,570 - INFO - Start polling
+2025-04-06 10:22:26,571 - INFO - Начало прослушивания очереди tasks
+2025-04-06 10:22:26,571 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-06 10:22:26,571 - INFO - Планировщик уведомлений запущен.
+2025-04-06 10:22:26,573 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 97.56 минут.
+2025-04-06 10:22:26,644 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 10:22:28,687 - INFO - Update id=560854061 is handled. Duration 343 ms by bot id=7718121314
+2025-04-06 10:22:29,945 - INFO - Update id=560854062 is handled. Duration 329 ms by bot id=7718121314
+2025-04-06 10:22:30,971 - INFO - Update id=560854063 is handled. Duration 172 ms by bot id=7718121314
+2025-04-06 10:22:32,107 - INFO - Update id=560854064 is handled. Duration 172 ms by bot id=7718121314
+2025-04-06 10:22:32,555 - INFO - Update id=560854065 is handled. Duration 156 ms by bot id=7718121314
+2025-04-06 10:22:33,112 - INFO - Update id=560854066 is handled. Duration 170 ms by bot id=7718121314
+2025-04-06 10:22:36,743 - INFO - Update id=560854067 is handled. Duration 170 ms by bot id=7718121314
+2025-04-06 10:22:38,899 - INFO - Update id=560854068 is handled. Duration 250 ms by bot id=7718121314
+2025-04-06 10:22:39,561 - INFO - Update id=560854069 is handled. Duration 172 ms by bot id=7718121314
+2025-04-06 10:22:40,349 - INFO - Update id=560854070 is handled. Duration 172 ms by bot id=7718121314
+2025-04-06 10:22:40,833 - INFO - Запущено создание конфигураций для серверов: 147.45.242.155
+2025-04-06 10:22:41,453 - INFO - Отправлена задача: {'task_type': 'update_and_reboot_server', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> Очередь: queue_task_Server_tol_test_10000
+2025-04-06 10:23:42,039 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 10:23:42,224 - INFO - Update id=560854071 is not handled. Duration 61406 ms by bot id=7718121314
+2025-04-06 10:23:42,224 - ERROR - Cause exception while process update id=560854071 by bot id=7718121314
+TelegramBadRequest: Telegram server says - Bad Request: query is too old and response timeout expired or query ID is invalid
+Traceback (most recent call last):
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "D:\Office\telegramBot\PingiVPN\bot\admin_func\another_settings\another_settings.py", line 94, in handle_action
+    await callback.answer()
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\methods\base.py", line 84, in emit
+    return await bot(self)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\bot.py", line 432, in __call__
+    return await self.session(self, method, timeout=request_timeout)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\session\base.py", line 257, in __call__
+    return cast(TelegramType, await middleware(bot, method))
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\session\aiohttp.py", line 175, in make_request
+    response = self.check_response(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\client\session\base.py", line 120, in check_response
+    raise TelegramBadRequest(method=method, message=description)
+aiogram.exceptions.TelegramBadRequest: Telegram server says - Bad Request: query is too old and response timeout expired or query ID is invalid
+2025-04-06 10:29:02,975 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 10:29:02,975 - INFO - Polling stopped
+2025-04-06 10:29:06,369 - INFO - Данные серверов успешно загружены.
+2025-04-06 10:29:06,371 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-06 10:29:06,372 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-06 10:29:06,372 - INFO - Scheduler started
+2025-04-06 10:29:06,377 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-06 10:29:06,377 - INFO - Start polling
+2025-04-06 10:29:06,377 - INFO - Начало прослушивания очереди tasks
+2025-04-06 10:29:06,378 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-06 10:29:06,378 - INFO - Планировщик уведомлений запущен.
+2025-04-06 10:29:06,380 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 90.89 минут.
+2025-04-06 10:29:06,452 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 10:29:10,527 - INFO - Update id=560854072 is handled. Duration 375 ms by bot id=7718121314
+2025-04-06 10:29:11,877 - INFO - Update id=560854073 is handled. Duration 280 ms by bot id=7718121314
+2025-04-06 10:29:13,074 - INFO - Update id=560854074 is handled. Duration 157 ms by bot id=7718121314
+2025-04-06 10:29:13,991 - INFO - Update id=560854075 is handled. Duration 217 ms by bot id=7718121314
+2025-04-06 10:29:14,576 - INFO - Update id=560854076 is handled. Duration 343 ms by bot id=7718121314
+2025-04-06 10:29:15,038 - INFO - Update id=560854077 is handled. Duration 186 ms by bot id=7718121314
+2025-04-06 10:29:18,537 - INFO - Update id=560854078 is handled. Duration 172 ms by bot id=7718121314
+2025-04-06 10:29:20,838 - INFO - Update id=560854079 is handled. Duration 265 ms by bot id=7718121314
+2025-04-06 10:29:21,426 - INFO - Update id=560854080 is handled. Duration 172 ms by bot id=7718121314
+2025-04-06 10:29:22,215 - INFO - Update id=560854081 is handled. Duration 187 ms by bot id=7718121314
+2025-04-06 10:29:23,091 - INFO - Запущено создание конфигураций для серверов: 147.45.242.155
+2025-04-06 10:29:23,723 - INFO - Отправлена задача: {'task_type': 'update_and_reboot_server', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> Очередь: queue_task_Server_tol_test_10000
+2025-04-06 10:29:23,724 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 10:29:23,936 - INFO - Update id=560854082 is handled. Duration 843 ms by bot id=7718121314
+2025-04-06 10:29:28,551 - INFO - Update id=560854083 is not handled. Duration 233 ms by bot id=7718121314
+2025-04-06 10:29:55,559 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 10:29:55,559 - INFO - Polling stopped
+2025-04-06 10:30:49,197 - INFO - Данные серверов успешно загружены.
+2025-04-06 10:30:49,201 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-06 10:30:49,202 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-06 10:30:49,202 - INFO - Scheduler started
+2025-04-06 10:30:49,206 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-06 10:30:49,207 - INFO - Start polling
+2025-04-06 10:30:49,207 - INFO - Начало прослушивания очереди tasks
+2025-04-06 10:30:49,207 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-06 10:30:49,208 - INFO - Планировщик уведомлений запущен.
+2025-04-06 10:30:49,210 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 89.18 минут.
+2025-04-06 10:30:49,294 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 10:30:49,828 - INFO - Update id=560854084 is handled. Duration 438 ms by bot id=7718121314
+2025-04-06 10:30:51,314 - INFO - Update id=560854085 is handled. Duration 218 ms by bot id=7718121314
+2025-04-06 10:30:52,363 - INFO - Update id=560854086 is handled. Duration 217 ms by bot id=7718121314
+2025-04-06 10:30:53,279 - INFO - Update id=560854087 is handled. Duration 202 ms by bot id=7718121314
+2025-04-06 10:30:53,868 - INFO - Update id=560854088 is handled. Duration 233 ms by bot id=7718121314
+2025-04-06 10:30:54,231 - INFO - Update id=560854089 is handled. Duration 203 ms by bot id=7718121314
+2025-04-06 10:30:57,714 - INFO - Update id=560854090 is handled. Duration 250 ms by bot id=7718121314
+2025-04-06 10:30:58,844 - INFO - Update id=560854091 is handled. Duration 406 ms by bot id=7718121314
+2025-04-06 10:30:59,398 - INFO - Update id=560854092 is handled. Duration 218 ms by bot id=7718121314
+2025-04-06 10:31:00,219 - INFO - Update id=560854093 is handled. Duration 219 ms by bot id=7718121314
+2025-04-06 10:31:00,576 - INFO - Запущено создание конфигураций для серверов: 147.45.242.155
+2025-04-06 10:31:01,204 - INFO - Отправлена задача: {'task_type': 'update_and_reboot_server', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> Очередь: queue_task_Server_tol_test_10000
+2025-04-06 10:31:01,204 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 10:31:01,828 - INFO - Update id=560854094 is handled. Duration 1250 ms by bot id=7718121314
+2025-04-06 10:31:02,815 - INFO - Update id=560854095 is handled. Duration 266 ms by bot id=7718121314
+2025-04-06 10:31:04,286 - INFO - Update id=560854096 is handled. Duration 202 ms by bot id=7718121314
+2025-04-06 10:34:41,225 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 10:34:41,225 - INFO - Polling stopped
+2025-04-06 10:34:44,702 - INFO - Данные серверов успешно загружены.
+2025-04-06 10:34:44,705 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-06 10:34:44,706 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-06 10:34:44,706 - INFO - Scheduler started
+2025-04-06 10:34:44,710 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-06 10:34:44,711 - INFO - Start polling
+2025-04-06 10:34:44,711 - INFO - Начало прослушивания очереди tasks
+2025-04-06 10:34:44,711 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-06 10:34:44,712 - INFO - Планировщик уведомлений запущен.
+2025-04-06 10:34:44,713 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 85.25 минут.
+2025-04-06 10:34:44,774 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 10:34:45,255 - INFO - Update id=560854097 is handled. Duration 421 ms by bot id=7718121314
+2025-04-06 10:34:46,849 - INFO - Update id=560854098 is handled. Duration 344 ms by bot id=7718121314
+2025-04-06 10:34:47,736 - INFO - Update id=560854099 is handled. Duration 172 ms by bot id=7718121314
+2025-04-06 10:34:48,730 - INFO - Update id=560854100 is handled. Duration 172 ms by bot id=7718121314
+2025-04-06 10:34:49,281 - INFO - Update id=560854101 is handled. Duration 157 ms by bot id=7718121314
+2025-04-06 10:34:49,832 - INFO - Update id=560854102 is handled. Duration 233 ms by bot id=7718121314
+2025-04-06 10:34:53,434 - INFO - Update id=560854103 is handled. Duration 156 ms by bot id=7718121314
+2025-04-06 10:34:54,195 - INFO - Update id=560854104 is handled. Duration 188 ms by bot id=7718121314
+2025-04-06 10:34:54,814 - INFO - Update id=560854105 is handled. Duration 156 ms by bot id=7718121314
+2025-04-06 10:34:55,633 - INFO - Update id=560854106 is handled. Duration 311 ms by bot id=7718121314
+2025-04-06 10:34:56,236 - INFO - Запущено создание конфигураций для серверов: 147.45.242.155
+2025-04-06 10:34:56,871 - INFO - Отправлена задача: {'task_type': 'update_and_reboot_server', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> Очередь: queue_task_Server_tol_test_10000
+2025-04-06 10:34:56,871 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 10:34:57,017 - INFO - Update id=560854107 is handled. Duration 780 ms by bot id=7718121314
+2025-04-06 10:35:57,441 - INFO - Полное имя очереди queue_task_Server_tol_test_10000
+2025-04-06 10:35:58,142 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 10:40:22,353 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 10:40:22,353 - INFO - Polling stopped
+2025-04-06 10:40:26,376 - INFO - Данные серверов успешно загружены.
+2025-04-06 10:40:26,378 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-06 10:40:26,379 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-06 10:40:26,379 - INFO - Scheduler started
+2025-04-06 10:40:26,383 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-06 10:40:26,384 - INFO - Start polling
+2025-04-06 10:40:26,384 - INFO - Начало прослушивания очереди tasks
+2025-04-06 10:40:26,384 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-06 10:40:26,385 - INFO - Планировщик уведомлений запущен.
+2025-04-06 10:40:26,387 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 79.56 минут.
+2025-04-06 10:40:26,453 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 10:40:27,645 - INFO - Update id=560854108 is handled. Duration 391 ms by bot id=7718121314
+2025-04-06 10:40:28,655 - INFO - Update id=560854109 is handled. Duration 187 ms by bot id=7718121314
+2025-04-06 10:40:29,462 - INFO - Update id=560854110 is handled. Duration 172 ms by bot id=7718121314
+2025-04-06 10:40:30,543 - INFO - Update id=560854111 is handled. Duration 186 ms by bot id=7718121314
+2025-04-06 10:40:31,206 - INFO - Update id=560854112 is handled. Duration 250 ms by bot id=7718121314
+2025-04-06 10:40:31,921 - INFO - Update id=560854113 is handled. Duration 390 ms by bot id=7718121314
+2025-04-06 10:40:35,482 - INFO - Update id=560854114 is handled. Duration 219 ms by bot id=7718121314
+2025-04-06 10:40:36,443 - INFO - Update id=560854115 is handled. Duration 172 ms by bot id=7718121314
+2025-04-06 10:40:37,144 - INFO - Update id=560854116 is handled. Duration 171 ms by bot id=7718121314
+2025-04-06 10:40:39,371 - INFO - Update id=560854117 is handled. Duration 202 ms by bot id=7718121314
+2025-04-06 10:40:40,232 - INFO - Запущено создание конфигураций для серверов: 147.45.242.155
+2025-04-06 10:40:40,869 - INFO - Отправлена задача: {'task_type': 'update_and_reboot_server', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> Очередь: queue_task_Server_tol_test_10000
+2025-04-06 10:40:40,869 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 10:40:41,026 - INFO - Update id=560854118 is handled. Duration 796 ms by bot id=7718121314
+2025-04-06 10:40:44,628 - INFO - Update id=560854119 is handled. Duration 266 ms by bot id=7718121314
+2025-04-06 10:40:45,768 - INFO - Update id=560854120 is handled. Duration 187 ms by bot id=7718121314
+2025-04-06 10:40:46,850 - INFO - Update id=560854121 is handled. Duration 188 ms by bot id=7718121314
+2025-04-06 10:41:42,139 - INFO - [Очередь: queue_task_Server_tol_test_10000] Все задачи типа 'update_and_reboot_server' удалены
+2025-04-06 10:41:42,139 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 10:44:14,231 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 10:44:14,231 - INFO - Polling stopped
+2025-04-06 10:44:17,561 - INFO - Данные серверов успешно загружены.
+2025-04-06 10:44:17,564 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-06 10:44:17,565 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-06 10:44:17,565 - INFO - Scheduler started
+2025-04-06 10:44:17,569 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-06 10:44:17,569 - INFO - Start polling
+2025-04-06 10:44:17,569 - INFO - Начало прослушивания очереди tasks
+2025-04-06 10:44:17,570 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-06 10:44:17,570 - INFO - Планировщик уведомлений запущен.
+2025-04-06 10:44:17,572 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 75.71 минут.
+2025-04-06 10:44:17,666 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 10:44:32,598 - INFO - Update id=560854122 is handled. Duration 422 ms by bot id=7718121314
+2025-04-06 10:44:33,912 - INFO - Update id=560854123 is handled. Duration 202 ms by bot id=7718121314
+2025-04-06 10:44:34,711 - INFO - Update id=560854124 is handled. Duration 203 ms by bot id=7718121314
+2025-04-06 10:44:35,559 - INFO - Update id=560854125 is handled. Duration 218 ms by bot id=7718121314
+2025-04-06 10:44:36,118 - INFO - Update id=560854126 is handled. Duration 264 ms by bot id=7718121314
+2025-04-06 10:44:36,529 - INFO - Update id=560854127 is handled. Duration 327 ms by bot id=7718121314
+2025-04-06 10:44:39,963 - INFO - Update id=560854128 is handled. Duration 187 ms by bot id=7718121314
+2025-04-06 10:44:41,860 - INFO - Update id=560854129 is handled. Duration 360 ms by bot id=7718121314
+2025-04-06 10:44:42,408 - INFO - Update id=560854130 is handled. Duration 171 ms by bot id=7718121314
+2025-04-06 10:44:43,033 - INFO - Update id=560854131 is handled. Duration 217 ms by bot id=7718121314
+2025-04-06 10:44:46,542 - INFO - Запущено создание конфигураций для серверов: 147.45.242.155
+2025-04-06 10:44:47,168 - INFO - Отправлена задача: {'task_type': 'update_and_reboot_server', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> Очередь: queue_task_Server_tol_test_10000
+2025-04-06 10:44:47,169 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 10:44:47,354 - INFO - Update id=560854132 is handled. Duration 813 ms by bot id=7718121314
+2025-04-06 10:45:48,336 - INFO - [Очередь: queue_task_Server_tol_test_10000] Все задачи типа 'update_and_reboot_server' удалены
+2025-04-06 10:45:48,337 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 10:46:08,146 - INFO - Update id=560854133 is handled. Duration 782 ms by bot id=7718121314
+2025-04-06 10:46:09,136 - INFO - Update id=560854134 is handled. Duration 250 ms by bot id=7718121314
+2025-04-06 10:46:10,705 - INFO - Update id=560854135 is handled. Duration 172 ms by bot id=7718121314
+2025-04-06 10:46:11,712 - INFO - Update id=560854136 is handled. Duration 172 ms by bot id=7718121314
+2025-04-06 10:46:12,381 - INFO - Update id=560854137 is handled. Duration 171 ms by bot id=7718121314
+2025-04-06 10:46:13,423 - INFO - Update id=560854138 is handled. Duration 156 ms by bot id=7718121314
+2025-04-06 10:46:17,291 - INFO - Update id=560854139 is handled. Duration 311 ms by bot id=7718121314
+2025-04-06 10:46:18,711 - INFO - Update id=560854140 is handled. Duration 219 ms by bot id=7718121314
+2025-04-06 10:46:19,412 - INFO - Update id=560854141 is handled. Duration 186 ms by bot id=7718121314
+2025-04-06 10:46:20,297 - INFO - Update id=560854142 is handled. Duration 233 ms by bot id=7718121314
+2025-04-06 10:46:21,258 - INFO - Запущено создание конфигураций для серверов: 147.45.242.155
+2025-04-06 10:46:21,903 - INFO - Отправлена задача: {'task_type': 'update_and_reboot_server', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> Очередь: queue_task_Server_tol_test_10000
+2025-04-06 10:46:21,903 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 10:46:22,119 - INFO - Update id=560854143 is handled. Duration 858 ms by bot id=7718121314
+2025-04-06 10:47:23,156 - INFO - [Очередь: queue_task_Server_tol_test_10000] Все задачи типа 'update_and_reboot_server' удалены
+2025-04-06 10:47:23,157 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 10:57:28,709 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 11:07:34,277 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 11:17:39,824 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-06 11:27:30,284 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-06 11:27:30,284 - INFO - Polling stopped
