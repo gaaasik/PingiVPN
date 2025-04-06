@@ -217,5 +217,5 @@ async def send_update_and_reboot_server(server_ips: list[str] = None):
         await task_manager.send_update_and_reboot_server(server_ip)
 
     # 🔁 Запускаем отслеживание через 5 минут (300 сек)
-    asyncio.create_task(result_module_server.monitor_reboot_timeout(delay_minutes=1))
+    asyncio.create_task(result_module_server.monitor_reboot_timeout(delay_minutes=5))
     await task_manager.close()
