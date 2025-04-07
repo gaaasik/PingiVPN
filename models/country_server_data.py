@@ -80,3 +80,20 @@ async def get_country_server_by_ip(server_ip: str) -> str:
         if server.get("address") == server_ip:
             return server.get("country", "Unknown")
     return "Unknown_Server"  # Если сервер не найден
+
+
+async def get_all_non_test_server_ips() -> list[str]:
+    """
+    Возвращает список IP всех серверов, у которых в имени нет 'test'.
+    """
+    global country_server_data
+    if country_server_data is None:
+        raise ValueError("Данные country_server_data еще не загружены.")
+
+    non_test_ips = []
+    for server in country_server_data.get("servers", []):
+        name = server.get("name", "")
+        ip = server.get("address", "")
+        if "test" not in name.lower():
+            non_test_ips.append(ip)
+    return non_test_ips

@@ -9,10 +9,9 @@ from typing import List
 import aiosqlite
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from communication_with_servers.handler_unknown_server_queue import process_unknown_server_queue
 from models.UserCl import UserCl
 from models.notifications.NotificationBaseCL import NotificationBase
-from models.notifications.utils.dates import is_trial_ended
+
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS  # Функция отправки сообщения админу
 from bot_instance import bot  # Инстанс бота для отправки сообщений
 
@@ -50,6 +49,10 @@ SEREVERS_IP = [
     "176.222.53.29",     # NL_32000
     "5.39.220.237",      # NL_33000
     "205.172.58.199",    # NL_34000
+    "212.108.82.206",    # NL_35000
+    "66.151.33.224",     # NL_36000
+    "80.209.240.23",     # NL_38000
+    "194.164.216.151",     # NL_39000
 ]
 
 
@@ -87,7 +90,7 @@ class PaymentReminder(NotificationBase):
                 async with db.execute(query) as cursor:
                     rows = await cursor.fetchall()
 
-            logging.info(f"✅ SQL-запрос выполнен! Найдено записей: {len(rows)}")
+            logging.info(f"SQL-запрос выполнен! Найдено записей: {len(rows)}")
 
             # Выводим первых 5 записей для отладки
             for row in rows[:5]:
@@ -100,9 +103,7 @@ class PaymentReminder(NotificationBase):
                 us = await UserCl.load_user(user)
                 await us.active_server.enable.set(False)
 
-            ###### Толя добавил #########################################################################################################
-            await process_unknown_server_queue()
-            #########################################################################################################################
+
 
             # Логирование количества заблокированных пользователей
             if blocked_users:

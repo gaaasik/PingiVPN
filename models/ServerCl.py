@@ -3,7 +3,7 @@ import asyncio
 import re
 import json
 from datetime import datetime
-from redis_configs.redis_settings import redis_client
+from redis_configs.redis_settings import redis_client_main
 import redis.asyncio as redis
 import logging
 from typing import TYPE_CHECKING
@@ -144,7 +144,7 @@ class Field:
         # Используем redis.asyncio вместо aioredis BLPOP  Ошибка декодирования
 
         try:
-            await redis_client.lpush(queue_name, json.dumps(task_data))
+            await redis_client_main.lpush(queue_name, json.dumps(task_data))
             logging.info(f"Задача добавлена в очередь {queue_name}: {task_data}")
             if queue_name == "queue_task_Unknown_Server":
                 await send_admin_log(bot,
@@ -304,7 +304,7 @@ class ServerCl:
             logging.info(f"Формируется очередь для удаления ключа: {queue_name}")
 
             # Отправка задачи в Redis
-            await redis_client.rpush(queue_name, json.dumps(task_data))
+            await redis_client_main.rpush(queue_name, json.dumps(task_data))
             logging.info(f"Задача удаления ключа добавлена в очередь {queue_name}: {task_data}")
 
             # Уведомление администратора
@@ -319,8 +319,8 @@ class ServerCl:
             )
         finally:
             try:
-                if redis_client:
-                    await redis_client.close()
+                if redis_client_main:
+                    await redis_client_main.close()
             except Exception as e:
                 logging.error(f"Ошибка при закрытии соединения с Redis: {e}")
 

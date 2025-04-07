@@ -1,20 +1,13 @@
 import logging
-import os
-import shutil
-from datetime import datetime
-import re
-
-from aiogram import Router, types, F
+from aiogram import Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, Chat, User, Message
 
-
-from bot.admin_func.searh_user.search_user_handlers import handle_chat_id_input
+from bot.admin_func.searh_user.search_user_handlers import handle_main_menu_user
 from bot.admin_func.searh_user.utils import format_history_key
 from bot.admin_func.states import AdminStates
 from bot.handlers.admin import send_admin_log
 from bot_instance import bot
-from models.ServerCl import ServerCl
 from models.UserCl import UserCl
 from dotenv import load_dotenv
 
@@ -26,7 +19,7 @@ load_dotenv()
 def button_back_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="🔙 Назад", callback_data="my_back_menu")]
+            [InlineKeyboardButton(text="🔙 Назад", callback_data="main_menu_user")]
         ]
     )
 def button_search_by_chat_id_keyboard() -> InlineKeyboardMarkup:
@@ -71,7 +64,9 @@ async def handle_history_key_show(callback: CallbackQuery, state: FSMContext):
     key_info = await format_history_key(selected_key, index)
     keyboard = await generate_history_keyboard(us.history_key_list, index)
 
+
     await callback.message.edit_text(key_info, reply_markup=keyboard, parse_mode="HTML")
+    await state.update_data(last_message_id=key_info.message_id)
     await callback.answer()
 
 
@@ -89,38 +84,33 @@ async def generate_history_keyboard(history_key_list, selected_index):
 
         buttons.append([InlineKeyboardButton(text=f"{prefix}{name}", callback_data=f"history_key_show_{i}")])
     buttons.append([InlineKeyboardButton(text="✅ Сделать ключ основным", callback_data=f"change_active_server_{index}")])
-    buttons.append([InlineKeyboardButton(text="🔙 Назад", callback_data="my_back_menu")]) #search_by_chat_id
+    buttons.append([InlineKeyboardButton(text="🔙 Назад", callback_data="main_menu_user")]) #search_by_chat_id
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
-@router.callback_query(F.data == "my_back_menu")
-async def handler_my_back_menu(callback: CallbackQuery, state: FSMContext):
-    """Возвращает в состояние ожидания ввода Chat ID."""
-    logging.info("Зашли в my_back_menu")
-
-    data = await state.get_data()
-    user = data.get("current_user")
-    if not user:
-        logging.error("Ошибка: current_user отсутствует в state.")
-        await callback.message.edit_text("❌ Ошибка: пользователь не найден.", )
-        return
-
-
-    # Создаем фейковое сообщение
-    fake_message = Message(
-        message_id=callback.message.message_id,  # Берем ID текущего сообщения
-        from_user=User(id=1388513042, is_bot=False, first_name="Admin"),  # Фейковый отправитель
-        chat=Chat(id=callback.message.chat.id, type="private"),  # Используем ID текущего чата
-        text=str(user.chat_id),  # Передаем chat_id как текст
-        date=datetime.utcnow()  # Обязательное поле date
-    )
-
-    # Передаем fake_message вместо chat_id
-    await handle_chat_id_input(fake_message, state)
-    await callback.answer()
+# @router.callback_query(F.data == "my_back_menu")
+# async def handler_my_back_menu(callback: CallbackQuery, state: FSMContext):
+#     """Возвращает в состояние ожидания ввода Chat ID."""
+#     logging.info("Зашли в my_back_menu")
+#
+#     data = await state.get_data()
+#     user = data.get("current_user")
+#
+#     await state.update_data(current_user=user)
+#     # Меняем пользователя
+#     await state.set_state(AdminStates.main_menu_user)
+#     await handle_main_menu_user(callback.message, state)
+#     await callback.answer()
 
 @router.callback_query(lambda c: c.data.startswith("change_active_server_"))
 async def handler_change_active_server(callback: CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    last_message_id = data.get("last_message_id")
+    if last_message_id:
+        try:
+            await callback.message.bot.delete_message(chat_id=callback.message.chat.id, message_id=last_message_id)
+        except Exception:
+            pass  # Игнорируем ошибки удаления
     from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg, move_in_user_files_wg
     """Возвращает в состояние ожидания ввода Chat ID."""
     logging.info("Запуск change_active_server_")
@@ -156,17 +146,11 @@ async def handler_change_active_server(callback: CallbackQuery, state: FSMContex
 
     await send_admin_log(bot,f"🆕 Администратор {callback.message.chat.id} изменил основной ключ у {us.chat_id} c {await old_key.name_protocol.get() if old_key else '$ключа не было$'} на {await new_key.name_protocol.get()}")
     await callback.message.answer(f"Изменил основной ключ у пользователя с chat_id {user.chat_id}.")
-    await state.set_state(AdminStates.waiting_for_bonus_days)
-    fake_message = Message(
-        message_id=callback.message.message_id,  # Берем ID текущего сообщения
-        from_user=User(id=callback.message.message_id, is_bot=False, first_name="Admin"),  # Фейковый отправитель
-        chat=Chat(id=callback.message.chat.id, type="private"),  # Используем ID текущего чата
-        text=str(user.chat_id),  # Передаем chat_id как текст
-        date=datetime.utcnow()  # Обязательное поле date
-    )
-
-    # Передаем fake_message вместо chat_id
-    await handle_chat_id_input(fake_message, state)
+    await state.set_state(AdminStates.main_menu_user)
+    await state.update_data(current_user=user)
+    # Меняем пользователя
+    await state.set_state(AdminStates.main_menu_user)
+    await handle_main_menu_user(callback, state)
     await callback.answer()
 
 

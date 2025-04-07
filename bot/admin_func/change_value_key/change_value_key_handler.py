@@ -8,7 +8,7 @@ from aiogram.types import CallbackQuery, Message, Document, InlineKeyboardMarkup
 from aiogram.types import CallbackQuery, Message, Document, Chat, User
 from aiogram.fsm.context import FSMContext
 
-from bot.admin_func.history_key.history_key import handler_my_back_menu
+
 
 from bot.admin_func.history_key.moving_wg_files import move_in_history_files_wg, validate_conf_file, generate_qr_code
 from bot.admin_func.keyboards import get_key_change_keyboard
@@ -32,7 +32,7 @@ def vless_key_keyboard() -> InlineKeyboardMarkup:
         inline_keyboard=[
             [InlineKeyboardButton(text="📥 Вставить из буфера", callback_data="paste_vless_key")],
             [InlineKeyboardButton(text="📂 Загрузить ключ самому", callback_data="change_to_vless")],
-            [InlineKeyboardButton(text="🔙 Назад", callback_data="my_back_menu")]
+            [InlineKeyboardButton(text="🔙 Назад", callback_data="main_menu_user")]
         ]
     )
 
@@ -41,7 +41,7 @@ def wireguard_key_keyboard() -> InlineKeyboardMarkup:
         inline_keyboard=[
             [InlineKeyboardButton(text="📥 Загрузить из буфера", callback_data="paste_wireguard_file")],
             [InlineKeyboardButton(text="📂 Загрузить ключ самому", callback_data="change_to_wireguard")],
-            [InlineKeyboardButton(text="🔙 Назад", callback_data="my_back_menu")]
+            [InlineKeyboardButton(text="🔙 Назад", callback_data="main_menu_user")]
         ]
     )
 
@@ -92,6 +92,7 @@ async def handle_paste_vless(callback: CallbackQuery, state: FSMContext):
     )
     # Передаем fake_message вместо chat_id
     await handle_chat_id_input(fake_message, state)
+    await callback.answer()
 
 
 @router.callback_query(F.data == "paste_wireguard_file")

@@ -2,6 +2,7 @@ import asyncio
 import os
 from datetime import datetime
 from bot_instance import bot
+from communication_with_servers.error_handler_queue import QueueErrorHandler
 from communication_with_servers.send_type_task import send_check_tasks_for_servers
 from models.UserCl import UserCl
 from .NotificationBaseCL import NotificationBase
@@ -28,10 +29,15 @@ class UnsubscribedNotification(NotificationBase):
             all_users = await UserCl.get_all_users()
             print(f"Всего пользователей: {len(all_users)}")
 
-            #############################################################
+            ######################################################################################################################################################################################
+
             #запуск процесса сверки enable из базы данных и по факту
             await send_check_tasks_for_servers()
-            #############################################################
+
+            task_manager = QueueErrorHandler()
+            await task_manager.process_unknown_server_queue()
+
+            ######################################################################################################################################################################################
 
             # Фильтруем пользователей, проверяя наличие серверов и подписку
             filtered_users = []

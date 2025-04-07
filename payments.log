@@ -25,7 +25,7 @@
 2025-04-03 23:24:53,011 - INFO - ����� ��������� �� wireguard
 2025-04-03 23:24:53,012 - ERROR - ������ ��� ����������� ������ ��� chat_id 1388513042: [Errno 2] No such file or directory: 'D:\\Office\\telegramBot\\PingiVPN\\configs\\registered_user\\1388513042_tolsemenov\\PingiVPN.conf'
 2025-04-03 23:24:53,033 - INFO - ����� 4_free.conf � 4_free.png ������� ���������� � ������������� ��� ������������ 1388513042
-2025-04-03 23:24:53,828 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������:  ������� ����� ��� 1388513042 tolsemenov. �������� 0 ������ � 
+2025-04-03 23:24:53,828 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������:  ������� ����� ��� 1388513042 tolsemenov. �������� 0 ������ �
 1 ��������. ������: Telegram server says - Bad Request: chat not found
 2025-04-03 23:24:53,834 - INFO - ������ ������ ������� _generate_server_params_wireguard. ���� � �����: D:\Office\telegramBot\PingiVPN\configs\registered_user\1388513042_tolsemenov\PingiVPN.conf
 2025-04-03 23:24:53,834 - INFO - ��������� ����: D:\Office\telegramBot\PingiVPN\configs\registered_user\1388513042_tolsemenov\PingiVPN.conf
@@ -275,7 +275,7 @@ ValueError: ������ country_server_data ��� �� ����
 2025-04-03 23:59:33,147 - INFO - Update id=560853767 is handled. Duration 1078 ms by bot id=7718121314
 2025-04-03 23:59:34,245 - INFO - �������� ������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 1, 'created_users': [{'user_id': '4d8fbca9-fc05-4bdb-8884-3a1ea2165b11', 'name': '10009_free', 'address': '10.8.0.13', 'private_key': 'kJeddYy8j9YOuQl5ZJqiHAuYp3wpzgBLyln/l+Sw/l0=', 'public_key': '+aKFm/94xp1ZCFwBE+fIpNuP9bIKPWNDc2Qvmwb0ZyQ=', 'pre_shared_key': 'SNGdUSb8AY/YQ3+27EWF+7aFqxE/vJNB6FhUiUXaAgs=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
 2025-04-03 23:59:34,245 - INFO - ������ ��������� ���������� �������� �������������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 1, 'created_users': [{'user_id': '4d8fbca9-fc05-4bdb-8884-3a1ea2165b11', 'name': '10009_free', 'address': '10.8.0.13', 'private_key': 'kJeddYy8j9YOuQl5ZJqiHAuYp3wpzgBLyln/l+Sw/l0=', 'public_key': '+aKFm/94xp1ZCFwBE+fIpNuP9bIKPWNDc2Qvmwb0ZyQ=', 'pre_shared_key': 'SNGdUSb8AY/YQ3+27EWF+7aFqxE/vJNB6FhUiUXaAgs=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
-2025-04-03 23:59:34,921 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user 
+2025-04-03 23:59:34,921 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user
 ������� ������� 1 ������������� WG. ������: Telegram server says - Bad Request: chat not found
 2025-04-04 00:04:08,964 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
 2025-04-04 00:04:08,964 - INFO - Polling stopped
@@ -304,7 +304,7 @@ ValueError: ������ country_server_data ��� �� ����
 2025-04-04 00:04:48,437 - INFO - �������� ������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 1, 'created_users': [{'user_id': 'd4f80d88-ea36-41cf-8832-38d1b51242a1', 'name': '10010_free', 'address': '10.8.0.14', 'private_key': 'YOF9DkC6j4fwdhaguAm9YRhMAvZlNt1ivGjLcdNyuEg=', 'public_key': 'yLPhU67CatPVOfmqCF4HV7FOddBHev0oueerJMAQNUs=', 'pre_shared_key': 'Nyhuy05i0tUTvVBUvIYyMNyrzWVoTEtC74xOITXKE9U=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
 2025-04-04 00:04:48,438 - INFO - ������ ��������� ���������� �������� �������������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 1, 'created_users': [{'user_id': 'd4f80d88-ea36-41cf-8832-38d1b51242a1', 'name': '10010_free', 'address': '10.8.0.14', 'private_key': 'YOF9DkC6j4fwdhaguAm9YRhMAvZlNt1ivGjLcdNyuEg=', 'public_key': 'yLPhU67CatPVOfmqCF4HV7FOddBHev0oueerJMAQNUs=', 'pre_shared_key': 'Nyhuy05i0tUTvVBUvIYyMNyrzWVoTEtC74xOITXKE9U=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
 2025-04-04 00:04:48,438 - INFO - ��������� ������������: 1
-2025-04-04 00:04:48,936 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user 
+2025-04-04 00:04:48,936 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user
 ������� ������� 1 ������������� WG. ������: Telegram server says - Bad Request: chat not found
 2025-04-04 00:05:46,499 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
 2025-04-04 00:05:46,499 - INFO - Polling stopped
@@ -337,7 +337,7 @@ ValueError: ������ country_server_data ��� �� ����
 2025-04-04 00:06:46,057 - INFO - �������� ������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 4, 'created_users': [{'user_id': '45ae7c03-9328-420e-ac2d-b06828d93248', 'name': '10011_free', 'address': '10.8.0.15', 'private_key': 'aH1Vqv4v3n5JBQPPwePGgHiD+qJiVQqbknVQZOYXg2A=', 'public_key': 'DdTJEfA/GJkhgDtnavCna8RvRhdZyFH89ZJse+u8fw8=', 'pre_shared_key': '6byT7ZZE6EvgRjOt7S41OgmjxwONQrH9NZMhvhMdM4Y=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '702d36a2-27df-48b7-b0eb-0a425ffc043c', 'name': '10012_free', 'address': '10.8.0.16', 'private_key': 'GLApx6lID7mYkDtR/Cu4C5DExWq4PdRyKQAQ3XG1Cmw=', 'public_key': 'NcRQ9suWAxmJ0n6GP/QCr84v3b7O28VX4X9IIAZuLUE=', 'pre_shared_key': '8cUTfE9Q+JPLEhuZOiRRQVaw+azRNhXtuxVy1RzQNc0=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '2570c21b-2820-4270-bc60-f76861108d8f', 'name': '10013_free', 'address': '10.8.0.17', 'private_key': 'qBclEUwmw51MtAd3lnYPZF7Va1eO40m2HR4JXSLTHlc=', 'public_key': '/Opn7a6wQtMKvM4Z/dd5ur19dB9aSD5ir4yCoTsrq2g=', 'pre_shared_key': 'fHb5jgVMAHweV+00gfqyXh6K0egpMDWxYGqFxY9T/Eg=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '2a8349d2-81d4-4dad-8582-880f39696a1a', 'name': '10039_free', 'address': '10.8.0.18', 'private_key': 'eL07BQuw9AqVWudRZYvHJkRlr946QKJ56ecz0uKAwWg=', 'public_key': 'Mjfd0DGqtscG7uOP5PLx5zPJ4/GFJtbXoTYaSpdN1Vw=', 'pre_shared_key': 'KAVg/golwm2am5OcYuJwv3ETGYwtyYaf8d05t4LJ0II=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
 2025-04-04 00:06:46,057 - INFO - ������ ��������� ���������� �������� �������������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 4, 'created_users': [{'user_id': '45ae7c03-9328-420e-ac2d-b06828d93248', 'name': '10011_free', 'address': '10.8.0.15', 'private_key': 'aH1Vqv4v3n5JBQPPwePGgHiD+qJiVQqbknVQZOYXg2A=', 'public_key': 'DdTJEfA/GJkhgDtnavCna8RvRhdZyFH89ZJse+u8fw8=', 'pre_shared_key': '6byT7ZZE6EvgRjOt7S41OgmjxwONQrH9NZMhvhMdM4Y=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '702d36a2-27df-48b7-b0eb-0a425ffc043c', 'name': '10012_free', 'address': '10.8.0.16', 'private_key': 'GLApx6lID7mYkDtR/Cu4C5DExWq4PdRyKQAQ3XG1Cmw=', 'public_key': 'NcRQ9suWAxmJ0n6GP/QCr84v3b7O28VX4X9IIAZuLUE=', 'pre_shared_key': '8cUTfE9Q+JPLEhuZOiRRQVaw+azRNhXtuxVy1RzQNc0=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '2570c21b-2820-4270-bc60-f76861108d8f', 'name': '10013_free', 'address': '10.8.0.17', 'private_key': 'qBclEUwmw51MtAd3lnYPZF7Va1eO40m2HR4JXSLTHlc=', 'public_key': '/Opn7a6wQtMKvM4Z/dd5ur19dB9aSD5ir4yCoTsrq2g=', 'pre_shared_key': 'fHb5jgVMAHweV+00gfqyXh6K0egpMDWxYGqFxY9T/Eg=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '2a8349d2-81d4-4dad-8582-880f39696a1a', 'name': '10039_free', 'address': '10.8.0.18', 'private_key': 'eL07BQuw9AqVWudRZYvHJkRlr946QKJ56ecz0uKAwWg=', 'public_key': 'Mjfd0DGqtscG7uOP5PLx5zPJ4/GFJtbXoTYaSpdN1Vw=', 'pre_shared_key': 'KAVg/golwm2am5OcYuJwv3ETGYwtyYaf8d05t4LJ0II=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
 2025-04-04 00:06:46,057 - INFO - ��������� ������������: 4
-2025-04-04 00:06:46,904 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user 
+2025-04-04 00:06:46,904 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user
 ������� ������� 4 ������������� WG. ������: Telegram server says - Bad Request: chat not found
 2025-04-04 00:06:46,904 - INFO - ��������� ���������� � Telegram: ������� ������� 4 ������������� WG
 2025-04-04 00:08:02,187 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
@@ -411,7 +411,7 @@ ValueError: ������ country_server_data ��� �� ����
 2025-04-04 00:10:32,303 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10037_free.png
 2025-04-04 00:10:32,344 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10038_free.png
 2025-04-04 00:10:32,384 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10039_free.png
-2025-04-04 00:10:32,891 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user 
+2025-04-04 00:10:32,891 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user
 ������� ������� 33 ������������� WG. ������: Telegram server says - Bad Request: chat not found
 2025-04-04 00:10:32,891 - INFO - ��������� ���������� � Telegram: ������� ������� 33 ������������� WG
 2025-04-04 00:11:56,126 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
@@ -447,7 +447,7 @@ ValueError: ������ country_server_data ��� �� ����
 2025-04-04 00:12:34,267 - INFO - ��������� ������������: 1
 2025-04-04 00:12:34,267 - INFO - ������������ ���������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10039_free.conf
 2025-04-04 00:12:34,318 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10039_free.png
-2025-04-04 00:12:34,885 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user 
+2025-04-04 00:12:34,885 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user
 ������� ������� 1 ������������� WG. ������: Telegram server says - Bad Request: chat not found
 2025-04-04 00:12:34,885 - INFO - ��������� ���������� � Telegram: ������� ������� 1 ������������� WG
 2025-04-04 00:13:19,345 - INFO - Update id=560853820 is handled. Duration 484 ms by bot id=7718121314
@@ -468,7 +468,7 @@ ValueError: ������ country_server_data ��� �� ����
 2025-04-04 00:13:35,558 - INFO - �������� ������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 0, 'created_users': [], 'action': 'created_batch'}
 2025-04-04 00:13:35,559 - INFO - ������ ��������� ���������� �������� �������������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 0, 'created_users': [], 'action': 'created_batch'}
 2025-04-04 00:13:35,559 - INFO - ��������� ������������: 0
-2025-04-04 00:13:36,098 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user 
+2025-04-04 00:13:36,098 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user
 ������� ������� 0 ������������� WG. ������: Telegram server says - Bad Request: chat not found
 2025-04-04 00:13:36,098 - INFO - ��������� ���������� � Telegram: ������� ������� 0 ������������� WG
 2025-04-04 00:14:11,903 - INFO - Update id=560853833 is handled. Duration 469 ms by bot id=7718121314
@@ -489,7 +489,7 @@ ValueError: ������ country_server_data ��� �� ����
 2025-04-04 00:14:23,455 - INFO - ��������� ������������: 1
 2025-04-04 00:14:23,456 - INFO - ������������ ���������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10039_free.conf
 2025-04-04 00:14:23,494 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10039_free.png
-2025-04-04 00:14:24,010 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user 
+2025-04-04 00:14:24,010 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user
 ������� ������� 1 ������������� WG. ������: Telegram server says - Bad Request: chat not found
 2025-04-04 00:14:24,010 - INFO - ��������� ���������� � Telegram: ������� ������� 1 ������������� WG
 2025-04-04 00:14:43,945 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'

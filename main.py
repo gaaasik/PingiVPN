@@ -7,7 +7,11 @@ from pathlib import Path
 import aiosqlite
 from aiogram import Bot
 from aiogram.types import FSInputFile
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
 from dotenv import load_dotenv
+
+from bot.admin_func.another_settings import another_settings
 
 from bot.admin_func.class_friends import handler_friends
 from bot.admin_func.history_key import history_key
@@ -17,7 +21,7 @@ from bot.handlers.all_menu import main_menu, menu_buy_vpn, menu_device, menu_my_
 from bot.handlers import start, support, \
     user_help_request, feedback, app_downloaded,file_or_qr,thank_you
 
-from bot.admin_func import bonus_days, service_mode,show_statistics,set_on_off, another_settings
+from bot.admin_func import bonus_days, service_mode,show_statistics,set_on_off
 from bot.admin_func.searh_user import search_user_handlers,search_user_by_nickname,search_by_fullname
 from bot.admin_func.change_value_key import change_value_key_handler
 from bot.payments2.payments_handler_redis import listen_to_redis_queue
@@ -45,8 +49,8 @@ from models.notifications.NotificationSchedulerCL import NotificationScheduler
 from models.notifications.PaymentReminderCL import PaymentReminder
 from models.notifications.WithoutKeyNotification import WithoutKeyNotification
 from models.notifications.utils import lottery
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler.triggers.cron import CronTrigger
+import communication_with_servers.result_processor.all_processor.result_creating_user as result_module
+
 from pytz import timezone
 moscow = timezone("Europe/Moscow")
 
@@ -145,8 +149,12 @@ async def periodic_backup_task(bot: Bot):
             await send_admin_log(bot, f"Ошибка при отправке бекапа базы данных: {e}")
 
 async def job_wrapper():
+    result_module.daily_created_users_wg = 0
+    result_module.daily_created_users_vless = 0
+    logging.info("🔁 Обнулены суточные счётчики пользователей (WG и VLESS)")
 
-    await send_creating_user_tasks_for_servers()
+    # ⏩ Запуск создания пользователей
+    #await send_creating_user_tasks_for_servers()
 
 
 async def main():
@@ -168,7 +176,7 @@ async def main():
         return
 
 
-    #Толян загружает данные из country_server в country_server_data   Запущено прослушивание очереди
+     #Толян загружает данные из country_server в country_server_data   При отправки создания пользоваетелей неизвестен протокол с которым работает сервер
     country_server_path = os.getenv('country_server_path')
     await load_server_data(country_server_path)
     # Планировщик задач от Толяна
@@ -176,7 +184,7 @@ async def main():
     # ПН (mon), СР (wed), ПТ (fri) в 02:00
     scheduler.add_job(
         job_wrapper,
-        CronTrigger(hour=15, minute=54, timezone=moscow)
+        CronTrigger(day_of_week="tue,fri", hour=3, minute=0, timezone=moscow)
     )
     scheduler.start()
 

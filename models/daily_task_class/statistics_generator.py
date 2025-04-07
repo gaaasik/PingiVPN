@@ -2,8 +2,11 @@ import logging
 import os
 from datetime import datetime, timedelta
 import aiofiles
-from redis_configs.redis_settings import redis_client
+from redis_configs.redis_settings import redis_client_main
 from models.UserCl import UserCl
+import communication_with_servers.result_processor.all_processor.result_creating_user as result_module
+
+
 
 async def generate_statistic_text(date: datetime = None) -> str:
     """
@@ -21,7 +24,8 @@ async def generate_statistic_text(date: datetime = None) -> str:
         paid_users = await UserCl.count_paid_users_by_date(date) or 0
         total_paid_users = await UserCl.count_total_paid_users(datetime(2024, 11, 24)) or 0
         remaining_configs = await get_remaining_configs() or 0
-        count_regeneration_user = await redis_client.get("new_vless_users_today") or 0
+        count_vless = result_module.daily_created_users_vless
+        count_wg = result_module.daily_created_users_wg
         remaining_urls = await count_remaining_vless_links() or 0
 
         # Формируем текст статистики
@@ -34,7 +38,8 @@ async def generate_statistic_text(date: datetime = None) -> str:
             f"💳 <b>Всего оплат с 24.11.2024:</b> {total_paid_users}\n"
             f"🔑 <b>Осталось конфигураций:</b> {remaining_configs}\n"
             f"🔗 <b>Осталось ссылок Vless:</b> {remaining_urls}\n"
-            f"🔄 <b>Сгенерировано новых ссылок Vless:</b> {count_regeneration_user}\n"
+            f"🔄 <b>Сгенерировано новых ссылок Vless:</b> {count_vless}\n"
+            f"🔄 <b>Сгенерировано новых файлов WG:</b> {count_wg}\n"
         ).strip()
 
         return stats_message if stats_message else f"❌ Статистика за {date.strftime('%d.%m.%Y')} недоступна"

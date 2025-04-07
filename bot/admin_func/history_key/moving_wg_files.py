@@ -2,12 +2,7 @@ import logging
 import os
 import re
 import shutil
-from datetime import datetime
-
 import qrcode
-
-from bot.utils.file_sender import create_user_files
-from bot_instance import bot
 from models.ServerCl import ServerCl
 
 
@@ -261,7 +256,7 @@ async def generate_qr_code(input_file, output_file):
         img = qr.make_image(fill='black', back_color='white')
         img.save(output_file)
 
-        logging.info(f"✅ QR-код успешно сохранен: {output_file}")
+        logging.info(f"QR-код успешно сохранен: {output_file}")
     except Exception as e:
         logging.error(f"Ошибка при создании QR-кода: {e}")
 

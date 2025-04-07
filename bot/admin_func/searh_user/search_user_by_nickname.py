@@ -9,7 +9,7 @@ from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardBut
 
 from bot.admin_func.states import AdminStates
 from bot.admin_func.keyboards import get_search_user_keyboard, get_user_service_keyboard
-from bot.admin_func.searh_user.utils import user_to_json, format_user_data  # Функции для получения и форматирования данных
+from bot.admin_func.searh_user.utils import user_to_json, format_user_data  # Функции для получения и форматирования данных Ошибка при поиске пользователя:
 from models.UserCl import UserCl  # Модель пользователя
 
 router = Router()

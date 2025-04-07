@@ -5,20 +5,20 @@ import os
 import traceback
 
 from .result_task_manager import ResultTaskManager
-from redis_configs.redis_settings import redis_client
+from redis_configs.redis_settings import redis_client_main
 from redis.exceptions import ConnectionError
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 async def process_queue_results_task():
     """Асинхронное прослушивание очереди Redis и обработка задач. push"""
-    manager = ResultTaskManager(redis_client)
+    manager = ResultTaskManager(redis_client_main)
     logging.info("Запущено прослушивание очереди result_task_queue.")
     NAME_RESULT_QUEUE = os.getenv("name_queue_result_task").strip()
 
     while True:
         try:
-            task_data = await redis_client.blpop(NAME_RESULT_QUEUE, timeout=0)
+            task_data = await redis_client_main.blpop(NAME_RESULT_QUEUE, timeout=0)
             if task_data:
                 try:
 

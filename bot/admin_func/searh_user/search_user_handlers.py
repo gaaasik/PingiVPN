@@ -64,34 +64,58 @@ async def handle_chat_id_input(message: types.Message, state: FSMContext):
 
         # Сохраняем найденного пользователя
         await state.update_data(current_user=user)
-
-        # Получаем данные пользователя
-        user_json = await user_to_json(user, DB_PATH)
-        formatted_data = await format_user_data(user_json)
-
-        # Кнопки действий
-        keyboard = await get_user_service_keyboard()
-
-        # Отправляем новое сообщение и сохраняем его ID
-        # sent_message = await message.answer(
-        #     f"✅ Найден пользователь:\n{formatted_data}\n\nВыберите действие:",
-        #     parse_mode="HTML",
-        #     reply_markup=keyboard
-        # )
-        sent_message = await bot.send_message(
-            message.chat.id,
-            f"✅ Найден пользователь:\n{formatted_data}\n\nВыберите действие:",
-            parse_mode="HTML",
-            reply_markup=keyboard
-        )
-
-
-        await state.update_data(last_message_id=sent_message.message_id)
-
-        # Меняем состояние
-        await state.set_state(AdminStates.waiting_for_action)
-
+        # Меняем пользователя
+        await state.set_state(AdminStates.main_menu_user)
+        await handle_main_menu_user(message, state)
     except Exception as e:
         logging.error(f"Ошибка при поиске пользователя: {e}")
         await bot.send_message(message.chat.id, "❌ Произошла ошибка при обработке запроса.")
         #await message.answer("❌ Произошла ошибка при обработке запроса.")
+
+@router.callback_query(F.data == "main_menu_user")
+async def handle_main_menu_user(
+    msg_or_cb: types.Message | types.CallbackQuery,
+    state: FSMContext
+):
+    mes_cal = msg_or_cb.message if isinstance(msg_or_cb, types.CallbackQuery) else msg_or_cb
+    data = await state.get_data()
+    last_message_id = data.get("last_message_id")
+    if last_message_id:
+        try:
+            await mes_cal.bot.delete_message(chat_id=mes_cal.chat.id, message_id=last_message_id)
+        except Exception:
+            pass  # Игнорируем ошибки удаления
+
+    if isinstance(msg_or_cb, types.CallbackQuery):
+        await msg_or_cb.answer()
+
+    data = await state.get_data()
+    user = data.get("current_user")
+
+    if not user:
+        if isinstance(msg_or_cb, types.CallbackQuery):
+            await msg_or_cb.message.edit_text("❌ Пользователь не найден.")
+            await msg_or_cb.answer()
+        else:
+            await msg_or_cb.answer("❌ Пользователь не найден.")
+        return
+
+    chat_id = msg_or_cb.message.chat.id if isinstance(msg_or_cb, types.CallbackQuery) else msg_or_cb.chat.id
+    await show_main_menu(user, chat_id, state)
+
+
+async def show_main_menu(user, chat_id, state: FSMContext):
+    user_json = await user_to_json(user, os.getenv('database_path_local'))
+    formatted_data = await format_user_data(user_json)
+    keyboard = await get_user_service_keyboard()
+
+    sent_message = await bot.send_message(
+        chat_id,
+        f"Данные пользователя:\n{formatted_data}\n\nВыберите действие:",
+        parse_mode="HTML",
+        reply_markup=keyboard
+    )
+
+    await state.update_data(last_message_id=sent_message.message_id)
+    await state.set_state(AdminStates.waiting_for_action)
+

@@ -50,7 +50,7 @@ async def handle_post_payment_actions(bot: Bot, chat_id: int):
             await ReferralCl.add_referral_bonus_after_pay(chat_id, bot)
         except Exception as e:
             await send_admin_log(bot,f"❌ Ошибка при начислении бонуса за оплату {chat_id}: {e}")
-            logging.error(f"❌ Ошибка при начислении бонуса за оплату {chat_id}: {e}")
+            logging.error(f"Ошибка при начислении бонуса за оплату {chat_id}: {e}")
 
 
         logging.info(f"Сообщение пользователю {chat_id} об успешной оплате отправлено.")

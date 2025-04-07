@@ -8,7 +8,7 @@ from pathlib import Path
 import aiofiles
 
 from bot.handlers.admin import send_admin_log, ADMIN_CHAT_IDS
-from redis_configs.redis_settings import redis_client
+from redis_configs.redis_settings import redis_client_main
 from models.UserCl import UserCl
 from models.referral_class.ReferralCL import ReferralCl
 #Надо проработать!!!!!!!!!!!
