@@ -275,7 +275,7 @@
     {
       "name": "Server_39000",
       "address": "194.164.216.151",
-      "country": "UK",
+      "country": "Britain",
       "name_protocol": "vless",
       "count_users": 40
     },
