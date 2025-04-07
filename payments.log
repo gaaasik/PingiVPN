@@ -1,0 +1,496 @@
+2025-04-03 23:24:28,674 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: ��� ����������. ������: Telegram server says - Bad Request: chat not found
+2025-04-03 23:24:28,675 - INFO - ������ �������� ������� ���������.
+2025-04-03 23:24:28,677 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-03 23:24:28,679 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-03 23:24:28,679 - INFO - Scheduler started
+2025-04-03 23:24:28,683 - INFO - ���� 'history_key' ��� ����������, ���������� �� ���������.
+2025-04-03 23:24:28,683 - INFO - Start polling
+2025-04-03 23:24:28,683 - INFO - ������ ������������� ������� tasks
+2025-04-03 23:24:28,683 - INFO - �������� ������������� ������� result_task_queue.
+2025-04-03 23:24:28,684 - INFO - ����������� ����������� �������.
+2025-04-03 23:24:28,685 - INFO - ��������� ����������� ['UnsubscribedNotification'] ����� 755.52 �����.
+2025-04-03 23:24:28,750 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:24:28,845 - INFO - Update id=560853653 is not handled. Duration 0 ms by bot id=7718121314
+2025-04-03 23:24:29,175 - INFO - Update id=560853652 is handled. Duration 343 ms by bot id=7718121314
+2025-04-03 23:24:29,199 - INFO - Update id=560853654 is handled. Duration 359 ms by bot id=7718121314
+2025-04-03 23:24:29,215 - INFO - Update id=560853656 is handled. Duration 375 ms by bot id=7718121314
+2025-04-03 23:24:29,301 - INFO - Update id=560853655 is handled. Duration 468 ms by bot id=7718121314
+2025-04-03 23:24:31,876 - INFO - Update id=560853657 is handled. Duration 108 ms by bot id=7718121314
+2025-04-03 23:24:33,524 - INFO - Update id=560853658 is handled. Duration 391 ms by bot id=7718121314
+2025-04-03 23:24:34,366 - INFO - Update id=560853659 is handled. Duration 155 ms by bot id=7718121314
+2025-04-03 23:24:36,257 - INFO - Update id=560853660 is handled. Duration 312 ms by bot id=7718121314
+2025-04-03 23:24:45,337 - INFO - Update id=560853661 is handled. Duration 156 ms by bot id=7718121314
+2025-04-03 23:24:48,217 - INFO - Update id=560853662 is handled. Duration 328 ms by bot id=7718121314
+2025-04-03 23:24:50,174 - INFO - Update id=560853663 is handled. Duration 202 ms by bot id=7718121314
+2025-04-03 23:24:53,011 - INFO - ����� ��������� �� wireguard
+2025-04-03 23:24:53,012 - ERROR - ������ ��� ����������� ������ ��� chat_id 1388513042: [Errno 2] No such file or directory: 'D:\\Office\\telegramBot\\PingiVPN\\configs\\registered_user\\1388513042_tolsemenov\\PingiVPN.conf'
+2025-04-03 23:24:53,033 - INFO - ����� 4_free.conf � 4_free.png ������� ���������� � ������������� ��� ������������ 1388513042
+2025-04-03 23:24:53,828 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������:  ������� ����� ��� 1388513042 tolsemenov. �������� 0 ������ � 
+1 ��������. ������: Telegram server says - Bad Request: chat not found
+2025-04-03 23:24:53,834 - INFO - ������ ������ ������� _generate_server_params_wireguard. ���� � �����: D:\Office\telegramBot\PingiVPN\configs\registered_user\1388513042_tolsemenov\PingiVPN.conf
+2025-04-03 23:24:53,834 - INFO - ��������� ����: D:\Office\telegramBot\PingiVPN\configs\registered_user\1388513042_tolsemenov\PingiVPN.conf
+2025-04-03 23:24:53,835 - INFO - ������ PrivateKey: SOsO7Zlejj2W5OCrvUnOV8SoSRLbV9VoUEm+oUh9UG0
+2025-04-03 23:24:53,835 - INFO - ������ Address: 10.8.0.21/24
+2025-04-03 23:24:53,835 - INFO - ������ Endpoint: 147.45.242.155:51820
+2025-04-03 23:24:53,835 - INFO - ��������� ���������� ������� WireGuard ���������.
+2025-04-03 23:24:53,844 - INFO - ����������� �������: queue_task_Server_tol_test_3x_ui_10000
+2025-04-03 23:24:54,463 - INFO - ������ ��������� � ������� queue_task_Server_tol_test_3x_ui_10000: {'task_type': 'change_enable_user', 'name_protocol': 'vless', 'chat_id': 1388513042, 'server_ip': '194.87.208.18', 'user_ip': '', 'uuid_value': '457ea164-9c78-4f0d-aade-884686484031', 'enable': False}
+2025-04-03 23:24:54,470 - INFO - �������� ������: {'status': 'success', 'task_type': 'result_change_enable_user', 'chat_id': 1388513042, 'protocol': 'vless', 'enable': False, 'traffic': {'transfer_received': '0', 'transfer_sent': '0'}, 'uuid_value': '457ea164-9c78-4f0d-aade-884686484031', 'action': 'disabled'}
+2025-04-03 23:24:54,478 - INFO - ���������� � history_key � ���� ������ enable=False
+2025-04-03 23:24:54,479 - INFO - enable ���������� � value_key � ���� ������ enable=False
+2025-04-03 23:24:55,153 - INFO - Update id=560853664 is handled. Duration 2141 ms by bot id=7718121314
+2025-04-03 23:27:57,396 - INFO - Update id=560853665 is handled. Duration 547 ms by bot id=7718121314
+2025-04-03 23:28:06,188 - INFO - Update id=560853666 is handled. Duration 203 ms by bot id=7718121314
+2025-04-03 23:28:08,336 - INFO - Update id=560853667 is handled. Duration 328 ms by bot id=7718121314
+2025-04-03 23:28:10,875 - INFO - Update id=560853668 is handled. Duration 155 ms by bot id=7718121314
+2025-04-03 23:28:12,423 - INFO - Update id=560853669 is handled. Duration 155 ms by bot id=7718121314
+2025-04-03 23:28:13,409 - INFO - Update id=560853670 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:28:14,502 - INFO - Update id=560853671 is handled. Duration 171 ms by bot id=7718121314
+2025-04-03 23:28:15,161 - INFO - Update id=560853672 is handled. Duration 171 ms by bot id=7718121314
+2025-04-03 23:28:15,962 - INFO - Update id=560853673 is handled. Duration 156 ms by bot id=7718121314
+2025-04-03 23:28:17,962 - INFO - Update id=560853674 is handled. Duration 172 ms by bot id=7718121314
+2025-04-03 23:28:19,711 - INFO - Update id=560853675 is handled. Duration 156 ms by bot id=7718121314
+2025-04-03 23:28:19,897 - INFO - Update id=560853676 is handled. Duration 172 ms by bot id=7718121314
+2025-04-03 23:28:22,336 - INFO - Update id=560853677 is handled. Duration 172 ms by bot id=7718121314
+2025-04-03 23:28:24,185 - INFO - Update id=560853678 is handled. Duration 155 ms by bot id=7718121314
+2025-04-03 23:28:24,961 - INFO - Update id=560853679 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:28:25,586 - INFO - Update id=560853680 is handled. Duration 172 ms by bot id=7718121314
+2025-04-03 23:28:26,929 - INFO - Update id=560853681 is handled. Duration 155 ms by bot id=7718121314
+2025-04-03 23:28:27,706 - INFO - Update id=560853682 is handled. Duration 172 ms by bot id=7718121314
+2025-04-03 23:28:31,593 - INFO - Update id=560853683 is handled. Duration 234 ms by bot id=7718121314
+2025-04-03 23:28:32,197 - INFO - Update id=560853684 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:28:33,209 - INFO - Update id=560853685 is handled. Duration 297 ms by bot id=7718121314
+2025-04-03 23:28:34,191 - INFO - Update id=560853686 is handled. Duration 219 ms by bot id=7718121314
+2025-04-03 23:28:35,821 - INFO - Update id=560853687 is handled. Duration 219 ms by bot id=7718121314
+2025-04-03 23:28:39,589 - INFO - Update id=560853688 is handled. Duration 156 ms by bot id=7718121314
+2025-04-03 23:28:42,293 - INFO - Update id=560853689 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:28:45,368 - INFO - Update id=560853690 is handled. Duration 250 ms by bot id=7718121314
+2025-04-03 23:28:48,071 - INFO - Update id=560853691 is handled. Duration 171 ms by bot id=7718121314
+2025-04-03 23:28:49,498 - INFO - Update id=560853692 is handled. Duration 155 ms by bot id=7718121314
+2025-04-03 23:28:50,122 - INFO - Update id=560853693 is handled. Duration 171 ms by bot id=7718121314
+2025-04-03 23:28:50,631 - INFO - Update id=560853694 is handled. Duration 250 ms by bot id=7718121314
+2025-04-03 23:28:50,940 - INFO - Update id=560853695 is handled. Duration 78 ms by bot id=7718121314
+2025-04-03 23:28:53,511 - INFO - Update id=560853696 is handled. Duration 156 ms by bot id=7718121314
+2025-04-03 23:28:54,224 - INFO - Update id=560853697 is handled. Duration 265 ms by bot id=7718121314
+2025-04-03 23:28:57,665 - INFO - Update id=560853698 is handled. Duration 171 ms by bot id=7718121314
+2025-04-03 23:28:59,419 - INFO - Update id=560853699 is handled. Duration 280 ms by bot id=7718121314
+2025-04-03 23:29:00,951 - INFO - Update id=560853700 is handled. Duration 296 ms by bot id=7718121314
+2025-04-03 23:29:06,250 - INFO - Update id=560853701 is handled. Duration 312 ms by bot id=7718121314
+2025-04-03 23:29:07,154 - INFO - Update id=560853702 is handled. Duration 157 ms by bot id=7718121314
+2025-04-03 23:31:48,739 - INFO - Update id=560853703 is handled. Duration 578 ms by bot id=7718121314
+2025-04-03 23:31:49,596 - INFO - Update id=560853704 is handled. Duration 172 ms by bot id=7718121314
+2025-04-03 23:34:29,230 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-03 23:41:15,403 - INFO - Polling stopped
+2025-04-03 23:41:15,404 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:41:48,618 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: ��� ����������. ������: Telegram server says - Bad Request: chat not found
+2025-04-03 23:41:48,622 - INFO - ���� 'history_key' ��� ����������, ���������� �� ���������.
+2025-04-03 23:41:48,622 - INFO - Start polling
+2025-04-03 23:41:48,622 - INFO - ������ ������������� ������� tasks
+2025-04-03 23:41:48,622 - INFO - �������� ������������� ������� result_task_queue.
+2025-04-03 23:41:48,623 - INFO - ����������� ����������� �������.
+2025-04-03 23:41:48,624 - INFO - ��������� ����������� ['UnsubscribedNotification'] ����� 738.19 �����.
+2025-04-03 23:41:48,704 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:43:25,751 - INFO - Update id=560853705 is handled. Duration 421 ms by bot id=7718121314
+2025-04-03 23:43:27,157 - INFO - Update id=560853706 is handled. Duration 157 ms by bot id=7718121314
+2025-04-03 23:43:28,343 - INFO - Update id=560853707 is not handled. Duration 0 ms by bot id=7718121314
+2025-04-03 23:43:28,343 - ERROR - Cause exception while process update id=560853707 by bot id=7718121314
+ValueError: ������ country_server_data ��� �� ���������.
+Traceback (most recent call last):
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "D:\Office\telegramBot\PingiVPN\bot\admin_func\another_settings\another_settings.py", line 35, in show_server_list
+    await send_server_page(callback.message, state)
+  File "D:\Office\telegramBot\PingiVPN\bot\admin_func\another_settings\another_settings.py", line 101, in send_server_page
+    servers_data = (await get_json_country_server_data())["servers"]
+  File "D:\Office\telegramBot\PingiVPN\models\country_server_data.py", line 46, in get_json_country_server_data
+    raise ValueError("������ country_server_data ��� �� ���������.")
+ValueError: ������ country_server_data ��� �� ���������.
+2025-04-03 23:43:50,761 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:43:50,761 - INFO - Polling stopped
+2025-04-03 23:43:55,119 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: ��� ����������. ������: Telegram server says - Bad Request: chat not found
+2025-04-03 23:43:55,123 - INFO - ���� 'history_key' ��� ����������, ���������� �� ���������.
+2025-04-03 23:43:55,123 - INFO - Start polling
+2025-04-03 23:43:55,124 - INFO - ������ ������������� ������� tasks
+2025-04-03 23:43:55,124 - INFO - �������� ������������� ������� result_task_queue.
+2025-04-03 23:43:55,125 - INFO - ����������� ����������� �������.
+2025-04-03 23:43:55,126 - INFO - ��������� ����������� ['UnsubscribedNotification'] ����� 736.08 �����.
+2025-04-03 23:43:55,192 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:44:05,459 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:44:05,459 - INFO - Polling stopped
+2025-04-03 23:44:09,786 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: ��� ����������. ������: Telegram server says - Bad Request: chat not found
+2025-04-03 23:44:09,787 - INFO - ������ �������� ������� ���������.
+2025-04-03 23:44:09,791 - INFO - ���� 'history_key' ��� ����������, ���������� �� ���������.
+2025-04-03 23:44:09,792 - INFO - Start polling
+2025-04-03 23:44:09,792 - INFO - ������ ������������� ������� tasks
+2025-04-03 23:44:09,793 - INFO - �������� ������������� ������� result_task_queue.
+2025-04-03 23:44:09,793 - INFO - ����������� ����������� �������.
+2025-04-03 23:44:09,795 - INFO - ��������� ����������� ['UnsubscribedNotification'] ����� 735.84 �����.
+2025-04-03 23:44:09,866 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:44:10,410 - INFO - Update id=560853708 is handled. Duration 467 ms by bot id=7718121314
+2025-04-03 23:44:12,472 - INFO - Update id=560853709 is handled. Duration 312 ms by bot id=7718121314
+2025-04-03 23:44:13,735 - INFO - Update id=560853710 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:44:15,802 - INFO - Update id=560853711 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:44:16,136 - INFO - Update id=560853712 is handled. Duration 125 ms by bot id=7718121314
+2025-04-03 23:44:18,233 - INFO - Update id=560853713 is handled. Duration 375 ms by bot id=7718121314
+2025-04-03 23:44:18,604 - INFO - Update id=560853714 is handled. Duration 359 ms by bot id=7718121314
+2025-04-03 23:44:19,023 - INFO - Update id=560853715 is handled. Duration 297 ms by bot id=7718121314
+2025-04-03 23:44:23,285 - INFO - Update id=560853716 is handled. Duration 202 ms by bot id=7718121314
+2025-04-03 23:44:24,222 - INFO - Update id=560853717 is handled. Duration 202 ms by bot id=7718121314
+2025-04-03 23:44:28,560 - INFO - Update id=560853718 is handled. Duration 93 ms by bot id=7718121314
+2025-04-03 23:44:29,017 - INFO - Update id=560853719 is handled. Duration 483 ms by bot id=7718121314
+2025-04-03 23:44:34,916 - INFO - Update id=560853720 is handled. Duration 250 ms by bot id=7718121314
+2025-04-03 23:44:35,399 - INFO - Update id=560853721 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:44:36,438 - INFO - Update id=560853722 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:44:37,579 - INFO - Update id=560853723 is handled. Duration 171 ms by bot id=7718121314
+2025-04-03 23:44:42,260 - INFO - Update id=560853724 is handled. Duration 203 ms by bot id=7718121314
+2025-04-03 23:44:44,001 - INFO - Update id=560853725 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:44:45,913 - INFO - Update id=560853726 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:47:04,220 - INFO - Update id=560853727 is handled. Duration 625 ms by bot id=7718121314
+2025-04-03 23:47:06,860 - INFO - Update id=560853728 is handled. Duration 155 ms by bot id=7718121314
+2025-04-03 23:47:11,761 - INFO - Update id=560853729 is handled. Duration 156 ms by bot id=7718121314
+2025-04-03 23:47:17,745 - INFO - Update id=560853730 is handled. Duration 421 ms by bot id=7718121314
+2025-04-03 23:47:19,365 - INFO - Update id=560853731 is handled. Duration 155 ms by bot id=7718121314
+2025-04-03 23:47:27,730 - INFO - Update id=560853732 is handled. Duration 140 ms by bot id=7718121314
+2025-04-03 23:49:08,596 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:49:08,596 - INFO - Polling stopped
+2025-04-03 23:49:12,848 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: ��� ����������. ������: Telegram server says - Bad Request: chat not found
+2025-04-03 23:49:12,849 - INFO - ������ �������� ������� ���������.
+2025-04-03 23:49:12,854 - INFO - ���� 'history_key' ��� ����������, ���������� �� ���������.
+2025-04-03 23:49:12,855 - INFO - Start polling
+2025-04-03 23:49:12,855 - INFO - ������ ������������� ������� tasks
+2025-04-03 23:49:12,855 - INFO - �������� ������������� ������� result_task_queue.
+2025-04-03 23:49:12,855 - INFO - ����������� ����������� �������.
+2025-04-03 23:49:12,857 - INFO - ��������� ����������� ['UnsubscribedNotification'] ����� 730.79 �����.
+2025-04-03 23:49:12,928 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:49:21,325 - INFO - Update id=560853733 is handled. Duration 421 ms by bot id=7718121314
+2025-04-03 23:49:22,632 - INFO - Update id=560853734 is handled. Duration 203 ms by bot id=7718121314
+2025-04-03 23:49:23,647 - INFO - Update id=560853735 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:49:24,646 - INFO - Update id=560853736 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:49:25,529 - INFO - Update id=560853737 is handled. Duration 250 ms by bot id=7718121314
+2025-04-03 23:49:26,193 - INFO - Update id=560853738 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:49:29,986 - INFO - Update id=560853739 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:49:31,174 - INFO - Update id=560853740 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:49:31,838 - INFO - Update id=560853741 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:49:33,462 - INFO - Update id=560853742 is handled. Duration 203 ms by bot id=7718121314
+2025-04-03 23:49:35,135 - INFO - Update id=560853743 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:51:32,545 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:51:32,545 - INFO - Polling stopped
+2025-04-03 23:51:36,935 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: ��� ����������. ������: Telegram server says - Bad Request: chat not found
+2025-04-03 23:51:36,935 - INFO - ������ �������� ������� ���������.
+2025-04-03 23:51:36,939 - INFO - ���� 'history_key' ��� ����������, ���������� �� ���������.
+2025-04-03 23:51:36,940 - INFO - Start polling
+2025-04-03 23:51:36,940 - INFO - ������ ������������� ������� tasks
+2025-04-03 23:51:36,940 - INFO - �������� ������������� ������� result_task_queue.
+2025-04-03 23:51:36,941 - INFO - ����������� ����������� �������.
+2025-04-03 23:51:36,942 - INFO - ��������� ����������� ['UnsubscribedNotification'] ����� 728.38 �����.
+2025-04-03 23:51:37,010 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:51:57,005 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:51:57,005 - INFO - Polling stopped
+2025-04-03 23:52:00,914 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: ��� ����������. ������: Telegram server says - Bad Request: chat not found
+2025-04-03 23:52:00,915 - INFO - ������ �������� ������� ���������.
+2025-04-03 23:52:00,920 - INFO - ���� 'history_key' ��� ����������, ���������� �� ���������.
+2025-04-03 23:52:00,921 - INFO - Start polling
+2025-04-03 23:52:00,921 - INFO - ������ ������������� ������� tasks
+2025-04-03 23:52:00,921 - INFO - �������� ������������� ������� result_task_queue.
+2025-04-03 23:52:00,922 - INFO - ����������� ����������� �������.
+2025-04-03 23:52:00,923 - INFO - ��������� ����������� ['UnsubscribedNotification'] ����� 727.98 �����.
+2025-04-03 23:52:01,008 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:52:25,089 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:52:25,089 - INFO - Polling stopped
+2025-04-03 23:52:31,975 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: ��� ����������. ������: Telegram server says - Bad Request: chat not found
+2025-04-03 23:52:31,976 - INFO - ������ �������� ������� ���������.
+2025-04-03 23:52:31,981 - INFO - ���� 'history_key' ��� ����������, ���������� �� ���������.
+2025-04-03 23:52:31,981 - INFO - Start polling
+2025-04-03 23:52:31,981 - INFO - ������ ������������� ������� tasks
+2025-04-03 23:52:31,981 - INFO - �������� ������������� ������� result_task_queue.
+2025-04-03 23:52:31,982 - INFO - ����������� ����������� �������.
+2025-04-03 23:52:31,984 - INFO - ��������� ����������� ['UnsubscribedNotification'] ����� 727.47 �����.
+2025-04-03 23:52:32,065 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:52:32,769 - INFO - Update id=560853744 is handled. Duration 360 ms by bot id=7718121314
+2025-04-03 23:52:34,178 - INFO - Update id=560853745 is handled. Duration 203 ms by bot id=7718121314
+2025-04-03 23:52:35,013 - INFO - Update id=560853746 is handled. Duration 171 ms by bot id=7718121314
+2025-04-03 23:52:36,077 - INFO - Update id=560853747 is handled. Duration 157 ms by bot id=7718121314
+2025-04-03 23:52:36,672 - INFO - Update id=560853748 is handled. Duration 155 ms by bot id=7718121314
+2025-04-03 23:52:37,410 - INFO - Update id=560853749 is handled. Duration 217 ms by bot id=7718121314
+2025-04-03 23:52:39,661 - INFO - Update id=560853750 is handled. Duration 264 ms by bot id=7718121314
+2025-04-03 23:52:43,148 - INFO - Update id=560853751 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:52:44,013 - INFO - Update id=560853752 is handled. Duration 312 ms by bot id=7718121314
+2025-04-03 23:52:44,745 - INFO - Update id=560853753 is handled. Duration 217 ms by bot id=7718121314
+2025-04-03 23:52:45,465 - INFO - Update id=560853754 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:52:46,146 - INFO - Update id=560853755 is handled. Duration 157 ms by bot id=7718121314
+2025-04-03 23:52:47,165 - INFO - Update id=560853756 is handled. Duration 171 ms by bot id=7718121314
+2025-04-03 23:59:07,737 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:59:07,737 - INFO - Polling stopped
+2025-04-03 23:59:11,320 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: ��� ����������. ������: Telegram server says - Bad Request: chat not found
+2025-04-03 23:59:11,321 - INFO - ������ �������� ������� ���������.
+2025-04-03 23:59:11,325 - INFO - ���� 'history_key' ��� ����������, ���������� �� ���������.
+2025-04-03 23:59:11,326 - INFO - Start polling
+2025-04-03 23:59:11,326 - INFO - ������ ������������� ������� tasks
+2025-04-03 23:59:11,326 - INFO - �������� ������������� ������� result_task_queue.
+2025-04-03 23:59:11,327 - INFO - ����������� ����������� �������.
+2025-04-03 23:59:11,328 - INFO - ��������� ����������� ['UnsubscribedNotification'] ����� 720.81 �����.
+2025-04-03 23:59:11,393 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-03 23:59:19,393 - INFO - Update id=560853757 is handled. Duration 407 ms by bot id=7718121314
+2025-04-03 23:59:20,930 - INFO - Update id=560853758 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:59:22,142 - INFO - Update id=560853759 is handled. Duration 171 ms by bot id=7718121314
+2025-04-03 23:59:23,227 - INFO - Update id=560853760 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:59:23,834 - INFO - Update id=560853761 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:59:24,447 - INFO - Update id=560853762 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:59:28,148 - INFO - Update id=560853763 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:59:28,912 - INFO - Update id=560853764 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:59:29,758 - INFO - Update id=560853765 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:59:30,531 - INFO - Update id=560853766 is handled. Duration 187 ms by bot id=7718121314
+2025-04-03 23:59:32,241 - INFO - �������� �������� ������������ ��� ��������: 147.45.242.155
+2025-04-03 23:59:32,860 - INFO - ���������� ������: {'task_type': 'creating_user', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> �������: queue_task_Server_tol_test_10000
+2025-04-03 23:59:33,147 - INFO - Update id=560853767 is handled. Duration 1078 ms by bot id=7718121314
+2025-04-03 23:59:34,245 - INFO - �������� ������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 1, 'created_users': [{'user_id': '4d8fbca9-fc05-4bdb-8884-3a1ea2165b11', 'name': '10009_free', 'address': '10.8.0.13', 'private_key': 'kJeddYy8j9YOuQl5ZJqiHAuYp3wpzgBLyln/l+Sw/l0=', 'public_key': '+aKFm/94xp1ZCFwBE+fIpNuP9bIKPWNDc2Qvmwb0ZyQ=', 'pre_shared_key': 'SNGdUSb8AY/YQ3+27EWF+7aFqxE/vJNB6FhUiUXaAgs=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
+2025-04-03 23:59:34,245 - INFO - ������ ��������� ���������� �������� �������������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 1, 'created_users': [{'user_id': '4d8fbca9-fc05-4bdb-8884-3a1ea2165b11', 'name': '10009_free', 'address': '10.8.0.13', 'private_key': 'kJeddYy8j9YOuQl5ZJqiHAuYp3wpzgBLyln/l+Sw/l0=', 'public_key': '+aKFm/94xp1ZCFwBE+fIpNuP9bIKPWNDc2Qvmwb0ZyQ=', 'pre_shared_key': 'SNGdUSb8AY/YQ3+27EWF+7aFqxE/vJNB6FhUiUXaAgs=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
+2025-04-03 23:59:34,921 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user 
+������� ������� 1 ������������� WG. ������: Telegram server says - Bad Request: chat not found
+2025-04-04 00:04:08,964 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-04 00:04:08,964 - INFO - Polling stopped
+2025-04-04 00:04:12,827 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: ��� ����������. ������: Telegram server says - Bad Request: chat not found
+2025-04-04 00:04:12,828 - INFO - ������ �������� ������� ���������.
+2025-04-04 00:04:12,832 - INFO - ���� 'history_key' ��� ����������, ���������� �� ���������.
+2025-04-04 00:04:12,832 - INFO - Start polling
+2025-04-04 00:04:12,832 - INFO - ������ ������������� ������� tasks
+2025-04-04 00:04:12,832 - INFO - �������� ������������� ������� result_task_queue.
+2025-04-04 00:04:12,833 - INFO - ����������� ����������� �������.
+2025-04-04 00:04:12,835 - INFO - ��������� ����������� ['UnsubscribedNotification'] ����� 715.79 �����.
+2025-04-04 00:04:12,900 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-04 00:04:30,994 - INFO - Update id=560853768 is handled. Duration 453 ms by bot id=7718121314
+2025-04-04 00:04:32,776 - INFO - Update id=560853769 is handled. Duration 172 ms by bot id=7718121314
+2025-04-04 00:04:33,451 - INFO - Update id=560853770 is handled. Duration 157 ms by bot id=7718121314
+2025-04-04 00:04:35,110 - INFO - Update id=560853771 is handled. Duration 202 ms by bot id=7718121314
+2025-04-04 00:04:35,834 - INFO - Update id=560853772 is handled. Duration 250 ms by bot id=7718121314
+2025-04-04 00:04:36,152 - INFO - Update id=560853773 is handled. Duration 250 ms by bot id=7718121314
+2025-04-04 00:04:39,956 - INFO - Update id=560853774 is handled. Duration 172 ms by bot id=7718121314
+2025-04-04 00:04:41,243 - INFO - Update id=560853775 is handled. Duration 155 ms by bot id=7718121314
+2025-04-04 00:04:41,947 - INFO - Update id=560853776 is handled. Duration 171 ms by bot id=7718121314
+2025-04-04 00:04:42,921 - INFO - Update id=560853777 is handled. Duration 264 ms by bot id=7718121314
+2025-04-04 00:04:46,903 - INFO - �������� �������� ������������ ��� ��������: 147.45.242.155
+2025-04-04 00:04:47,524 - INFO - ���������� ������: {'task_type': 'creating_user', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> �������: queue_task_Server_tol_test_10000
+2025-04-04 00:04:47,670 - INFO - Update id=560853778 is handled. Duration 842 ms by bot id=7718121314
+2025-04-04 00:04:48,437 - INFO - �������� ������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 1, 'created_users': [{'user_id': 'd4f80d88-ea36-41cf-8832-38d1b51242a1', 'name': '10010_free', 'address': '10.8.0.14', 'private_key': 'YOF9DkC6j4fwdhaguAm9YRhMAvZlNt1ivGjLcdNyuEg=', 'public_key': 'yLPhU67CatPVOfmqCF4HV7FOddBHev0oueerJMAQNUs=', 'pre_shared_key': 'Nyhuy05i0tUTvVBUvIYyMNyrzWVoTEtC74xOITXKE9U=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
+2025-04-04 00:04:48,438 - INFO - ������ ��������� ���������� �������� �������������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 1, 'created_users': [{'user_id': 'd4f80d88-ea36-41cf-8832-38d1b51242a1', 'name': '10010_free', 'address': '10.8.0.14', 'private_key': 'YOF9DkC6j4fwdhaguAm9YRhMAvZlNt1ivGjLcdNyuEg=', 'public_key': 'yLPhU67CatPVOfmqCF4HV7FOddBHev0oueerJMAQNUs=', 'pre_shared_key': 'Nyhuy05i0tUTvVBUvIYyMNyrzWVoTEtC74xOITXKE9U=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
+2025-04-04 00:04:48,438 - INFO - ��������� ������������: 1
+2025-04-04 00:04:48,936 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user 
+������� ������� 1 ������������� WG. ������: Telegram server says - Bad Request: chat not found
+2025-04-04 00:05:46,499 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-04 00:05:46,499 - INFO - Polling stopped
+2025-04-04 00:05:50,671 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: ��� ����������. ������: Telegram server says - Bad Request: chat not found
+2025-04-04 00:05:50,672 - INFO - ������ �������� ������� ���������.
+2025-04-04 00:05:50,676 - INFO - ���� 'history_key' ��� ����������, ���������� �� ���������.
+2025-04-04 00:05:50,676 - INFO - Start polling
+2025-04-04 00:05:50,677 - INFO - ������ ������������� ������� tasks
+2025-04-04 00:05:50,677 - INFO - �������� ������������� ������� result_task_queue.
+2025-04-04 00:05:50,678 - INFO - ����������� ����������� �������.
+2025-04-04 00:05:50,679 - INFO - ��������� ����������� ['UnsubscribedNotification'] ����� 714.16 �����.
+2025-04-04 00:05:50,758 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-04 00:06:22,074 - INFO - Update id=560853779 is handled. Duration 500 ms by bot id=7718121314
+2025-04-04 00:06:23,277 - INFO - Update id=560853780 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:06:24,087 - INFO - Update id=560853781 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:06:25,445 - INFO - Update id=560853782 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:06:26,198 - INFO - Update id=560853783 is handled. Duration 219 ms by bot id=7718121314
+2025-04-04 00:06:26,746 - INFO - Update id=560853784 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 00:06:30,024 - INFO - Update id=560853785 is handled. Duration 282 ms by bot id=7718121314
+2025-04-04 00:06:30,344 - INFO - Update id=560853786 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:06:31,089 - INFO - Update id=560853787 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:06:35,183 - INFO - Update id=560853788 is handled. Duration 280 ms by bot id=7718121314
+2025-04-04 00:06:35,895 - INFO - Update id=560853789 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:06:36,121 - INFO - Update id=560853790 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:06:42,424 - INFO - Update id=560853791 is handled. Duration 218 ms by bot id=7718121314
+2025-04-04 00:06:43,614 - INFO - Update id=560853792 is handled. Duration 217 ms by bot id=7718121314
+2025-04-04 00:06:44,442 - INFO - �������� �������� ������������ ��� ��������: 147.45.242.155
+2025-04-04 00:06:45,074 - INFO - ���������� ������: {'task_type': 'creating_user', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> �������: queue_task_Server_tol_test_10000
+2025-04-04 00:06:45,248 - INFO - Update id=560853793 is handled. Duration 905 ms by bot id=7718121314
+2025-04-04 00:06:46,057 - INFO - �������� ������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 4, 'created_users': [{'user_id': '45ae7c03-9328-420e-ac2d-b06828d93248', 'name': '10011_free', 'address': '10.8.0.15', 'private_key': 'aH1Vqv4v3n5JBQPPwePGgHiD+qJiVQqbknVQZOYXg2A=', 'public_key': 'DdTJEfA/GJkhgDtnavCna8RvRhdZyFH89ZJse+u8fw8=', 'pre_shared_key': '6byT7ZZE6EvgRjOt7S41OgmjxwONQrH9NZMhvhMdM4Y=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '702d36a2-27df-48b7-b0eb-0a425ffc043c', 'name': '10012_free', 'address': '10.8.0.16', 'private_key': 'GLApx6lID7mYkDtR/Cu4C5DExWq4PdRyKQAQ3XG1Cmw=', 'public_key': 'NcRQ9suWAxmJ0n6GP/QCr84v3b7O28VX4X9IIAZuLUE=', 'pre_shared_key': '8cUTfE9Q+JPLEhuZOiRRQVaw+azRNhXtuxVy1RzQNc0=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '2570c21b-2820-4270-bc60-f76861108d8f', 'name': '10013_free', 'address': '10.8.0.17', 'private_key': 'qBclEUwmw51MtAd3lnYPZF7Va1eO40m2HR4JXSLTHlc=', 'public_key': '/Opn7a6wQtMKvM4Z/dd5ur19dB9aSD5ir4yCoTsrq2g=', 'pre_shared_key': 'fHb5jgVMAHweV+00gfqyXh6K0egpMDWxYGqFxY9T/Eg=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '2a8349d2-81d4-4dad-8582-880f39696a1a', 'name': '10039_free', 'address': '10.8.0.18', 'private_key': 'eL07BQuw9AqVWudRZYvHJkRlr946QKJ56ecz0uKAwWg=', 'public_key': 'Mjfd0DGqtscG7uOP5PLx5zPJ4/GFJtbXoTYaSpdN1Vw=', 'pre_shared_key': 'KAVg/golwm2am5OcYuJwv3ETGYwtyYaf8d05t4LJ0II=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
+2025-04-04 00:06:46,057 - INFO - ������ ��������� ���������� �������� �������������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 4, 'created_users': [{'user_id': '45ae7c03-9328-420e-ac2d-b06828d93248', 'name': '10011_free', 'address': '10.8.0.15', 'private_key': 'aH1Vqv4v3n5JBQPPwePGgHiD+qJiVQqbknVQZOYXg2A=', 'public_key': 'DdTJEfA/GJkhgDtnavCna8RvRhdZyFH89ZJse+u8fw8=', 'pre_shared_key': '6byT7ZZE6EvgRjOt7S41OgmjxwONQrH9NZMhvhMdM4Y=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '702d36a2-27df-48b7-b0eb-0a425ffc043c', 'name': '10012_free', 'address': '10.8.0.16', 'private_key': 'GLApx6lID7mYkDtR/Cu4C5DExWq4PdRyKQAQ3XG1Cmw=', 'public_key': 'NcRQ9suWAxmJ0n6GP/QCr84v3b7O28VX4X9IIAZuLUE=', 'pre_shared_key': '8cUTfE9Q+JPLEhuZOiRRQVaw+azRNhXtuxVy1RzQNc0=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '2570c21b-2820-4270-bc60-f76861108d8f', 'name': '10013_free', 'address': '10.8.0.17', 'private_key': 'qBclEUwmw51MtAd3lnYPZF7Va1eO40m2HR4JXSLTHlc=', 'public_key': '/Opn7a6wQtMKvM4Z/dd5ur19dB9aSD5ir4yCoTsrq2g=', 'pre_shared_key': 'fHb5jgVMAHweV+00gfqyXh6K0egpMDWxYGqFxY9T/Eg=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '2a8349d2-81d4-4dad-8582-880f39696a1a', 'name': '10039_free', 'address': '10.8.0.18', 'private_key': 'eL07BQuw9AqVWudRZYvHJkRlr946QKJ56ecz0uKAwWg=', 'public_key': 'Mjfd0DGqtscG7uOP5PLx5zPJ4/GFJtbXoTYaSpdN1Vw=', 'pre_shared_key': 'KAVg/golwm2am5OcYuJwv3ETGYwtyYaf8d05t4LJ0II=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
+2025-04-04 00:06:46,057 - INFO - ��������� ������������: 4
+2025-04-04 00:06:46,904 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user 
+������� ������� 4 ������������� WG. ������: Telegram server says - Bad Request: chat not found
+2025-04-04 00:06:46,904 - INFO - ��������� ���������� � Telegram: ������� ������� 4 ������������� WG
+2025-04-04 00:08:02,187 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-04 00:08:02,187 - INFO - Polling stopped
+2025-04-04 00:08:09,239 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: ��� ����������. ������: Telegram server says - Bad Request: chat not found
+2025-04-04 00:08:09,239 - INFO - ������ �������� ������� ���������.
+2025-04-04 00:08:09,243 - INFO - ���� 'history_key' ��� ����������, ���������� �� ���������.
+2025-04-04 00:08:09,243 - INFO - Start polling
+2025-04-04 00:08:09,244 - INFO - ������ ������������� ������� tasks
+2025-04-04 00:08:09,244 - INFO - �������� ������������� ������� result_task_queue.
+2025-04-04 00:08:09,244 - INFO - ����������� ����������� �������.
+2025-04-04 00:08:09,247 - INFO - ��������� ����������� ['UnsubscribedNotification'] ����� 711.85 �����.
+2025-04-04 00:08:09,325 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-04 00:10:08,941 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-04 00:10:08,941 - INFO - Polling stopped
+2025-04-04 00:10:12,915 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: ��� ����������. ������: Telegram server says - Bad Request: chat not found
+2025-04-04 00:10:12,916 - INFO - ������ �������� ������� ���������.
+2025-04-04 00:10:12,922 - INFO - ���� 'history_key' ��� ����������, ���������� �� ���������.
+2025-04-04 00:10:12,923 - INFO - Start polling
+2025-04-04 00:10:12,923 - INFO - ������ ������������� ������� tasks
+2025-04-04 00:10:12,923 - INFO - �������� ������������� ������� result_task_queue.
+2025-04-04 00:10:12,924 - INFO - ����������� ����������� �������.
+2025-04-04 00:10:12,925 - INFO - ��������� ����������� ['UnsubscribedNotification'] ����� 709.78 �����.
+2025-04-04 00:10:13,011 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-04 00:10:16,145 - INFO - Update id=560853794 is handled. Duration 516 ms by bot id=7718121314
+2025-04-04 00:10:17,338 - INFO - Update id=560853795 is handled. Duration 219 ms by bot id=7718121314
+2025-04-04 00:10:18,385 - INFO - Update id=560853796 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 00:10:19,769 - INFO - Update id=560853797 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 00:10:20,851 - INFO - Update id=560853798 is handled. Duration 202 ms by bot id=7718121314
+2025-04-04 00:10:21,539 - INFO - Update id=560853799 is handled. Duration 202 ms by bot id=7718121314
+2025-04-04 00:10:25,343 - INFO - Update id=560853800 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 00:10:26,511 - INFO - Update id=560853801 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 00:10:27,175 - INFO - Update id=560853802 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 00:10:28,139 - INFO - Update id=560853803 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 00:10:29,327 - INFO - �������� �������� ������������ ��� ��������: 147.45.242.155
+2025-04-04 00:10:29,955 - INFO - ���������� ������: {'task_type': 'creating_user', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> �������: queue_task_Server_tol_test_10000
+2025-04-04 00:10:30,141 - INFO - Update id=560853804 is handled. Duration 906 ms by bot id=7718121314
+2025-04-04 00:10:31,031 - INFO - �������� ������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 33, 'created_users': [{'user_id': '36b5c6b6-c522-4dd0-b52e-d629cc1e6f0c', 'name': '10007_free', 'address': '10.8.0.11', 'private_key': 'OM4bVcm3aw7Bgh87tnkFP/3ScLpCtcNi8kxgthkOSGA=', 'public_key': 'JqDfFGg31Pb4pTlK32KKj3ff7cgadQdchHr29IeKp1c=', 'pre_shared_key': 'QGJDcTUHjPpHkd0E7NHAVE6WjETNBcU2pTcNzR0OjjE=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'e63b926a-e700-4d61-9bef-bbe7b4b20df3', 'name': '10008_free', 'address': '10.8.0.12', 'private_key': 'wESBDGQSdQBPTMPnxH2XWBmwLWLlUmBM3xRF2vPEokk=', 'public_key': 'piAg/4A0aYlWrB1KSPHuFctzAhWYyox/ppByTXz8Jh0=', 'pre_shared_key': 'MdU1aY9LFz/daVRvQyg+moQx49S+JLygM/OOtE2L1yY=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '6f7cfea7-c2a9-44ce-a32f-4ae54a8b5390', 'name': '10009_free', 'address': '10.8.0.13', 'private_key': 'GJnLlAT4VSENMw7u1iL6lJO6qiESlQzGARRVZQ9hanw=', 'public_key': 'jaSRjG5rqdSdqUHlAqlaQJ/ln8l4/TI8RFWzA6+/mHs=', 'pre_shared_key': 'Qy/fPtRvO/Klzfam1QQuLk/CHQOKjgpJ/kb9UkJGYU4=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'e612d279-be4e-4291-8fc9-aadc23b89c70', 'name': '10010_free', 'address': '10.8.0.14', 'private_key': 'qOGTIt90uiuYNfQYy2+2cWip/E+rXSvNyJpmX+JIsn4=', 'public_key': 'z6OeMTTzfD/iL8jR3Qrf+A/HMFeE76Kg96i3snfCJwU=', 'pre_shared_key': 'zgmIB7Fw9lTyEAsfC9ZeFX20RIwltUbUqP6fp0ddDfQ=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '79686c49-d8d7-4fcb-88eb-8838b69bb07b', 'name': '10011_free', 'address': '10.8.0.15', 'private_key': 'WOt9aQh7aT9GKXoHhlSU9h5Ywf8iTdVTBdT45LlFSlM=', 'public_key': 'ot/pOXTNGY1lHYDmGnEPDKa9x1aV1J93v5Ju/PwxKm4=', 'pre_shared_key': 'rVEHTqC7LZmiRcV1ucM4Q+OltgazdO0+7nTzhM5IGVo=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '107de618-b3ca-4456-9a8f-bdee9b957e16', 'name': '10012_free', 'address': '10.8.0.16', 'private_key': 'gPJw8KBLVMnKS1Mp7DWeLjIVELypNA64Uqc+SsHJJ2w=', 'public_key': 'hPSS9WScYhAdNjRgACIn0uY8PClBiYx4N5su2PScnk0=', 'pre_shared_key': 'tm02CqT5ZMO7AxAGfoX3Y/L22cjyXl6cKu8dm2J4CeM=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '71cfcaa7-1585-4396-a288-672edb66c738', 'name': '10013_free', 'address': '10.8.0.17', 'private_key': 'mOcnbmZZmlnOVOeQrxZt3LLom2hmy36wDf441h/xSmE=', 'public_key': 'vcWYs6H4vsy1gcxa3Nbkp3QSxrB6BOnLCug1CIctEAQ=', 'pre_shared_key': 'YDzKH2YU77FGAvZKPYnQoqfbmyzK7SgU8vGi1xRk4/s=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '701fb7ed-a7d8-4e2b-bc08-93ed704d70b0', 'name': '10014_free', 'address': '10.8.0.18', 'private_key': 'kEnWe8hhtPrKo4hp5bpqtpFlVQSVvVnlK1hilLVqNmU=', 'public_key': 'lB1i0X3WLi6u08EliupyLvUl0vEdoyM8TitgBVsHOi4=', 'pre_shared_key': 'PuHyGkDob1RO2RYHdVHH8vmftOAnJcHkLXj6oiEYmQM=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'e0078a8c-a90b-4946-beb2-5f675161ff2b', 'name': '10015_free', 'address': '10.8.0.19', 'private_key': 'QAru4Gf1g76WN33u6A8a1UUEFOcAor+rVl4YGKjTXWE=', 'public_key': 'LkZDomWuBUiv1dOF46UQ/EDCoke1ELvalZnB/90ALUQ=', 'pre_shared_key': 'B7trvzrCEwzGR+cZODfXByDbH7D1MZR+6qJAwGzXKUo=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '0ee252a9-b51a-411a-b646-aeb44de86c34', 'name': '10016_free', 'address': '10.8.0.20', 'private_key': 'QCvvwMmhanfUjIQsAMSsWOcZ9NlBuagCMmMFhBOzRm8=', 'public_key': 'w+VsHDfCio7YWybPofrtCMKTRU5ycRusML3LapW5Wx8=', 'pre_shared_key': 'K6aBcFBLAz2y7MXfD1hkGwRWMdaN1HX99Z2E9H4MIu8=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'd01172be-25bb-4215-82fc-4c90fb66bb8e', 'name': '10017_free', 'address': '10.8.0.21', 'private_key': 'sAxzUZsTQLQXc8z1t5gbJlhOX52utS7xpvr2HSR2iGg=', 'public_key': 'zcVLjf27/EUrae06ftDbdjt8aJvNuq/ANrvtQVNR2GM=', 'pre_shared_key': 'wvjtRJoIbwwM1DvzTi1/iCOefNf8uL5n22biuChoGRA=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '87551230-ea5d-4c6e-b78d-3327079fa3c6', 'name': '10018_free', 'address': '10.8.0.22', 'private_key': 'cBTfFLjKHoJevSTjiQJONjbX4bi+Lk8DWyDscuQax2Q=', 'public_key': 'bYKrE5ujaPKoOlILiItsKQRogXdmNUnPyYv2QJVKoQQ=', 'pre_shared_key': 'vYirCB0ZZRIdDwL/9+tcM2kboFpr+n4MSrsBTC6Ralk=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'ada66ab4-e203-4e76-99a1-0166cc1b7e87', 'name': '10019_free', 'address': '10.8.0.23', 'private_key': 'cNYJdoRPxwaZSwFyUWD2/pSrm4i68Pq0OjtSMnYQZE0=', 'public_key': 'k4qjbxRkVryUvzgWXLt4vesbpgMqvBw/40vhEw21jCI=', 'pre_shared_key': 'lTNS7quw5evYgJXSJY2nAmED7sLHX7m09L8LyF1GnnY=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'ed32bdd2-f0b7-4ad1-902d-eca07e681415', 'name': '10020_free', 'address': '10.8.0.24', 'private_key': 'aHrAO+O7voot7yZEicIPNhhVmlg9eYplhyrwEZiDHW4=', 'public_key': 'l9EdiOdYBt5TNOc4TH2L+yrugUlfmTfrjk8JNKTY6gw=', 'pre_shared_key': 'nprog8YQmapHtO5Bk0FYd+PMyc9ZSyrj8fowPTrdzBc=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '40055c99-2e30-426e-97af-efff6e85d666', 'name': '10021_free', 'address': '10.8.0.25', 'private_key': 'eJhbeXJspIFb4X8+0AVG4UjTRk7PXfyFuGiA+2CcC1Y=', 'public_key': 'ofM85KtOC3nEov4Qz+UHgiuaNfbrEM6z3UfMN1vqlzU=', 'pre_shared_key': 'hK93ZUOHSgDUFSD4egDR7BlJYETK6ejy+4HS+Em1taA=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'aa292212-024f-48fc-9490-250ef09c0c87', 'name': '10022_free', 'address': '10.8.0.26', 'private_key': 'qBbjkxYi5OwDsLAWQLC754YEZL8kHKod1PMiRh5BfEs=', 'public_key': 'cF8WP4zHeA8Fm6TmYMdK6+4VXTQfcVJ1mmC/TBfbQms=', 'pre_shared_key': '3MFZK3Qbrfw9OC+/ECLD8y/rNBPUyYj7rxTeIfMUezw=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '20ba8cbd-6d3c-48ed-a880-bf983760d302', 'name': '10023_free', 'address': '10.8.0.27', 'private_key': 'SITccBLEMwjltbXKHf81JT8f5T7W4xFHzyTYnR0U4kk=', 'public_key': 'oXSpDxx9de1HXD+kPy1SWcMaesIx9p4HvIRmMaIPYxE=', 'pre_shared_key': '7s4RF1p5Op87qzDa7rZOyW+TcxsCyFm/M+PgOqnSCWI=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '56627ec5-eefc-422c-a5b4-fafce25fe082', 'name': '10024_free', 'address': '10.8.0.28', 'private_key': 'yAzbt43WBFwxO1uJ9wxPbdthuAbD5BZTe3pmvx0VuXQ=', 'public_key': 'CL1AUB1C1EBaBLNIpD6v9j3RR79OnDhr1+cN1Oz7HFw=', 'pre_shared_key': '5vF+xgUN7irsYr/9+i+4PvplBaRNv4su5IIkvRcFBUE=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'c71b0d9b-c476-41a5-965f-c785ac2da9fa', 'name': '10025_free', 'address': '10.8.0.29', 'private_key': 'qOEXuqVUFSRJcPRIyFaX4sdmhuSK/rp7riVipprdKFs=', 'public_key': 'N6msB7W/Jp2PJ1wVLL7IFjwqdXLuZsOm29pjKXMQyD8=', 'pre_shared_key': 'WeilfCC19xWql9xeeLm2wmdn9VNZ/ye/gvUje/dT/oM=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '73c666af-95e3-4408-8af9-3a458e2930c6', 'name': '10026_free', 'address': '10.8.0.30', 'private_key': 'YH9idRJ9PZTMa3LHBKe+MwGzbrbLOr9tUEV0VHZp2l8=', 'public_key': 'dvOJh0BTYrR+SPK/BWFAvHLdqsQ3U3dk1EEKLqHvVgg=', 'pre_shared_key': 'X6OPvOBc+7etB45jt73wmAsY768IcbG9qlQskpMY+X8=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'b4f71ec4-ab9e-4417-a3b2-344d9edb0b29', 'name': '10027_free', 'address': '10.8.0.31', 'private_key': 'yHYlUjmM97yiRInPBEpT/PmCqI6VRbXrSMvWWBs74ls=', 'public_key': 'ZmUHmZSCLqRQ+sN64DZFuR6RQXeqSa0CArra4Hy7LQ0=', 'pre_shared_key': 'ivmsmEF8ld0pBLflw7uoL1gSldAMp+lRuc5rfCjDy2A=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '6de3770d-48ea-4e45-a319-fa1b02901a0d', 'name': '10028_free', 'address': '10.8.0.32', 'private_key': 'EC9Vwc0U/884EqHgY0dq069lh2P6cbINABoEz3p2nnc=', 'public_key': 'Zpp3ciDNx4LhLECrPsj1jjSoq819DG8z2Pn0e3+gpzM=', 'pre_shared_key': 'h4baVPWn2TBWQoxlApqqKPSc9hjuBZrLAEz6mkdjBgI=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'c4998aee-3457-401c-9ae8-ab06ac9d1b77', 'name': '10029_free', 'address': '10.8.0.33', 'private_key': 'uHjPIKNzgLyb+Js0yObGu/mqck+opexhwADSEEKbSGI=', 'public_key': 'kMuOXy4Ipw5U6BKnQs65avmrw/GekN72oA6xKmPn/HI=', 'pre_shared_key': 'uVG58JdM00J2PWzMo6eZ567nVkAVgXLD+RstFwsWsCE=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '61a26a05-40c7-474d-ab56-a095ab19006d', 'name': '10030_free', 'address': '10.8.0.34', 'private_key': 'gEub2GMZzN+sV3eqa2ZikMrihgd6L2BeJirTbwXrp1k=', 'public_key': 'zBvjKPjQJ3t01v3muShRIsg4ZToWii2d0KIdPKsgaX0=', 'pre_shared_key': 'ngbgJX4Mhywi55VbjfQoIi0AJZi3nW/ADyGACg11o30=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'c29b0e31-7520-40a2-a447-43fcd65244c2', 'name': '10031_free', 'address': '10.8.0.35', 'private_key': '2D5dzSgky+qhoG9lhJNDCvpVsXDBeREvBFCnr1iRZWg=', 'public_key': 'Zac/oi4zo6+ysLlBshNg3dSwtYHO0iBRYcwcQcaf6Ag=', 'pre_shared_key': '1g/LLn2PeD+D6DLC3xULxxOZbwVYPQv35bPIX0ApB/Y=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '9dfd91b2-0968-4d4d-b378-ac735c14fc53', 'name': '10032_free', 'address': '10.8.0.36', 'private_key': 'UC0dwk6h7zjyuP5eVIJRRC5Sa77YbuZf1h6wPxgMx04=', 'public_key': 'gs9r5qHYMYuzX0gm11Op+5zPWm8483iHe8i4q2zqMU8=', 'pre_shared_key': 'ZUAIbvto/qUaCvY+WtxcApkNjau/1U8VdQs9xbwTTCo=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'e65d0cd1-4a27-4867-a95a-10ff59742513', 'name': '10033_free', 'address': '10.8.0.37', 'private_key': 'CBS0G0brP8dhsRiArxgBMBrJHcsOSCeB8yjvYmGmxlw=', 'public_key': 'q+3fRhIN389zfCXjtE9bvTU31RuSnLg1fkb5lOUNeBs=', 'pre_shared_key': '3gJ793AchNW/Hgd4WkGgj3MbIE4vBfCvY5xqgrWTMzk=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '9108d8d9-410c-4615-aaef-f6a7a41f54e9', 'name': '10034_free', 'address': '10.8.0.38', 'private_key': 'YIwDVt5xn0hkQ9/e37cE5e0oSGeV3902Pu/hKwEZh1k=', 'public_key': 'dI+sTStNj982R2W/UmZVRu7mkTVT+rKzry0MmsS+MiY=', 'pre_shared_key': 'wa8VsxJ99Emi7vyb8WwsQN5Z9m+wjZfXL/UPhgc3n1I=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'a5058d43-d2a1-4ad1-a454-4639146cdd95', 'name': '10035_free', 'address': '10.8.0.39', 'private_key': 'mFROwzE+u2vZCdP2drtahP5M2E9mO3dqB+bu1i3n6Gg=', 'public_key': 'lomp0UZe/ybHNsDffm/ZRFHBSAhrYAeCG7ydITnBChc=', 'pre_shared_key': 'xco94dkIZsCItHvD8KYXGo6v8ane1PHltIaxuRvvMRQ=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '6abb7fc0-fdef-4cfb-ae12-c59be15878e0', 'name': '10036_free', 'address': '10.8.0.40', 'private_key': 'KOxtAdrtNBy1u4NErok2YwTMFrW94O1s+mHCKB/Riko=', 'public_key': 'Ae5LJ/rsBVPXJZnjeRgNyyH1PF1VVKFoedmBtXOFzUc=', 'pre_shared_key': 'eCKmgxdjcsf+3IZMt8Zkuj126emkkIvq9iqv44YBRPA=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '081890a3-eeb5-4208-aa5c-9b1a05ae1e7b', 'name': '10037_free', 'address': '10.8.0.41', 'private_key': 'KP844T4p2UefQg07czP9JXYf2XTTnkMrVyUUTnFvTXQ=', 'public_key': '96RDSmDp58BWpFlAuq5fUBC3fxkCnG7Zye5JsdAVkhU=', 'pre_shared_key': 'X51CfMz4gGQZsaIr2t4O5iR7XWjPQ5QV6ttjLIQK6ig=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '218aca79-db49-4ee7-b654-10a8fcdac14e', 'name': '10038_free', 'address': '10.8.0.42', 'private_key': 'cOpZeZrHHDekG/KlIGKxCKembHM5RFjesecunSvjkXU=', 'public_key': 'TXOzuO8Bf7AwiZra9O4cbzKQLJkckFIUZYgLjxbUsHI=', 'pre_shared_key': 'khowzyt9K/HUFwQWs5mCgNTvLv0Ar2SstaoQ072lHvc=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '0dd1b2b6-c5a0-468a-95a9-cc8e9fdc1621', 'name': '10039_free', 'address': '10.8.0.43', 'private_key': 'oJR/fMzHDImNIM3it1+CAEzigZ/nmM5xjxQAbnOhonc=', 'public_key': 'OWVDkn4RXPy9QZ0gS9jnJAvBBol0ohZng6vN6dJ5Ihc=', 'pre_shared_key': 'WjL5GJNC/RD9ImMHF76LrF3tBlQyiAEXiqFy8cK6HoM=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
+2025-04-04 00:10:31,035 - INFO - ������ ��������� ���������� �������� �������������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 33, 'created_users': [{'user_id': '36b5c6b6-c522-4dd0-b52e-d629cc1e6f0c', 'name': '10007_free', 'address': '10.8.0.11', 'private_key': 'OM4bVcm3aw7Bgh87tnkFP/3ScLpCtcNi8kxgthkOSGA=', 'public_key': 'JqDfFGg31Pb4pTlK32KKj3ff7cgadQdchHr29IeKp1c=', 'pre_shared_key': 'QGJDcTUHjPpHkd0E7NHAVE6WjETNBcU2pTcNzR0OjjE=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'e63b926a-e700-4d61-9bef-bbe7b4b20df3', 'name': '10008_free', 'address': '10.8.0.12', 'private_key': 'wESBDGQSdQBPTMPnxH2XWBmwLWLlUmBM3xRF2vPEokk=', 'public_key': 'piAg/4A0aYlWrB1KSPHuFctzAhWYyox/ppByTXz8Jh0=', 'pre_shared_key': 'MdU1aY9LFz/daVRvQyg+moQx49S+JLygM/OOtE2L1yY=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '6f7cfea7-c2a9-44ce-a32f-4ae54a8b5390', 'name': '10009_free', 'address': '10.8.0.13', 'private_key': 'GJnLlAT4VSENMw7u1iL6lJO6qiESlQzGARRVZQ9hanw=', 'public_key': 'jaSRjG5rqdSdqUHlAqlaQJ/ln8l4/TI8RFWzA6+/mHs=', 'pre_shared_key': 'Qy/fPtRvO/Klzfam1QQuLk/CHQOKjgpJ/kb9UkJGYU4=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'e612d279-be4e-4291-8fc9-aadc23b89c70', 'name': '10010_free', 'address': '10.8.0.14', 'private_key': 'qOGTIt90uiuYNfQYy2+2cWip/E+rXSvNyJpmX+JIsn4=', 'public_key': 'z6OeMTTzfD/iL8jR3Qrf+A/HMFeE76Kg96i3snfCJwU=', 'pre_shared_key': 'zgmIB7Fw9lTyEAsfC9ZeFX20RIwltUbUqP6fp0ddDfQ=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '79686c49-d8d7-4fcb-88eb-8838b69bb07b', 'name': '10011_free', 'address': '10.8.0.15', 'private_key': 'WOt9aQh7aT9GKXoHhlSU9h5Ywf8iTdVTBdT45LlFSlM=', 'public_key': 'ot/pOXTNGY1lHYDmGnEPDKa9x1aV1J93v5Ju/PwxKm4=', 'pre_shared_key': 'rVEHTqC7LZmiRcV1ucM4Q+OltgazdO0+7nTzhM5IGVo=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '107de618-b3ca-4456-9a8f-bdee9b957e16', 'name': '10012_free', 'address': '10.8.0.16', 'private_key': 'gPJw8KBLVMnKS1Mp7DWeLjIVELypNA64Uqc+SsHJJ2w=', 'public_key': 'hPSS9WScYhAdNjRgACIn0uY8PClBiYx4N5su2PScnk0=', 'pre_shared_key': 'tm02CqT5ZMO7AxAGfoX3Y/L22cjyXl6cKu8dm2J4CeM=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '71cfcaa7-1585-4396-a288-672edb66c738', 'name': '10013_free', 'address': '10.8.0.17', 'private_key': 'mOcnbmZZmlnOVOeQrxZt3LLom2hmy36wDf441h/xSmE=', 'public_key': 'vcWYs6H4vsy1gcxa3Nbkp3QSxrB6BOnLCug1CIctEAQ=', 'pre_shared_key': 'YDzKH2YU77FGAvZKPYnQoqfbmyzK7SgU8vGi1xRk4/s=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '701fb7ed-a7d8-4e2b-bc08-93ed704d70b0', 'name': '10014_free', 'address': '10.8.0.18', 'private_key': 'kEnWe8hhtPrKo4hp5bpqtpFlVQSVvVnlK1hilLVqNmU=', 'public_key': 'lB1i0X3WLi6u08EliupyLvUl0vEdoyM8TitgBVsHOi4=', 'pre_shared_key': 'PuHyGkDob1RO2RYHdVHH8vmftOAnJcHkLXj6oiEYmQM=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'e0078a8c-a90b-4946-beb2-5f675161ff2b', 'name': '10015_free', 'address': '10.8.0.19', 'private_key': 'QAru4Gf1g76WN33u6A8a1UUEFOcAor+rVl4YGKjTXWE=', 'public_key': 'LkZDomWuBUiv1dOF46UQ/EDCoke1ELvalZnB/90ALUQ=', 'pre_shared_key': 'B7trvzrCEwzGR+cZODfXByDbH7D1MZR+6qJAwGzXKUo=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '0ee252a9-b51a-411a-b646-aeb44de86c34', 'name': '10016_free', 'address': '10.8.0.20', 'private_key': 'QCvvwMmhanfUjIQsAMSsWOcZ9NlBuagCMmMFhBOzRm8=', 'public_key': 'w+VsHDfCio7YWybPofrtCMKTRU5ycRusML3LapW5Wx8=', 'pre_shared_key': 'K6aBcFBLAz2y7MXfD1hkGwRWMdaN1HX99Z2E9H4MIu8=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'd01172be-25bb-4215-82fc-4c90fb66bb8e', 'name': '10017_free', 'address': '10.8.0.21', 'private_key': 'sAxzUZsTQLQXc8z1t5gbJlhOX52utS7xpvr2HSR2iGg=', 'public_key': 'zcVLjf27/EUrae06ftDbdjt8aJvNuq/ANrvtQVNR2GM=', 'pre_shared_key': 'wvjtRJoIbwwM1DvzTi1/iCOefNf8uL5n22biuChoGRA=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '87551230-ea5d-4c6e-b78d-3327079fa3c6', 'name': '10018_free', 'address': '10.8.0.22', 'private_key': 'cBTfFLjKHoJevSTjiQJONjbX4bi+Lk8DWyDscuQax2Q=', 'public_key': 'bYKrE5ujaPKoOlILiItsKQRogXdmNUnPyYv2QJVKoQQ=', 'pre_shared_key': 'vYirCB0ZZRIdDwL/9+tcM2kboFpr+n4MSrsBTC6Ralk=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'ada66ab4-e203-4e76-99a1-0166cc1b7e87', 'name': '10019_free', 'address': '10.8.0.23', 'private_key': 'cNYJdoRPxwaZSwFyUWD2/pSrm4i68Pq0OjtSMnYQZE0=', 'public_key': 'k4qjbxRkVryUvzgWXLt4vesbpgMqvBw/40vhEw21jCI=', 'pre_shared_key': 'lTNS7quw5evYgJXSJY2nAmED7sLHX7m09L8LyF1GnnY=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'ed32bdd2-f0b7-4ad1-902d-eca07e681415', 'name': '10020_free', 'address': '10.8.0.24', 'private_key': 'aHrAO+O7voot7yZEicIPNhhVmlg9eYplhyrwEZiDHW4=', 'public_key': 'l9EdiOdYBt5TNOc4TH2L+yrugUlfmTfrjk8JNKTY6gw=', 'pre_shared_key': 'nprog8YQmapHtO5Bk0FYd+PMyc9ZSyrj8fowPTrdzBc=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '40055c99-2e30-426e-97af-efff6e85d666', 'name': '10021_free', 'address': '10.8.0.25', 'private_key': 'eJhbeXJspIFb4X8+0AVG4UjTRk7PXfyFuGiA+2CcC1Y=', 'public_key': 'ofM85KtOC3nEov4Qz+UHgiuaNfbrEM6z3UfMN1vqlzU=', 'pre_shared_key': 'hK93ZUOHSgDUFSD4egDR7BlJYETK6ejy+4HS+Em1taA=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'aa292212-024f-48fc-9490-250ef09c0c87', 'name': '10022_free', 'address': '10.8.0.26', 'private_key': 'qBbjkxYi5OwDsLAWQLC754YEZL8kHKod1PMiRh5BfEs=', 'public_key': 'cF8WP4zHeA8Fm6TmYMdK6+4VXTQfcVJ1mmC/TBfbQms=', 'pre_shared_key': '3MFZK3Qbrfw9OC+/ECLD8y/rNBPUyYj7rxTeIfMUezw=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '20ba8cbd-6d3c-48ed-a880-bf983760d302', 'name': '10023_free', 'address': '10.8.0.27', 'private_key': 'SITccBLEMwjltbXKHf81JT8f5T7W4xFHzyTYnR0U4kk=', 'public_key': 'oXSpDxx9de1HXD+kPy1SWcMaesIx9p4HvIRmMaIPYxE=', 'pre_shared_key': '7s4RF1p5Op87qzDa7rZOyW+TcxsCyFm/M+PgOqnSCWI=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '56627ec5-eefc-422c-a5b4-fafce25fe082', 'name': '10024_free', 'address': '10.8.0.28', 'private_key': 'yAzbt43WBFwxO1uJ9wxPbdthuAbD5BZTe3pmvx0VuXQ=', 'public_key': 'CL1AUB1C1EBaBLNIpD6v9j3RR79OnDhr1+cN1Oz7HFw=', 'pre_shared_key': '5vF+xgUN7irsYr/9+i+4PvplBaRNv4su5IIkvRcFBUE=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'c71b0d9b-c476-41a5-965f-c785ac2da9fa', 'name': '10025_free', 'address': '10.8.0.29', 'private_key': 'qOEXuqVUFSRJcPRIyFaX4sdmhuSK/rp7riVipprdKFs=', 'public_key': 'N6msB7W/Jp2PJ1wVLL7IFjwqdXLuZsOm29pjKXMQyD8=', 'pre_shared_key': 'WeilfCC19xWql9xeeLm2wmdn9VNZ/ye/gvUje/dT/oM=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '73c666af-95e3-4408-8af9-3a458e2930c6', 'name': '10026_free', 'address': '10.8.0.30', 'private_key': 'YH9idRJ9PZTMa3LHBKe+MwGzbrbLOr9tUEV0VHZp2l8=', 'public_key': 'dvOJh0BTYrR+SPK/BWFAvHLdqsQ3U3dk1EEKLqHvVgg=', 'pre_shared_key': 'X6OPvOBc+7etB45jt73wmAsY768IcbG9qlQskpMY+X8=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'b4f71ec4-ab9e-4417-a3b2-344d9edb0b29', 'name': '10027_free', 'address': '10.8.0.31', 'private_key': 'yHYlUjmM97yiRInPBEpT/PmCqI6VRbXrSMvWWBs74ls=', 'public_key': 'ZmUHmZSCLqRQ+sN64DZFuR6RQXeqSa0CArra4Hy7LQ0=', 'pre_shared_key': 'ivmsmEF8ld0pBLflw7uoL1gSldAMp+lRuc5rfCjDy2A=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '6de3770d-48ea-4e45-a319-fa1b02901a0d', 'name': '10028_free', 'address': '10.8.0.32', 'private_key': 'EC9Vwc0U/884EqHgY0dq069lh2P6cbINABoEz3p2nnc=', 'public_key': 'Zpp3ciDNx4LhLECrPsj1jjSoq819DG8z2Pn0e3+gpzM=', 'pre_shared_key': 'h4baVPWn2TBWQoxlApqqKPSc9hjuBZrLAEz6mkdjBgI=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'c4998aee-3457-401c-9ae8-ab06ac9d1b77', 'name': '10029_free', 'address': '10.8.0.33', 'private_key': 'uHjPIKNzgLyb+Js0yObGu/mqck+opexhwADSEEKbSGI=', 'public_key': 'kMuOXy4Ipw5U6BKnQs65avmrw/GekN72oA6xKmPn/HI=', 'pre_shared_key': 'uVG58JdM00J2PWzMo6eZ567nVkAVgXLD+RstFwsWsCE=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '61a26a05-40c7-474d-ab56-a095ab19006d', 'name': '10030_free', 'address': '10.8.0.34', 'private_key': 'gEub2GMZzN+sV3eqa2ZikMrihgd6L2BeJirTbwXrp1k=', 'public_key': 'zBvjKPjQJ3t01v3muShRIsg4ZToWii2d0KIdPKsgaX0=', 'pre_shared_key': 'ngbgJX4Mhywi55VbjfQoIi0AJZi3nW/ADyGACg11o30=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'c29b0e31-7520-40a2-a447-43fcd65244c2', 'name': '10031_free', 'address': '10.8.0.35', 'private_key': '2D5dzSgky+qhoG9lhJNDCvpVsXDBeREvBFCnr1iRZWg=', 'public_key': 'Zac/oi4zo6+ysLlBshNg3dSwtYHO0iBRYcwcQcaf6Ag=', 'pre_shared_key': '1g/LLn2PeD+D6DLC3xULxxOZbwVYPQv35bPIX0ApB/Y=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '9dfd91b2-0968-4d4d-b378-ac735c14fc53', 'name': '10032_free', 'address': '10.8.0.36', 'private_key': 'UC0dwk6h7zjyuP5eVIJRRC5Sa77YbuZf1h6wPxgMx04=', 'public_key': 'gs9r5qHYMYuzX0gm11Op+5zPWm8483iHe8i4q2zqMU8=', 'pre_shared_key': 'ZUAIbvto/qUaCvY+WtxcApkNjau/1U8VdQs9xbwTTCo=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'e65d0cd1-4a27-4867-a95a-10ff59742513', 'name': '10033_free', 'address': '10.8.0.37', 'private_key': 'CBS0G0brP8dhsRiArxgBMBrJHcsOSCeB8yjvYmGmxlw=', 'public_key': 'q+3fRhIN389zfCXjtE9bvTU31RuSnLg1fkb5lOUNeBs=', 'pre_shared_key': '3gJ793AchNW/Hgd4WkGgj3MbIE4vBfCvY5xqgrWTMzk=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '9108d8d9-410c-4615-aaef-f6a7a41f54e9', 'name': '10034_free', 'address': '10.8.0.38', 'private_key': 'YIwDVt5xn0hkQ9/e37cE5e0oSGeV3902Pu/hKwEZh1k=', 'public_key': 'dI+sTStNj982R2W/UmZVRu7mkTVT+rKzry0MmsS+MiY=', 'pre_shared_key': 'wa8VsxJ99Emi7vyb8WwsQN5Z9m+wjZfXL/UPhgc3n1I=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': 'a5058d43-d2a1-4ad1-a454-4639146cdd95', 'name': '10035_free', 'address': '10.8.0.39', 'private_key': 'mFROwzE+u2vZCdP2drtahP5M2E9mO3dqB+bu1i3n6Gg=', 'public_key': 'lomp0UZe/ybHNsDffm/ZRFHBSAhrYAeCG7ydITnBChc=', 'pre_shared_key': 'xco94dkIZsCItHvD8KYXGo6v8ane1PHltIaxuRvvMRQ=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '6abb7fc0-fdef-4cfb-ae12-c59be15878e0', 'name': '10036_free', 'address': '10.8.0.40', 'private_key': 'KOxtAdrtNBy1u4NErok2YwTMFrW94O1s+mHCKB/Riko=', 'public_key': 'Ae5LJ/rsBVPXJZnjeRgNyyH1PF1VVKFoedmBtXOFzUc=', 'pre_shared_key': 'eCKmgxdjcsf+3IZMt8Zkuj126emkkIvq9iqv44YBRPA=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '081890a3-eeb5-4208-aa5c-9b1a05ae1e7b', 'name': '10037_free', 'address': '10.8.0.41', 'private_key': 'KP844T4p2UefQg07czP9JXYf2XTTnkMrVyUUTnFvTXQ=', 'public_key': '96RDSmDp58BWpFlAuq5fUBC3fxkCnG7Zye5JsdAVkhU=', 'pre_shared_key': 'X51CfMz4gGQZsaIr2t4O5iR7XWjPQ5QV6ttjLIQK6ig=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '218aca79-db49-4ee7-b654-10a8fcdac14e', 'name': '10038_free', 'address': '10.8.0.42', 'private_key': 'cOpZeZrHHDekG/KlIGKxCKembHM5RFjesecunSvjkXU=', 'public_key': 'TXOzuO8Bf7AwiZra9O4cbzKQLJkckFIUZYgLjxbUsHI=', 'pre_shared_key': 'khowzyt9K/HUFwQWs5mCgNTvLv0Ar2SstaoQ072lHvc=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}, {'user_id': '0dd1b2b6-c5a0-468a-95a9-cc8e9fdc1621', 'name': '10039_free', 'address': '10.8.0.43', 'private_key': 'oJR/fMzHDImNIM3it1+CAEzigZ/nmM5xjxQAbnOhonc=', 'public_key': 'OWVDkn4RXPy9QZ0gS9jnJAvBBol0ohZng6vN6dJ5Ihc=', 'pre_shared_key': 'WjL5GJNC/RD9ImMHF76LrF3tBlQyiAEXiqFy8cK6HoM=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
+2025-04-04 00:10:31,036 - INFO - ��������� ������������: 33
+2025-04-04 00:10:31,088 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10007_free.png
+2025-04-04 00:10:31,128 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10008_free.png
+2025-04-04 00:10:31,167 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10009_free.png
+2025-04-04 00:10:31,207 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10010_free.png
+2025-04-04 00:10:31,248 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10011_free.png
+2025-04-04 00:10:31,289 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10012_free.png
+2025-04-04 00:10:31,331 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10013_free.png
+2025-04-04 00:10:31,372 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10014_free.png
+2025-04-04 00:10:31,411 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10015_free.png
+2025-04-04 00:10:31,451 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10016_free.png
+2025-04-04 00:10:31,492 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10017_free.png
+2025-04-04 00:10:31,534 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10018_free.png
+2025-04-04 00:10:31,575 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10019_free.png
+2025-04-04 00:10:31,615 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10020_free.png
+2025-04-04 00:10:31,656 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10021_free.png
+2025-04-04 00:10:31,697 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10022_free.png
+2025-04-04 00:10:31,738 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10023_free.png
+2025-04-04 00:10:31,781 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10024_free.png
+2025-04-04 00:10:31,821 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10025_free.png
+2025-04-04 00:10:31,860 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10026_free.png
+2025-04-04 00:10:31,901 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10027_free.png
+2025-04-04 00:10:31,943 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10028_free.png
+2025-04-04 00:10:31,983 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10029_free.png
+2025-04-04 00:10:32,023 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10030_free.png
+2025-04-04 00:10:32,062 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10031_free.png
+2025-04-04 00:10:32,103 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10032_free.png
+2025-04-04 00:10:32,144 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10033_free.png
+2025-04-04 00:10:32,184 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10034_free.png
+2025-04-04 00:10:32,223 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10035_free.png
+2025-04-04 00:10:32,263 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10036_free.png
+2025-04-04 00:10:32,303 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10037_free.png
+2025-04-04 00:10:32,344 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10038_free.png
+2025-04-04 00:10:32,384 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10039_free.png
+2025-04-04 00:10:32,891 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user 
+������� ������� 33 ������������� WG. ������: Telegram server says - Bad Request: chat not found
+2025-04-04 00:10:32,891 - INFO - ��������� ���������� � Telegram: ������� ������� 33 ������������� WG
+2025-04-04 00:11:56,126 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-04 00:11:56,126 - INFO - Polling stopped
+2025-04-04 00:12:00,350 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: ��� ����������. ������: Telegram server says - Bad Request: chat not found
+2025-04-04 00:12:00,351 - INFO - ������ �������� ������� ���������.
+2025-04-04 00:12:00,355 - INFO - ���� 'history_key' ��� ����������, ���������� �� ���������.
+2025-04-04 00:12:00,355 - INFO - Start polling
+2025-04-04 00:12:00,356 - INFO - ������ ������������� ������� tasks
+2025-04-04 00:12:00,356 - INFO - �������� ������������� ������� result_task_queue.
+2025-04-04 00:12:00,356 - INFO - ����������� ����������� �������.
+2025-04-04 00:12:00,358 - INFO - ��������� ����������� ['UnsubscribedNotification'] ����� 707.99 �����.
+2025-04-04 00:12:00,424 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-04 00:12:11,422 - INFO - Update id=560853805 is handled. Duration 467 ms by bot id=7718121314
+2025-04-04 00:12:13,165 - INFO - Update id=560853806 is handled. Duration 358 ms by bot id=7718121314
+2025-04-04 00:12:14,130 - INFO - Update id=560853807 is handled. Duration 233 ms by bot id=7718121314
+2025-04-04 00:12:15,046 - INFO - Update id=560853808 is handled. Duration 202 ms by bot id=7718121314
+2025-04-04 00:12:18,175 - INFO - Update id=560853809 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 00:12:19,447 - INFO - Update id=560853810 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 00:12:20,151 - INFO - Update id=560853811 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:12:20,969 - INFO - Update id=560853812 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:12:21,607 - INFO - Update id=560853813 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:12:25,419 - INFO - Update id=560853814 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:12:26,185 - INFO - Update id=560853815 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 00:12:27,240 - INFO - Update id=560853816 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 00:12:28,195 - INFO - Update id=560853817 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 00:12:28,880 - INFO - Update id=560853818 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 00:12:32,744 - INFO - �������� �������� ������������ ��� ��������: 147.45.242.155
+2025-04-04 00:12:33,365 - INFO - ���������� ������: {'task_type': 'creating_user', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> �������: queue_task_Server_tol_test_10000
+2025-04-04 00:12:33,577 - INFO - Update id=560853819 is handled. Duration 921 ms by bot id=7718121314
+2025-04-04 00:12:34,267 - INFO - �������� ������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 1, 'created_users': [{'user_id': 'f9dd051e-9e96-4689-bd3b-825be519eda1', 'name': '10039_free', 'address': '10.8.0.43', 'private_key': 'qKJ9NMHqHTGPj2EL/1RojjHjJwKq2e7lE3xxxybsqEE=', 'public_key': 'ccLz798Q8iBiVYo7ZuQg4KpgNOhYcvxYs1FKUMw8vA0=', 'pre_shared_key': 'yRGVU4cARfxaW3kkfFOnh8A5pFC+nV/FZGAFbGpGcD4=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
+2025-04-04 00:12:34,267 - INFO - ������ ��������� ���������� �������� �������������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 1, 'created_users': [{'user_id': 'f9dd051e-9e96-4689-bd3b-825be519eda1', 'name': '10039_free', 'address': '10.8.0.43', 'private_key': 'qKJ9NMHqHTGPj2EL/1RojjHjJwKq2e7lE3xxxybsqEE=', 'public_key': 'ccLz798Q8iBiVYo7ZuQg4KpgNOhYcvxYs1FKUMw8vA0=', 'pre_shared_key': 'yRGVU4cARfxaW3kkfFOnh8A5pFC+nV/FZGAFbGpGcD4=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
+2025-04-04 00:12:34,267 - INFO - ��������� ������������: 1
+2025-04-04 00:12:34,267 - INFO - ������������ ���������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10039_free.conf
+2025-04-04 00:12:34,318 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10039_free.png
+2025-04-04 00:12:34,885 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user 
+������� ������� 1 ������������� WG. ������: Telegram server says - Bad Request: chat not found
+2025-04-04 00:12:34,885 - INFO - ��������� ���������� � Telegram: ������� ������� 1 ������������� WG
+2025-04-04 00:13:19,345 - INFO - Update id=560853820 is handled. Duration 484 ms by bot id=7718121314
+2025-04-04 00:13:20,757 - INFO - Update id=560853821 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:13:21,912 - INFO - Update id=560853822 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:13:23,104 - INFO - Update id=560853823 is handled. Duration 202 ms by bot id=7718121314
+2025-04-04 00:13:25,641 - INFO - Update id=560853824 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:13:26,192 - INFO - Update id=560853825 is handled. Duration 203 ms by bot id=7718121314
+2025-04-04 00:13:26,713 - INFO - Update id=560853826 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:13:27,428 - INFO - Update id=560853827 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:13:28,034 - INFO - Update id=560853828 is handled. Duration 202 ms by bot id=7718121314
+2025-04-04 00:13:28,580 - INFO - Update id=560853829 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:13:31,892 - INFO - Update id=560853830 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:13:32,933 - INFO - Update id=560853831 is handled. Duration 233 ms by bot id=7718121314
+2025-04-04 00:13:34,071 - INFO - �������� �������� ������������ ��� ��������: 147.45.242.155
+2025-04-04 00:13:34,694 - INFO - ���������� ������: {'task_type': 'creating_user', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> �������: queue_task_Server_tol_test_10000
+2025-04-04 00:13:34,876 - INFO - Update id=560853832 is handled. Duration 905 ms by bot id=7718121314
+2025-04-04 00:13:35,558 - INFO - �������� ������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 0, 'created_users': [], 'action': 'created_batch'}
+2025-04-04 00:13:35,559 - INFO - ������ ��������� ���������� �������� �������������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 0, 'created_users': [], 'action': 'created_batch'}
+2025-04-04 00:13:35,559 - INFO - ��������� ������������: 0
+2025-04-04 00:13:36,098 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user 
+������� ������� 0 ������������� WG. ������: Telegram server says - Bad Request: chat not found
+2025-04-04 00:13:36,098 - INFO - ��������� ���������� � Telegram: ������� ������� 0 ������������� WG
+2025-04-04 00:14:11,903 - INFO - Update id=560853833 is handled. Duration 469 ms by bot id=7718121314
+2025-04-04 00:14:13,416 - INFO - Update id=560853834 is handled. Duration 139 ms by bot id=7718121314
+2025-04-04 00:14:15,561 - INFO - Update id=560853835 is handled. Duration 141 ms by bot id=7718121314
+2025-04-04 00:14:16,610 - INFO - Update id=560853836 is handled. Duration 140 ms by bot id=7718121314
+2025-04-04 00:14:17,258 - INFO - Update id=560853837 is handled. Duration 171 ms by bot id=7718121314
+2025-04-04 00:14:17,865 - INFO - Update id=560853838 is handled. Duration 171 ms by bot id=7718121314
+2025-04-04 00:14:18,497 - INFO - Update id=560853839 is handled. Duration 155 ms by bot id=7718121314
+2025-04-04 00:14:19,085 - INFO - Update id=560853840 is handled. Duration 156 ms by bot id=7718121314
+2025-04-04 00:14:20,065 - INFO - Update id=560853841 is handled. Duration 187 ms by bot id=7718121314
+2025-04-04 00:14:21,096 - INFO - Update id=560853842 is handled. Duration 265 ms by bot id=7718121314
+2025-04-04 00:14:21,947 - INFO - �������� �������� ������������ ��� ��������: 147.45.242.155
+2025-04-04 00:14:22,571 - INFO - ���������� ������: {'task_type': 'creating_user', 'server_ip': '147.45.242.155', 'name_protocol': 'wireguard'} -> �������: queue_task_Server_tol_test_10000
+2025-04-04 00:14:22,821 - INFO - Update id=560853843 is handled. Duration 1094 ms by bot id=7718121314
+2025-04-04 00:14:23,455 - INFO - �������� ������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 1, 'created_users': [{'user_id': '10efa58f-e5f3-4114-84a5-40af4fd8afbc', 'name': '10039_free', 'address': '10.8.0.43', 'private_key': 'OI4hTa/5uZ9VoOjlkoG6BQk0HCiVdsnVnmsPR97GGkQ=', 'public_key': 'z50U3okwAB8o9hNoONf9HYgFydmuXR5ZOWWUGmHiPRw=', 'pre_shared_key': 'EazRaEL8BeuCs2f8UIiAo1BR3O/zrnoey9bc/gPZ/gc=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
+2025-04-04 00:14:23,455 - INFO - ������ ��������� ���������� �������� �������������: {'status': 'success', 'server_id': '147.45.242.155', 'server_name': 'Server_tol_test_10000', 'task_type': 'result_create_user', 'protocol': 'wireguard', 'count_users': 1, 'created_users': [{'user_id': '10efa58f-e5f3-4114-84a5-40af4fd8afbc', 'name': '10039_free', 'address': '10.8.0.43', 'private_key': 'OI4hTa/5uZ9VoOjlkoG6BQk0HCiVdsnVnmsPR97GGkQ=', 'public_key': 'z50U3okwAB8o9hNoONf9HYgFydmuXR5ZOWWUGmHiPRw=', 'pre_shared_key': 'EazRaEL8BeuCs2f8UIiAo1BR3O/zrnoey9bc/gPZ/gc=', 'server_public_key': 'Ipz3RN5toGRrEAk4oN1PSirrfs4uFyNHDazW+YIP0Uw=', 'endpoint': '147.45.242.155:51820', 'dns': '1.1.1.1'}], 'action': 'created_batch'}
+2025-04-04 00:14:23,455 - INFO - ��������� ������������: 1
+2025-04-04 00:14:23,456 - INFO - ������������ ���������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10039_free.conf
+2025-04-04 00:14:23,494 - INFO - QR-��� ������� ��������: D:\Office\telegramBot\PingiVPN\configs\base_configs\10039_free.png
+2025-04-04 00:14:24,010 - ERROR - ������ ��� �������� ��������� ������ � ID 7554798911. ���������: result_creating_user 
+������� ������� 1 ������������� WG. ������: Telegram server says - Bad Request: chat not found
+2025-04-04 00:14:24,010 - INFO - ��������� ���������� � Telegram: ������� ������� 1 ������������� WG
+2025-04-04 00:14:43,945 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-04 00:14:43,945 - INFO - Polling stopped
