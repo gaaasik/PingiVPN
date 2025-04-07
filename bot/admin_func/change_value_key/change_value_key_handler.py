@@ -170,7 +170,7 @@ async def process_wireguard_file(message: Message, state: FSMContext):
     - Вызывает update_key_to_wireguard для обновления ключа."""
 
     try:
-        logging.info("📥 Получен файл конфигурации WireGuard")
+        logging.info("Получен файл конфигурации WireGuard")
 
         data = await state.get_data()
         us: UserCl = data.get("current_user")
@@ -178,20 +178,20 @@ async def process_wireguard_file(message: Message, state: FSMContext):
 
         if not us:
             await message.answer("❌ Ошибка: Не удалось определить пользователя.")
-            logging.error("❌ Ошибка: current_user отсутствует в состоянии.")
+            logging.error("Ошибка: current_user отсутствует в состоянии.")
             return
 
         document: Document = message.document
 
         if not document.file_name.endswith(".conf"):
             await message.answer("❌ Ошибка: загруженный файл должен быть в формате .conf")
-            logging.warning(f"⚠️ Файл {document.file_name} имеет неподдерживаемый формат.")
+            logging.warning(f"Файл {document.file_name} имеет неподдерживаемый формат.")
             return
 
         # Получаем путь к основной папке пользователей из .env
         base_directory = os.getenv("REGISTERED_USERS_DIR")
         if not base_directory:
-            logging.error("❌ Ошибка: Переменная окружения base_directory_user_files_wg не найдена!")
+            logging.error("Ошибка: Переменная окружения base_directory_user_files_wg не найдена!")
             return
 
         # Определяем папку пользователя (ищем или создаем)
@@ -208,7 +208,7 @@ async def process_wireguard_file(message: Message, state: FSMContext):
         if not user_folder:
             user_folder = os.path.join(base_directory, f"{chat_id}_{user_login}")
             os.makedirs(user_folder, exist_ok=True)
-            logging.info(f"📂 Создана папка для пользователя: {user_folder}")
+            logging.info(f"Создана папка для пользователя: {user_folder}")
 
         if await us.active_server.name_protocol.get() == "wireguard":
             await move_in_history_files_wg(us.active_server)
@@ -238,8 +238,8 @@ async def process_wireguard_file(message: Message, state: FSMContext):
                 user_ip = address_match.group(1)
 
         if not server_ip or not user_ip:
-            await message.answer("❌ Ошибка: Не удалось извлечь server_ip или user_ip из файла.")
-            logging.error(f"❌ Ошибка парсинга IP в файле {file_path}")
+            await message.answer("Ошибка: Не удалось извлечь server_ip или user_ip из файла.")
+            logging.error(f"Ошибка парсинга IP в файле {file_path}")
             return
 
         logging.info(f"🔍 Извлечены данные: server_ip={server_ip}, user_ip={user_ip}")
