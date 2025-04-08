@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardBut
 from aiogram.fsm.context import FSMContext
 
 from communication_with_servers.send_type_task import send_creating_user_tasks_for_servers, \
-    send_update_and_reboot_server
+    send_update_and_reboot_server, send_create_xui_inbound
 from models.country_server_data import get_json_country_server_data
 
 router = Router()
@@ -18,6 +18,7 @@ async def get_admin_settings_keyboard():
         [InlineKeyboardButton(text="📋 Вывести все сервера", callback_data="view_all_servers")],
         [InlineKeyboardButton(text="♻️ Регенерация ключей", callback_data="confirm:regenerate_all")],
         [InlineKeyboardButton(text="🔄 Перезагрузка всех серверов", callback_data="confirm:reboot_all")],
+        [InlineKeyboardButton(text="Создать соединение", callback_data="confirm:inbounds")],
         [InlineKeyboardButton(text="🔙 Назад", callback_data="search_user")]
     ])
 
@@ -90,6 +91,8 @@ async def handle_action(callback: CallbackQuery, state: FSMContext):
         await send_update_and_reboot_server(targets)
         keyboard = await get_back_keyboard()
         await callback.message.edit_text(f"✅ Задачи на перезагрузку серверов отправлены.", reply_markup=keyboard)
+
+
         # Тут будет вызов перезагрузки позже
     await callback.answer()
 
@@ -105,7 +108,8 @@ async def confirm_action(callback: CallbackQuery, state: FSMContext):
     ])
     text_map = {
         "regenerate": "♻️ Вы уверены, что хотите запустить регенерацию ключей на <b>все сервера</b>?",
-        "reboot": "🔄 Вы уверены, что хотите перезагрузить <b>все сервера</b>?"
+        "reboot": "🔄 Вы уверены, что хотите перезагрузить <b>все сервера</b>?",
+        "inbounds": "Создать новое соединение?"
     }
     await callback.message.edit_text(text_map.get(action, "❓ Неизвестное действие."), parse_mode="HTML", reply_markup=keyboard)
     await callback.answer()
@@ -122,6 +126,16 @@ async def do_confirmed_action(callback: CallbackQuery):
         # Здесь можно будет вставить реализацию
         await send_update_and_reboot_server()
         result_text = "♻️ Перезагрузка запущена для всех серверов."
+    elif action == "reboot_all":
+        result_text = "✅ reboot_all."
+        await send_update_and_reboot_server()
+        keyboard = await get_back_keyboard()
+        await callback.message.edit_text(f"✅ Задачи на перезагрузку серверов отправлены.", reply_markup=keyboard)
+    elif action == "inbounds":
+        result_text = "✅ inbounds."
+        await send_create_xui_inbound()
+        keyboard = await get_back_keyboard()
+        await callback.message.edit_text(f"✅ Задачи на перезагрузку серверов отправлены.", reply_markup=keyboard)
 
     else:
         result_text = "❌ Неизвестное действие."
