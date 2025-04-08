@@ -154,6 +154,31 @@ class TaskRedis:
         except Exception as e:
             logger.error(f"Ошибка при отправке задачи на сервер {server_ip}: {e}")
 
+    async def send_create_xui_inbound(self, server_ip):
+        """
+        Отправляет задачу 'creating_user' в очередь Redis для указанного сервера.
+
+        :param server_ip: IP-адрес сервера.
+        :param users: Список объектов UserCl, привязанных к серверу.
+        """
+        try:
+            server_name = await get_name_server_by_ip(server_ip)  # Получаем имя сервера
+            queue_name = f"queue_task_{server_name}"  # Формируем имя очереди в Redis
+            name_protocol = await get_protocol_server_by_ip(server_ip)
+            if not name_protocol:
+                logger.error(f"При отправки создания пользоваетелей неизвестен протокол с которым работает сервер!")
+                return
+            task_data = {
+                "task_type": "create_xui_inbound",
+                "server_ip": server_ip,
+                "name_protocol": name_protocol,
+            }
+            await self.redis_client.rpush(queue_name, json.dumps(task_data))  # Отправка задачи в очередь
+            logger.info(f"Отправлена задача: {task_data} -> Очередь: {queue_name}")
+
+        except Exception as e:
+            logger.error(f"Ошибка при отправке задачи на сервер {server_ip}: {e}")
+
 async def send_check_tasks_for_servers():
     """
     Запускает отправку задач 'check_enable_user' для всех серверов в списке `SERVERS_IP`.
@@ -218,4 +243,17 @@ async def send_update_and_reboot_server(server_ips: list[str] = None):
 
     # 🔁 Запускаем отслеживание через 5 минут (300 сек)
     asyncio.create_task(result_module_server.monitor_reboot_timeout(delay_minutes=5))
+    await task_manager.close()
+
+
+async def send_create_xui_inbound():
+    """
+    Отправляет задачи 'creating_user' в Redis для указанных серверов.
+    Если server_ips=None — используется весь список SERVERS_CREATE_USER_TEST.
+    """
+    task_manager = TaskRedis()
+
+    logger.info(f"Запущено create_xui_inbound")
+    await task_manager.send_create_xui_inbound("194.164.216.151")
+    # 🔁 Запускаем отслеживание через 5 минут (300 сек)
     await task_manager.close()
