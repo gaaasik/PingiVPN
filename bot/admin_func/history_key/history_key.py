@@ -64,9 +64,8 @@ async def handle_history_key_show(callback: CallbackQuery, state: FSMContext):
     key_info = await format_history_key(selected_key, index)
     keyboard = await generate_history_keyboard(us.history_key_list, index)
 
-
     await callback.message.edit_text(key_info, reply_markup=keyboard, parse_mode="HTML")
-    await state.update_data(last_message_id=key_info.message_id)
+    await state.update_data(last_message_id=callback.message.message_id)
     await callback.answer()
 
 

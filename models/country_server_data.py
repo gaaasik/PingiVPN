@@ -17,7 +17,8 @@ logging.basicConfig(
     handlers=[
         logging.FileHandler("payments.log"),
         logging.StreamHandler()
-    ]
+    ],
+    encoding="utf-8"
 )
 logger = logging.getLogger(__name__)
 

@@ -494,3 +494,533 @@ ValueError: пїЅпїЅпїЅпїЅпїЅпїЅ country_server_data пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
 2025-04-04 00:14:24,010 - INFO - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ Telegram: пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ WG
 2025-04-04 00:14:43,945 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
 2025-04-04 00:14:43,945 - INFO - Polling stopped
+2025-04-08 20:24:48,029 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-08 20:24:48,030 - INFO - Данные серверов успешно загружены.
+2025-04-08 20:24:48,033 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-08 20:24:48,034 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-08 20:24:48,034 - INFO - Scheduler started
+2025-04-08 20:24:48,038 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-08 20:24:48,039 - INFO - Start polling
+2025-04-08 20:24:48,039 - INFO - Начало прослушивания очереди tasks
+2025-04-08 20:24:48,039 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-08 20:24:48,040 - INFO - Планировщик уведомлений запущен.
+2025-04-08 20:24:48,041 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 935.20 минут.
+2025-04-08 20:24:48,132 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 20:24:49,322 - INFO - Update id=560854233 is handled. Duration 407 ms by bot id=7718121314
+2025-04-08 20:24:50,929 - INFO - Update id=560854234 is handled. Duration 563 ms by bot id=7718121314
+2025-04-08 20:24:51,679 - INFO - Update id=560854235 is handled. Duration 453 ms by bot id=7718121314
+2025-04-08 20:27:04,967 - INFO - Update id=560854236 is handled. Duration 687 ms by bot id=7718121314
+2025-04-08 20:27:06,528 - INFO - Update id=560854237 is handled. Duration 250 ms by bot id=7718121314
+2025-04-08 20:27:07,383 - INFO - Update id=560854238 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 20:27:08,151 - INFO - Запущено create_xui_inbound
+2025-04-08 20:27:08,785 - INFO - Отправлена задача: {'task_type': 'create_xui_inbound', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 20:27:08,785 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 20:27:09,238 - INFO - Update id=560854239 is handled. Duration 1092 ms by bot id=7718121314
+2025-04-08 20:36:11,459 - INFO - Update id=560854240 is handled. Duration 594 ms by bot id=7718121314
+2025-04-08 20:36:12,744 - INFO - Update id=560854241 is handled. Duration 530 ms by bot id=7718121314
+2025-04-08 20:36:13,449 - INFO - Update id=560854242 is handled. Duration 234 ms by bot id=7718121314
+2025-04-08 20:36:14,206 - INFO - Update id=560854243 is handled. Duration 172 ms by bot id=7718121314
+2025-04-08 20:36:14,813 - INFO - Запущено create_xui_inbound
+2025-04-08 20:36:15,457 - INFO - Отправлена задача: {'task_type': 'create_xui_inbound', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 20:36:15,458 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 20:36:15,965 - INFO - Update id=560854244 is handled. Duration 1155 ms by bot id=7718121314
+2025-04-08 20:38:08,684 - INFO - Update id=560854245 is handled. Duration 1063 ms by bot id=7718121314
+2025-04-08 20:38:09,893 - INFO - Update id=560854246 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 20:38:11,194 - INFO - Update id=560854247 is handled. Duration 344 ms by bot id=7718121314
+2025-04-08 20:38:11,607 - INFO - Запущено create_xui_inbound
+2025-04-08 20:38:12,233 - INFO - Отправлена задача: {'task_type': 'create_xui_inbound', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 20:38:12,234 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 20:38:12,752 - INFO - Update id=560854248 is handled. Duration 1156 ms by bot id=7718121314
+2025-04-08 20:46:37,505 - INFO - Update id=560854249 is handled. Duration 641 ms by bot id=7718121314
+2025-04-08 20:46:45,039 - INFO - Update id=560854250 is handled. Duration 405 ms by bot id=7718121314
+2025-04-08 20:46:46,102 - INFO - Update id=560854251 is handled. Duration 171 ms by bot id=7718121314
+2025-04-08 20:46:47,040 - INFO - Update id=560854252 is handled. Duration 172 ms by bot id=7718121314
+2025-04-08 20:46:47,534 - INFO - Запущено create_xui_inbound
+2025-04-08 20:46:48,174 - INFO - Отправлена задача: {'task_type': 'create_xui_inbound', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 20:46:48,174 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 20:46:48,682 - INFO - Update id=560854253 is handled. Duration 1156 ms by bot id=7718121314
+2025-04-08 20:56:53,739 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 21:06:59,296 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 21:17:04,853 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 21:27:10,426 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 21:32:28,017 - INFO - Update id=560854254 is handled. Duration 844 ms by bot id=7718121314
+2025-04-08 21:32:30,376 - INFO - Update id=560854255 is handled. Duration 186 ms by bot id=7718121314
+2025-04-08 21:32:31,426 - INFO - Update id=560854256 is handled. Duration 313 ms by bot id=7718121314
+2025-04-08 21:32:32,001 - INFO - Запущено create_xui_inbound
+2025-04-08 21:32:32,638 - INFO - Отправлена задача: {'task_type': 'create_xui_inbound', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 21:32:32,638 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 21:32:33,023 - INFO - Update id=560854257 is handled. Duration 1032 ms by bot id=7718121314
+2025-04-08 21:37:37,736 - INFO - Update id=560854258 is handled. Duration 577 ms by bot id=7718121314
+2025-04-08 21:37:40,072 - INFO - Update id=560854259 is handled. Duration 204 ms by bot id=7718121314
+2025-04-08 21:37:41,211 - INFO - Update id=560854260 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 21:37:41,856 - INFO - Запущено create_xui_inbound
+2025-04-08 21:37:42,803 - INFO - Отправлена задача: {'task_type': 'create_xui_inbound', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 21:37:42,803 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 21:37:43,243 - INFO - Update id=560854261 is handled. Duration 1390 ms by bot id=7718121314
+2025-04-08 21:38:06,062 - INFO - Update id=560854262 is handled. Duration 813 ms by bot id=7718121314
+2025-04-08 21:38:07,126 - INFO - Update id=560854263 is handled. Duration 155 ms by bot id=7718121314
+2025-04-08 21:38:08,629 - INFO - Update id=560854264 is handled. Duration 452 ms by bot id=7718121314
+2025-04-08 21:38:09,166 - INFO - Запущено create_xui_inbound
+2025-04-08 21:38:09,782 - INFO - Отправлена задача: {'task_type': 'create_xui_inbound', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 21:38:09,783 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 21:38:10,011 - INFO - Update id=560854265 is handled. Duration 844 ms by bot id=7718121314
+2025-04-08 21:42:11,403 - INFO - Update id=560854266 is handled. Duration 562 ms by bot id=7718121314
+2025-04-08 21:42:13,291 - INFO - Update id=560854267 is handled. Duration 233 ms by bot id=7718121314
+2025-04-08 21:42:14,804 - INFO - Update id=560854268 is handled. Duration 219 ms by bot id=7718121314
+2025-04-08 21:42:15,889 - INFO - Update id=560854269 is handled. Duration 312 ms by bot id=7718121314
+2025-04-08 21:42:24,033 - INFO - Запущено create_xui_inbound
+2025-04-08 21:42:24,661 - INFO - Отправлена задача: {'task_type': 'create_xui_inbound', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 21:42:24,661 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 21:42:24,965 - INFO - Update id=560854270 is handled. Duration 937 ms by bot id=7718121314
+2025-04-08 21:49:39,942 - INFO - Update id=560854271 is handled. Duration 687 ms by bot id=7718121314
+2025-04-08 21:49:41,773 - INFO - Update id=560854272 is handled. Duration 265 ms by bot id=7718121314
+2025-04-08 21:49:42,799 - INFO - Update id=560854273 is handled. Duration 281 ms by bot id=7718121314
+2025-04-08 21:49:43,709 - INFO - Update id=560854274 is handled. Duration 234 ms by bot id=7718121314
+2025-04-08 21:49:44,451 - INFO - Запущено create_xui_inbound
+2025-04-08 21:49:45,066 - INFO - Отправлена задача: {'task_type': 'create_xui_inbound', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 21:49:45,067 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 21:49:45,413 - INFO - Update id=560854275 is handled. Duration 967 ms by bot id=7718121314
+2025-04-08 21:54:53,037 - INFO - Update id=560854276 is handled. Duration 562 ms by bot id=7718121314
+2025-04-08 21:54:55,694 - INFO - Update id=560854277 is handled. Duration 407 ms by bot id=7718121314
+2025-04-08 21:54:57,635 - INFO - Update id=560854278 is handled. Duration 156 ms by bot id=7718121314
+2025-04-08 21:54:59,660 - INFO - Update id=560854279 is handled. Duration 155 ms by bot id=7718121314
+2025-04-08 21:55:00,802 - INFO - Update id=560854280 is handled. Duration 172 ms by bot id=7718121314
+2025-04-08 21:55:01,442 - INFO - Update id=560854281 is handled. Duration 172 ms by bot id=7718121314
+2025-04-08 21:55:01,948 - INFO - Update id=560854282 is handled. Duration 219 ms by bot id=7718121314
+2025-04-08 21:55:05,546 - INFO - Update id=560854283 is handled. Duration 187 ms by bot id=7718121314
+2025-04-08 21:55:06,676 - INFO - Update id=560854284 is handled. Duration 172 ms by bot id=7718121314
+2025-04-08 21:55:07,581 - INFO - Update id=560854285 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 21:55:09,090 - INFO - Update id=560854286 is handled. Duration 219 ms by bot id=7718121314
+2025-04-08 21:55:11,256 - INFO - Запущено обновление и перезагрузка для серверов: 194.164.216.151
+2025-04-08 21:55:11,933 - INFO - Отправлена задача: {'task_type': 'creating_user', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 21:55:11,934 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 21:55:12,216 - INFO - Update id=560854287 is handled. Duration 1062 ms by bot id=7718121314
+2025-04-08 21:56:29,645 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 21:56:29,645 - INFO - Polling stopped
+2025-04-08 21:58:19,063 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-08 21:58:19,064 - INFO - Данные серверов успешно загружены.
+2025-04-08 21:58:19,067 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-08 21:58:19,068 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-08 21:58:19,068 - INFO - Scheduler started
+2025-04-08 21:58:19,072 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-08 21:58:19,073 - INFO - Start polling
+2025-04-08 21:58:19,073 - INFO - Начало прослушивания очереди tasks
+2025-04-08 21:58:19,073 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-08 21:58:19,074 - INFO - Планировщик уведомлений запущен.
+2025-04-08 21:58:19,075 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 841.68 минут.
+2025-04-08 21:58:19,155 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 21:58:50,508 - INFO - Update id=560854288 is handled. Duration 469 ms by bot id=7718121314
+2025-04-08 22:01:16,670 - INFO - Получена задача: {'status': 'alive', 'task_type': 'result_update_and_reboot_server', 'server_name': 'Server_39000', 'server_ip': '194.164.216.151'}
+2025-04-08 22:02:45,342 - INFO - Update id=560854289 is handled. Duration 687 ms by bot id=7718121314
+2025-04-08 22:02:47,747 - INFO - Update id=560854290 is handled. Duration 217 ms by bot id=7718121314
+2025-04-08 22:02:49,009 - INFO - Update id=560854291 is handled. Duration 484 ms by bot id=7718121314
+2025-04-08 22:02:50,279 - INFO - Update id=560854292 is handled. Duration 343 ms by bot id=7718121314
+2025-04-08 22:02:51,095 - INFO - Запущено create_xui_inbound
+2025-04-08 22:02:51,735 - INFO - Отправлена задача: {'task_type': 'create_xui_inbound', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 22:02:51,735 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 22:02:52,048 - INFO - Update id=560854293 is handled. Duration 952 ms by bot id=7718121314
+2025-04-08 22:03:30,994 - INFO - Update id=560854294 is handled. Duration 625 ms by bot id=7718121314
+2025-04-08 22:03:32,519 - INFO - Update id=560854295 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 22:03:33,683 - INFO - Update id=560854296 is handled. Duration 172 ms by bot id=7718121314
+2025-04-08 22:03:34,895 - INFO - Update id=560854297 is handled. Duration 312 ms by bot id=7718121314
+2025-04-08 22:03:35,739 - INFO - Update id=560854298 is handled. Duration 342 ms by bot id=7718121314
+2025-04-08 22:03:38,077 - INFO - Update id=560854299 is handled. Duration 204 ms by bot id=7718121314
+2025-04-08 22:03:39,087 - INFO - Update id=560854300 is handled. Duration 172 ms by bot id=7718121314
+2025-04-08 22:03:40,186 - INFO - Update id=560854301 is handled. Duration 156 ms by bot id=7718121314
+2025-04-08 22:03:43,919 - INFO - Update id=560854302 is handled. Duration 155 ms by bot id=7718121314
+2025-04-08 22:03:45,202 - INFO - Update id=560854303 is handled. Duration 204 ms by bot id=7718121314
+2025-04-08 22:03:46,434 - INFO - Запущено обновление и перезагрузка для серверов: 194.164.216.151
+2025-04-08 22:03:47,055 - INFO - Отправлена задача: {'task_type': 'creating_user', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 22:03:47,056 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 22:03:47,204 - INFO - Update id=560854304 is handled. Duration 859 ms by bot id=7718121314
+2025-04-08 22:07:09,037 - INFO - Update id=560854305 is handled. Duration 672 ms by bot id=7718121314
+2025-04-08 22:07:11,675 - INFO - Update id=560854306 is handled. Duration 250 ms by bot id=7718121314
+2025-04-08 22:07:12,879 - INFO - Update id=560854307 is handled. Duration 250 ms by bot id=7718121314
+2025-04-08 22:07:14,403 - INFO - Update id=560854308 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 22:07:15,135 - INFO - Update id=560854309 is handled. Duration 250 ms by bot id=7718121314
+2025-04-08 22:07:15,804 - INFO - Update id=560854310 is handled. Duration 266 ms by bot id=7718121314
+2025-04-08 22:07:19,552 - INFO - Update id=560854311 is handled. Duration 219 ms by bot id=7718121314
+2025-04-08 22:07:23,245 - INFO - Update id=560854312 is handled. Duration 217 ms by bot id=7718121314
+2025-04-08 22:07:24,307 - INFO - Update id=560854313 is handled. Duration 484 ms by bot id=7718121314
+2025-04-08 22:07:25,051 - INFO - Update id=560854314 is handled. Duration 250 ms by bot id=7718121314
+2025-04-08 22:07:26,143 - INFO - Запущено обновление и перезагрузка для серверов: 194.164.216.151
+2025-04-08 22:07:26,785 - INFO - Отправлена задача: {'task_type': 'creating_user', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 22:07:26,785 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 22:07:27,001 - INFO - Update id=560854315 is handled. Duration 967 ms by bot id=7718121314
+2025-04-08 22:17:32,345 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 22:27:37,903 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 22:37:43,462 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 22:47:49,004 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 22:51:38,696 - INFO - Update id=560854316 is handled. Duration 484 ms by bot id=7718121314
+2025-04-08 22:51:41,802 - INFO - Update id=560854317 is handled. Duration 516 ms by bot id=7718121314
+2025-04-08 22:51:43,999 - INFO - Update id=560854318 is handled. Duration 186 ms by bot id=7718121314
+2025-04-08 22:51:45,386 - INFO - Запущено create_xui_inbound
+2025-04-08 22:51:46,376 - INFO - Отправлена задача: {'task_type': 'create_xui_inbound', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 22:51:46,376 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 22:51:46,597 - INFO - Update id=560854319 is handled. Duration 1218 ms by bot id=7718121314
+2025-04-08 22:52:25,315 - INFO - Update id=560854320 is handled. Duration 704 ms by bot id=7718121314
+2025-04-08 22:52:26,410 - INFO - Update id=560854321 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 22:52:27,253 - INFO - Update id=560854322 is handled. Duration 281 ms by bot id=7718121314
+2025-04-08 22:52:27,854 - INFO - Запущено create_xui_inbound
+2025-04-08 22:52:28,465 - INFO - Отправлена задача: {'task_type': 'create_xui_inbound', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 22:52:28,465 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 22:52:29,228 - INFO - Update id=560854323 is handled. Duration 1375 ms by bot id=7718121314
+2025-04-08 22:52:42,135 - INFO - Update id=560854324 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 22:52:43,532 - INFO - Update id=560854325 is handled. Duration 187 ms by bot id=7718121314
+2025-04-08 22:52:44,827 - INFO - Update id=560854326 is handled. Duration 204 ms by bot id=7718121314
+2025-04-08 22:52:45,928 - INFO - Update id=560854327 is handled. Duration 203 ms by bot id=7718121314
+2025-04-08 22:52:46,583 - INFO - Update id=560854328 is handled. Duration 234 ms by bot id=7718121314
+2025-04-08 22:52:47,155 - INFO - Update id=560854329 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 22:52:50,782 - INFO - Update id=560854330 is handled. Duration 187 ms by bot id=7718121314
+2025-04-08 22:52:51,488 - INFO - Update id=560854331 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 22:52:52,365 - INFO - Update id=560854332 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 22:52:53,767 - INFO - Update id=560854333 is handled. Duration 266 ms by bot id=7718121314
+2025-04-08 22:52:57,253 - INFO - Запущено обновление и перезагрузка для серверов: 194.164.216.151
+2025-04-08 22:52:57,872 - INFO - Отправлена задача: {'task_type': 'creating_user', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 22:52:57,872 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 22:52:57,996 - INFO - Update id=560854334 is not handled. Duration 952 ms by bot id=7718121314
+2025-04-08 22:52:57,997 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 22:52:57,997 - INFO - Polling stopped
+2025-04-08 22:52:58,939 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот завершил работу и пошел отдыхать. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-08 22:58:08,520 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-08 22:58:08,521 - INFO - Данные серверов успешно загружены.
+2025-04-08 22:58:08,523 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-08 22:58:08,524 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-08 22:58:08,524 - INFO - Scheduler started
+2025-04-08 22:58:08,528 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-08 22:58:08,529 - INFO - Start polling
+2025-04-08 22:58:08,529 - INFO - Начало прослушивания очереди tasks
+2025-04-08 22:58:08,529 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-08 22:58:08,529 - INFO - Планировщик уведомлений запущен.
+2025-04-08 22:58:08,531 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 781.86 минут.
+2025-04-08 22:58:08,600 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 22:58:09,153 - INFO - Получена задача: {'status': 'alive', 'task_type': 'result_update_and_reboot_server', 'server_name': 'Server_39000', 'server_ip': '194.164.216.151'}
+2025-04-08 22:59:52,418 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 22:59:52,418 - INFO - Polling stopped
+2025-04-08 22:59:56,495 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-08 22:59:56,495 - INFO - Данные серверов успешно загружены.
+2025-04-08 22:59:56,498 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-08 22:59:56,498 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-08 22:59:56,498 - INFO - Scheduler started
+2025-04-08 22:59:56,503 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-08 22:59:56,503 - INFO - Start polling
+2025-04-08 22:59:56,504 - INFO - Начало прослушивания очереди tasks
+2025-04-08 22:59:56,504 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-08 22:59:56,504 - INFO - Планировщик уведомлений запущен.
+2025-04-08 22:59:56,506 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 780.06 минут.
+2025-04-08 22:59:56,585 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 23:00:24,086 - INFO - Update id=560854335 is handled. Duration 530 ms by bot id=7718121314
+2025-04-08 23:00:25,617 - INFO - Update id=560854336 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 23:00:27,178 - INFO - Update id=560854337 is handled. Duration 188 ms by bot id=7718121314
+2025-04-08 23:00:27,756 - INFO - Запущено create_xui_inbound
+2025-04-08 23:00:28,621 - INFO - Отправлена задача: {'task_type': 'create_xui_inbound', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 23:00:28,622 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 23:00:28,928 - INFO - Update id=560854338 is handled. Duration 1188 ms by bot id=7718121314
+2025-04-08 23:00:59,369 - INFO - Update id=560854339 is handled. Duration 561 ms by bot id=7718121314
+2025-04-08 23:01:00,867 - INFO - Update id=560854340 is handled. Duration 217 ms by bot id=7718121314
+2025-04-08 23:01:03,747 - INFO - Update id=560854341 is handled. Duration 295 ms by bot id=7718121314
+2025-04-08 23:01:05,174 - INFO - Update id=560854342 is handled. Duration 266 ms by bot id=7718121314
+2025-04-08 23:01:05,774 - INFO - Update id=560854343 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 23:01:06,234 - INFO - Update id=560854344 is handled. Duration 155 ms by bot id=7718121314
+2025-04-08 23:01:06,982 - INFO - Update id=560854345 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 23:01:07,715 - INFO - Update id=560854346 is handled. Duration 280 ms by bot id=7718121314
+2025-04-08 23:01:08,810 - INFO - Update id=560854347 is handled. Duration 250 ms by bot id=7718121314
+2025-04-08 23:01:10,060 - INFO - Update id=560854348 is handled. Duration 172 ms by bot id=7718121314
+2025-04-08 23:01:14,033 - INFO - Запущено обновление и перезагрузка для серверов: 194.164.216.151
+2025-04-08 23:01:14,674 - INFO - Отправлена задача: {'task_type': 'creating_user', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 23:01:14,675 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 23:01:14,830 - INFO - Update id=560854349 is handled. Duration 890 ms by bot id=7718121314
+2025-04-08 23:01:47,436 - INFO - Update id=560854350 is handled. Duration 547 ms by bot id=7718121314
+2025-04-08 23:01:49,004 - INFO - Update id=560854351 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 23:01:50,720 - INFO - Update id=560854352 is handled. Duration 187 ms by bot id=7718121314
+2025-04-08 23:01:51,836 - INFO - Update id=560854353 is handled. Duration 187 ms by bot id=7718121314
+2025-04-08 23:02:00,364 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: 1388513042 Начал читать историю про пингвина. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-08 23:02:00,595 - INFO - Update id=560854354 is handled. Duration 734 ms by bot id=7718121314
+2025-04-08 23:02:02,537 - INFO - Update id=560854355 is handled. Duration 217 ms by bot id=7718121314
+2025-04-08 23:02:03,896 - INFO - Update id=560854356 is handled. Duration 452 ms by bot id=7718121314
+2025-04-08 23:02:04,553 - INFO - Update id=560854357 is handled. Duration 391 ms by bot id=7718121314
+2025-04-08 23:02:07,034 - INFO - Update id=560854358 is handled. Duration 358 ms by bot id=7718121314
+2025-04-08 23:02:14,875 - INFO - Формируется очередь: queue_task_Server_tol_test_10000
+2025-04-08 23:02:15,511 - INFO - Задача добавлена в очередь queue_task_Server_tol_test_10000: {'task_type': 'change_enable_user', 'name_protocol': 'wireguard', 'chat_id': 1388513042, 'server_ip': '147.45.242.155', 'user_ip': '10.8.0.21', 'uuid_value': '0', 'enable': False}
+2025-04-08 23:02:16,153 - INFO - Update id=560854359 is handled. Duration 1282 ms by bot id=7718121314
+2025-04-08 23:02:21,955 - INFO - Update id=560854360 is handled. Duration 500 ms by bot id=7718121314
+2025-04-08 23:02:23,384 - INFO - Зашли в history_key_show_
+2025-04-08 23:02:23,522 - INFO - Update id=560854361 is not handled. Duration 140 ms by bot id=7718121314
+2025-04-08 23:02:23,523 - ERROR - Cause exception while process update id=560854361 by bot id=7718121314
+AttributeError: 'str' object has no attribute 'message_id'
+Traceback (most recent call last):
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "D:\Office\telegramBot\PingiVPN\bot\admin_func\history_key\history_key.py", line 69, in handle_history_key_show
+    await state.update_data(last_message_id=key_info.message_id)
+AttributeError: 'str' object has no attribute 'message_id'
+2025-04-08 23:02:25,260 - INFO - Зашли в history_key_show_
+2025-04-08 23:02:25,366 - INFO - Update id=560854362 is not handled. Duration 108 ms by bot id=7718121314
+2025-04-08 23:02:25,366 - ERROR - Cause exception while process update id=560854362 by bot id=7718121314
+AttributeError: 'str' object has no attribute 'message_id'
+Traceback (most recent call last):
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 308, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 157, in feed_update
+    response = await self.update.wrap_outer_middleware(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 27, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\fsm\middleware.py", line 41, in __call__
+    return await handler(event, data)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\dispatcher.py", line 275, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 144, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 116, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 111, in _wrapped
+    return await self._propagate_event(
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\router.py", line 136, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\telegram.py", line 120, in trigger
+    return await wrapped_inner(event, kwargs)
+  File "D:\Office\telegramBot\PingiVPN\.venv\lib\site-packages\aiogram\dispatcher\event\handler.py", line 42, in call
+    return await wrapped()
+  File "D:\Office\telegramBot\PingiVPN\bot\admin_func\history_key\history_key.py", line 69, in handle_history_key_show
+    await state.update_data(last_message_id=key_info.message_id)
+AttributeError: 'str' object has no attribute 'message_id'
+2025-04-08 23:07:25,223 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 23:07:25,223 - INFO - Polling stopped
+2025-04-08 23:07:29,202 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-08 23:07:29,203 - INFO - Данные серверов успешно загружены.
+2025-04-08 23:07:29,206 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-08 23:07:29,207 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-08 23:07:29,207 - INFO - Scheduler started
+2025-04-08 23:07:29,212 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-08 23:07:29,212 - INFO - Start polling
+2025-04-08 23:07:29,212 - INFO - Начало прослушивания очереди tasks
+2025-04-08 23:07:29,212 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-08 23:07:29,213 - INFO - Планировщик уведомлений запущен.
+2025-04-08 23:07:29,214 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 772.51 минут.
+2025-04-08 23:07:29,300 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 23:07:35,335 - INFO - Update id=560854363 is handled. Duration 484 ms by bot id=7718121314
+2025-04-08 23:07:36,756 - INFO - Update id=560854364 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 23:07:37,612 - INFO - Update id=560854365 is handled. Duration 327 ms by bot id=7718121314
+2025-04-08 23:07:40,611 - INFO - Update id=560854366 is handled. Duration 343 ms by bot id=7718121314
+2025-04-08 23:07:42,518 - INFO - Зашли в history_key_show_
+2025-04-08 23:07:42,806 - INFO - Update id=560854367 is handled. Duration 297 ms by bot id=7718121314
+2025-04-08 23:07:45,414 - INFO - Зашли в history_key_show_
+2025-04-08 23:07:45,617 - INFO - Update id=560854368 is handled. Duration 217 ms by bot id=7718121314
+2025-04-08 23:07:49,338 - INFO - Зашли в history_key_show_
+2025-04-08 23:07:49,563 - INFO - Update id=560854369 is handled. Duration 219 ms by bot id=7718121314
+2025-04-08 23:07:51,181 - INFO - Запуск change_active_server_
+2025-04-08 23:07:51,195 - ERROR - у пользователя 1388513042 нету active_server
+2025-04-08 23:07:51,200 - INFO - Из history_key_list удален выбранный ключ и добавлен старый ключ
+2025-04-08 23:07:51,204 - INFO - Обновил базу данных 
+2025-04-08 23:07:51,204 - INFO - Формируется очередь: queue_task_Server_tol_test_3x_ui_10000
+2025-04-08 23:07:52,157 - INFO - Задача добавлена в очередь queue_task_Server_tol_test_3x_ui_10000: {'task_type': 'change_enable_user', 'name_protocol': 'vless', 'chat_id': 1388513042, 'server_ip': '194.87.208.18', 'user_ip': '', 'uuid_value': '457ea164-9c78-4f0d-aade-884686484031', 'enable': True}
+2025-04-08 23:07:52,158 - INFO - Формируется очередь: queue_task_Server_tol_test_10000
+2025-04-08 23:07:52,165 - INFO - Получена задача: {'status': 'success', 'task_type': 'result_change_enable_user', 'chat_id': 1388513042, 'protocol': 'vless', 'enable': True, 'traffic': {'transfer_received': '0', 'transfer_sent': '0'}, 'uuid_value': '457ea164-9c78-4f0d-aade-884686484031', 'action': 'enabled'}
+2025-04-08 23:07:52,173 - INFO - enable Изменилось в value_key в базе данных enable=True
+2025-04-08 23:07:52,173 - INFO - Успешно обновлен enable для активного ключа 457ea164-9c78-4f0d-aade-884686484031
+2025-04-08 23:07:52,207 - INFO - Задача добавлена в очередь queue_task_Server_tol_test_10000: {'task_type': 'change_enable_user', 'name_protocol': 'wireguard', 'chat_id': 1388513042, 'server_ip': '147.45.242.155', 'user_ip': '10.8.0.21', 'uuid_value': '0', 'enable': False}
+2025-04-08 23:07:52,207 - INFO - Отключил old_key, включил new_key
+2025-04-08 23:07:52,215 - INFO - Файл D:\Office\telegramBot\PingiVPN\configs\registered_user\1388513042_tolsemenov\PingiVPN.conf прошел проверку: server_ip и user_ip совпадают.
+2025-04-08 23:07:52,216 - INFO - Файл D:\Office\telegramBot\PingiVPN\configs\registered_user\1388513042_tolsemenov\PingiVPN.conf перемещен в D:\Office\telegramBot\PingiVPN\configs\registered_user\1388513042_tolsemenov\history_key\147_45_242_155-10_8_0_21.conf
+2025-04-08 23:07:52,216 - INFO - Файл D:\Office\telegramBot\PingiVPN\configs\registered_user\1388513042_tolsemenov\PingiVPN.png перемещен в D:\Office\telegramBot\PingiVPN\configs\registered_user\1388513042_tolsemenov\history_key\147_45_242_155-10_8_0_21.png
+2025-04-08 23:07:54,198 - INFO - Update id=560854370 is handled. Duration 3140 ms by bot id=7718121314
+2025-04-08 23:12:32,443 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 23:12:32,443 - INFO - Polling stopped
+2025-04-08 23:12:36,288 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-08 23:12:36,288 - INFO - Данные серверов успешно загружены.
+2025-04-08 23:12:36,297 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-08 23:12:36,298 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-08 23:12:36,298 - INFO - Scheduler started
+2025-04-08 23:12:36,302 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-08 23:12:36,304 - INFO - Start polling
+2025-04-08 23:12:36,304 - INFO - Начало прослушивания очереди tasks
+2025-04-08 23:12:36,304 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-08 23:12:36,305 - INFO - Планировщик уведомлений запущен.
+2025-04-08 23:12:36,306 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 767.39 минут.
+2025-04-08 23:12:36,378 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 23:12:45,984 - INFO - Update id=560854371 is handled. Duration 390 ms by bot id=7718121314
+2025-04-08 23:12:47,190 - INFO - Update id=560854372 is handled. Duration 204 ms by bot id=7718121314
+2025-04-08 23:12:48,507 - INFO - Update id=560854373 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 23:12:50,852 - INFO - Update id=560854374 is handled. Duration 312 ms by bot id=7718121314
+2025-04-08 23:12:52,546 - INFO - Формируется очередь: queue_task_Server_tol_test_3x_ui_10000
+2025-04-08 23:12:53,211 - INFO - Задача добавлена в очередь queue_task_Server_tol_test_3x_ui_10000: {'task_type': 'change_enable_user', 'name_protocol': 'vless', 'chat_id': 1388513042, 'server_ip': '194.87.208.18', 'user_ip': '', 'uuid_value': '457ea164-9c78-4f0d-aade-884686484031', 'enable': False}
+2025-04-08 23:12:53,216 - INFO - Получена задача: {'status': 'success', 'task_type': 'result_change_enable_user', 'chat_id': 1388513042, 'protocol': 'vless', 'enable': False, 'traffic': {'transfer_received': '0', 'transfer_sent': '0'}, 'uuid_value': '457ea164-9c78-4f0d-aade-884686484031', 'action': 'disabled'}
+2025-04-08 23:12:53,225 - INFO - enable Изменилось в value_key в базе данных enable=False
+2025-04-08 23:12:53,225 - INFO - Успешно обновлен enable для активного ключа 457ea164-9c78-4f0d-aade-884686484031
+2025-04-08 23:12:53,602 - INFO - Update id=560854375 is handled. Duration 1062 ms by bot id=7718121314
+2025-04-08 23:14:37,023 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 23:14:37,023 - INFO - Polling stopped
+2025-04-08 23:14:40,740 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-08 23:14:40,741 - INFO - Данные серверов успешно загружены.
+2025-04-08 23:14:40,743 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-08 23:14:40,744 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-08 23:14:40,744 - INFO - Scheduler started
+2025-04-08 23:14:40,749 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-08 23:14:40,750 - INFO - Start polling
+2025-04-08 23:14:40,750 - INFO - Начало прослушивания очереди tasks
+2025-04-08 23:14:40,750 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-08 23:14:40,751 - INFO - Планировщик уведомлений запущен.
+2025-04-08 23:14:40,752 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 765.32 минут.
+2025-04-08 23:14:40,818 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 23:14:45,244 - INFO - Update id=560854376 is handled. Duration 358 ms by bot id=7718121314
+2025-04-08 23:14:46,229 - INFO - Update id=560854377 is handled. Duration 234 ms by bot id=7718121314
+2025-04-08 23:14:47,085 - INFO - Update id=560854378 is handled. Duration 155 ms by bot id=7718121314
+2025-04-08 23:14:49,962 - INFO - Update id=560854379 is handled. Duration 469 ms by bot id=7718121314
+2025-04-08 23:14:52,169 - INFO - Формируется очередь: queue_task_Server_tol_test_3x_ui_10000
+2025-04-08 23:14:52,810 - INFO - Задача добавлена в очередь queue_task_Server_tol_test_3x_ui_10000: {'task_type': 'change_enable_user', 'name_protocol': 'vless', 'chat_id': 1388513042, 'server_ip': '194.87.208.18', 'user_ip': '', 'uuid_value': '457ea164-9c78-4f0d-aade-884686484031', 'enable': True}
+2025-04-08 23:14:52,818 - INFO - Получена задача: {'status': 'success', 'task_type': 'result_change_enable_user', 'chat_id': 1388513042, 'protocol': 'vless', 'enable': True, 'traffic': {'transfer_received': '0', 'transfer_sent': '0'}, 'uuid_value': '457ea164-9c78-4f0d-aade-884686484031', 'action': 'enabled'}
+2025-04-08 23:14:52,827 - INFO - enable Изменилось в value_key в базе данных enable=True
+2025-04-08 23:14:52,827 - INFO - Успешно обновлен enable для активного ключа 457ea164-9c78-4f0d-aade-884686484031
+2025-04-08 23:14:53,015 - INFO - Update id=560854380 is handled. Duration 844 ms by bot id=7718121314
+2025-04-08 23:15:35,831 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 23:15:35,831 - INFO - Polling stopped
+2025-04-08 23:15:39,826 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-08 23:15:39,826 - INFO - Данные серверов успешно загружены.
+2025-04-08 23:15:39,829 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-08 23:15:39,830 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-08 23:15:39,830 - INFO - Scheduler started
+2025-04-08 23:15:39,835 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-08 23:15:39,836 - INFO - Start polling
+2025-04-08 23:15:39,836 - INFO - Начало прослушивания очереди tasks
+2025-04-08 23:15:39,836 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-08 23:15:39,836 - INFO - Планировщик уведомлений запущен.
+2025-04-08 23:15:39,838 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 764.34 минут.
+2025-04-08 23:15:39,911 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 23:15:45,757 - INFO - Update id=560854381 is handled. Duration 452 ms by bot id=7718121314
+2025-04-08 23:15:46,688 - INFO - Update id=560854382 is handled. Duration 219 ms by bot id=7718121314
+2025-04-08 23:15:47,412 - INFO - Update id=560854383 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 23:15:49,894 - INFO - Update id=560854384 is handled. Duration 327 ms by bot id=7718121314
+2025-04-08 23:15:54,286 - INFO - Формируется очередь: queue_task_Server_tol_test_3x_ui_10000
+2025-04-08 23:15:54,925 - INFO - Получена задача: {'status': 'success', 'task_type': 'result_change_enable_user', 'chat_id': 1388513042, 'protocol': 'vless', 'enable': True, 'traffic': {'transfer_received': '0', 'transfer_sent': '0'}, 'uuid_value': '457ea164-9c78-4f0d-aade-884686484031', 'action': 'enabled'}
+2025-04-08 23:15:54,927 - INFO - Задача добавлена в очередь queue_task_Server_tol_test_3x_ui_10000: {'task_type': 'change_enable_user', 'name_protocol': 'vless', 'chat_id': 1388513042, 'server_ip': '194.87.208.18', 'user_ip': '', 'uuid_value': '457ea164-9c78-4f0d-aade-884686484031', 'enable': True}
+2025-04-08 23:15:54,932 - INFO - enable Изменилось в value_key в базе данных enable=True
+2025-04-08 23:15:54,932 - INFO - Успешно обновлен enable для активного ключа 457ea164-9c78-4f0d-aade-884686484031
+2025-04-08 23:15:55,115 - INFO - Update id=560854385 is handled. Duration 842 ms by bot id=7718121314
+2025-04-08 23:19:23,423 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 23:19:23,423 - INFO - Polling stopped
+2025-04-08 23:19:27,577 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-08 23:19:27,577 - INFO - Данные серверов успешно загружены.
+2025-04-08 23:19:27,581 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-08 23:19:27,581 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-08 23:19:27,581 - INFO - Scheduler started
+2025-04-08 23:19:27,585 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-08 23:19:27,585 - INFO - Start polling
+2025-04-08 23:19:27,585 - INFO - Начало прослушивания очереди tasks
+2025-04-08 23:19:27,586 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-08 23:19:27,586 - INFO - Планировщик уведомлений запущен.
+2025-04-08 23:19:27,590 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 760.54 минут.
+2025-04-08 23:19:27,656 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 23:19:29,188 - INFO - Update id=560854386 is handled. Duration 344 ms by bot id=7718121314
+2025-04-08 23:19:33,150 - INFO - Update id=560854387 is handled. Duration 172 ms by bot id=7718121314
+2025-04-08 23:19:34,017 - INFO - Update id=560854388 is handled. Duration 156 ms by bot id=7718121314
+2025-04-08 23:19:36,953 - INFO - Update id=560854389 is handled. Duration 250 ms by bot id=7718121314
+2025-04-08 23:19:38,921 - INFO - Формируется очередь: queue_task_Server_tol_test_3x_ui_10000
+2025-04-08 23:19:39,548 - INFO - Задача добавлена в очередь queue_task_Server_tol_test_3x_ui_10000: {'task_type': 'change_enable_user', 'name_protocol': 'vless', 'chat_id': 1388513042, 'server_ip': '194.87.208.18', 'user_ip': '', 'uuid_value': '457ea164-9c78-4f0d-aade-884686484031', 'enable': False}
+2025-04-08 23:19:39,553 - INFO - Получена задача: {'status': 'success', 'task_type': 'result_change_enable_user', 'chat_id': 1388513042, 'protocol': 'vless', 'enable': False, 'traffic': {'transfer_received': '0', 'transfer_sent': '0'}, 'uuid_value': '457ea164-9c78-4f0d-aade-884686484031', 'action': 'disabled'}
+2025-04-08 23:19:39,561 - INFO - enable Изменилось в value_key в базе данных enable=False
+2025-04-08 23:19:39,561 - INFO - Успешно обновлен enable для активного ключа 457ea164-9c78-4f0d-aade-884686484031
+2025-04-08 23:19:39,843 - INFO - Update id=560854390 is handled. Duration 922 ms by bot id=7718121314
+2025-04-08 23:20:05,623 - INFO - Формируется очередь: queue_task_Server_tol_test_3x_ui_10000
+2025-04-08 23:20:05,673 - INFO - Получена задача: {'status': 'success', 'task_type': 'result_change_enable_user', 'chat_id': 1388513042, 'protocol': 'vless', 'enable': True, 'traffic': {'transfer_received': '0', 'transfer_sent': '0'}, 'uuid_value': '457ea164-9c78-4f0d-aade-884686484031', 'action': 'enabled'}
+2025-04-08 23:20:05,674 - INFO - Задача добавлена в очередь queue_task_Server_tol_test_3x_ui_10000: {'task_type': 'change_enable_user', 'name_protocol': 'vless', 'chat_id': 1388513042, 'server_ip': '194.87.208.18', 'user_ip': '', 'uuid_value': '457ea164-9c78-4f0d-aade-884686484031', 'enable': True}
+2025-04-08 23:20:05,682 - INFO - enable Изменилось в value_key в базе данных enable=True
+2025-04-08 23:20:05,682 - INFO - Успешно обновлен enable для активного ключа 457ea164-9c78-4f0d-aade-884686484031
+2025-04-08 23:20:06,408 - INFO - Update id=560854391 is handled. Duration 797 ms by bot id=7718121314
+2025-04-08 23:20:09,229 - INFO - Update id=560854392 is handled. Duration 187 ms by bot id=7718121314
+2025-04-08 23:21:21,935 - INFO - Update id=560854393 is handled. Duration 813 ms by bot id=7718121314
+2025-04-08 23:21:23,376 - INFO - Update id=560854394 is handled. Duration 233 ms by bot id=7718121314
+2025-04-08 23:21:24,680 - INFO - Update id=560854395 is handled. Duration 250 ms by bot id=7718121314
+2025-04-08 23:21:25,217 - INFO - Update id=560854396 is handled. Duration 187 ms by bot id=7718121314
+2025-04-08 23:21:25,913 - INFO - Update id=560854397 is handled. Duration 280 ms by bot id=7718121314
+2025-04-08 23:21:26,373 - INFO - Update id=560854398 is handled. Duration 186 ms by bot id=7718121314
+2025-04-08 23:21:27,420 - INFO - Update id=560854399 is handled. Duration 233 ms by bot id=7718121314
+2025-04-08 23:21:29,187 - INFO - Update id=560854400 is handled. Duration 250 ms by bot id=7718121314
+2025-04-08 23:21:30,378 - INFO - Update id=560854401 is handled. Duration 297 ms by bot id=7718121314
+2025-04-08 23:21:31,193 - INFO - Запущено обновление и перезагрузка для серверов: 194.164.216.151
+2025-04-08 23:21:31,244 - INFO - Отправлена задача: {'task_type': 'creating_user', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 23:21:31,244 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 23:21:31,471 - INFO - Update id=560854402 is handled. Duration 405 ms by bot id=7718121314
+2025-04-08 23:26:26,303 - INFO - Получена задача: {'status': 'alive', 'task_type': 'result_update_and_reboot_server', 'server_name': 'Server_39000', 'server_ip': '194.164.216.151'}
+2025-04-08 23:26:26,303 - INFO - Сервер 194.164.216.151 успешно перезагрузился. Осталось: 0
+2025-04-08 23:28:02,406 - INFO - Update id=560854403 is handled. Duration 532 ms by bot id=7718121314
+2025-04-08 23:28:04,159 - INFO - Update id=560854404 is handled. Duration 265 ms by bot id=7718121314
+2025-04-08 23:28:04,965 - INFO - Update id=560854405 is handled. Duration 219 ms by bot id=7718121314
+2025-04-08 23:28:05,844 - INFO - Update id=560854406 is handled. Duration 280 ms by bot id=7718121314
+2025-04-08 23:28:06,994 - INFO - Update id=560854407 is handled. Duration 295 ms by bot id=7718121314
+2025-04-08 23:28:07,566 - INFO - Update id=560854408 is handled. Duration 250 ms by bot id=7718121314
+2025-04-08 23:28:08,107 - INFO - Update id=560854409 is handled. Duration 171 ms by bot id=7718121314
+2025-04-08 23:28:08,698 - INFO - Update id=560854410 is handled. Duration 157 ms by bot id=7718121314
+2025-04-08 23:28:09,353 - INFO - Update id=560854411 is handled. Duration 155 ms by bot id=7718121314
+2025-04-08 23:28:10,351 - INFO - Update id=560854412 is handled. Duration 187 ms by bot id=7718121314
+2025-04-08 23:28:14,238 - INFO - Update id=560854413 is handled. Duration 155 ms by bot id=7718121314
+2025-04-08 23:28:15,345 - INFO - Запущено обновление и перезагрузка для серверов: 194.164.216.151
+2025-04-08 23:28:16,002 - INFO - Отправлена задача: {'task_type': 'creating_user', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 23:28:16,002 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 23:28:16,165 - INFO - Update id=560854414 is handled. Duration 905 ms by bot id=7718121314
+2025-04-08 23:29:53,893 - INFO - Update id=560854415 is handled. Duration 452 ms by bot id=7718121314
+2025-04-08 23:29:55,448 - INFO - Update id=560854416 is handled. Duration 187 ms by bot id=7718121314
+2025-04-08 23:29:56,720 - INFO - Update id=560854417 is handled. Duration 375 ms by bot id=7718121314
+2025-04-08 23:29:59,178 - INFO - Запущено create_xui_inbound
+2025-04-08 23:29:59,824 - INFO - Отправлена задача: {'task_type': 'create_xui_inbound', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 23:29:59,824 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 23:30:00,055 - INFO - Update id=560854418 is handled. Duration 891 ms by bot id=7718121314
+2025-04-08 23:30:04,070 - INFO - Update id=560854419 is handled. Duration 422 ms by bot id=7718121314
+2025-04-08 23:30:06,584 - INFO - Update id=560854420 is handled. Duration 172 ms by bot id=7718121314
+2025-04-08 23:30:16,536 - INFO - Update id=560854421 is handled. Duration 202 ms by bot id=7718121314
+2025-04-08 23:30:18,838 - INFO - Update id=560854422 is handled. Duration 172 ms by bot id=7718121314
+2025-04-08 23:30:20,813 - INFO - Update id=560854423 is handled. Duration 484 ms by bot id=7718121314
+2025-04-08 23:30:21,506 - INFO - Update id=560854424 is handled. Duration 94 ms by bot id=7718121314
+2025-04-08 23:30:23,990 - INFO - Update id=560854425 is handled. Duration 186 ms by bot id=7718121314
+2025-04-08 23:30:24,839 - INFO - Update id=560854426 is handled. Duration 344 ms by bot id=7718121314
+2025-04-08 23:30:25,267 - INFO - Update id=560854427 is handled. Duration 266 ms by bot id=7718121314
+2025-04-08 23:30:25,749 - INFO - Update id=560854428 is handled. Duration 217 ms by bot id=7718121314
+2025-04-08 23:30:29,357 - INFO - Update id=560854429 is handled. Duration 327 ms by bot id=7718121314
+2025-04-08 23:30:30,052 - INFO - Update id=560854430 is handled. Duration 297 ms by bot id=7718121314
+2025-04-08 23:30:31,893 - INFO - Update id=560854431 is handled. Duration 218 ms by bot id=7718121314
+2025-04-08 23:30:50,467 - INFO - Запущено обновление и перезагрузка для серверов: 194.164.216.151
+2025-04-08 23:30:51,089 - INFO - Отправлена задача: {'task_type': 'creating_user', 'server_ip': '194.164.216.151', 'name_protocol': 'vless'} -> Очередь: queue_task_Server_39000
+2025-04-08 23:30:51,089 - ERROR - Redis Connection Error: Connection closed by server.
+2025-04-08 23:30:51,138 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 23:30:51,138 - INFO - Update id=560854432 is not handled. Duration 1141 ms by bot id=7718121314
+2025-04-08 23:30:51,138 - INFO - Polling stopped
+2025-04-08 23:30:51,875 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот завершил работу и пошел отдыхать. Ошибка: Telegram server says - Bad Request: chat not found

@@ -3,7 +3,7 @@ from aiogram import Bot
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 # Настройка логирования
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s", encoding="utf-8")
 
 # Список администраторов
 ADMIN_CHAT_IDS = [456717505, 1388513042, 7032840268, 6720032062,7554798911]  # Укажи ID администраторов

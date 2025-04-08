@@ -55,8 +55,8 @@ class UpdateAndRebootServer(BaseResultProcessor):
             if server_ip in rebooted_servers_expected:
                 rebooted_servers_expected.remove(server_ip)
                 if not rebooted_servers_expected:
-                    await send_admin_log(bot, f"✅ Все сервера перезагрузились успешно.")
+                    await send_admin_log(bot, f"Все сервера перезагрузились успешно.")
 
-            logging.info(f"✅ Сервер {server_ip} успешно перезагрузился. Осталось: {len(rebooted_servers_expected)}")
+            logging.info(f"Сервер {server_ip} успешно перезагрузился. Осталось: {len(rebooted_servers_expected)}")
         except Exception as e:
             logging.error(f"Ошибка в обработчике UpdateAndRebootServer: {e}")

@@ -2,7 +2,7 @@ import logging
 from .base_processor import BaseResultProcessor
 from models.UserCl import UserCl
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s", encoding="utf-8")
 
 
 class ResultDeleteUser(BaseResultProcessor):

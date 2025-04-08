@@ -8,7 +8,7 @@ from .result_task_manager import ResultTaskManager
 from redis_configs.redis_settings import redis_client_main
 from redis.exceptions import ConnectionError
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s", encoding="utf-8")
 
 async def process_queue_results_task():
     """Асинхронное прослушивание очереди Redis и обработка задач. push"""

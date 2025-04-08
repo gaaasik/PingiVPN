@@ -5,7 +5,7 @@ from bot.handlers.admin import send_admin_log
 from bot_instance import bot
 from models.UserCl import UserCl
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s", encoding="utf-8")
 
 
 class ResultCheckEnable(BaseResultProcessor):
