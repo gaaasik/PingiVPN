@@ -494,3 +494,24 @@ ValueError: пїЅпїЅпїЅпїЅпїЅпїЅ country_server_data пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
 2025-04-04 00:14:24,010 - INFO - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ Telegram: пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ WG
 2025-04-04 00:14:43,945 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
 2025-04-04 00:14:43,945 - INFO - Polling stopped
+2025-04-08 20:21:05,324 - ERROR - Ошибка при отправке сообщения админу с ID 7554798911. Сообщение: Бот запустился. Ошибка: Telegram server says - Bad Request: chat not found
+2025-04-08 20:21:05,332 - INFO - Данные серверов успешно загружены.
+2025-04-08 20:21:05,339 - INFO - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2025-04-08 20:21:05,341 - INFO - Added job "job_wrapper" to job store "default"
+2025-04-08 20:21:05,341 - INFO - Scheduler started
+2025-04-08 20:21:05,350 - INFO - Поле 'history_key' уже существует, обновление не требуется.
+2025-04-08 20:21:05,351 - INFO - Start polling
+2025-04-08 20:21:05,351 - INFO - Начало прослушивания очереди tasks
+2025-04-08 20:21:05,351 - INFO - Запущено прослушивание очереди result_task_queue.
+2025-04-08 20:21:05,352 - INFO - Планировщик уведомлений запущен.
+2025-04-08 20:21:05,354 - INFO - Следующее уведомление ['UnsubscribedNotification'] через 938.91 минут.
+2025-04-08 20:21:05,420 - INFO - Run polling for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
+2025-04-08 20:23:11,540 - INFO - Update id=560854226 is handled. Duration 562 ms by bot id=7718121314
+2025-04-08 20:23:12,809 - INFO - Update id=560854227 is handled. Duration 313 ms by bot id=7718121314
+2025-04-08 20:23:14,123 - INFO - Update id=560854228 is handled. Duration 280 ms by bot id=7718121314
+2025-04-08 20:23:16,225 - INFO - Update id=560854229 is handled. Duration 405 ms by bot id=7718121314
+2025-04-08 20:23:17,873 - INFO - Update id=560854230 is handled. Duration 250 ms by bot id=7718121314
+2025-04-08 20:23:20,137 - INFO - Update id=560854231 is handled. Duration 234 ms by bot id=7718121314
+2025-04-08 20:23:21,077 - INFO - Update id=560854232 is handled. Duration 390 ms by bot id=7718121314
+2025-04-08 20:23:29,611 - INFO - Polling stopped
+2025-04-08 20:23:29,612 - INFO - Polling stopped for bot @Payment_test13_bot id=7718121314 - 'Payment_test'
