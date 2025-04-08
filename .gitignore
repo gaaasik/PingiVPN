@@ -1,6 +1,7 @@
 /VPN_BOT.zip
 /tests
 /configs/base_configs/*
+payments.log
 # Игнорирование виртуальных окружений
 venv/
 .venv/
