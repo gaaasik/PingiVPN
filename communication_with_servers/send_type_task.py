@@ -214,7 +214,6 @@ async def send_creating_user_tasks_for_servers(server_ips: list[str] = None):
     """
     task_manager = TaskRedis()
     targets = server_ips if server_ips else SERVERS_CREATE_USER_TEST
-    print(">>> Вызвана send_creating_user_tasks_for_servers")
     logger.info(
         f"Запущено обновление и перезагрузка для серверов: {', '.join(targets)}"
     )
@@ -231,10 +230,10 @@ async def send_update_and_reboot_server(server_ips: list[str] = None):
     Если server_ips=None — используется весь список SERVERS_CREATE_USER_TEST.
     """
     task_manager = TaskRedis()
-    SERVERS_CREATE_USER_TEST = get_all_non_test_server_ips()
-    targets = server_ips if server_ips else SERVERS_CREATE_USER_TEST
+    list_all_server = await get_all_non_test_server_ips()
+    targets = server_ips if server_ips else list_all_server
     result_module_server.rebooted_servers_expected = targets.copy()
-    result_module_server.first_response_time = None
+
     logger.info(
         f"Запущено создание конфигураций для серверов: {', '.join(targets)}"
     )
