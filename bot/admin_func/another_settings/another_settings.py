@@ -18,7 +18,7 @@ async def get_admin_settings_keyboard():
         [InlineKeyboardButton(text="📋 Вывести все сервера", callback_data="view_all_servers")],
         [InlineKeyboardButton(text="♻️ Регенерация ключей", callback_data="all:regenerate")],
         [InlineKeyboardButton(text="🔄 Перезагрузка всех серверов", callback_data="all:reboot")],
-        [InlineKeyboardButton(text="Создать соединение", callback_data="confirm:inbounds")],
+        #[InlineKeyboardButton(text="Создать соединение", callback_data="confirm:inbounds")],
         [InlineKeyboardButton(text="🔙 Назад", callback_data="search_user")]
     ])
 
