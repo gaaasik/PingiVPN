@@ -1,6 +1,8 @@
 import json
 import logging
 
+from bot.handlers.admin import send_admin_log
+from bot_instance import bot
 from models.UserCl import UserCl
 from models.country_server_data import get_name_server_by_ip
 from redis_configs.redis_settings import redis_client_main
@@ -14,7 +16,7 @@ class QueueErrorHandler:
 
     async def remove_tasks_from_queue(self, server_ip: str, task_type: str):
         """
-        Удаляет задачи указанного типа из очереди Redis по IP сервера.
+        Удаляет задачи указанного типа из очереди Redis по IP сервера. не все сервера
 
         :param server_ip: IP-адрес сервера.
         :param task_type: Тип задачи, которую нужно удалить (например, "update_and_reboot_server").
@@ -38,6 +40,9 @@ class QueueErrorHandler:
 
                 if not isinstance(task_data, dict) or task_data.get("task_type") != task_type:
                     updated_tasks.append(task)
+                else:
+                    name_server = await get_name_server_by_ip(task_data.get("server_ip"))
+                    await send_admin_log(bot, f"Задача {task_type} удалена для {name_server}-{task_data.get('server_ip')}")
 
             # Обновление очереди
             await self.redis_client_main.delete(queue_name)
