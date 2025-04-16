@@ -56,7 +56,7 @@ async def app_lifespan(app: FastAPI):
     logger.info("Инициализация приложения...")
     PASSWORD_REDIS = os.getenv('password_redis')
     # Инициализация Redis
-    redis_client = redis.Redis(host="217.25.91.109", port=6379, password=PASSWORD_REDIS, decode_responses=True)
+    redis_client = redis.Redis(host="localhost", port=6379, password=PASSWORD_REDIS, decode_responses=True)
     logger.info("Redis успешно инициализирован.")
     try:
         await redis_client.ping()
@@ -210,7 +210,7 @@ async def webhook(request: Request):
 
     except Exception as e:
         logger.error(f"Ошибка обработки вебхука: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Internal server error 500 see logs")
 
 
 @app.get("/", response_class=HTMLResponse)
