@@ -24,10 +24,10 @@ db_path = os.getenv('database_path_local')
 # Настройка API Юкассы
 Configuration.account_id = os.getenv('SHOPID')
 Configuration.secret_key = os.getenv('API_KEY')
-#REDIS_QUEUE = 'payment_notifications'
+REDIS_QUEUE = 'payment_notifications'
 
-#Для тестов!!!
-REDIS_QUEUE = 'payment_notifications_test'
+# #Для тестов!!!
+# REDIS_QUEUE = 'payment_notifications_test'
 
 PASSWORD_REDIS = os.getenv('password_redis')
 
@@ -146,7 +146,10 @@ async def listen_to_redis_queue(bot: Bot):
     while True:
         try:
             #logging.info("Попытка извлечь задачу из очереди Redis")
-            task_data = await asyncio.to_thread(redis_client.lpop, 'payment_notifications_test ')
+            task_data = await asyncio.to_thread(redis_client.lpop, 'payment_notifications')
+
+            #Для тестов оплаты
+            #task_data = await asyncio.to_thread(redis_client.lpop, 'payment_notifications_test')
 
             if task_data:
                 logging.info(f"Извлечена задача из Redis: {task_data}")

@@ -36,7 +36,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 # Глобальная переменная Redis-клиента
 redis_client: redis.Redis = None
-#нужно сделать тестовый стенд и начать тестировать оплату !!!!!!
 
 class PaymentData(BaseModel):
     user_id: int
@@ -186,14 +185,14 @@ async def webhook(request: Request):
             "payload_json": payload
         }
 
-        # # Отправляем в Redis
-        # await redis_client.lpush("payment_notifications", json.dumps(message))
-        # logger.info(f"Платёж {payment_id} добавлен в очередь Redis")
-
-        #Для тестов!!
         # Отправляем в Redis
-        await redis_client.lpush("payment_notifications_test", json.dumps(message))
+        await redis_client.lpush("payment_notifications", json.dumps(message))
         logger.info(f"Платёж {payment_id} добавлен в очередь Redis")
+
+        # #Для тестов!!
+        # # Отправляем в Redis
+        # await redis_client.lpush("payment_notifications_test", json.dumps(message))
+        # logger.info(f"Платёж {payment_id} добавлен в очередь Redis")
 
         # Сохраняем в БД
         payment_data = PaymentData(

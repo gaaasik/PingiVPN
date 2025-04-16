@@ -193,3 +193,17 @@ ERROR:app:Ошибка обработки вебхука: argument of type 'floa
 INFO:app:Получен webhook - начало обработки
 INFO:app:Получено событие: payment.succeeded, ID платежа: 2f7f99ef-000f-5000-b000-191ca6e608f2, сумма: 199.00 RUB, пользователь: 456717505
 ERROR:app:Ошибка обработки вебхука: argument of type 'float' is not iterable
+INFO:__main__:Инициализация приложения...
+INFO:__main__:Redis успешно инициализирован.
+INFO:__main__:✅ Подключение к Redis прошло успешно.
+INFO:__main__:Получен webhook - начало обработки
+INFO:__main__:Получено событие: payment.succeeded, ID платежа: 2f91cdc2-000f-5001-8000-11dfd9ed43aa, сумма: 199.00 RUB, пользователь: 456717505
+ERROR:__main__:Ошибка обработки вебхука: Error while reading from 217.25.91.109:6379 : (22, 'Указанное сетевое имя более недоступно', None, 64, None)
+INFO:__main__:Получен webhook - начало обработки
+INFO:__main__:Получено событие: payment.succeeded, ID платежа: 2f91cdc2-000f-5001-8000-11dfd9ed43aa, сумма: 199.00 RUB, пользователь: 456717505
+INFO:__main__:Платёж 2f91cdc2-000f-5001-8000-11dfd9ed43aa добавлен в очередь Redis
+INFO:__main__:Добавлена новая запись о платеже с payment_id=2f91cdc2-000f-5001-8000-11dfd9ed43aa
+INFO:__main__:Получен webhook - начало обработки
+INFO:__main__:Получено событие: payment.succeeded, ID платежа: 2f91cfd2-000f-5000-b000-1e3ba900444c, сумма: 549.00 RUB, пользователь: 456717505
+INFO:__main__:Платёж 2f91cfd2-000f-5000-b000-1e3ba900444c добавлен в очередь Redis
+INFO:__main__:Добавлена новая запись о платеже с payment_id=2f91cfd2-000f-5000-b000-1e3ba900444c

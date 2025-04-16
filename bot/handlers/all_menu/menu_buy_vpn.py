@@ -47,15 +47,15 @@ def get_add_key_keyboard():
 async def handle_buy_vpn(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
     us = await UserCl.load_user(chat_id)
-    # # Проверка на администратора
-    # if not (int(chat_id) in ADMIN_CHAT_IDS):
-    #     # Отправка сообщения для неадминистратора
-    #     await callback_query.message.answer(
-    #         f"Оплата скоро будет доступна, если у вас проблемы с подключением напишите нам @pingi_help"
-    #
-    #     )
-    #     await callback_query.answer()
-    #     return  # Завершаем выполнение функции
+    # Проверка на администратора
+    if not (int(chat_id) in ADMIN_CHAT_IDS):
+        # Отправка сообщения для неадминистратора
+        await callback_query.message.answer(
+            f"Оплата скоро будет доступна, если у вас проблемы с подключением напишите нам @pingi_help"
+
+        )
+        await callback_query.answer()
+        return  # Завершаем выполнение функции
 
 
     # Получаем количество ключей и статус
