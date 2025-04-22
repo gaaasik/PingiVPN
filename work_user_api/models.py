@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import Optional, List
 
 @dataclass
 class ServerPassword:
@@ -22,11 +22,3 @@ class ServerList:
 
     def get_by_name(self, name: str) -> Optional[Server]:
         return next((s for s in self.servers if s.name == name), None)
-
-
-@dataclass
-class VPNUser:
-    id: str
-    email: str
-    enable: bool
-    expiry_time: int  # timestamp (ms)
