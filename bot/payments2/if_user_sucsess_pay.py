@@ -17,7 +17,7 @@ from models.referral_class.ReferralCL import ReferralCl
 async def handle_post_payment_actions(bot: Bot, chat_id: int):
     """Выполняет действия после успешной оплаты."""
 
-    # Удаление сообщений об оплате (здесь можно вставить свой код)
+    # Удаление сообщений об оплате (здесь можно вставить свой код) run_listening_redis_for_duration
     # Например:
     await delete_message_with_type(chat_id, "msg_with_pay_url", bot)
     await delete_message_with_type(chat_id, "account_status", bot)

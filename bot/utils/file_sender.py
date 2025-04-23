@@ -6,6 +6,7 @@ from aiogram.types import FSInputFile
 import logging
 
 from bot.handlers.admin import send_admin_log
+from models.referral_class.ReferralCL import ReferralCl
 
 from work_with_conf_WG.file_manager import find_user_directory
 
@@ -134,6 +135,12 @@ async def create_user_files(chat_id, username, bot, free_day=7):
         # Ищем папку пользователя, которая содержит chat_id в своем имени
         user_dir = find_user_directory(chat_id)  #=============#
         us = await UserCl.load_user(chat_id)
+
+        try:
+            await ReferralCl.add_referral_bonus(chat_id)
+        except Exception as e:
+            await send_admin_log(bot, f"❌ Ошибка при начислении бонуса за реферала {chat_id}: {e}")
+            logging.error(f"❌ Ошибка при начислении бонуса за реферала {chat_id}: {e}")
         if not user_dir:  #=============#
             # Если папка не найдена, создаем новую
             folder_name = f"{chat_id}_{username}" if username else f"{chat_id}"
