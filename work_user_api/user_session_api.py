@@ -1,7 +1,11 @@
-from work_user_api.decryptor import decrypt_json_file
+from urllib.parse import urljoin
+
+from work_user_api.decryptor import decrypt_json_file, logger
 from work_user_api.models import Server, ServerPassword
 import json
 import requests
+
+from work_user_api.server_model import ServerModel
 
 
 class EnableToggle:
@@ -10,27 +14,49 @@ class EnableToggle:
         self.uuid_id = uuid_id
         self.session = requests.Session()
 
-    def _login(self):
+    def _login(self) -> bool:
         login_url = f"{self.server.xui_url}/login"
+        logger.info(f"[POST] Авторизация в XUI: {login_url}")
         try:
-            resp = self.session.post(login_url, data={
-                "username": self.server.passwords.login,
-                "password": self.server.passwords.password
-            }, verify=False)
-            return resp.status_code == 200
+            response = self.session.post(
+                login_url,
+                json={
+                    "username": self.server.login,
+                    "password": self.server.password
+                },
+                verify=False
+            )
+            logger.info(f"[LOGIN STATUS] {response.status_code} - {response.text[:100]}")
+
+            # Сохраняем куки после логина
+            self.session.cookies.update(response.cookies)
+
+            return response.status_code == 200
         except Exception as e:
-            print(f"Login error: {e}")
+            logger.exception("❌ Ошибка при логине в XUI")
             return False
 
-    def _get_inbound(self):
-        list_url = f"{self.server.xui_url}/panel/api/inbounds/list"
-        response = self.session.get(list_url, verify=False)
-        return response.json().get("obj", [])
+    def _get_inbound(self) -> list:
+        inbound_url = f"{self.server.xui_url}/xui/inbound/list"
+        logger.info(f"[GET] Получаем список пользователей: {inbound_url}")
+        try:
+            response = self.session.get(inbound_url, verify=False)
+            if not response.text:
+                logger.error(f"[ERROR] Сервер вернул пустой ответ на {inbound_url}")
+                return []
+            try:
+                return response.json().get("obj", [])
+            except json.JSONDecodeError:
+                logger.error(f"[ERROR] Ответ сервера не является JSON: {response.status_code} — {response.text[:100]}")
+                return []
+        except Exception as e:
+            logger.exception("❌ Ошибка при получении списка пользователей")
+            return []
 
-    def set(self, state: bool) -> bool:
+    def set(self, state: bool):
         if not self._login():
+            logger.error("❌ Логин не выполнен. Операция отменена.")
             return False
-
         inbounds = self._get_inbound()
         for inbound in inbounds:
             clients = json.loads(inbound["settings"]).get("clients", [])
@@ -48,6 +74,8 @@ class EnableToggle:
 
     def get(self) -> bool:
         if not self._login():
+            login = self.server.get_password("login")
+            password = self.server.get_password("password")
             return False
 
         inbounds = self._get_inbound()
@@ -67,20 +95,9 @@ class UserSessionAPI:
             raise ValueError(f"Сервер с IP {ip_server} не найден.")
         self.enable = EnableToggle(self.server, self.uuid_id)
 
-    def _get_server_by_ip(self, ip: str) -> Server:
+    def _get_server_by_ip(self, ip_server):
         data = decrypt_json_file()
-        for srv in data.get("servers", []):
-            if srv["address"] == ip:
-                return Server(
-                    name=srv["name"],
-                    country=srv["country"],
-                    address=srv["address"],
-                    xui_url=srv.get("3X_UI", "").strip(),
-                    username=srv["username"],
-                    passwords=ServerPassword(
-                        login=srv["passwords"]["login"],
-                        password=srv["passwords"]["password"],
-                        root_password=srv["passwords"]["root password"]
-                    )
-                )
-        return None
+        for srv in data:
+            if srv.get("address") == ip_server:
+                return ServerModel(srv)
+        raise ValueError(f"Server with IP {ip_server} not found.")

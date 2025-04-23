@@ -11,6 +11,7 @@ from communication_with_servers.test_send_vless_api.send_test import test_toggle
 from models.UserCl import UserCl
 from models.work_new_url import update_users_keys
 from communication_with_servers.send_type_task import send_creating_user_tasks_for_servers
+from work_user_api.user_session_api import UserSessionAPI
 
 router = Router()
 
@@ -46,7 +47,10 @@ async def handle_support(event: types.Message | types.CallbackQuery):
     us = await UserCl.load_user(chat_id)
     print("tolsemenov MENU_MY_KEYS ", chat_id)
     if chat_id in ADMIN_CHAT_IDS:
-        await test_toggle_vpn_user()
+        server_ip = await us.active_server.server_ip.get()
+        email_key = await us.active_server.email_key.get()
+        us_api = UserSessionAPI(server_ip, email_key)
+        us_api.enable.set(False)
 
         ###await update_users_keys()
 
