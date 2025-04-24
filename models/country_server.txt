@@ -315,6 +315,20 @@
       "count_users": 40
     },
     {
+      "name": "Server_45000",
+      "address": "212.69.87.192",
+      "country": "Netherlands",
+      "name_protocol": "vless",
+      "count_users": 50
+    },
+    {
+      "name": "Server_46000",
+      "address": "176.222.55.184",
+      "country": "Netherlands",
+      "name_protocol": "vless",
+      "count_users": 50
+    },
+    {
       "name": "Server_tol_test_10000",
       "address": "147.45.242.155",
       "country": "Netherlands",
