@@ -15,7 +15,7 @@ class EnableToggle:
         self.session = requests.Session()
 
     def _login(self) -> bool:
-        login_url = f"{self.server.xui_url}/login"
+        login_url = f"{self.server.xui_url}login"
         logger.info(f"[POST] Авторизация в XUI: {login_url}")
         try:
             response = self.session.post(
@@ -37,7 +37,7 @@ class EnableToggle:
             return False
 
     def _get_inbound(self) -> list:
-        inbound_url = f"{self.server.xui_url}/xui/inbound/list"
+        inbound_url = f"{self.server.xui_url}xui/inbound/list"
         logger.info(f"[GET] Получаем список пользователей: {inbound_url}")
         try:
             response = self.session.get(inbound_url, verify=False)
