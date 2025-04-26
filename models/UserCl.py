@@ -842,8 +842,12 @@ class UserCl:
                 await move_in_history_files_wg(old_key)
 
             logging.info(f"добавили старый ключ в поле history_key_list")
-            await old_key.enable.set(False)
-            logging.info(f"отключение старого ключа")
+            try:
+                await old_key.enable.set(False)
+                logging.info(f"отключение старого ключа")
+            except Exception as e:
+                logging.error(f"Ошибка при отключении ключа {e}")
+
 
             new_key_params = await self.generate_server_params_vless(url, free_day)
             await self.add_history_servers_json(server_params=new_key_params, field="servers")
@@ -890,8 +894,12 @@ class UserCl:
                 self.servers.remove(old_key)
                 logging.info("Удаляем старый ключ из servers, ")
                 await self.add_history_servers_json(ready_server=old_key, field="history_key_list")
-            await old_key.enable.set(False)
-            logging.info(f"отключение старого ключа")
+
+            try:
+                await old_key.enable.set(False)
+                logging.info(f"отключение старого ключа")
+            except Exception as e:
+                logging.error(f"Ошибка при отключении ключа {e}")
 
             for server in self.servers:
                 logging.error(f"Сейчас в server есть ключ, а его не должно быть, {server}")

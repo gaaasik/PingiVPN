@@ -141,8 +141,6 @@ async def process_vless_key(message: Message, state: FSMContext):
     await us.update_key_to_vless(key)
 
 
-    # Вместо вызова handler_my_back_menu вызываем команду с inline-кнопки
-    #await router.feed_callback_query(callback=CallbackQuery(id="123", from_user=message.from_user, data="my_back_menu"))
 
     fake_message = Message(
         message_id=message.message_id,  # Берем ID текущего сообщения
