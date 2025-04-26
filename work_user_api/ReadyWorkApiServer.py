@@ -1,7 +1,18 @@
+import asyncio
+import json
+import os
+
+from redis.exceptions import RedisError
 import logging
-from typing import Dict
+
+
+from redis_configs.redis_settings import redis_client_main
 from work_user_api.XUIApiClient import XUIApiClient
 from work_user_api.decryptor import get_server_credentials_by_ip
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -13,7 +24,7 @@ logging.basicConfig(
     encoding="utf-8"
 )
 my_logging = logging.getLogger(__name__)
-
+NAME_RESULT_QUEUE = os.getenv("name_queue_result_task").strip()
 
 class ReadyWorkApiServer():
     def __init__(self, server_ip: str):
@@ -30,24 +41,36 @@ class ReadyWorkApiServer():
         )
         self.server.login()
 
-    async def process_change_enable_user(self, email_key: str, enable: bool, chat_id: int):
-
+    async def process_change_enable_user(self, email_key: str, enable: bool, chat_id: int, uuid_value: str):
         try:
             success, response = self.server.toggle_user_enable_by_email(email=email_key, enable=enable)
+            if not success:
+                status_value = "error"
+            else:
+                status_value = "success"
 
-            result = {
-                "status": "success" if success else "error",
-                "task_type": "result_change_enable_user",
-                "chat_id": chat_id,
-                "protocol": "vless",
-                "enable": enable,
-                "email_key": email_key,
-                "response": response
-            }
-
-            my_logging.info(f"API VLESS изменение enable: {result}")
+            # После изменения — проверяем реальное состояние
             actual_enable = self.server.check_enable(email_key)
 
+            my_logging.info(f"API VLESS изменение enable и проверка статуса: {actual_enable}")
+
+
+            # Отправляем результат в Redis
+            redis_payload = {
+                "status": status_value,
+                "task_type": "result_change_enable_user",
+                "enable": actual_enable,
+                "user_ip": None,  # если IP нет, оставляем пустым
+                "uuid_value": uuid_value,
+                "protocol": "vless",
+                "chat_id": chat_id,
+            }
+            await redis_client_main.lpush(NAME_RESULT_QUEUE, json.dumps(redis_payload))
+            my_logging.info(f"Обновленные данные отправлены в Redis: {redis_payload}")
+
+        except RedisError as e:
+            my_logging.error(f"Ошибка подключения к Redis: {e}. Повторная попытка через 5 секунд...")
+            await asyncio.sleep(5)
         except Exception as e:
             my_logging.error(f"Ошибка при изменении пользователя через API: {e}")
 

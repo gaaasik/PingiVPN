@@ -6,7 +6,7 @@ from aiogram.filters import Command
 from telebot.formatting import escape_markdown
 
 from bot.handlers.admin import ADMIN_CHAT_IDS
-from communication_with_servers.test_send_vless_api.send_test import test_toggle_vpn_user
+
 from models.UserCl import UserCl
 from work_user_api.ReadyWorkApiServer import ReadyWorkApiServer
 
@@ -40,17 +40,17 @@ def help_options_keyboard():
 @router.callback_query(F.data == "help")
 async def handle_support(event: types.Message | types.CallbackQuery):
     ################################### TEST TOL ######################################################## Задача добавлена в очередь
-    chat_id = event.message.chat.id
-    us = await UserCl.load_user(chat_id)
-
-    if chat_id in ADMIN_CHAT_IDS:
-
-        server_ip = await us.active_server.server_ip.get()
-        email_key = await us.active_server.email_key.get()
-        processor = ReadyWorkApiServer(server_ip)
-
-        await processor.process_change_enable_user(email_key=email_key, enable=True, chat_id=chat_id)
-
+    # chat_id = event.message.chat.id
+    # us = await UserCl.load_user(chat_id)
+    #
+    # if chat_id in ADMIN_CHAT_IDS:
+    #
+    #     server_ip = await us.active_server.server_ip.get()
+    #     email_key = await us.active_server.email_key.get()
+    #     processor = ReadyWorkApiServer(server_ip)
+    #
+    #     await processor.process_change_enable_user(email_key=email_key, enable=True, chat_id=chat_id)
+    #
 
 
 

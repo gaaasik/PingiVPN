@@ -111,7 +111,7 @@ class Field:
 
     # Использование данных в функциях
     async def _set_enable(self, enable_value: bool):
-        """Обновляет значение enable и отправляет задачу в Redis."""
+        """Обновляет значение enable и отправляет задачу в Redis. Ошибка при выключении пользователя"""
 
         country_server_data = await get_json_country_server_data()
 
@@ -149,7 +149,7 @@ class Field:
 
         if name_protocol == "vless":
             processor = ReadyWorkApiServer(server_ip)
-            await processor.process_change_enable_user(email_key=email_key, enable=True, chat_id=chat_id)
+            await processor.process_change_enable_user(email_key=email_key, enable=enable_value, chat_id=chat_id, uuid_value=uuid_value)
         elif name_protocol == "wireguard":
             try:
                 await redis_client_main.lpush(queue_name, json.dumps(task_data))
