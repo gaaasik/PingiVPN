@@ -33,7 +33,9 @@ class ReadyWorkApiServer():
             all_data = get_server_credentials_by_ip(server_ip)
         except ValueError as e:
             my_logging.error(f"Ошибка: {e}")
-            send_admin_log(bot, f"result_check_enable: Ошибка при поиске шифрованных данных по серверу {server_ip}")
+            import asyncio
+            loop = asyncio.get_event_loop()
+            loop.create_task(send_admin_log(bot, f"result_check_enable: Ошибка при поиске шифрованных данных по серверу {server_ip}"))
             raise  # <-- ВАЖНО! Прерываем выполнение, чтобы не продолжать без данных
 
         # Инициализируем XUIApiClient с нужными данными
