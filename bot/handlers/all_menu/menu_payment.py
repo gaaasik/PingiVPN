@@ -213,13 +213,15 @@ async def handle_email_input(message: types.Message, state: FSMContext):
     email = message.text
     chat_id = message.chat.id
     bot = message.bot
+    data = await state.get_data()
+    tariff_code = data.get("tariff_code")
 
     if validate_email(email):
         try:
             us = await UserCl.load_user(chat_id)
             await us.email.set(email)
             user_login = await us.user_login.get()
-            await send_payment_link(chat_id, bot, user_login, email, state)
+            await send_payment_link(chat_id, bot, user_login, email, state,tariff_code)
             await send_admin_log(bot, f"Пользователь {chat_id} получил ссылку на оплату, ждем оплаты, подтверждения или отмены")
         except Exception as e:
             logging.error(f"Ошибка при сохранении email: {e}")
