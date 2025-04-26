@@ -5,7 +5,8 @@ import os
 from redis.exceptions import RedisError
 import logging
 
-
+from bot.handlers.admin import send_admin_log
+from bot_instance import bot
 from redis_configs.redis_settings import redis_client_main
 from work_user_api.XUIApiClient import XUIApiClient
 from work_user_api.decryptor import get_server_credentials_by_ip
@@ -32,6 +33,7 @@ class ReadyWorkApiServer():
             all_data = get_server_credentials_by_ip(server_ip)
         except ValueError as e:
             my_logging.error(f"Ошибка: {e}")
+            send_admin_log(bot, f"result_check_enable: Ошибка при поиске шифрованных данных по серверу {server_ip}")
 
         # Инициализируем XUIApiClient с нужными данными
         self.server = XUIApiClient(
