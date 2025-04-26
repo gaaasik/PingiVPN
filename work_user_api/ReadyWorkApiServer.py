@@ -34,6 +34,7 @@ class ReadyWorkApiServer():
         except ValueError as e:
             my_logging.error(f"Ошибка: {e}")
             send_admin_log(bot, f"result_check_enable: Ошибка при поиске шифрованных данных по серверу {server_ip}")
+            raise  # <-- ВАЖНО! Прерываем выполнение, чтобы не продолжать без данных
 
         # Инициализируем XUIApiClient с нужными данными
         self.server = XUIApiClient(
