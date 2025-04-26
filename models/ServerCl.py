@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 from bot.handlers.admin import send_admin_log
 from bot_instance import bot
 from models.country_server_data import get_json_country_server_data, get_name_server_by_ip, get_country_server_by_ip
+from work_user_api.ReadyWorkApiServer import ReadyWorkApiServer
 
 if TYPE_CHECKING:
     from models.UserCl import UserCl  # Только для аннотаций типов
@@ -126,6 +127,7 @@ class Field:
         uuid_value = await self._server.uuid_id.get()
         server_ip = await self._server.server_ip.get()
         user_ip = await self._server.user_ip.get()
+        email_key = await self._server.email_key.get()
 
         # Получаем имя сервера
         server_name = self.__get_server_name_by_ip(country_server_data, server_ip)
@@ -145,21 +147,23 @@ class Field:
 
         # Используем redis.asyncio вместо aioredis BLPOP  Ошибка декодирования
 
-        try:
-            await redis_client_main.lpush(queue_name, json.dumps(task_data))
-            logging.info(f"Задача добавлена в очередь {queue_name}: {task_data}")
-            if queue_name == "queue_task_Unknown_Server":
-                await send_admin_log(bot,
-                                     f"❌Пользователь {chat_id} не изменил состояние на {enable_value}, задача в очереди queue_task_Unknown_Server")
-        except Exception as e:
-            logging.error(f"Ошибка при добавлении задачи в очередь {queue_name}: {e}")
-        finally:
+        if name_protocol == "vless":
+            processor = ReadyWorkApiServer(server_ip)
+            await processor.process_change_enable_user(email_key=email_key, enable=True, chat_id=chat_id)
+        elif name_protocol == "wireguard":
             try:
-                pass
-                # if redis:
-                #     await redis_client.close()
+                await redis_client_main.lpush(queue_name, json.dumps(task_data))
+                logging.info(f"Задача добавлена в очередь {queue_name}: {task_data}")
+                if queue_name == "queue_task_Unknown_Server":
+                    await send_admin_log(bot,
+                                         f"❌Пользователь {chat_id} не изменил состояние на {enable_value}, задача в очереди queue_task_Unknown_Server")
             except Exception as e:
-                logging.error(f"Ошибка с redis_client")
+                logging.error(f"Ошибка при добавлении задачи в очередь {queue_name}: {e}")
+            finally:
+                try:
+                    pass
+                except Exception as e:
+                    logging.error(f"Ошибка с redis_client")
 
     async def set_enable_admin(self, enable_value: bool):
         """Напрямую обновление в базе данных значения поля enable"""

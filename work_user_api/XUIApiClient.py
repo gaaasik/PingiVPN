@@ -96,3 +96,18 @@ class XUIApiClient:
         sub_id = client.get("subId", "")  # забираем subId из клиента, если нет — ставим пустую строку
         return self.update_client_enable_status(inbound_id, client_id, email, enable, sub_id)
 
+
+    def check_enable(self, email: str) -> bool | None:
+        """
+        Проверяет текущее значение enable для клиента по email.
+        Возвращает True / False или None если клиент не найден.
+        """
+        if not self.authenticated:
+            if not self.login():
+                return None
+
+        inbound_id, client = self.find_client_by_email(email)
+        if client:
+            return client.get("enable")
+        else:
+            return None

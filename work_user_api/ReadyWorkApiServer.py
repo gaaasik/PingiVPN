@@ -46,6 +46,9 @@ class ReadyWorkApiServer():
             }
 
             my_logging.info(f"API VLESS изменение enable: {result}")
+            actual_enable = self.server.check_enable(email_key)
+
         except Exception as e:
             my_logging.error(f"Ошибка при изменении пользователя через API: {e}")
+
 

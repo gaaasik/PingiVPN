@@ -37,7 +37,7 @@ def decrypt_json_file():
         try:
             _server_cache = json.loads(decrypted_data)
         except json.JSONDecodeError:
-            logger.warning("[WARN] JSONDecodeError. Пробуем заменить кавычки и декодировать снова...")
+            logger.info("[WARN] JSONDecodeError. Пробуем заменить кавычки и декодировать снова...")
             corrected = decrypted_data.replace("'", '"')
             _server_cache = json.loads(corrected)
 

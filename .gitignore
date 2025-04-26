@@ -28,3 +28,5 @@ logs/*.log
 configs/url_vless_new
 configs/url_vless_user
 models/new_key.json
+models/work_new_url.py
+models/change_key
