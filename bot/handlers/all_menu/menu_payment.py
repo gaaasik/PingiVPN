@@ -232,21 +232,23 @@ async def handle_email_input(message: types.Message, state: FSMContext):
         )
         await bot.send_message(chat_id, "Неверный формат email. Пожалуйста, введите корректный email.", reply_markup=keyboard)
 
-# Обработчик подтверждения или изменения email
 @router.callback_query(lambda c: c.data in ["confirm_email", "edit_email"])
 async def handle_email_confirmation(callback_query: types.CallbackQuery, state: FSMContext):
     chat_id = callback_query.message.chat.id
     bot = callback_query.message.bot
     data = await state.get_data()
     email = data.get("email")
+    tariff_code = data.get("tariff_code")  # забираем тариф код!
 
     if callback_query.data == "confirm_email":
         logging.info(f"Пользователь подтвердил email: {email}")
     elif callback_query.data == "edit_email":
         await request_user_email(chat_id, bot, state)
         await state.set_state(PaymentForm.awaiting_email)
+        await state.update_data(tariff_code=tariff_code)  # снова записываем тариф!
 
     await callback_query.answer()
+
 
 # Таймер для сброса состояния email через 1 час
 async def start_email_timeout(chat_id: int, state: FSMContext, timeout: int = 3600):
