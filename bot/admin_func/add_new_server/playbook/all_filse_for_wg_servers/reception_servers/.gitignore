@@ -1,0 +1,14 @@
+__pycache__/
+.idea/
+.env
+venv/
+.venv/
+test_api/
+old_backup/
+logging_config/reception.log
+vpn_task_processor.log
+test/
+wg_task_processor.log
+wg_task_errors.log
+wg_task_processor.log.log
+root

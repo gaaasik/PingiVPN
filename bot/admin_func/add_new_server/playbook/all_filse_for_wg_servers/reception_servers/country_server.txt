@@ -1,0 +1,353 @@
+{
+  "servers": [
+    {
+      "name": "Server_10",
+      "country": "Netherlands",
+      "address": "147.45.232.240",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_Bot_100",
+      "country": "Poland",
+      "address": "217.25.91.109",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_1000",
+      "country": "Poland",
+      "address": "185.104.112.64",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_2000",
+      "country": "Netherlands",
+      "address": "194.135.38.128",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_3000",
+      "country": "Poland",
+      "address": "90.156.228.68",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_5000",
+      "country": "Poland",
+      "address": "87.249.50.108",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_6000",
+      "country": "Poland",
+      "address": "217.151.231.215",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_7000",
+      "country": "Poland",
+      "address": "194.35.119.227",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_8000",
+      "address": "92.51.46.66",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_9000",
+      "address": "194.35.116.119",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_10000",
+      "address": "88.218.169.126",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_11000",
+      "address": "147.45.137.180",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_12000",
+      "address": "88.218.169.80",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_13000",
+      "address": "194.87.49.144",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_14000",
+      "address": "89.23.119.110",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_15000",
+      "address": "85.92.108.52",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_16000",
+      "address": "194.87.250.200",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_17000",
+      "address": "147.45.225.175",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_18000",
+      "address": "185.201.28.16",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_19000",
+      "address": "147.45.142.205",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_20000",
+      "address": "185.70.186.37",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_4000",
+      "address": "194.87.220.216",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_21000",
+      "address": "147.45.234.70",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_22000",
+      "address": "194.58.57.88",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_23000",
+      "address": "194.87.134.170",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_24000",
+      "address": "141.98.235.50",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 30
+    },
+    {
+      "name": "Server_25000",
+      "address": "194.164.216.197",
+      "country": "USA",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_26000",
+      "address": "205.172.58.35",
+      "country": "USA",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_27000",
+      "address": "80.209.243.248",
+      "country": "USA",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_28000",
+      "address": "195.26.231.178",
+      "country": "Germany",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_29000",
+      "address": "66.248.207.185",
+      "country": "Netherlands",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_30000",
+      "address": "167.224.64.87",
+      "country": "USA",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_31000",
+      "address": "195.26.230.208",
+      "country": "Finland",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_32000",
+      "address": "176.222.53.29",
+      "country": "Netherlands",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_33000",
+      "address": "5.39.220.237",
+      "country": "Netherlands",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_34000",
+      "address": "205.172.58.199",
+      "country": "USA",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_35000",
+      "address": "212.108.82.206",
+      "country": "Netherlands",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_36000",
+      "address": "66.151.33.224",
+      "country": "Netherlands",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_37000",
+      "address": "167.224.64.213",
+      "country": "USA",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_38000",
+      "address": "80.209.240.23",
+      "country": "USA",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_39000",
+      "address": "194.164.216.151",
+      "country": "Britain",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_40000",
+      "address": "205.172.57.139",
+      "country": "USA",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_41000",
+      "address": "80.209.240.39",
+      "country": "USA",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_42000",
+      "address": "205.172.56.224",
+      "country": "USA",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_43000",
+      "address": "193.109.69.116",
+      "country": "Netherlands",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_44000",
+      "address": "46.17.97.74",
+      "country": "Netherlands",
+      "name_protocol": "vless",
+      "count_users": 40
+    },
+    {
+      "name": "Server_45000",
+      "address": "212.69.87.192",
+      "country": "Netherlands",
+      "name_protocol": "vless",
+      "count_users": 50
+    },
+    {
+      "name": "Server_46000",
+      "address": "176.222.55.184",
+      "country": "Netherlands",
+      "name_protocol": "vless",
+      "count_users": 50
+    },
+    {
+      "name": "Server_tol_test_10000",
+      "address": "147.45.242.155",
+      "country": "Netherlands",
+      "name_protocol": "wireguard",
+      "count_users": 40
+    },
+    {
+      "name": "Server_tol_test_3x_ui_10000",
+      "address": "194.87.208.18",
+      "country": "Netherlands",
+      "name_protocol": "vless",
+      "count_users": 40
+    }
+  ]
+}
