@@ -20,14 +20,17 @@ def get_admin_reply_keyboard():
 
 
 async def send_admin_log(bot: Bot, message: str):
-    # Получаем реплай-клавиатуру
-    keyboard = get_admin_reply_keyboard()
-    for admin_chat_id in ADMIN_CHAT_IDS:
-        try:
-            await bot.send_message(chat_id=admin_chat_id, text=message, reply_markup=keyboard)
-        except Exception as e:
-            # Логирование ошибки с деталями
-            logging.error(
-                f"Ошибка при отправке сообщения админу с ID {admin_chat_id}. "
-                f"Сообщение: {message}. Ошибка: {e}"
-            )
+    try:
+        # Получаем реплай-клавиатуру
+        keyboard = get_admin_reply_keyboard()
+        for admin_chat_id in ADMIN_CHAT_IDS:
+            try:
+                await bot.send_message(chat_id=admin_chat_id, text=message, reply_markup=keyboard)
+            except Exception as e:
+                # Логирование ошибки с деталями
+                logging.error(
+                    f"Ошибка при отправке сообщения админу с ID {admin_chat_id}. "
+                    f"Сообщение: {message}. Ошибка: {e}"
+                )
+    except Exception as e:
+        logging.error(f"Ошибка отправки админу {e}")

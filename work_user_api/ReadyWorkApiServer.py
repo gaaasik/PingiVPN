@@ -13,7 +13,12 @@ from work_user_api.decryptor import get_server_credentials_by_ip
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-
+def ensure_logged_in(func):
+    async def wrapper(self, *args, **kwargs):
+        if not self.server.authenticated:
+            await self.server.login()
+        return await func(self, *args, **kwargs)
+    return wrapper
 
 logging.basicConfig(
     level=logging.INFO,
@@ -27,56 +32,52 @@ logging.basicConfig(
 my_logging = logging.getLogger(__name__)
 NAME_RESULT_QUEUE = os.getenv("name_queue_result_task").strip()
 
-class ReadyWorkApiServer():
+
+class ReadyWorkApiServer:
     def __init__(self, server_ip: str):
-        try:
-            all_data = get_server_credentials_by_ip(server_ip)
-        except ValueError as e:
-            my_logging.error(f"Ошибка: {e}")
-            import asyncio
-            loop = asyncio.get_event_loop()
-            loop.create_task(send_admin_log(bot, f"result_check_enable: Ошибка при поиске шифрованных данных по серверу {server_ip}"))
-            raise  # <-- ВАЖНО! Прерываем выполнение, чтобы не продолжать без данных
+        """
+        Инициализация подключения к серверу по IP.
+        Загружаем xui_url, login, password и токен.
+        """
+        all_data = get_server_credentials_by_ip(server_ip)
+        full_url = all_data.get("xui_url")
 
-        # Инициализируем XUIApiClient с нужными данными
-        self.server = XUIApiClient(
-            host=all_data["xui_url"],
-            username=all_data["login"],
-            password=all_data["password"]
-        )
-        self.server.login()
+        if not full_url:
+            raise ValueError(f"Нет xui_url для сервера {server_ip}")
 
-    async def process_change_enable_user(self, email_key: str, enable: bool, chat_id: int, uuid_value: str):
+        # Извлекаем базовый адрес и токен
+        parts = full_url.split("/", 3)
+        if len(parts) < 4:
+            raise ValueError(f"Неверный формат xui_url для сервера {server_ip}")
+
+        self.base_url = parts[0] + '//' + parts[2]  # https://ip:port
+        self.token = parts[3]  # сам токен
+
+        self.server = XUIApiClient(base_url=self.base_url, token=self.token)
+
+    @ensure_logged_in
+    async def process_change_enable_user(self, email_key: str, enable: bool, chat_id: int, uuid_value: str) -> None:
+        """
+        Процесс изменения активности пользователя по email.
+        """
         try:
-            success, response = self.server.toggle_user_enable_by_email(email=email_key, enable=enable)
+            await self.server.login()
+            success, _ = await self.server.toggle_user_enable_by_email(email=email_key, enable=enable)
+
             if not success:
-                status_value = "error"
-            else:
-                status_value = "success"
-
-            # После изменения — проверяем реальное состояние
-            actual_enable = self.server.check_enable(email_key)
-
-            my_logging.info(f"API VLESS изменение enable и проверка статуса: {actual_enable}")
-
-
-            # Отправляем результат в Redis
-            redis_payload = {
-                "status": status_value,
-                "task_type": "result_change_enable_user",
-                "enable": actual_enable,
-                "user_ip": None,  # если IP нет, оставляем пустым
-                "uuid_value": uuid_value,
-                "protocol": "vless",
-                "chat_id": chat_id,
-            }
-            await redis_client_main.lpush(NAME_RESULT_QUEUE, json.dumps(redis_payload))
-            my_logging.info(f"Обновленные данные отправлены в Redis: {redis_payload}")
-
-        except RedisError as e:
-            my_logging.error(f"Ошибка подключения к Redis: {e}. Повторная попытка через 5 секунд...")
-            await asyncio.sleep(5)
+                my_logging.error(f"Ошибка при изменении состояния пользователя {email_key} через API.")
         except Exception as e:
             my_logging.error(f"Ошибка при изменении пользователя через API: {e}")
 
+    @ensure_logged_in
+    async def process_get_clients(self) -> dict:
+        """
+        Получить список всех клиентов.
+        """
+        try:
+            await self.server.login()
+            return await self.server.list_clients()
+        except Exception as e:
+            my_logging.error(f"Ошибка при получении списка клиентов: {e}")
+            return {"error": str(e)}
 

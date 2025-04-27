@@ -55,21 +55,31 @@ def decrypt_json_file():
 def get_server_credentials_by_ip(server_ip: str):
     """
     Возвращает данные для подключения к серверу по IP:
-    xui_url, login и password.
+    base_url, token, login, password.
 
     Если сервер не найден — выбрасывает ValueError.
     """
-    servers_data = decrypt_json_file()  # Здесь теперь будет список, а не словарь
+    servers_data = decrypt_json_file()
 
-    for s in servers_data:  # без .get("servers")
+    for s in servers_data:
         if s.get("address") == server_ip:
+            xui_url = s.get("3X_UI", "").strip()
+
+            # Разделяем базовый URL и токен
+            parts = xui_url.split("/")
+            if len(parts) < 5:
+                raise ValueError(f"Некорректный формат XUI URL: {xui_url}")
+
+            base_url = "/".join(parts[:3])  # https://ip:port
+            token = parts[4]  # токен после порта
+
             return {
-                "xui_url": s.get("3X_UI", "").strip(),
+                "base_url": base_url,
+                "token": token,
                 "login": s["passwords"]["login"],
                 "password": s["passwords"]["password"]
             }
 
-    # Если не нашли сервер — кидаем исключение
     raise ValueError(f"Сервер с IP {server_ip} не найден в зашифрованном файле.")
 
 
