@@ -150,8 +150,9 @@ class Field:
 
         if name_protocol == "vless":
             try:
-                processor = ReadyWorkApiServer(server_ip)
+                processor = await ReadyWorkApiServer.create(server_ip)
                 await processor.process_change_enable_user(email_key=email_key, enable=enable_value, chat_id=chat_id, uuid_value=uuid_value)
+                await processor.close()
             except Exception as e:
                 logging.error(f"Ошибка при выключении ключа пользователя: {e}")
                 await send_admin_log(bot,
