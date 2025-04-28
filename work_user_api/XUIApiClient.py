@@ -27,7 +27,7 @@ class XUIApiClient:
         data = {"username": self.username, "password": self.password}
         try:
             my_logging.info(f"Пытаемся авторизоваться в x-ui API: {self.host}")
-            response = await asyncio.to_thread(self.session.post, f"{self.host}/login", data=data, verify=False, timeout=10)
+            response = await asyncio.to_thread(self.session.post, f"{self.host}/login", data=data, verify=False, timeout=5)
             self.authenticated = response.status_code == 200
             if self.authenticated:
                 my_logging.info("Успешная авторизация в x-ui API")
@@ -41,7 +41,7 @@ class XUIApiClient:
 
     async def list_clients(self):
         try:
-            response = await asyncio.to_thread(self.session.get,f"{self.host}/panel/api/inbounds/list", verify=False, timeout=10)
+            response = await asyncio.to_thread(self.session.get,f"{self.host}/panel/api/inbounds/list", verify=False, timeout=5)
             return response.json()
         except Exception as e:
             my_logging.error(f"Ошибка при получении списка клиентов: {e}")
@@ -79,7 +79,7 @@ class XUIApiClient:
             "settings": json.dumps(settings)
         }
         url = f"{self.host}/panel/api/inbounds/updateClient/{client_id}"
-        response = await asyncio.to_thread(self.session.post, url, headers=headers, json=data, timeout=10)
+        response = await asyncio.to_thread(self.session.post, url, headers=headers, json=data, timeout=5)
 
         return response.status_code == 200, response.json()
 
