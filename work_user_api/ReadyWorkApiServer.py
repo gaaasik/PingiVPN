@@ -44,18 +44,19 @@ class ReadyWorkApiServer():
             username=all_data["login"],
             password=all_data["password"]
         )
-        self.server.login()
+
 
     async def process_change_enable_user(self, email_key: str, enable: bool, chat_id: int, uuid_value: str):
         try:
-            success, response = self.server.toggle_user_enable_by_email(email=email_key, enable=enable)
+            await self.server.login()
+            success, response = await self.server.toggle_user_enable_by_email(email=email_key, enable=enable)
             if not success:
                 status_value = "error"
             else:
                 status_value = "success"
 
             # После изменения — проверяем реальное состояние
-            actual_enable = self.server.check_enable(email_key)
+            actual_enable = await self.server.check_enable(email_key)
 
             my_logging.info(f"API VLESS изменение enable и проверка статуса: {actual_enable}")
 
