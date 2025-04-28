@@ -233,7 +233,7 @@ async def main():
     #notification_scheduler.add_to_schedule("11:00", "CompensationNotification")
     notification_scheduler.add_to_schedule("12:00", "UnsubscribedNotification")
     notification_scheduler.add_to_schedule("12:30", "TrialEndingNotification")
-    notification_scheduler.add_to_schedule("13:00", "PaymentReminder")  # Добавили PaymentReminder
+    notification_scheduler.add_to_schedule("16:40", "PaymentReminder")  # Добавили PaymentReminder
     notification_scheduler.add_to_schedule("13:30", "AccessExpiredReminder")
     notification_scheduler.add_to_schedule("14:00", "WithoutKeyNotification")
     #пропущенный пользователь
