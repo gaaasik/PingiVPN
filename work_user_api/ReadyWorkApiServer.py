@@ -27,34 +27,27 @@ logging.basicConfig(
 my_logging = logging.getLogger(__name__)
 NAME_RESULT_QUEUE = os.getenv("name_queue_result_task").strip()
 
-class ReadyWorkApiServer:
-    def __init__(self, server_ip: str, server: XUIApiClient):
-        self.server_ip = server_ip
-        self.server = server
-
-    @classmethod
-    async def create(cls, server_ip: str):
+class ReadyWorkApiServer():
+    def __init__(self, server_ip: str):
         try:
             all_data = get_server_credentials_by_ip(server_ip)
         except ValueError as e:
             my_logging.error(f"Ошибка: {e}")
-            await send_admin_log(bot, f"result_check_enable: Ошибка при поиске шифрованных данных по серверу {server_ip}")
-            raise
+            import asyncio
+            loop = asyncio.get_event_loop()
+            loop.create_task(send_admin_log(bot, f"result_check_enable: Ошибка при поиске шифрованных данных по серверу {server_ip}"))
+            raise  # <-- ВАЖНО! Прерываем выполнение, чтобы не продолжать без данных
 
-        server = XUIApiClient(
+        # Инициализируем XUIApiClient с нужными данными
+        self.server = XUIApiClient(
             host=all_data["xui_url"],
             username=all_data["login"],
             password=all_data["password"]
         )
-        await server.login()
-
-        return cls(server_ip, server)
-
 
 
     async def process_change_enable_user(self, email_key: str, enable: bool, chat_id: int, uuid_value: str):
         try:
-            success, response = await self.server.toggle_user_enable_by_email(email=email_key, enable=enable)
             await self.server.login()
             success, response = await self.server.toggle_user_enable_by_email(email=email_key, enable=enable)
             if not success:
@@ -62,16 +55,18 @@ class ReadyWorkApiServer:
             else:
                 status_value = "success"
 
-            actual_enable = await self.server.check_enable(email_key)
             # После изменения — проверяем реальное состояние
+            actual_enable = await self.server.check_enable(email_key)
 
             my_logging.info(f"API VLESS изменение enable и проверка статуса: {actual_enable}")
 
+
+            # Отправляем результат в Redis
             redis_payload = {
                 "status": status_value,
                 "task_type": "result_change_enable_user",
                 "enable": actual_enable,
-                "user_ip": None,
+                "user_ip": None,  # если IP нет, оставляем пустым
                 "uuid_value": uuid_value,
                 "protocol": "vless",
                 "chat_id": chat_id,
@@ -84,8 +79,5 @@ class ReadyWorkApiServer:
             await asyncio.sleep(5)
         except Exception as e:
             my_logging.error(f"Ошибка при изменении пользователя через API: {e}")
-        finally:
-            await self.server.close()  # <-- вот здесь ЗАКРЫВАЕМ
 
-    async def close(self):
-        await self.server.close()
+
