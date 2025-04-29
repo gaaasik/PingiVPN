@@ -11,6 +11,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from dotenv import load_dotenv
 
+from bot.admin_func.add_new_server import handler_add_new_server
 from bot.admin_func.another_settings import another_settings
 
 from bot.admin_func.class_friends import handler_friends
@@ -278,6 +279,7 @@ async def main():
     dp.include_router(handler_friends.router)
     dp.include_router(lottery.router)
     dp.include_router(feedback_menu.router)
+    dp.include_router(handler_add_new_server.router)
 
     try:
         pass

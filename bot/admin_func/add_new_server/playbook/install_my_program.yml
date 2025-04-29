@@ -1,0 +1,179 @@
+---
+- name: Установка программы на сервер с WireGuard
+  hosts: all
+  become: yes
+  vars:
+    service_name: reception_redis_json
+    service_file_path: /etc/systemd/system/reception_redis_json.service
+    log_lines: 20
+    wireguard_config_path: "/root/.wg-easy/wg0.conf"
+    x_ui_db_path: "/etc/x-ui/x-ui.db"
+
+  tasks:
+    - name: Очистить текущие настройки Docker
+      shell: |
+        rm -f /etc/apt/keyrings/docker-archive-keyring.gpg
+        rm -f /etc/apt/sources.list.d/docker.list
+        rm -rf /var/lib/apt/lists/*
+      args:
+        executable: /bin/bash
+
+    - name: Создать каталог для ключей APT
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+
+    - name: Скачивание и сохранение ключа GPG Docker
+      shell: |
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker-archive-keyring.gpg
+      args:
+        executable: /bin/bash
+
+    - name: Добавление репозитория Docker
+      shell: |
+        echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu jammy stable" > /etc/apt/sources.list.d/docker.list
+      args:
+        executable: /bin/bash
+
+    - name: Обновить кеш пакетов APT
+      apt:
+        update_cache: yes
+
+    - name: Убедиться, что Python установлен
+      raw: |
+        if ! command -v python3 &> /dev/null; then
+          apt update && apt install -y python3 python3-pip
+        fi
+      changed_when: false
+
+    - name: Установить python3-venv и python3-pip
+      apt:
+        name:
+          - python3-venv
+          - python3-pip
+        state: present
+
+    - name: Убедиться, что папка существует
+      file:
+        path: /home/program_for_serverWgVless_Pingi/
+        state: directory
+
+    - name: Установить rsync на сервере
+      package:
+        name: rsync
+        state: present
+
+    - name: Синхронизация файлов проекта
+      synchronize:
+        src: "{{ playbook_dir }}/all_filse_for_wg_servers/reception_servers/"
+        dest: /home/program_for_serverWgVless_Pingi/
+        delete: yes
+        recursive: yes
+        rsync_opts:
+          - "--checksum"
+          - "-e ssh -p {{ ansible_port | default(22) }}"
+      delegate_to: localhost
+
+    - name: Копировать .env отдельно
+      copy:
+        src: "{{ playbook_dir }}/all_filse_for_wg_servers/file_env/.env"
+        dest: /home/program_for_serverWgVless_Pingi/.env
+        force: no
+
+    - name: Проверка наличия wg0.conf
+      stat:
+        path: "{{ wireguard_config_path }}"
+      register: wireguard_file
+
+    - name: Проверка наличия x-ui.db
+      stat:
+        path: "{{ x_ui_db_path }}"
+      register: x_ui_db_file
+
+    - name: Завершить если оба файла отсутствуют
+      fail:
+        msg: "Файлы не найдены: wg0.conf и x-ui.db"
+      when: not (wireguard_file.stat.exists or x_ui_db_file.stat.exists)
+
+    - name: Показать наличие wg0.conf или x-ui.db
+      debug:
+        msg: >
+          WireGuard: {{ wireguard_file.stat.exists }},
+          x-ui.db: {{ x_ui_db_file.stat.exists }}
+
+    - name: Создать виртуальное окружение
+      command: python3 -m venv /home/program_for_serverWgVless_Pingi/venv
+      args:
+        creates: /home/program_for_serverWgVless_Pingi/venv
+
+    - name: Установить зависимости из requirements.txt
+      pip:
+        requirements: /home/program_for_serverWgVless_Pingi/requirements.txt
+        virtualenv: /home/program_for_serverWgVless_Pingi/venv
+        virtualenv_command: /usr/bin/python3 -m venv
+
+    - name: Создание systemd-сервиса
+      copy:
+        dest: "{{ service_file_path }}"
+        content: |
+          [Unit]
+          Description=Запуск main.py
+          After=network.target
+
+          [Service]
+          Type=simple
+          User=root
+          WorkingDirectory=/home/program_for_serverWgVless_Pingi/
+          ExecStart=/home/program_for_serverWgVless_Pingi/venv/bin/python3 /home/program_for_serverWgVless_Pingi/main.py
+          Restart=on-failure
+          StandardOutput=append:/var/log/reception_redis_json.log
+          StandardError=append:/var/log/reception_redis_json_error.log
+
+          [Install]
+          WantedBy=multi-user.target
+      notify: Reload systemd
+
+    - name: Перезагрузить systemd
+      command: systemctl daemon-reload
+
+    - name: Подождать перед стартом сервиса
+      pause:
+        seconds: 3
+
+    - name: Запустить и включить сервис
+      systemd:
+        name: "{{ service_name }}"
+        enabled: yes
+        state: started
+
+    - name: Проверить статус сервиса
+      command: systemctl status "{{ service_name }}"
+      register: service_status
+      ignore_errors: yes
+
+    - name: Вывод статуса systemd
+      debug:
+        msg: "{{ service_status.stdout_lines }}"
+
+    - name: Вывести {{ log_lines }} строк логов сервиса
+      command: journalctl -u "{{ service_name }}" -n "{{ log_lines }}"
+      register: service_logs
+      ignore_errors: yes
+
+    - name: Показать логи сервиса
+      debug:
+        msg: "{{ service_logs.stdout_lines }}"
+
+    - name: Разрешить новым серверам доступ к Redis
+      delegate_to: 217.25.91.109
+      command: sudo ufw allow from {{ ansible_default_ipv4.address }} to any port 6379
+      when: ansible_default_ipv4.address is defined
+
+    - name: Перезагрузить UFW на Redis-сервере
+      delegate_to: 217.25.91.109
+      command: sudo ufw reload
+
+  handlers:
+    - name: Reload systemd
+      command: systemctl daemon-reload

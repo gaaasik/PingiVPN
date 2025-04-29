@@ -12,3 +12,7 @@ class AdminStates(StatesGroup):
     waiting_for_wireguard_file = State()
     waiting_for_friend_confirmation = State()
     main_menu_user = State()
+    choosing_server_type = State()
+    waiting_ip = State()
+    waiting_password = State()
+    processing = State()

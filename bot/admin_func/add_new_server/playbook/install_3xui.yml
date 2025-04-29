@@ -1,0 +1,81 @@
+---
+- name: Установка и настройка 3x-ui
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Копирование скрипта install_x_ui.sh на сервер
+      copy:
+        src: "all_files_for_3xui/install_x_ui.sh"
+        dest: "/tmp/install_x_ui.sh"
+        mode: '0755'
+
+    - name: Запуск скрипта install_x_ui.sh с автоматическими ответами через stdin
+      shell: |
+        /bin/bash /tmp/install_x_ui.sh <<EOF
+        y
+        14928
+        y
+        EOF
+      register: install_x_ui_result
+      no_log: true
+
+    - name: Проверка статуса сервиса x-ui
+      command: "systemctl status x-ui"
+      register: x_ui_status
+
+    - name: Вывод статуса сервиса x-ui
+      debug:
+        var: x_ui_status
+
+    - name: Копирование скрипта autossl.sh на сервер
+      copy:
+        src: "all_files_for_3xui/autossl.sh"
+        dest: "/tmp/autossl.sh"
+        mode: '0755'
+
+    - name: Запуск скрипта autossl.sh с автоматическим нажатием Enter
+      shell: |
+        /bin/bash /tmp/autossl.sh <<EOF
+
+        EOF
+      register: autossl_result
+      no_log: false  # Убираем скрытие логов
+
+    - name: Проверка результата выполнения скрипта autossl.sh
+      debug:
+        msg:
+          - "Command: {{ autossl_result.cmd }}"
+          - "Return Code: {{ autossl_result.rc }}"
+          - "Standard Output: {{ autossl_result.stdout }}"
+          - "Standard Error: {{ autossl_result.stderr }}"
+          - "Execution Duration: {{ autossl_result.delta }}"
+
+    - name: Перезапуск сервиса x-ui
+      service:
+        name: x-ui
+        state: restarted
+        enabled: yes
+
+    - name: Выполнение команды на сервере x-ui
+      shell: |
+        echo "x-ui" | x-ui
+        echo "10" | x-ui
+      register: x_ui_command_result
+
+    - name: Вывод результата выполнения команды x-ui с форматированием
+      debug:
+        msg: >-
+          Username: {{ x_ui_command_result.stdout | regex_search('username: \S+') | default('Not Found') | replace('username: ', '') }}
+          Password: {{ x_ui_command_result.stdout | regex_search('password: \S+') | default('Not Found') | replace('password: ', '') }}
+          Port: {{ x_ui_command_result.stdout | regex_search('port: \S+') | default('Not Found') | replace('port: ', '') }}
+          WebBasePath: {{ x_ui_command_result.stdout | regex_search('webBasePath: \S+') | default('Not Found') | replace('webBasePath: ', '') }}
+          Access URL: {{ x_ui_command_result.stdout | regex_search('Access URL: \S+') | default('Not Found') | replace('Access URL: ', '') }}
+
+    - name: Удаление временных файлов
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "/tmp/install_x_ui.sh"
+        - "/tmp/autossl.sh"
