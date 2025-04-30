@@ -128,7 +128,6 @@ class Field:
         server_ip = await self._server.server_ip.get()
         user_ip = await self._server.user_ip.get()
         email_key = await self._server.email_key.get()
-        server_name = await self._server.name_server.get()
 
         # Получаем имя сервера
         server_name = self.__get_server_name_by_ip(country_server_data, server_ip)
@@ -149,15 +148,8 @@ class Field:
         # Используем redis.asyncio вместо aioredis BLPOP  Ошибка декодирования
 
         if name_protocol == "vless":
-            try:
-                processor = await ReadyWorkApiServer.create(server_ip)
-                await processor.process_change_enable_user(email_key=email_key, enable=enable_value, chat_id=chat_id, uuid_value=uuid_value)
-                await processor.close()
-            except Exception as e:
-                logging.error(f"Ошибка при выключении ключа пользователя: {e}")
-                await send_admin_log(bot,
-                                     f"❌Пользователь {chat_id} не изменил состояние на {enable_value}, {server_name}, ({server_ip})")
-
+            processor = ReadyWorkApiServer(server_ip)
+            await processor.process_change_enable_user(email_key=email_key, enable=enable_value, chat_id=chat_id, uuid_value=uuid_value)
         elif name_protocol == "wireguard":
             try:
                 await redis_client_main.lpush(queue_name, json.dumps(task_data))
