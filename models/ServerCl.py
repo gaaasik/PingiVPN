@@ -148,8 +148,22 @@ class Field:
         # Используем redis.asyncio вместо aioredis BLPOP  Ошибка декодирования
 
         if name_protocol == "vless":
-            processor = ReadyWorkApiServer(server_ip)
-            await processor.process_change_enable_user(email_key=email_key, enable=enable_value, chat_id=chat_id, uuid_value=uuid_value)
+            status = False
+            try:
+                processor = ReadyWorkApiServer(server_ip)
+                status = await processor.process_change_enable_user(email_key=email_key, enable=enable_value, chat_id=chat_id, uuid_value=uuid_value)
+                if not status:
+                    logging.info(f"Запускаем альтернативное вкл/откл")
+                    await redis_client_main.lpush(queue_name, json.dumps(task_data))
+                    logging.info(f"Задача добавлена в очередь {queue_name}: {task_data}")
+
+            except Exception as e:
+                logging.error(f"Ошибка вкл/откл пользователя, {e}")
+                if not status:
+                    logging.info(f"Запускаем альтернативное вкл/откл")
+                    await redis_client_main.lpush(queue_name, json.dumps(task_data))
+                    logging.info(f"Задача добавлена в очередь {queue_name}: {task_data}")
+
         elif name_protocol == "wireguard":
             try:
                 await redis_client_main.lpush(queue_name, json.dumps(task_data))

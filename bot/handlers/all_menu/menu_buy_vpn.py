@@ -95,7 +95,7 @@ async def handle_buy_vpn(callback_query: CallbackQuery):
                 )
                 keyboard = get_payment_keyboard()
 
-            elif enabled == False:
+            elif enabled == False or enabled == None:
                 # Ключ заблокирован
                 text = (
                     f"🔒 Ключ: {key_name}\n"

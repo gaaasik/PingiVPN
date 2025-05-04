@@ -85,7 +85,7 @@ async def get_user_status_text(us):
         if (enabled == True) and (has_paid_key == 0) and remaining_days > 0:
             return f"Активный период до {end_date_str} (осталось {remaining_days} дней)"
 
-        elif enabled == False or remaining_days < 0:
+        elif enabled == False or remaining_days < 0 or enabled == None:
             return ("Ключ заблокирован, требуется оплата")
 
         elif (enabled == True) and (has_paid_key > 0):
