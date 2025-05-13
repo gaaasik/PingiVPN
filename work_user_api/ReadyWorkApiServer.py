@@ -80,4 +80,5 @@ class ReadyWorkApiServer():
         except Exception as e:
             my_logging.error(f"Ошибка при изменении пользователя через API: {e}")
 
-
+    async def close(self):
+        await self.server.close()
