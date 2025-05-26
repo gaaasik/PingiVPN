@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMar
 from bot.handlers.admin import ADMIN_CHAT_IDS
 from bot.handlers.all_menu.main_menu import get_user_status_text
 from bot.handlers.all_menu.menu_buy_vpn import get_add_key_keyboard
-
+from urllib.parse import quote_plus
 from models.UserCl import UserCl
 import logging
 
@@ -97,31 +97,45 @@ async def handle_my_keys(callback_query: CallbackQuery):
     chat_id = callback_query.message.chat.id
     us = await UserCl.load_user(chat_id)
 #
-# ####################################TEST#####################################
-#     print("tolsemenov MENU_MY_KEYS ", chat_id)
-#     if chat_id in ADMIN_CHAT_IDS:
-#         us = await UserCl.load_user(chat_id)
-#         if us.active_server:
-#             await us.add_key_from_buffer(us.active_server, "vless")
-#
-#             #await us.active_server.enable.set(False)
-#             #await task_manager.send_creating_user(server_ip)
-#             #await us.active_server.delete_user_key()
-#             #await us.update_key_to_vless("vless://05f71aa4-6ddb-4466-a15a-d523a7b4d24e@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=google.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#user_1_Netherlands")
-#     #
-#
-#
-# ###########################################################################
-    try:
-        # Генерируем текст и клавиатуру для ответа
-        text, keyboard = await generate_key_status_text(us)
+####################################TEST#####################################
+    print("tolsemenov MENU_MY_KEYS ", chat_id)
+    if chat_id in ADMIN_CHAT_IDS:
+        us = await UserCl.load_user(chat_id)
+        if us.active_server:
+            await us.add_key_from_buffer(us.active_server, "vless")
 
-        # Отправляем сообщение
-        await callback_query.message.answer(text, reply_markup=keyboard, disable_web_page_preview=True,
-                                            parse_mode="HTML")
+            #await us.active_server.enable.set(False)
+            #await task_manager.send_creating_user(server_ip)
+            #await us.active_server.delete_user_key()
+            #await us.update_key_to_vless("vless://05f71aa4-6ddb-4466-a15a-d523a7b4d24e@194.87.208.18:443?type=tcp&security=reality&pbk=kX9Di-f2fMnJjRxx2rMsy6_Pe5gXyRO4S1NrZw8Dcyk&fp=chrome&sni=google.com&sid=9c&spx=%2F&flow=xtls-rprx-vision#user_1_Netherlands")
+        try:
+            # Генерируем текст и клавиатуру для ответа
+            text, keyboard = await generate_key_status_text(us)
+            sub_link = f"https://172.19.0.1/sub/{chat_id}"
+            v2raytun_link = f"v2raytun://import/{quote_plus(sub_link)}"
+            text += f"\n Нажми для подключения:\n{v2raytun_link}"
+            # Отправляем сообщение
+            await callback_query.message.answer(text, reply_markup=keyboard, disable_web_page_preview=True,
+                                                parse_mode="HTML")
 
-    except Exception as e:
-        logging.error(f"Ошибка при генерации сообщения о ключах: {e}")
-        await callback_query.message.answer("Произошла ошибка при проверке статуса. Попробуйте позже.")
+        except Exception as e:
+            logging.error(f"Ошибка при генерации сообщения о ключах: {e}")
+            await callback_query.message.answer("Произошла ошибка при проверке статуса. Попробуйте позже.")
 
-    await callback_query.answer()
+        await callback_query.answer()
+
+    else:
+###########################################################################
+        try:
+            # Генерируем текст и клавиатуру для ответа
+            text, keyboard = await generate_key_status_text(us)
+
+            # Отправляем сообщение
+            await callback_query.message.answer(text, reply_markup=keyboard, disable_web_page_preview=True,
+                                                parse_mode="HTML")
+
+        except Exception as e:
+            logging.error(f"Ошибка при генерации сообщения о ключах: {e}")
+            await callback_query.message.answer("Произошла ошибка при проверке статуса. Попробуйте позже.")
+
+        await callback_query.answer()
