@@ -111,7 +111,7 @@ async def handle_my_keys(callback_query: CallbackQuery):
         try:
             # Генерируем текст и клавиатуру для ответа
             text, keyboard = await generate_key_status_text(us)
-            sub_link = f"https://172.19.0.1/sub/{chat_id}"
+            sub_link = f"https://194.87.208.18/sub/{chat_id}"
             v2raytun_link = f"v2raytun://import/{quote_plus(sub_link)}"
             text += f"\n Нажми для подключения:\n{v2raytun_link}"
             # Отправляем сообщение
