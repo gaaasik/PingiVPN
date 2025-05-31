@@ -72,7 +72,7 @@ async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
 
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
-                [InlineKeyboardButton(text="🔗 Подключиться", url=v2raytun_link)],
+                [InlineKeyboardButton(text="📥 Скачать конфиг", url=sub_link)],
                 [InlineKeyboardButton(text="💳 Оплатить ключ", callback_data="buy_vpn")],
                 [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
             ]
