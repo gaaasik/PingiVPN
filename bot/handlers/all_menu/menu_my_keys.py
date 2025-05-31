@@ -67,7 +67,7 @@ async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
 
         name_protocol = await us.active_server.name_protocol.get()
 
-        sub_link = f"https://194.87.208.18:8080/sub/{us.chat_id}"
+        sub_link = f"http://194.87.208.18:8080/sub/{us.chat_id}"
         v2raytun_link = f"v2raytun://import/{quote_plus(sub_link)}"
 
         keyboard = InlineKeyboardMarkup(
