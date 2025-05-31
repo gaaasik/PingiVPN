@@ -63,9 +63,22 @@ async def generate_key_status_text(us: UserCl) -> (str, InlineKeyboardMarkup):
 
         # Определяем статус и срок действия ключа
         status_text = await get_user_status_text(us)
-        keyboard = get_first_payment_keyboard()
+
 
         name_protocol = await us.active_server.name_protocol.get()
+
+        sub_link = f"https://194.87.208.18:8080/sub/{us.chat_id}"
+        v2raytun_link = f"v2raytun://import/{quote_plus(sub_link)}"
+
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text="🔗 Подключиться", url=v2raytun_link)],
+                [InlineKeyboardButton(text="💳 Оплатить ключ", callback_data="buy_vpn")],
+                [InlineKeyboardButton(text="🏠 Главное меню", callback_data="main_menu")]
+            ]
+        )
+
+
         if name_protocol == "wireguard":
             # Формируем текст сообщения в формате HTML
             text = (
