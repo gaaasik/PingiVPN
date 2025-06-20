@@ -15,6 +15,7 @@ PAGE_SIZE = 6  # количество серверов на страницу
 # 📌 Главное меню админ-настроек
 async def get_admin_settings_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="➕ Добавить новый сервер", callback_data="add_new_server")],
         [InlineKeyboardButton(text="📋 Вывести все сервера", callback_data="view_all_servers")],
         [InlineKeyboardButton(text="♻️ Регенерация ключей", callback_data="all:regenerate")],
         [InlineKeyboardButton(text="🔄 Перезагрузка всех серверов", callback_data="all:reboot")],
