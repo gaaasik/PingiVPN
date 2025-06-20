@@ -12,8 +12,8 @@ from bot.handlers.admin import ADMIN_CHAT_IDS
 def download_app_keyboard(device: str) -> InlineKeyboardMarkup:
     # Определяем ссылку для скачивания в зависимости от устройства
     if device.lower() == 'android':
-        download_link = "https://play.google.com/store/apps/details?id=com.hiddify"
-        instruction_link = "https://telegra.ph/Instrukciya-dlya-Android-01-01"
+        download_link = "https://play.google.com/store/apps/details?id=com.v2raytun.android&hl=ru&pli=1"
+        instruction_link = "https://telegra.ph/Podklyuchenie-PingiVPN-na-iPhone-11-01"
     elif device.lower() == 'iphone':
         download_link = "https://apps.apple.com/ru/app/v2raytun/id6476628951"
         instruction_link = "https://telegra.ph/Podklyuchenie-PingiVPN-na-iPhone-11-01"
