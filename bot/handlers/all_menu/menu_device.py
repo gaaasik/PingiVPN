@@ -20,7 +20,7 @@ WIREGUARD_LINKS = {
 }
 
 VLESS_LINKS = {
-    "android": "https://play.google.com/store/apps/details?id=com.v2ray.ang",
+    "android": "https://play.google.com/store/apps/details?id=com.v2raytun.android&pcampaignid=web_share",
     "iphone": "https://apps.apple.com/ru/app/v2raytun/id6476628951",
     "windows": "https://apps.microsoft.com/detail/9pdfnl3qv2s5?hl=ru-ru&gl=RU",
     "mac": "https://apps.apple.com/us/app/foxray/id6448898396",
